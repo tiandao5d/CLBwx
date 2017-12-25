@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <style type="text/css">
+    * {
+    	padding: 0;
+    	margin: 0;
+    }
+    ::-webkit-scrollbar {
+	    display: none;
+	}
+    #box {
+    	position: absolute;
+    	left: 0;
+    	top: 0;
+    	height: 100%;
+    	width: 100%;
+    	overflow-x: hidden;
+    	overflow-y: auto;
+    }
+    .li {
+    	height: 40px;
+    	display: flex;
+    	align-items: center;
+    	padding: 0 15px;
+    	border-bottom: solid 1px #eee;
+    }
+    .load {
+    	line-height: 40px;
+    	text-align: center;
+    	color: #888;
+    }
+    .hide {
+    	display: none !important;
+    }
+    </style>
+</head>
+<body>
+    
+    <div id="box">
+    	<div class="ul"></div>
+    	<div class="load">加载中……</div>
+    </div>
+    
+    <script src="../js/jquery-2.2.4.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+	var data = [],
+		isTrue = true,
+		lnum = 10,
+		snum = lnum*4;
+    init();
+    //页面初始化
+    function init(){
+    	var $box = $('#box'),
+			$load = $box.find('.load');
+    	getItemFn(snum, function(){//获取数据，40条
+			$load.addClass('hide');
+			showDataFn(0);
+    	});
+    	$box.on('scroll', boxscroll);//绑定容器滚动事件
+    }
+    
+    function showDataFn(_start){
+		var $box = $('#box'),
+			$ul = $box.find('.ul'),
+			$load = $box.find('.load'),
+			str = '',
+			sData = data.slice(_start, (_start + snum));//选出要显示的40条数据
+		
+		$.each(sData, function(index, txt){
+			str += '<div class="li">item ' + txt + '</div>';
+		});
+		$ul.html(str);
+    	var $li = $ul.find('.li'),
+    		lh = $li.outerHeight();
+    	$ul.css({
+    		'padding-top': (lh*_start + 'px')
+    	});
+		$box.data('start', _start);
+    	isTrue = true;
+    }
+    //容器滚动
+    function boxscroll(){
+    	var $box = $('#box'),
+    		$ul = $box.find('.ul'),
+			$load = $box.find('.load'),
+    		$li = $ul.find('.li'),
+    		lh = $li.outerHeight(),
+    		bs = $box.scrollTop(),
+    		leq = bs/lh,
+    		lgn = data.length,
+    		_start = Math.floor(leq/snum*.5)*lnum,
+    		ds = $box.data('start') || 0,
+    		isload = !$load.hasClass('hide');
+    	if(!(ds === _start) && isTrue){
+			isTrue = false;
+			if(_start + snum > lgn){
+				$load.removeClass('hide');
+				if(!isload){
+		    		getItemFn(lnum, function(){
+		    			isTrue = true;
+						$load.addClass('hide');
+		    			boxscroll();
+		    		});
+				}
+			}else{
+				showDataFn(_start);
+			}
+    }
+    }
+    
+    //请求并整理项目
+    function getItemFn(num, callback){
+    	num = parseInt(num) || 20;
+    	callback = callback || function(){};
+    	setTimeout(function(){
+	    	var lgn;
+	    	while(num--){
+	    		lgn = data.length + 1;
+	    		data[data.length] = lgn;
+	    	}
+    		callback();
+    	}, 500)
+    }
+    
+    </script>
+</body>
+</html>

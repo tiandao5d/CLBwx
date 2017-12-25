@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>电饭锅</title>
+    <style>
+    html,body {
+    	margin: 0;
+    }
+    .laydate-box {
+    	width: 100%;
+    	max-width: 500px;
+    	margin: 0 auto;
+    	overflow: hidden;
+    	-webkit-transition: all .3s;
+    	transition: all .3s;
+    	-webkit-transform-origin: 0 0;
+    	transform-origin: 0 0;
+    }
+    .laydate-con {
+    	-webkit-transition: all .3s;
+    	transition: all .3s;
+    	-webkit-transform-origin: 0 0;
+    	transform-origin: 0 0;
+    	display: inline-block;
+    }
+    .lay-li {
+    	position: relative;
+    	float: left;
+    	width: 50%;
+    }
+    .lay-li .layui-laydate-header i {
+    	display: none;
+    }
+    .lay-li .layui-laydate-header:after {
+    	position: absolute;
+    	content: '';
+    	left: 0;
+    	top: 0;
+    	width: 100%;
+    	height: 100%;
+    	z-index: 10;
+    }
+    .lay-button {
+    	border: 0;
+    	background: #009688;
+    	color: #fff;
+    	padding: 8px 16px;
+    	font-size: 14px;
+    }
+    .laydate-modal {
+    	position: fixed;
+    	left: 100%;
+    	top: 0;
+    	height: 100%;
+    	width: 100%;
+    	background: #fff;
+    	-webkit-transition: all .3s;
+    	transition: all .3s;
+    	-webkit-transform-origin: 0 0;
+    	transform-origin: 0 0;
+    }
+    .laydate-modal.active {
+    	left: 0;
+    }
+    </style>
+</head>
+<body>
+<div class="laydate-box active" id="laydate_year"></div>
+<div class="laydate-box" id="laydate_month"></div>
+<div class="laydate-modal" id="laydate_modal"></div>
+<button class="lay-button" onclick="returnSelect()">返回</button>
+<button class="lay-button" onclick="modalSH('laydate_modal', 'show');modalInitFn();">添加事件</button>
+</body>
+<script src="../laydate/laydate.js"></script>
+<script type="text/javascript" >
+"use strict";
+var globalData = {};
+globalData.userEObj = [{
+	date: '2017-11-01',
+	title: '赵云',
+	content: '常胜将军'
+}, {
+	date: '2017-02-01',
+	title: '白军',
+	content: '枝江白军'
+}];
+dateDataInit(2017, globalData.userEObj);
+globalData.userChange = false;
+//xlkuajax({
+//	url: 'http://127.0.0.1:3000/query',
+//	type: 'get'
+//}, function(data){
+//	globalData.userEObj = data;
+//	dateDataInit(2017, data);
+//});
+//添加日常事件
+function submitFn(){
+	var boxm = document.getElementById('laydate_month') || {},
+		mbox = document.getElementById('laydate_modal'),
+		layt = boxm.laydate || {},
+		val = layt.value,
+		isTrue = true,
+		param = {
+			date: val,
+			title: mbox.querySelector('.lm_title').value,
+			content: mbox.querySelector('.lm_con').value
+		};
+	if(param['date'] && param['title'] && param['content']){
+		each(globalData.userEObj, function(index, obj){
+			if(obj.value === val){
+				isTrue = false;
+				obj = param;
+			}
+		});
+		if(isTrue === true){
+			globalData.userEObj.push(param);
+		}
+//		xlkuajax({
+//			url: 'http://127.0.0.1:3000/add',
+//			data: param,
+//			type: 'post'
+//		}, function(data){
+//			if(data.id){
+				globalData.userChange = true;
+				modalSH('laydate_modal', 'hide');
+				shareLaydate(globalData.userEObj, val);
+//				console.log('添加成功！');
+//			}else{
+//				console.log('添加失败！');
+//			}
+//		});
+	}
+}
+
+//模态框内容初始化
+function modalInitFn(obj){
+	obj = obj || {
+		date: '',
+		title: '',
+		content: ''
+	}
+	var box = document.getElementById('laydate_modal'),
+		str =
+		'<div><label>抬头</label><input class="lm_title" type="text" value="' + obj.title + '" placeholder="只能有两个字"></div>'+
+		'<div><label>主体</label><input class="lm_con" type="text" value="' + obj.content + '" placeholder="主体内容"></div>'+
+		'<div><button onclick="submitFn()">提交</button></div>'+
+		'<div><button onclick="modalSH(\'laydate_modal\', \'hide\')">返回</button></div>';
+	box.innerHTML = str;
+}
+
+//模态框显示隐藏
+function modalSH(id, type){
+	var box = document.getElementById(id);
+	if(type === 'show'){
+		box.classList.add('active');
+	}else if(type === 'hide'){
+		box.classList.remove('active');
+	}
+}
+
+
+//年份日历初始化
+function dateDataInit(year, data, month){
+	var i = 0, boxy = document.getElementById('laydate_year'), li, rnum = 0, me;
+	boxy.innerHTML = '<div class="laydate-con"></div>';
+	var cony = boxy.querySelector('.laydate-con');
+	for(; i < 12; i++){
+		li = document.createElement('div');
+		li.className = 'lay-li';
+		if(month === (i + 1)){
+			me = li;
+		}
+		cony.appendChild(li);
+		renderLayDate(li, (year + '-' + (i < 9 ? ('0' + (i + 1)) : (i + 1)) + '-01'), data, function(laydate){
+			rnum++;
+			if(rnum === 1){
+				cony.style.width = cony.querySelector('.layui-laydate').offsetWidth*2 + 'px';
+			}
+			if(rnum === 12){
+				var ww = boxy.offsetWidth/cony.offsetWidth;
+					cony.style['webkitTransform'] = 'scale(' + ww + ')';
+					cony.style['transform'] = 'scale(' + ww + ')';
+					boxy.style.height = cony.offsetHeight*ww + 'px';
+			}
+		});
+	}
+}
+//渲染日历
+//box
+function renderLayDate(li, value, data, callback){
+	callback = callback || function(){};
+	var layt = laydate.render({
+		elem: li,
+		position: 'static',
+		showBottom: false,
+		value: value,
+		zIndex: 1,
+		mark: (function(){
+			var a = {}, b = 0, c;
+			while(c = data[b++]){
+				a[c['date']] = c['title']
+			}
+			return a;
+		})(),
+		done: function(value, date){
+			onliclick(value);
+		},
+		ready: function(){
+			li.laydate = this;
+			callback(layt);
+		}
+	});
+	return layt;
+}
+
+//渲染共用日历
+function shareLaydate(data, value){
+	var boxm = document.getElementById('laydate_month');
+	boxm.innerHTML = '<div class="laydate-con"></div>';
+	var conm = boxm.querySelector('.laydate-con');
+	var layt = laydate.render({
+		elem: conm,
+		value: value,
+		position: 'static',
+		showBottom: false,
+		zIndex: 1,
+		mark: (function(){
+			var a = {}, b = 0, c;
+			while(c = data[b++]){
+				a[c['date']] = c['title']
+			}
+			return a;
+		})(),
+		done: function(val, date){
+			var b = 0, c;
+			while(c = data[b++]){
+				if(c['date'] === val){
+					modalInitFn(c);
+					modalSH('laydate_modal', 'show');
+					break;
+				}
+			}
+		},
+		ready: function(){
+			boxm.laydate = this;
+			var ww = boxm.offsetWidth/conm.offsetWidth;
+			boxm.style['height'] = conm.offsetHeight*ww + 'px';
+			conm.style['webkitTransform'] = 'scale(' + ww + ')';
+			conm.style['transform'] = 'scale(' + ww + ')';
+		}
+	});
+	return layt;
+}
+
+
+//返回重新选择
+function returnSelect(){
+	var boxy = document.getElementById('laydate_year'),
+		boxm = document.getElementById('laydate_month');
+	if(globalData.userChange){
+		//重新渲染
+		dateDataInit(2017, globalData.userEObj);
+		globalData.userChange = false;
+	}else{
+		var cony = boxy.querySelector('.laydate-con'),
+			ww = boxy.offsetWidth/cony.offsetWidth;
+		cony.style['webkitTransform'] = 'scale(' + ww + ')';
+		cony.style['transform'] = 'scale(' + ww + ')';
+		boxy.style.height = cony.offsetHeight*ww + 'px';
+	}
+	boxm.style.height = '0';
+	boxy.classList.add('active');
+	boxm.classList.remove('active');
+}
+
+//单个日历的点击选中
+function onliclick(value){
+	var boxy = document.getElementById('laydate_year'),
+		boxm = document.getElementById('laydate_month'),
+		cony = boxy.querySelector('.laydate-con');
+	cony.style['webkitTransform'] = 'scale(0)';
+	cony.style['transform'] = 'scale(0)';
+	boxy.style.height = '0';
+	shareLaydate(globalData.userEObj, value);
+	boxy.classList.remove('active');
+	boxm.classList.add('active');
+}
+
+//数组和对象遍历
+function each(obj, callback) {
+	if(typeof obj != 'object'){return obj;}
+	var value, i = 0, length = obj.length;
+	if(length === 0){return obj;}
+	if (obj instanceof Array || obj[0]) {
+		for (; i < length; i++) {
+			value = callback.call(obj[i], i, obj[i]);
+			if (value === false) {break;}
+		}
+	} else {
+		for (i in obj) {
+			value = callback.call(obj[i], i, obj[i]);
+			if (value === false) {break;}
+		}
+	}
+	return obj;
+}
+
+window.onresize = function(){
+	var box = document.querySelector('.laydate-box.active'),
+		con = box.querySelector('.laydate-con'),
+		ww = box.offsetWidth/con.offsetWidth;
+		con.style['webkitTransform'] = 'scale(' + ww + ')';
+		con.style['transform'] = 'scale(' + ww + ')';
+		box.style.height = con.offsetHeight*ww + 'px';
+}
+//ajax方法封装，可独立使用，不依赖任何库，和上面也没有关系
+function xlkuajax(_param, callback){
+	callback = _param.callback || callback || function(){};
+	var _a = {
+		url: '',//请求地址
+		type: 'get',//请求方式
+		dataType: 'json',//返回数据类型
+		timeout: 20000,//超时终止
+		data: {},//需要传递的参数
+		async: true,//默认异步请求
+		headers: {},//请求的头信息
+		processData: true//是否处理数据，以form传输
+	},
+	parseObj = function(obj){//序列化对象
+		var s = [], k, v;
+		for(k in obj){
+			v = obj[k];
+			v = typeof v === 'function' ? (v() + '') : ((v + '') || '');
+			s[s.length] = encodeURIComponent(k) + '=' + encodeURIComponent(v);
+		}
+		return s.join( '&' ).replace(/%20/g, '+');
+	};
+	for(var pn in _param){//合并对象
+		_a[pn] = _param[pn];
+	}
+	var xhr = new XMLHttpRequest(),
+		headers = _a.headers || {},
+		data = _a.data || {},
+		tt;//计时器ID
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState == 4) {
+			clearTimeout(tt);
+			if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+				if((_a.dataType).toLocaleLowerCase() === 'json'){
+					var rdata = JSON.parse(xhr.responseText + '');
+					callback(rdata);
+				}else{
+					callback(xhr.responseText + '');
+				}
+			} else {
+				callback(xhr, xhr.status);
+			}
+		}
+	};
+	if (_a.async && _a.timeout > 0) {//设置timeout
+		tt = setTimeout(function(){
+			xhr.abort();
+		}, _a.timeout);
+	}
+	xhr.open(_a.type, _a.url, _a.async);//初始化xhr
+	if (_a.processData) {
+		xhr.setRequestHeader(//默认发送的数据类型
+			'content-type',
+			'application/x-www-form-urlencoded; charset=UTF-8'
+		);
+		data = parseObj(data);
+	}else{
+		if(typeof data === 'object'){
+			if(Object.prototype.toString.call(data) != '[object FormData]'){
+				data = JSON.stringify(data);
+			}
+		}else{
+			data = (data + '');
+		}
+	}
+	for(var hn in headers){//设置头信息
+		xhr.setRequestHeader(hn, headers[hn]);
+	}
+	xhr.send(data);
+}
+</script>
+</html>

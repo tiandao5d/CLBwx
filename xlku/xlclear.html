@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<style type="text/css">
+			body {
+				margin: 0;
+			}
+			
+			.itemlist {
+				position: relative;
+			}
+			
+			.box {
+				position: absolute;
+				left: 0;
+				top: 0;
+				height: 100%;
+				width: 100%;
+				overflow: hidden;
+			}
+			
+			.adt {
+				transition: all .3s;
+			}
+			
+			.item {
+				position: absolute;
+				left: 0;
+				top: 0;
+				box-sizing: border-box;
+				width: 100%;
+				height: 60px;
+				display: flex;
+				align-items: center;
+				color: #fff;
+				padding: 0 10px;
+				background: rgb(28, 138, 248);
+				border-top: 1px solid rgba(255, 255, 255, 0.07);
+				border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+				transition: all .3s;
+			}
+			
+			.drag {
+				-webkit-transition: -webkit-transform 0s linear, opacity 0s linear!important;
+				-moz-transition: -moz-transform 0s linear, opacity 0s linear!important;
+				transition: transform 0s linear, opacity 0s linear!important
+			}
+			
+			.pullitem {
+				top: -60px;
+				padding: 0;
+				perspective-origin: bottom center;
+				perspective: 400px;
+				background: none;
+			}
+			
+			.pullbox {
+				height: 60px;
+				width: 100%;
+				opacity: 0;
+				background: rgb(28, 138, 248);
+				transform: rotateX(90deg);
+				transform-origin: bottom center;
+			}
+			*:not(input) {
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				-o-user-select: none;
+				user-select: none
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="box">
+			<div class="itemlist"></div>
+		</div>
+		<script src="../js/jquery-2.2.4.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var raf = window.requestAnimationFrame ||
+				window.webkitRequestAnimationFrame ||
+				window.mozRequestAnimationFrame ||
+				function(callback) {
+					window.setTimeout(callback, 16);
+				},
+				btouch;
+			var $box = $('.box'),
+				$tl = $('.itemlist'),
+				$item;
+			function ggg(){
+				var gradient = new gradientColor([23,128,247], [255,0,0], 20);
+				var str = '';
+				console.log(gradient)
+				$.each(gradient, function(index, txt) {
+					str += '<div class="item" style="transform: translate3d(0,' + (index*60) + 'px,0);background: ' + txt + '">' + txt + '</div>';
+				});
+				$tl.append(str);
+			}
+			init()
+
+			function init() {
+				var num = 20,
+					str = '';
+//				while(num--) {
+//					str += '<div class="item">' + num + '</div>';
+//				}
+//				$tl.append(str);
+				ggg();
+				$item = $('.item');
+				$tl.prepend('<div class="item pullitem"><div class="pullbox">喇叭</div></div>');
+				$item.each(function(index) {
+					$(this).css({
+						'transform': 'translate3d(0,' + (index * 60) + 'px,0)'
+					});
+				});
+				btouch = touchXL($box);
+				btouch.moveStart = moveStart;
+				btouch.tbSlideFn = tbSlideFn;
+				btouch.moveend = moveend;
+				btouch.tap = itemTap;
+
+			}
+			
+			function itemTap(touchXL, e){
+				var $me = $(e.target);
+				if(!$me.hasClass('item')){
+					return false;
+				}
+				var titem = $me.prevAll(),
+					bitem = $me.nextAll(),
+					wh = $tl[0].scrollHeight;
+				if($me.hasClass('wwww')) {
+					var tn = $item.length;
+					$item.each(function(index) {
+						$(this).css({
+							'transform': 'translate3d(0,' + (index * 60) + 'px,0)'
+						});
+					});
+					$me.removeClass('wwww');
+					return false;
+				}
+				$me.addClass('wwww');
+				titem.each(function(index) {
+					$(this).css({
+						'transform': 'translate3d(0,-' + (index * 60 + 60) + 'px,0)'
+					});
+				});
+				bitem.each(function(index) {
+					$(this).css({
+						'transform': 'translate3d(0,' + (index * 60 + wh) + 'px,0)'
+					});
+				});
+			}
+
+			function moveY(y) {
+				$tl.data('y', y).removeClass('adt').css({
+					'transform': 'translate3d(0,' + y + 'px,0)'
+				});
+			}
+			function moveStart(touchXL, e) {
+				$tl.data('s', 0);
+			}
+			function tbSlideFn(touchXL, e) {
+				var yy = touchXL.m.y_y,
+					boxh = $box.height(),
+					tlh = $tl[0].scrollHeight,
+					mins = boxh - tlh,
+					ys = (yy - ($tl.data('s') || 0)),
+					y = ($tl.data('y') || 0) + ys;
+				if(y < mins || y > 0) {
+					y = ($tl.data('y') || 0) + ys * .45;
+				}
+				if(y > 0) {
+					var pct = y / 60;
+					var r = Math.max(0, (1 - pct) * 90);
+					$tl.find('.pullbox').css({
+						'transform': 'rotateX(' + r + 'deg)',
+						'opacity': (pct / 2 + .5)
+					});
+				}
+				$tl.data('s', yy);
+				moveY(y);
+			}
+			function moveend(touchXL, e) {
+				var yy = touchXL.m.y_y,
+					boxh = $box.height(),
+					tlh = $tl[0].scrollHeight,
+					mins = boxh - tlh - .5,
+					tt = touchXL.e.t - touchXL.s.t,
+					y = ($tl.data('y') || 0) + (yy - ($tl.data('s') || 0)),
+					sp = yy / tt * 16;
+				sp = Math.max(-35, Math.min(35, sp));
+				loop();
+
+				function loop() {
+					if(btouch.isDown) {
+						return false;
+					}
+					var y = $tl.data('y');
+					if(y < mins) {
+						$tl.data('y', y + (mins - y) * .2);
+						sp *= .85; // 申请额外的摩擦
+						if($tl.data('y') < mins) {
+							raf(loop);
+							y = ($tl.data('y') || 0) + sp;
+							$tl.data('s', yy);
+							moveY(y);
+							sp *= .95;
+						} else {
+							moveY(mins);
+						}
+					} else if(y > 0.5) {
+						$tl.data('y', y * .8);
+						sp *= .85;
+						if(y * .8 > 0.5) {
+							raf(loop);
+							y = ($tl.data('y') || 0) + sp;
+							$tl.data('s', yy);
+							moveY(y);
+							sp *= .95;
+						} else {
+							moveY(0);
+						}
+					} else if(Math.abs(sp) > .1) {
+						raf(loop);
+						y = ($tl.data('y') || 0) + sp;
+						$tl.data('s', yy);
+						moveY(y);
+						sp *= .95;
+					}
+				}
+			}
+
+			//touch的封装可用于PC 基于jQuery
+			function touchXL($me) {
+				if(!$me) {
+					return false;
+				}
+				if(($me.nodeType === 1) || (typeof $me === 'string')) {
+					$me = $($me);
+				} else if(!($me instanceof jQuery)) {
+					return false;
+				}
+				if(!($me.length > 0)) {
+					return false;
+				}
+				var nt = $me.data('bindt');
+				var cbObj = {
+					moveStart: function() {},
+					tap: function() {}, //单击事件
+					moveend: function() {}, //滑动完成事件
+					longTouch: function() {}, //长按事件
+					tbSlideFn: function() {}, //上下滑动事件
+					lrSlideFn: function() {}, //左右滑动事件
+					isDown: true
+				};
+				var isTouch = 'ontouchstart' in window,
+					start = isTouch ? 'touchstart' : 'mousedown',
+					move = isTouch ? 'touchmove' : 'mousemove',
+					end = isTouch ? 'touchend' : 'mouseup',
+					dstart = 'dragstart',
+					longt = 1000, //长按的时间
+					tapt = 200, //单机的时间
+					moves = 10; //滑动的最短距离
+				if(nt) {
+					if(arguments[1] === 'logout') {
+						var offe = (start + '.start' + nt) + ' ' + (move + '.move' + nt) + ' ' + (dstart + '.dstart' + nt);
+						console.log(offe);
+						$me.removeData(['bindt', 'touchXL']).off(offe);
+						$(document).off((end + '.end' + nt));
+					}
+					return false;
+				}
+				nt = Date.now();
+				start += ('.start' + nt);
+				move += ('.move' + nt);
+				end += ('.end' + nt);
+				dstart += ('.dstart' + nt);
+				$me.data('bindt', nt);
+				$me.on(start, function(e) {
+					var hobj = isTouch ? e.originalEvent.targetTouches[0] : e.originalEvent,
+						touchXL = {
+							s: {
+								x: hobj.pageX,
+								y: hobj.pageY,
+								t: Date.now()
+							},
+							type: 'start'
+						};
+					cbObj.moveStart();
+					cbObj.isDown = true;
+					touchXL.s1000 = setTimeout(function() {
+						touchXL = $me.data('touchXL');
+						touchXL.s.lt = longt;
+						touchXL.type = 'long';
+						$me.data('touchXL', touchXL);
+						cbObj.longTouch(touchXL, e);
+					}, longt);
+					$me.data('touchXL', touchXL);
+				}).on(move, function(e) {
+					var hobj = isTouch ? e.originalEvent.targetTouches[0] : e.originalEvent,
+						touchXL = $me.data('touchXL') || {},
+						s = touchXL.s,
+						type = touchXL.type,
+						m;
+					clearTimeout(touchXL.s1000);
+					//未经过start
+					if(!s || s.lt) {
+						return false;
+					}
+					m = {
+						x: hobj.pageX,
+						y: hobj.pageY,
+						t: Date.now()
+					};
+					var sx = s.x,
+						sy = s.y,
+						mx = m.x,
+						my = m.y,
+						x_x = mx - sx,
+						y_y = my - sy;
+					m.x_x = x_x;
+					m.y_y = y_y;
+					touchXL.m = m;
+					touchXL.type = 'move';
+					if(type === 'move_tb') {
+						touchXL.type = 'move_tb';
+						cbObj.tbSlideFn(touchXL, e);
+					} else if(type === 'move_lr') {
+						touchXL.type = 'move_lr';
+						cbObj.lrSlideFn(touchXL, e);
+					} else if(Math.abs(y_y) > moves) {
+						touchXL.type = 'move_tb';
+						cbObj.tbSlideFn(touchXL, e);
+					} else if(Math.abs(x_x) > moves) {
+						touchXL.type = 'move_lr';
+						cbObj.lrSlideFn(touchXL, e);
+					} else {
+						return false; //不保存move事件
+					}
+					$me.data('touchXL', touchXL);
+				}).on(end, function(e) {
+					var touchXL = $me.data('touchXL') || {},
+						nt = Date.now(),
+						type = touchXL.type || '',
+						s = touchXL.s,
+						m = touchXL.m;
+					cbObj.isDown = false;
+					touchXL.e = {
+						t: nt
+					};
+					clearTimeout(touchXL.s1000); //清除初始用于检测长按的计时
+					if(s && (nt - s.t < tapt) && type === 'start') {
+						touchXL.type = 'tap';
+						cbObj.tap(touchXL, e);
+					} else if(s && m) {
+						cbObj.moveend(touchXL, e);
+					}
+					$me.removeData('touchXL');
+				}).on(dstart, function() {
+					return false; //阻止元素拖拽
+				}).on('mouseout', function(e){
+                    var x = e.pageX,
+                        y = e.pageY,
+                        left = this.offsetLeft,
+                        top = this.offsetTop,
+                        right = left + $(this).width(),
+                        bottom = top + $(this).height();
+					if(x <= left || x >= right || y <= top || y >= bottom){
+						console.log(123);
+						$(this).trigger(end);
+					}
+				});
+				return cbObj;
+			}
+
+			function gradientColor(startColor, endColor, step) {
+				startRGB = colorRgb(startColor); //转换为rgb数组模式
+				startR = startRGB[0];
+				startG = startRGB[1];
+				startB = startRGB[2];
+				endRGB = colorRgb(endColor);
+				endR = endRGB[0];
+				endG = endRGB[1];
+				endB = endRGB[2];
+				sR = (endR - startR) / step; //总差值
+				sG = (endG - startG) / step;
+				sB = (endB - startB) / step;
+				var colorArr = [];
+				for(var i = 0; i < step; i++) {
+					//计算每一步的hex值 
+					var hex = colorHex('rgb(' + parseInt((sR * i + startR)) + ',' + parseInt((sG * i + startG)) + ',' + parseInt((sB * i + startB)) + ')');
+					colorArr.push(hex);
+				}
+				return colorArr;
+			}
+			// 将hex表示方式转换为rgb表示方式(这里返回rgb数组模式)
+			function colorRgb(sColor) {
+				if(sColor instanceof Array){
+					return sColor;
+				}
+				var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
+				var sColor = sColor.toLowerCase();
+				if(sColor && reg.test(sColor)) {
+					if(sColor.length === 4) {
+						var sColorNew = "#";
+						for(var i = 1; i < 4; i += 1) {
+							sColorNew += sColor.slice(i, i + 1).concat(sColor.slice(i, i + 1));
+						}
+						sColor = sColorNew;
+					}
+					//处理六位的颜色值
+					var sColorChange = [];
+					for(var i = 1; i < 7; i += 2) {
+						sColorChange.push(parseInt("0x" + sColor.slice(i, i + 2)));
+					}
+					return sColorChange;
+				} else {
+					return sColor;
+				}
+			};
+			// 将rgb表示方式转换为hex表示方式
+			function colorHex(rgb) {
+				var _this = rgb;
+				var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
+				if(/^(rgb|RGB)/.test(_this)) {
+					var aColor = _this.replace(/(?:(|)|rgb|RGB)*/g, "").split(",");
+					var strHex = "#";
+					for(var i = 0; i < aColor.length; i++) {
+						var hex = Number(aColor[i]).toString(16);
+						hex = hex < 10 ? 0 + '' + hex : hex; // 保证每个rgb的值为2位
+						if(hex === "0") {
+							hex += hex;
+						}
+						strHex += hex;
+					}
+					if(strHex.length !== 7) {
+						strHex = _this;
+					}
+					return strHex;
+				} else if(reg.test(_this)) {
+					var aNum = _this.replace(/#/, "").split("");
+					if(aNum.length === 6) {
+						return _this;
+					} else if(aNum.length === 3) {
+						var numHex = "#";
+						for(var i = 0; i < aNum.length; i += 1) {
+							numHex += (aNum[i] + aNum[i]);
+						}
+						return numHex;
+					}
+				} else {
+					return _this;
+				}
+			}
+		</script>
+	</body>
+
+</html>

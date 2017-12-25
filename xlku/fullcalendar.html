@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    
+<link href="../fullcalendar/dist/fullcalendar.css" rel="stylesheet" />
+<link href="../fullcalendar/dist/fullcalendar.print.css" rel="stylesheet" media="print" />
+<style>
+
+	body {
+		margin: 0;
+		padding: 0;
+		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+	}
+	#calendar {
+		width: 100%;
+		transform-origin: 0 0;
+		transition: all .3s;
+		overflow: hidden;
+		margin: 0 auto;
+		
+	}
+    	.fc-scroller {
+    		overflow: auto;
+    	}
+</style>
+</head>
+<body>
+	<button class="clbtn">测试用</button>
+	<div id="calendar"></div>
+<script src="../fullcalendar/moment/moment.js"></script>
+<script src="../fullcalendar/jquery/dist/jquery.js"></script>
+<script src="../fullcalendar/dist/fullcalendar.js"></script>
+<script src="../fullcalendar/dist/locale/zh-cn.js"></script>
+    <script type="text/javascript">
+
+	$(document).ready(function() {
+		$('.clbtn').on('click', function(){
+			console.log(fd.fullCalendar( 'addEventSource', [{title: '中国', start: '2017-11-03T10:10:10', constraint: '内容'}]))
+		})
+		var fd = $('#calendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay,listMonth'
+			},
+			defaultDate: '2017-11-12',
+			navLinks: true, // can click day/week names to navigate views
+			businessHours: true, // display business hours
+			editable: true,
+			dayClick: function(){
+				console.log(arguments)
+			},
+			events: [
+				{
+					id: 1,
+					title: 'Business Lunch',
+					start: '2017-11-03T13:00:00',
+					constraint: 'businessHours'
+				},
+				{
+					title: 'Meeting',
+					start: '2017-11-13T11:00:00',
+					constraint: 'availableForMeeting', // defined below
+					color: '#257e4a'
+				},
+				{
+					title: 'Conference',
+					start: '2017-11-18',
+					end: '2017-11-20'
+				},
+				{
+					title: 'Party',
+					start: '2017-11-29T20:00:00'
+				},
+
+				// areas where "Meeting" must be dropped
+				{
+					id: 'availableForMeeting',
+					start: '2017-11-11T10:00:00',
+					end: '2017-11-11T16:00:00',
+					rendering: 'background'
+				},
+				{
+					id: 'availableForMeeting',
+					start: '2017-11-13T10:00:00',
+					end: '2017-11-13T16:00:00',
+					rendering: 'background'
+				},
+
+				// red areas where no events can be dropped
+				{
+					start: '2017-11-24',
+					end: '2017-11-28',
+					overlap: false,
+					rendering: 'background',
+					color: '#ff9f89'
+				},
+				{
+					start: '2017-11-06',
+					end: '2017-11-08',
+					overlap: false,
+					rendering: 'background',
+					color: '#ff9f89'
+				}
+			]
+		});
+	});
+    </script>
+</body>
+</html>
