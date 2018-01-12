@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<style type="text/css">
+			* {
+				box-sizing: border-box;
+			}
+			.tmodal-box {
+				position: fixed;
+				left: 0;
+				top: 0;
+				opacity: 0;
+				width: 100%;
+				height: 100%;
+				transition: opacity .3s;
+				overflow: hidden;
+			}
+			
+			.tmodal-bg {
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background: #000;
+				opacity: .6;
+			}
+			
+			.tmodal-con {
+				position: absolute;
+				transition: all .3s;
+				z-index: 1;
+			}
+			.tmodal-con .tmodal-bg {
+				opacity: 0;
+			}
+			.tmodal-html {
+				position: relative;
+				z-index: 2;
+				padding: 15px;
+				background: #fff;
+				width: 100%;
+				height: 100%;
+				min-height: 150px;
+				min-width: 150px;
+				max-width: 720px;
+				margin: 0 auto;
+			}
+			.tmodal-con.left,
+			.tmodal-con.right {
+				top: 0;
+				height: 100%;
+			}
+			
+			.tmodal-con.right {
+				right: -100%;
+			}
+			
+			.tmodal-con.left {
+				left: -100%;
+			}
+			.tmodal-box.active {
+				opacity: 1;
+			}
+			.tmodal-box.active .tmodal-con.right {
+				right: 0;
+			}
+			
+			.tmodal-box.active .tmodal-con.left {
+				left: 0;
+			}
+			
+			.tmodal-con.top,
+			.tmodal-con.bottom {
+				left: 0;
+				width: 100%;
+			}
+			
+			.tmodal-con.bottom {
+				bottom: -100%;
+			}
+			
+			.tmodal-con.top {
+				top: -100%;
+			}
+			
+			.tmodal-box.active .tmodal-con.bottom {
+				bottom: 0;
+			}
+			
+			.tmodal-box.active .tmodal-con.top {
+				top: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<button>点击</button>
+		<div id="aaa"></div>
+		<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			tmodal('bottom', 'str');
+			//划出modal
+			function tmodal(dir, str) {
+				dir = dir || 'bottom';
+				str = str || '没有任何数据';
+				var $box = $('.tmodal-box'),
+					$con,
+					s = document.body.style,
+					tend = (
+						'transition' in s ? 'transitionend' :
+						'webkitTransition' in s ? 'webkitTransitionEnd' :
+						'mozTransition' in s ? 'mozTransitionEnd' : ''
+					);
+				if(dir === 'hide') {
+					if(tend){
+						$box.removeClass('active').one(tend, function(){
+							$(this).hide();
+						});
+					}else{
+						$box.removeClass('active').hide();
+					}
+					return false;
+				}else if($box.length > 0){
+					$box.show().find('.tmodal-con')
+					.removeClass().addClass(('tmodal-con ' + dir))
+					.find('.tmodal-html').html(str);
+				}else{
+					var str =
+						'<div class="tmodal-box">'+
+						'<div class="tmodal-bg" onclick="tmodal(\'hide\')"></div>'+
+						'<div class="tmodal-con ' + dir + '">'+
+							'<div class="tmodal-bg" onclick="tmodal(\'hide\')"></div>' +
+							'<div class="tmodal-html">' + str + '</div>'+
+						'</div>'+
+						'</div>';
+					$('body').append(str);
+				}
+				setTimeout(function() {
+					$('.tmodal-box').addClass('active');
+				}, 0);
+			}
+
+		</script>
+	</body>
+
+</html>
