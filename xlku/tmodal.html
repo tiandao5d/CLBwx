@@ -98,11 +98,16 @@
 		</style>
 	</head>
 	<body>
-		<button>点击</button>
-		<div id="aaa"></div>
+		<button onclick="aaclick()">点击</button>
+		<div></div>
 		<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
-			tmodal('bottom', 'str');
+			function aaclick(){
+				var a = ['left', 'right', 'bottom', 'top'],
+					rd = Math.floor(Math.random()*a.length) + 0;
+				console.log(rd);
+				tmodal(a[rd], a[rd]);
+			}
 			//划出modal
 			function tmodal(dir, str) {
 				dir = dir || 'bottom';
