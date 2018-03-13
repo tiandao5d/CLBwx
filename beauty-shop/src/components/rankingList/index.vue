@@ -1,4 +1,5 @@
 <template>
+  <!-- 排行榜界面 -->
   <div class="page-body">
     <div class="content-body">
       <div class="tabs-box">
@@ -13,7 +14,18 @@
           </div>
         </div>
         <div class="tabs-content">
-          <div>{{titleActive}}</div>
+          <img class="tabs-bg1" :src="pageBg20">
+          <div class="tabs-item" :style="{'backgroundImage': 'url(' + pageBg21 + ')'}">
+            <div>{{titleActive}}</div>
+            <table class="rl-table">
+              <thead>
+                <tr><th>名次</th><th>站点</th><th>票数</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>01</td><td>010101</td><td>123456</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <foot-tabs :value="footActive" :tabarr="tabarr" @change="footTabChange"></foot-tabs>
@@ -23,6 +35,8 @@
 </template>
 
 <script>
+import pageBg20 from '@/assets/image/bs/add_shop020.png';
+import pageBg21 from '@/assets/image/bs/add_shop021.png';
 import provinceData from '@/assets/json/province.js';
 
 import ProvinceList from '@/components/sharing/province';
@@ -34,6 +48,8 @@ export default {
       list.push('item' + (i + 1))
     }
     return {
+      pageBg20,
+      pageBg21,
       titletabs: provinceData, // 储存抬头数据
       titleActive: provinceData[0].value, // 储存选中的抬头
       footActive: 'tab1',
@@ -134,7 +150,33 @@ export default {
   right: 0;
   bottom: 0;
   overflow: auto;
+  background-color: #fffad3;
   -webkit-overflow-scrolling: touch;
+}
+.tabs-bg1 {
+  width: 100%;
+}
+.tabs-item {
+  padding: 0 9.5%;
+  background-repeat: repeat-y;
+  background-size: 100%;
+  padding-bottom: 20px;
+}
+.rl-table {
+  background-color: #fffad3;
+  border-collapse:collapse;
+  width: 100%;
+}
+.rl-table th,
+.rl-table td {
+  text-align: center;
+  vertical-align: middle;
+  border: solid 1px #f55745;
+  height: 30px;
+  color: #626262;
+}
+.rl-table th {
+  color: #434343;
 }
 .footer .mu-tab-link-highlight {
   display: none;

@@ -16,13 +16,24 @@
         <div class="tabs-content">
           <div>{{titleActive}}</div>
           <div class="clearfix plist-ul">
-            <product-list v-for="item, index in productlist" :item="item" :key="index"></product-list>
+            <product-list @voteSuccess="voteSuccess" :status="listType" v-for="item, index in productlist" :item="item" :key="index"></product-list>
           </div>
           <scroll-bottom :scroller="scroller" :loading="loading" @load="loadMore"></scroll-bottom>
         </div>
       </div>
       <foot-tabs :value="footActive" :tabarr="tabarr" @change="footTabChange"></foot-tabs>
       <province-list ref="province"></province-list>
+      <mu-dialog :open="footActive === 'tab2'" title="搜索站点编号" @close="sdailogSH">
+        <mu-text-field v-model="sdIptVal" type="number" @focus="iptErrObj.sderr = ''" :errorText="iptErrObj.sderr" hintText="提示文字"/>
+        <mu-flat-button slot="actions" @click="sdailogSH" primary label="取消"/>
+        <mu-flat-button slot="actions" primary @click="sdailogSH('primary')" label="确定"/>
+      </mu-dialog>
+      <mu-dialog :open="voteDialog" title="投票成功" @close="voteClose">
+        感谢您投的宝贵一票，还差1票就可以获得抽奖机会哦！
+        <mu-flat-button slot="actions" @click="voteClose" primary label="取消"/>
+        <mu-flat-button slot="actions" primary @click="voteClose('confrim')" label="为我拉票"/>
+      </mu-dialog>
+      <share-dailog ref="shareda"/>
     </div>
   </div>
 </template>
@@ -34,35 +45,51 @@ import ScrollBottom from '@/components/sharing/scrollbottom'; // 滚动到底部
 import provinceData from '@/assets/json/province.js'; // 省份数据
 import ProvinceList from '@/components/sharing/province'; // 省份列表
 import FootTabs from '@/components/sharing/foot'; // 底部菜单
+import ShareDailog from '@/components/share'; // 底部菜单
 export default {
   data () {
-    const list = []
-    for (let i = 0; i < 10; i++) {
-      list.push('item' + (i + 1))
+    let listParam = {},
+        plen = provinceData.length;
+    for ( let i = 0; i < plen; i++ ) {
+      listParam[('p' + provinceData[i]['value'])] = {
+        currentPage: 0, // 当前页
+        totalCount: 1, // 总个数
+        pagePage: 1, // 总页数
+        recordList: [] // 数据内容
+      };
     }
     return {
-      num: 10,
       loading: false,
       scroller: null,
-      productlist: list,
+      productlist: [],
       bannerList: [], // 储存banner图数据
       titletabs: provinceData, // 储存抬头数据
       titleActive: provinceData[0].value, // 储存选中的抬头
       footActive: 'tab1',
+      oldFootA: '', // 记录旧的选择
+      listType: false,
+      voteDialog: false,
+      shareItem: {},
+      sdIptVal: '',
+      iptErrObj: {
+        sderr: ''
+      },
+      listParam: listParam,
       tabarr: [
-        {txt: '参选1', val: 'tab1', href: '#/', icon: 'cxzd'},
-        {txt: '参选2', val: 'tab2', href: '#/', icon: 'ss'},
-        {txt: '参选3', val: 'tab3', href: '#/', icon: 'wdbm'},
-        {txt: '参选4', val: 'tab4', href: '#/', icon: 'hdsm'}
+        {txt: '参选站点', val: 'tab1', href: '#/', icon: 'cxzd'},
+        {txt: '搜索', val: 'tab2', href: '', icon: 'ss', fn: this.sdailogSH},
+        {txt: '我的报名', val: 'tab3', href: '#/totalTable', icon: 'wdbm'},
+        {txt: '活动说明', val: 'tab4', href: '#/totalNum', icon: 'hdsm'}
       ]
     }
   },
   mounted () {
-    this.scroller = this.$el.querySelector('.tabs-content')
-  },
-  created () {
     // 页面数据初始化
-    this.pageInit()
+    this.pageInit();
+    this.scroller = this.$el.querySelector('.tabs-content');
+    if ( this.$xljs.activeData.status === 103 ) {
+      this.listType = true;
+    }
   },
   watch: {
     titleActive ( nv, ov ) {
@@ -83,12 +110,15 @@ export default {
   methods: {
     // 页面数据并发请求
     pageInit () {
-      let me = this;
-      let pid = me.$xljs.localProL().id || 0;
-      me.$xljs.ajaxAll([
-        {url: `${me.$xljs.domainUrl}/ushop-api-merchant/api/sns/notify/banner/list/6/${pid}.json`}
+      let that = this,
+          id = that.$xljs.activeId,
+          pid = that.$xljs.localProL().id || 0;
+      that.getWorksList();
+      that.$xljs.ajaxAll([
+        {url: `${that.$xljs.domainUrl}/ushop-api-merchant/api/sns/notify/banner/list/6/${pid}.json`},
+        {url: `${that.$xljs.domainUrl}/ushop-api-merchant/api/sns/vote/voter/get/${id}`}
       ], function () {
-        me.bannerInit(arguments[0]);
+        that.bannerInit(arguments[0]);
       });
     },
     //查看更多省份列表
@@ -98,32 +128,113 @@ export default {
     },
     // banner图初始化
     bannerInit (obj) {
-      let me = this;
+      let that = this;
       let arr = obj.recordList || [];
       arr = arr.map((o, i) => {
         return o.pictureAddress
       })
-      me.bannerList = arr;
+      that.bannerList = arr;
+    },
+    // 搜索显示隐藏
+    sdailogSH () {
+      let that = this;
+      if ( arguments[0] === 'show' ) {
+        that.footActive = 'tab2';
+      } else {
+        if ( that.sdIptVal ) {
+          // 显示搜索内容
+          console.log(that.sdIptVal);
+        } else if (arguments[0] === 'primary') {
+          that.iptErrObj.sderr = '不能为空';
+          return false;
+        }
+        that.footActive = that.oldFootA;
+      }
+    },
+    voteClose () {
+      let that = this;
+      that.voteDialog = false;
+      if ( arguments[0] === 'confrim' ) {
+        that.$refs.shareda.show(that.shareItem);
+      }
+    },
+    // 投票成功后
+    voteSuccess ( item ) {
+      let that = this;
+      that.voteDialog = true;
+      that.shareItem = item;
+    },
+    // 获取候选作品列表
+    getWorksList ( np ) {
+      let that = this,
+          cp = that.listParam[('p' + that.titleActive)],
+          _url = '/ushop-api-merchant/api/sns/vote/candidate/listBy',
+          _param = {
+            page: cp.currentPage + 1,
+            rows: 10,
+            serialNo: that.titleActive,
+            electionId: '',
+            self: ''
+          };
+      that.$xljs.extend( _param, np );
+      that.$xljs.ajax(_url, 'get', _param, ( data ) => {
+        data = {
+          currentPage: 1, // 当前页
+          totalCount: 1, // 总个数
+          pagePage: 1, // 总页数
+          recordList: [{
+            serialNo: 123,
+            address: '地址很长'
+          }] // 数据内容
+        }
+        if ( data.recordList ) {
+          cp.currentPage = data.currentPage;
+          cp.totalCount = data.totalCount;
+          cp.pagePage = data.pagePage;
+          if ( data.currentPage === 1 ) {
+            cp.recordList = data.recordList;
+          } else {
+            cp.recordList = cp.recordList.concat(data.recordList);
+          }
+          that.loading = false; // 加载更多消失
+        }
+        that.productlist = cp.recordList;
+      }, false);
     },
     // tab抬头切换
     titleTabChange ( val ) {
       this.titleActive = val;
+      let that = this,
+          cp = that.listParam[('p' + that.titleActive)];
+      if ( cp.currentPage === 0 ) {
+        that.getWorksList();
+      } else {
+        that.productlist = cp.recordList;
+      }
     },
     footTabChange ( val ) {
-      this.footActive = val;
-    },
-    loadMore () {
-      if (this.num >= 20) {
+      let that = this,
+          item;
+      that.oldFootA = that.footActive;
+      that.footActive = val;
+      if ( val === 'tab2' ) { // 搜索
         return false;
       }
-      this.loading = true
-      setTimeout(() => {
-        for (let i = this.num; i < this.num + 10; i++) {
-          this.productlist.push('item' + (i + 1))
+      that.$xljs.each(that.tabarr, (index, obj) => {
+        if ( obj.val === val ) {
+          item = obj;
+          return false;
         }
-        this.num += 10
-        this.loading = false
-      }, 2000)
+      });
+      that.$router.push(item.href);
+    },
+    loadMore () {
+      let that = this,
+          cp = that.listParam[('p' + that.titleActive)];
+      if ( cp.currentPage < cp.pagePage ) {
+        that.loading = true;
+        that.getWorksList();
+      }
     }
   },
   components: {
@@ -131,7 +242,8 @@ export default {
     ProductList,
     ScrollBottom,
     ProvinceList,
-    FootTabs
+    FootTabs,
+    ShareDailog
   }
 }
 </script>

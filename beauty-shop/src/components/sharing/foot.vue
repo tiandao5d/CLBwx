@@ -2,7 +2,7 @@
   <div class="footer">
     <mu-tabs :value="value" @change="footTabChange" lineClass="footer-line">
       <mu-tab v-for="item, index in tabarr" :key="index"
-              :href="item.href" :value="item.val" icon="."
+              :value="item.val" icon="."
               :iconClass="item.icon + ' icony'" :title="item.txt"/>
     </mu-tabs>
   </div>

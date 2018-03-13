@@ -4,6 +4,7 @@
 */
 import md5 from 'js-md5';
 import axios from 'axios';
+
 let globaljs = {};
 function isTest () {
   let domainUrl = location.protocol + '//' + location.host;
@@ -426,7 +427,7 @@ globaljs.install = function (Vue, options) {
       if (box) {
         if (status === 'show') {
           box.classList.remove('hide');
-          if (txt) {
+          if ( typeof txt === 'string' ) {
             box.querySelector('.loading-box-text').innerHTML = txt;
           }
         } else if (status === 'hide') {

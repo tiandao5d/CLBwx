@@ -10,13 +10,13 @@
             <img class="full-img" :src="pageBg11">
             <div class="tt-d tt-tt">{{dttObj.d}}</div>
             <div class="tt-h tt-tt">{{dttObj.h}}</div>
-            <div class="tt-i tt-tt">{{dttObj.i}}</div>
+            <div class="tt-i tt-tt">{{dttObj.i + 1}}</div>
           </div>
           <!-- 可报名 -->
           <div class="tt-status2 tt-status" v-if="ttStatus === '2'">
             <img class="full-img" :src="pageBg12">
-            <div class="tts2-btn"></div>
-            <div class="tts2-num">已有<span>2015</span>家投注站完成报名</div>
+            <router-link to="/addShop" class="tts2-btn"></router-link>
+            <div class="tts2-num">已有<span>{{signup}}</span>家投注站完成报名</div>
           </div>
           <!-- 已结束 -->
           <div class="tt-status3 tt-status" v-if="ttStatus === '3'">
@@ -105,9 +105,13 @@ export default {
       pageBg11,
       pageBg12,
       pageBg13,
+      signup: 0, // 当前已经报名的数量
       endtt: +(new Date('2018-03-10')),
-      ttStatus: '2'
+      ttStatus: ''
     }
+  },
+  mounted () {
+    this.pageInit();
   },
   computed: {
     dttObj () {
@@ -120,20 +124,37 @@ export default {
           i = parseInt((timeDif%3600000)/(60000)),
           s = parseInt((timeDif%60000)/1000),
           ms = parseInt((timeDif%1000)/100);
-      console.log(123)
       return {d, h, i, s, ms}
     }
-  },
-  created () {
-    // 页面数据初始化
-    this.pageInit()
   },
   methods: {
     // 页面数据并发请求
     pageInit () {
       let that = this;
-      if (that.ttStatus === '1') {
-        that.ttItval();
+      that.atStatus(that.$xljs.activeData);
+    },
+    atStatus ( data ) {
+      let that = this;
+      data = {
+        status: 101,
+        enrollTime: '2018-03-13 00:00:00',
+        participants: 123
+      }
+      if ( data.status === 101 ) { // 可以开始报名
+        let et = +(new Date(data.enrollTime)), //报名时间
+            nt = +(new Date()); // 当前时间
+        if ( et > nt ) { // 说明报名时间未到，开启倒计时
+          that.ttStatus = '1'; // 倒计时
+          that.endtt = et;
+          that.ttItval();
+        } else { // 可是开始报名，显示报名按键
+          that.ttStatus = '2'; // 可以报名
+          that.signup = data.participants;
+        }
+      } else if ( data.status === 103 ) { // 可以开始投票
+        that.$router.push('/home/vote');
+      } else if ( data.status === 104 ) { // 已经结束了
+          that.ttStatus = '3'; // 可以报名
       }
     },
     ttItval () {

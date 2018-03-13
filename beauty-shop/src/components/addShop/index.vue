@@ -6,36 +6,34 @@
         <div class="form-con" :style="{'backgroundImage': 'url(' + pageBg1 + ')'}">
           <div class="input-group">
             <label>站点编号：</label>
-            <input type="text" placeholder="请填写正确的站点编号">
+            <input v-model="fromData.serialNo.val" type="text" placeholder="请填写正确的站点编号">
           </div>
           <div class="input-group">
             <label>所在地区：</label>
-            <select>
-              <option v-for="item, index in provinceData" :key="index" :value="item.value">{{item.desc}}</option>
-            </select>
+            <input type="text" v-model="fromData.district.val" placeholder="点击选择地址" readonly @click="bottomSheetSH('show')">
           </div>
           <div class="input-group">
             <label>站点地址：</label>
-            <input type="text" placeholder="请填写真实住址">
+            <input v-model="fromData.address.val" type="text" placeholder="请填写真实住址">
           </div>
           <div class="input-group">
             <label>站主姓名：</label>
-            <input type="text" placeholder="请填写真实姓名">
+            <input type="text" v-model="fromData.name.val" placeholder="请填写真实姓名">
           </div>
           <div class="input-group">
             <label>联系方式：</label>
-            <input type="text" placeholder="请填写正确的联系方式">
+            <input type="text" v-model="fromData.phone.val" placeholder="请填写正确的联系方式">
           </div>
           <div class="input-group">
             <label>站点服务及业绩：</label>
-            <textarea placeholder="介绍文字300字以内"></textarea>
+            <textarea v-model="fromData.remark.val" placeholder="介绍文字300字以内"></textarea>
           </div>
           <div class="add-img">
-            <div class="addimg-item" v-for="img, index in addimgArr" :key="index">
-              <img class="addimg-img" :src="img">
+            <div class="addimg-item" v-for="item, index in addimgArr" :key="index">
+              <img class="addimg-img" :src="item.bs64">
               <mu-float-button class="addimg-close" @click="img_close(index)" mini icon="close" backgroundColor="#f00"/>
             </div>
-            <div class="addimg-btn" v-if="addimgArr.length < 3" @click="addimgClick">
+            <div class="addimg-btn" v-if="addimgArr.length < 1" @click="addimgClick">
               <input type="file" class="form-file" id="form_file" @change="img_edit">
               <mu-icon value="add" color="#959595" :size="30"/>
               <span>添加照片</span>
@@ -68,6 +66,15 @@
           <div class="alert-btn3" @click="alertClose"></div>
         </div>
       </div>
+      <toast-txt ref="toasttxt" />
+      <mu-bottom-sheet :open="bottomSheet" @close="bottomSheetSH('hide')">
+        <mu-list @change="cityChange">
+          <mu-sub-header>请选择</mu-sub-header>
+          <div class="city-box">
+            <mu-list-item v-for="item, index in cityArr" :key="index" :value="item.name" :title="item.name"/>
+          </div>
+        </mu-list>
+      </mu-bottom-sheet>
     </div>
   </div>
 </template>
@@ -81,8 +88,10 @@ import pageBg5 from '@/assets/image/bs/add_shop005.png';
 import pageBg6 from '@/assets/image/bs/add_shop006.png';
 
 import CropperBox from '@/components/sharing/crop';
+import ToastTxt from '@/components/sharing/toast';
 
-import provinceData from '@/assets/json/province.js';
+import cityData from '@/assets/json/city.min.js';
+
 export default {
   data () {
     return {
@@ -92,10 +101,24 @@ export default {
       pageBg4,
       pageBg5,
       pageBg6,
-      alertActive: 'alert3',
-      provinceData,
-      addimgArr: [],
-      game2: 1
+      alertActive: false, // 弹窗显示否
+      cityData, // 省份数据
+      addimgArr: [], // 图片数据
+      toastsh: true, // 提示框显示否
+      bottomSheet: false, // 城市选择显示否
+      cityArr: cityData, // 城市数据
+      fromCity: [], // 储存三级联动的数据
+      fromData: {
+        serialNo: {val: '', errtxt: '站点号不能为空', valid: true},
+        userNo:  {val: '', valid: false},
+        phone:  {val: '', errtxt: '请输入联系方式', valid: true},
+        province:  {val: '', errtxt: '请输入省份', valid: false},
+        district:  {val: '', errtxt: '请输入地区', valid: true},
+        remark:  {val: '', errtxt: '请输入站点服务及业绩', valid: true},
+        name:  {val: '', errtxt: '请输入站主姓名', valid: true},
+        address:  {val: '', errtxt: '请选择所在地址', valid: true},
+        url:  {val: '', errtxt: '请添加站点图片', valid: true}
+      }
     }
   },
   created () {
@@ -105,18 +128,48 @@ export default {
   methods: {
     // 页面数据并发请求
     pageInit () {
+      let that = this,
+          _url = '/ushop-api-merchant/api/sns/vote/candidate/signedUp/' + id;
+      that.$xljs.ajax(_url, 'get', {}, (data) => {
+        // "result":"报名状态(0:未报名 待审:98 不通过:99 通过:100)"，
+        if ( data.result === 0 ) {
+          console.log('未报名');
+        } else if ( data.result === 98 ) {
+          console.log('待审');
+        } else if ( data.result === 99 ) {
+          that.alertActive = 'alert1'; // 不通过
+        } else if ( data.result === 100 ) {
+          that.alertActive = 'alert2'; // 不通过
+        }
+      });
     },
     // 图片编辑
-    img_edit ( e ) {
-      let that = this,
-          _file = e.target.files[0],
-          bs64 = '',
-          rf = new FileReader();
-      rf.readAsDataURL(_file);
-      rf.onload = function(){
-        that.$refs.cropper.showcrop( rf.result )
+    img_edit () {
+      let that = this;
+      that.$xljs.loading( 'show', '图片解析中……' ); // 遮屏
+      if ( that.$xljs.isWeixin() ) {//微信选择图片
+        let localId = arguments[0];
+        window.wx.getLocalImgData({
+          localId: localId, // 图片的localID
+          success ( res ) {
+            that.$xljs.loading( 'hide' ); // 解除遮屏
+            // localData是图片的base64数据，可以用img标签显示
+            that.$refs.cropper.showcrop( res.localData )
+          }
+        });
+      } else { // 本地用于测试的选择图片
+        let e = arguments[0],
+            _file = e.target.files[0],
+            rf = new FileReader();
+        rf.readAsDataURL( _file );
+        rf.onload = () => {
+          // result是图片的base64数据，可以用img标签显示
+          that.$xljs.loading( 'hide' ); // 解除遮屏
+          that.$refs.cropper.showcrop( rf.result );
+        }
       }
     },
+    // 关闭弹窗
     alertClose () {
       this.alertActive = false;
     },
@@ -126,18 +179,113 @@ export default {
     },
     //图片编辑后回调
     cropCb ( data ) {
-      this.addimgArr.push(data.bs64)
+      this.addimgArr.push(data);
+      this.fromData.url.val = data.url;
     },
+    // 点击添加图片
     addimgClick () {
-      let fileIpt = document.getElementById('form_file');
-      fileIpt.click();
+      let that = this;
+      if ( that.$xljs.isWeixin() ) {//微信选择图片
+        if ( !window.wxIsTrue ) {
+          console.log('页面初始化中，请稍后！');
+          return false;
+        }
+        that.wxImgB64();
+      }else{//本地用于测试的选择图片
+        document.getElementById('form_file').click();
+      }
+    },
+    // 微信图片获取
+    wxImgB64 () {
+      let that = this;
+      window.wx.chooseImage({
+        count: 1, // 默认9
+        sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+        success (res) {
+           // res.localIds 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+          that.img_edit( res.localIds[0] );
+        }
+      });
+    },
+    // 城市选择显示隐藏
+    bottomSheetSH ( type ) {
+      let that = this;
+      if ( type === 'show' ) {
+        that.fromCity = [];
+        that.cityArr = cityData;
+        that.bottomSheet = true;
+      } else if ( type === 'hide' ) {
+        that.bottomSheet = false;
+      }
+    },
+    cityChange ( val ) {
+      let that = this,
+          ct = that.fromCity;
+      ct[ct.length] = val;
+      if ( ct.length === 1 ) { // 省份选择完成
+        that.$xljs.each(cityData, ( index, obj ) => {
+          if ( obj.name === ct[0] ) {
+            that.cityArr = obj.sub;
+            return false;
+          }
+        });
+      } else if ( ct.length === 2 ) { // 城市选择完成
+        that.$xljs.each(cityData, ( index, obj ) => {
+          if ( obj.name === ct[0] ) {
+            that.$xljs.each(obj.sub, ( i, o ) => {
+              if ( o.name === ct[1] ) {
+                that.cityArr = o.sub;
+                return false;
+              }
+            });
+            return false;
+          }
+        });
+      } else if ( ct.length === 3 ) { // 地区选择完成
+        that.bottomSheetSH( 'hide' );
+        that.fromData.district.val = ct.join(' ');
+        console.log(ct)
+      }
+    },
+    // 获取并验证数据
+    getValidData () {
+      let that = this,
+          o = that.fromData,
+          me, istrue = true;
+      that.$xljs.each(o, ( k, obj ) => {
+        if ( !obj.val && obj.valid ) {
+          that.$refs.toasttxt.snackbarSH( 'show', obj.errtxt );
+          istrue = false;
+          return false;
+        }
+      });
+      return istrue;
     },
     formSubmit () {
-      console.log()
+      let that = this,
+          _url = '/ushop-api-merchant/api/sns/vote/candidate/signUp',
+          _param = {};
+      console.log(this.fromData)
+      if ( !that.getValidData() ) {
+        return false;
+      }
+      that.$xljs.each(that.fromData, ( k, o ) => {
+        _param[k] = o.val;
+      });
+      console.log(_param);
+      that.$xljs.ajax(_url, 'post', _param, (data) => {
+        if ( data.result === 'SUCCESS' ) {
+          console.log('成功！');
+          that.alertActive = 'alert3';
+        }
+      });
+      // that.$refs.toasttxt.snackbarSH( 'show', '内容不确定' );
     }
   },
   components: {
-    CropperBox
+    CropperBox,
+    ToastTxt
   }
 }
 </script>
@@ -277,5 +425,9 @@ export default {
   right: 43%;
   bottom: 7%;
   top: 77%;
+}
+.city-box {
+  max-height: 300px;
+  overflow-y: auto;
 }
 </style>

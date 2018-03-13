@@ -2,7 +2,8 @@
   <div class="crop-box" v-show="show">
     <div class="crop-img" id="image-box"></div>
     <div class="crop-foot">
-      <button @click="closecrop">确定</button>
+      <mu-raised-button @click="closecrop" label="返回" class="raised-button"/>
+      <mu-raised-button @click="submitImg" label="确定" class="raised-button"/>
     </div>
   </div>
 </template>
@@ -32,14 +33,20 @@ export default {
       that.imgobj = imgobj;
       imgobj.src = src || p200200;
       imgbox.appendChild(imgobj);
-      imgobj.onload = function () {
+      imgobj.onload = () => {
         that.cropperobj = new Cropper(imgobj, {
           autoCropArea: .8, //裁切框大小，0-1，现对于总的图片大小
-          aspectRatio: 16/9 //裁切框比例
+          aspectRatio: 1/1 //裁切框比例
         });
       }
     },
     closecrop () {
+      let that = this;
+      that.show = false;
+      that.cropperobj.destroy();
+      that.imgbox.removeChild(that.imgobj);
+    },
+    submitImg () {
       //cropper.getCroppedCanvas().toDataURL('image/jpeg')
       //cropper.getCroppedCanvas().toBlob(function (blob) {})
       let that = this,
@@ -51,12 +58,12 @@ export default {
                       thumb: 1
                     }],
           _url = '/ushop-api-merchant/api/sns/file/submit';
-      that.$xljs.ajax(_url, 'post', JSON.stringify(_param), function(data){
-        data.bs64 = bs64;
-        that.show = false;
-        that.cropperobj.destroy();
-        that.imgbox.removeChild(that.imgobj);
-        that.$parent.cropCb( data );
+      that.$xljs.ajax(_url, 'post', JSON.stringify(_param), (data) => {
+        that.closecrop();
+        that.$parent.cropCb( {
+          bs64: bs64,
+          url: data.urls[0]
+        } );
       });
     }
   }
@@ -91,5 +98,14 @@ export default {
   top: 80%;
   width: 100%;
   height: 20%;
+  padding: 15px;
+  text-align: center;
+}
+.raised-button {
+  border-radius: 10px;
+  background-color: #ffa818;
+  color: #fff;
+  width: 40%;
+  font-size: 16px;
 }
 </style>

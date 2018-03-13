@@ -38,8 +38,9 @@ export default {
   height: 100%;
   width: 100%;
   background: #fff;
-  z-index: 1000000;
-  overflow: hidden;
+  z-index: 999;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .province-btn-item {
   float: left;

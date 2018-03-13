@@ -2,19 +2,19 @@
 <div class="plist-box">
   <div class="plist-img">
     <img :src="p22">
-    <div class="plist-num">
+    <div class="plist-num" v-if="status">
       <img :src="pageBg18">
       <div class="plist-num-p">
-        <div class="plist-num-p1">{{this.formatNum(Math.floor(Math.random()*100000))}}</div>
+        <div class="plist-num-p1">{{formatNum(Math.floor(Math.random()*100000))}}</div>
         <div class="plist-num-p2">票</div>
       </div>
     </div>
   </div>
   <div class="plist-txt">
-    <div class="ellipsis">站点编号：{{item}}</div>
-    <div class="ellipsis">站点地址：{{item}}</div>
-    <div class="plist-btn">
-      <mu-raised-button label="为TA投票" class="raised-button"/>
+    <div class="ellipsis">站点编号：{{item.serialNo}}</div>
+    <div class="ellipsis">站点地址：{{item.address}}</div>
+    <div class="plist-btn" v-if="status">
+      <mu-raised-button label="为TA投票" @click="voteSubmit(item)" class="raised-button"/>
     </div>
   </div>
 </div>
@@ -26,9 +26,13 @@ import pageBg18 from '@/assets/image/bs/add_shop018.png';
 export default {
   props: {
     item: {
-      type: String,
+      type: Object,
       required: true,
-      default: '没有内容'
+      default: {}
+    },
+    status: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -53,6 +57,17 @@ export default {
       } else {
         return val;
       }
+    },
+    voteSubmit ( item ) {
+      let that = this,
+          activeId = that.$xljs.activeId,
+          _url = `/ushop-api-merchant/api/sns/vote/voter/submit/${activeId}/${item.id}`;
+      that.$xljs.ajax(_url, 'post', {}, (data) => {
+        if ( data.result === 'SUCCESS' ) {
+          console.log('成功');
+        }
+        that.$emit('voteSuccess', item);
+      })
     }
   }
 }

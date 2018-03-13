@@ -21,6 +21,12 @@ Vue.use(VueAwesomeSwiper)
 
 Vue.config.productionTip = false
 
+router.goBack = (vm) => {
+  window.history.length > 1
+    ? vm.$router.go(-1)
+    : vm.$router.push('/')
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

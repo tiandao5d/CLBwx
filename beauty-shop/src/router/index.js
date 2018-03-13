@@ -6,13 +6,14 @@ import TotalTable from '@/components/totalTable'
 import DetailsShop from '@/components/detailsShop'
 import TotalNum from '@/components/totalNum'
 import RankingList from '@/components/rankingList'
+import Share from '@/components/share'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/home',
       name: 'Home',
       component: Home
     },
@@ -36,6 +37,11 @@ export default new Router({
       name: 'RankingList',
       component: RankingList
     },
+    // {
+    //   path: '/share',
+    //   name: 'Share',
+    //   component: Share
+    // },
     {
       path: '/detailsShop',
       name: 'DetailsShop',
