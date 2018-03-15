@@ -131,15 +131,10 @@ export default {
     // 页面数据并发请求
     pageInit () {
       let that = this;
-      that.atStatus(that.$xljs.activeData);
+      that.atStatus(that.$xljs.actSession());
     },
     atStatus ( data ) {
       let that = this;
-      data = {
-        status: 101,
-        enrollTime: '2018-03-13 00:00:00',
-        participants: 123
-      }
       if ( data.status === 101 ) { // 可以开始报名
         let et = +(new Date(data.enrollTime)), //报名时间
             nt = +(new Date()); // 当前时间
@@ -149,12 +144,12 @@ export default {
           that.ttItval();
         } else { // 可是开始报名，显示报名按键
           that.ttStatus = '2'; // 可以报名
-          that.signup = data.participants;
+          that.signup = data.selects;
         }
       } else if ( data.status === 103 ) { // 可以开始投票
-        that.$router.push('/home/vote');
+        that.$router.push('/home');
       } else if ( data.status === 104 ) { // 已经结束了
-          that.ttStatus = '3'; // 可以报名
+          that.ttStatus = '3'; // 已结束
       }
     },
     ttItval () {

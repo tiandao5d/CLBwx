@@ -22,9 +22,9 @@ function getDm () {
     // domainUrl = 'http://10.35.0.66:8080';
     // domainUrl = 'http://10.35.0.166:8090';
     // domainUrl = 'http://10.35.0.134';
-    domainUrl = 'http://10.13.0.57';
+    // domainUrl = 'http://10.13.0.57';
     // domainUrl = 'http://clbtest.lotplay.cn';
-    // domainUrl = 'http://10.13.0.170';
+    domainUrl = 'http://10.13.0.170';
     // domainUrl = 'http://pay.lotplay.cn';
     // domainUrl = 'http://clb.lotplay.cn';
   }
@@ -52,6 +52,7 @@ globaljs.install = function (Vue, options) {
     localLot: 'ls_global_lottery_data', // 彩票数据
     localPro: 'ls_global_province_data', // 本地省份数据
     localGen: 'ls_global_generalize_data', // 本地推广员数据
+    sessionAct: 'ls_global_active_session', // 本活动的数据
     domainUrl: getDm(),
     messageG () { // 全局消息通知数据，配合用户名，区分用户
       let that = this;
@@ -105,6 +106,15 @@ globaljs.install = function (Vue, options) {
         }
       }
       return obj;
+    },
+    isEmptyObject ( obj ) {
+      if ( !(obj instanceof Object) ) {
+        return false;
+      }
+      for ( let v in obj ) {
+        return false;
+      }
+      return true;
     },
     // 获取或修改储存在本地的用户信息
     // agr0为函数时，则此函数的参数为用户信息
@@ -201,9 +211,19 @@ globaljs.install = function (Vue, options) {
       }
       return o;
     },
+    // 储存活动数据，储存为session数据，浏览器关闭
+    actSession ( obj ) {
+      let that = this,
+          o = that.storageL(that.sessionAct, undefined, true) || {};
+        if (obj instanceof Object) { // 只有可能是obj
+          that.extend(o, obj);
+          that.storageL(that.sessionAct, o, true);
+        }
+        return o
+    },
     storageL (key, val) {
       if (typeof(Storage) !== 'undefined') {
-        if ((val === undefined) || (val === null)) {//不存储undefined和null
+        if ((val === undefined) || (val === null)) { // 不存储undefined和null
           if (arguments[2] === true) {
             val = sessionStorage[key];
           } else {
@@ -248,6 +268,21 @@ globaljs.install = function (Vue, options) {
           localStorage.clear();
         }
       }
+    },
+    deCodeUrlFn (str = document.URL) {
+      str = str.split('?')[1] || '';
+      str = str.split('#')[0] || '';
+      let a = {};
+      if (str) {
+        let b = str.split('&'),
+          i = 0,
+          s;
+        while (s = b[i++]) {
+          s = (s + '').split('=');
+          a[s[0]] = s[1];
+        }
+      }
+      return a;
     },
     // 时间格式化
     msToTime: function(ms){
@@ -364,6 +399,15 @@ globaljs.install = function (Vue, options) {
           callback({}, res);
         })
       }
+      function purl () {
+        if ( _param.method.toLowerCase() === 'get' && !that.isEmptyObject( _param.data ) ) {
+          let a = [];
+          that.each(_param.data, ( k, v ) => {
+            a[a.length] = (encodeURIComponent(k) + '=' + encodeURIComponent(v));
+          });
+          _param.url = _param.url.indexOf('?') ? (_param.url + '&' + a.join('&')) : (_param.url + '?' + a.join('&'));
+        }
+      }
       if (typeof arguments[0] === 'string') {
         _param.url = _url;
         _param.method = _method || 'get';
@@ -386,9 +430,11 @@ globaljs.install = function (Vue, options) {
       if (_param.url.indexOf('/') === 0) {
         that.getTT((tt) => {
           _param.url = that.formatUrl(_param.url, tt);
+          purl();
           sendaxios(_param);
         }, false);
       } else {
+        purl();
         sendaxios(_param);
       }
     },

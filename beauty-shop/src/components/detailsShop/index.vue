@@ -2,68 +2,93 @@
   <div class="page-body">
     <div class="content-body">
       <div class="ds-body">
-        <img class="ds-banner" :src="bannerImg">
+        <img class="ds-banner" :src="item.url">
         <div style="height: 3px;"></div>
         <div class="ds-con">
           <div class="ds-p">
             <strong>站点编号：</strong>
-            <span>001</span>
+            <span>{{item.serialNo}}</span>
           </div>
           <div class="ds-p">
-            <strong>站点编号：</strong>
-            <span>001</span>
+            <strong>所在地区：</strong>
+            <span>{{item.district}}</span>
           </div>
           <div class="ds-p">
-            <strong>站点编号：</strong>
-            <span>001</span>
+            <strong>站点地址：</strong>
+            <span>{{'湖北省' + item.district + item.address}}</span>
           </div>
           <div class="ds-p">
-            <strong>站点编号：</strong>
-            <span>001</span>
+            <strong>站主姓名：</strong>
+            <span>{{item.name}}</span>
           </div>
           <div class="ds-p">
-            <strong>站点编号：</strong>
-            <span>001</span>
+            <strong>联系方式：</strong>
+            <span>{{item.phone}}</span>
           </div>
           <div class="ds-p">
-            <strong>站点编号：</strong>
-            <span class="ds-p-p">在彩票行业，彩民就是投注站的上帝，他们是维系投注站乃至福彩事业的根本，在这里绝不是一个单纯的买卖关系，需要的是人与人的沟通。为服务好彩民，黄姐非常注重与彩民的沟通。把彩民当成朋友一样去交流，当成亲人一样去接待，无论是新彩民还是老彩民，无论是投注金额大，还是投注金额小，都始终做到来有迎声、去有送语。在投注站里有不少已经退休的老彩民，黄姐对待他们就象亲人一样，照顾非常周到，嘘寒问暖。使老人们非常感动。为服务好彩民，及时给他们提供信息。黄姐主动给彩民们打电话，每</span>
+            <strong>站点服务及业绩：</strong>
+            <span class="ds-p-p">{{item.remark}}</span>
           </div>
           <div class="ds-num">
-            <div class="ds-num-p">当前票数：<span>111</span></div>
-            <div class="ds-num-p">当前排名：<span>111</span></div>
+            <div class="ds-num-p">当前票数：<span>{{item.score}}</span></div>
+            <div class="ds-num-p">当前排名：<span>{{item.ranking}}</span></div>
           </div>
         </div>
       </div>
       <div class="ds-foot clearfix">
-        <mu-raised-button label="投 票" class="raised-button"/>
-        <mu-raised-button label="分 享" class="raised-button right"/>
+        <mu-raised-button label="投 票" @click="voteSubmit" class="raised-button" />
+        <mu-raised-button label="分 享" @click="shareClick" class="raised-button right" />
       </div>
     </div>
   </div>
 </template>
-
 <script>
 import pageBg3 from '@/assets/image/bs/add_shop003.jpg';
 
 export default {
-  data () {
+  data() {
     return {
-      bannerImg: pageBg3
+      bannerImg: pageBg3,
+      item: {}
     }
   },
-  created () {
+  created() {
     // 页面数据初始化
     this.pageInit()
   },
   methods: {
     // 页面数据并发请求
-    pageInit () {
+    pageInit() {
+      let that = this,
+          item = that.$route.params.item || that.$xljs.storageL('ls_partly_worksitem') || {};
+      if (item.id) {
+        that.item = item;
+        that.$xljs.storageL('ls_partly_worksitem', item);
+      } else {
+        console.log('数据错误')
+      }
+    },
+    voteSubmit() {
+      // this.$emit('voteSubmit', this.item);
+    },
+    shareClick() {
+      // this.$emit('shareClick', this.item);
     }
   }
 }
+
 </script>
 <style scoped>
+.ds-box {
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: #fff;
+}
+
 .ds-body {
   position: absolute;
   bottom: 56px;
@@ -73,25 +98,31 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
 }
+
 .ds-banner {
   width: 100%;
 }
+
 .ds-con {
   position: relative;
   background-color: #fff;
   padding: 0 15px;
 }
+
 .ds-p {
   line-height: 30px;
   color: #727272;
 }
+
 .ds-p-p {
   display: block;
   text-align: justify;
 }
+
 .ds-p strong {
   color: #535353;
 }
+
 .ds-num {
   position: absolute;
   right: 0;
@@ -100,9 +131,11 @@ export default {
   color: #fff;
   padding: 3px 6px;
 }
+
 .ds-num-p span {
   color: #fd3b39;
 }
+
 .ds-foot {
   position: absolute;
   left: 0;
@@ -111,6 +144,7 @@ export default {
   padding: 10px 20px;
   width: 100%;
 }
+
 .raised-button {
   border-radius: 10px;
   background-color: #ff6600;
@@ -119,8 +153,10 @@ export default {
   float: left;
   font-size: 15px;
 }
+
 .raised-button.right {
   float: right;
   background-color: #ffa818;
 }
+
 </style>

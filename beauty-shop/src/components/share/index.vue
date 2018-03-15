@@ -3,7 +3,7 @@
     <div class="share-imgbox">
       <img :src="pageBg19">
       <div class="share-con">
-        <div class="share-txt">001站点正在参加“最美投注站”，感谢您为它拉票</div>
+        <div class="share-txt">{{txt}}</div>
         <div class="share-img">
           <img :src="p22">
         </div>
@@ -22,7 +22,8 @@ export default {
     return {
       shareShow: false,
       pageBg19,
-      p22
+      p22,
+      txt: '000站点正在参加“最美投注站”，感谢您为它拉票'
     }
   },
   created () {
@@ -33,8 +34,12 @@ export default {
     // 页面数据并发请求
     pageInit () {
     },
-    show () {
+    show ( item ) {
+      console.log(item)
       this.shareShow = true;
+      this.p22 = item.url || p22;
+      this.txt = item.serialNo + '站点正在参加“最美投注站”，感谢您为它拉票';
+
     },
     shareBtnClick () {
       this.shareShow = false;
@@ -46,12 +51,12 @@ export default {
 </script>
 <style scoped>
 .share-body {
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
-  z-index: 100;
+  z-index: 200;
   background-color: rgba(0,0,0,.7);
 }
 .share-imgbox {

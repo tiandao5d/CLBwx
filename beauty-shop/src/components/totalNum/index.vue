@@ -5,8 +5,8 @@
         <img class="full-img" :src="pageBg16">
         <div class="tt-con">
           <img class="full-img" :src="pageBg17">
-          <div class="tnum-num1">222</div>
-          <div class="tnum-num2">333</div>
+          <div class="tnum-num1">{{this.$xljs.actSession().selects}}</div>
+          <div class="tnum-num2">{{this.$xljs.actSession().participants}}</div>
         </div>
       </div>
       <img class="full-img" :src="pageBg14">

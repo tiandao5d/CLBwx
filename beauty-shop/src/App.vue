@@ -27,28 +27,46 @@ export default {
   },
   mounted() {
     // 页面数据初始化
-    this.pageInit()
+    this.pageInit();
+    if ( this.$xljs.isTest() ) {
+      let data = {userId: "888200000002013", token: "88630169E97E8D0CFA3BEBEEC494A94A", timestamp: 1521017026478};
+      this.$xljs.storageL('ls_global_user_id', data.userId);
+      this.$xljs.storageL('ls_global_token', data.token);
+    }
   },
   methods: {
     pageInit() {
-      let that = this;
-      that.urlData = that.deCodeUrlFn();
-      if ( !that.urlData.id ) {
+      let that = this,
+          ud = that.$xljs.actSession();
+      ud = ud.id ? ud : that.deCodeUrlFn();
+      if ( !ud.id ) {
         that.txt = '活动ID不存在！';
         return false;
       }
-      let id = that.urlData.id,
-          userid = that.urlData.userid,
+      let id = ud.id,
+          userid = ud.userid,
           _param = [
-            {url: `${that.$xljs.domainUrl}/ushop-api-merchant/api/sns/vote/election/get/${id}`}, // 获取去活动详情
-            {url: `/ushop-api-merchant/api/sns/vote/canvassing/visit/${id}`} // 记录进入的次数
+            {url: `/ushop-api-merchant/api/sns/vote/election/get/${id}`} // 获取去活动详情
           ];
-      if ( userid ) { // 记录粉丝
+      // 说明是推广进来的，记录粉丝
+      if ( userid ) {
         _param.push({url: `/ushop-api-merchant/api/sns/vote/canvassing/canvass/${id}/${userid}`})
       }
+      // 说明不是本地数据，记录进入次数
+      if ( ud.status === 103 && !that.$xljs.actSession() ) {
+        _param.push({url: `/ushop-api-merchant/api/sns/vote/canvassing/visit/${id}`})
+      }
       // 报名未发布100 报名已发布101 投票未发布102 投票已发布103 结束104 下架105
-      that.$xljs.ajaxAll(_param, () => {
-        that.$xljs.activeData = arguments[0] || {}; // 记录此活动的详情数据
+      that.$xljs.ajaxAll(_param, (adata) => {
+        adata = adata || {};
+        if ( !adata.id ) {
+          that.$xljs.actSession('');
+          that.txt = '未请求到相关活动数据！';
+          return false;
+        }
+
+        // 将数据记录在本地
+        that.$xljs.actSession(adata);
         if ( that.$xljs.isWeixin() ) {
           if ( window.wxIsTrue ) {
             that.loader = false;
@@ -61,7 +79,7 @@ export default {
       if ( that.$xljs.isWeixin() ) {
         window.wx.ready(() => {
           window.wxIsTrue = true;
-          if ( that.$xljs.activeData ) {
+          if ( that.$xljs.actSession() ) {
             that.loader = false;
           }
         });

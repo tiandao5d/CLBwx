@@ -1,11 +1,11 @@
 <template>
 <div class="plist-box">
   <div class="plist-img">
-    <img :src="p22">
+    <img :src="item.url || p22" @click="goDetails">
     <div class="plist-num" v-if="status">
       <img :src="pageBg18">
       <div class="plist-num-p">
-        <div class="plist-num-p1">{{formatNum(Math.floor(Math.random()*100000))}}</div>
+        <div class="plist-num-p1">{{formatNum(item.score || 0)}}</div>
         <div class="plist-num-p2">票</div>
       </div>
     </div>
@@ -14,7 +14,7 @@
     <div class="ellipsis">站点编号：{{item.serialNo}}</div>
     <div class="ellipsis">站点地址：{{item.address}}</div>
     <div class="plist-btn" v-if="status">
-      <mu-raised-button label="为TA投票" @click="voteSubmit(item)" class="raised-button"/>
+      <mu-raised-button label="为TA投票" @click="voteSubmit" class="raised-button"/>
     </div>
   </div>
 </div>
@@ -58,16 +58,11 @@ export default {
         return val;
       }
     },
-    voteSubmit ( item ) {
-      let that = this,
-          activeId = that.$xljs.activeId,
-          _url = `/ushop-api-merchant/api/sns/vote/voter/submit/${activeId}/${item.id}`;
-      that.$xljs.ajax(_url, 'post', {}, (data) => {
-        if ( data.result === 'SUCCESS' ) {
-          console.log('成功');
-        }
-        that.$emit('voteSuccess', item);
-      })
+    goDetails () {
+      this.$router.push({path: '/detailsShop', params: {item: this.item}})
+    },
+    voteSubmit () {
+      this.$emit('voteSubmit', this.item);
     }
   }
 }
