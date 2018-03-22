@@ -6,6 +6,8 @@ import TotalTable from '@/components/totalTable'
 import DetailsShop from '@/components/detailsShop'
 import TotalNum from '@/components/totalNum'
 import RankingList from '@/components/rankingList'
+import Login from '@/components/login/login'
+import MyVote from '@/components/myVote'
 
 Vue.use(Router)
 
@@ -15,6 +17,11 @@ export default new Router({
       path: '/home',
       name: 'Home',
       component: Home
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
     },
     {
       path: '/addshop',
@@ -40,6 +47,11 @@ export default new Router({
       path: '/detailsShop',
       name: 'DetailsShop',
       component: DetailsShop
+    },
+    {
+      path: '/myVote',
+      name: 'MyVote',
+      component: MyVote
     },
     {
       path: '*',

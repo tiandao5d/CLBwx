@@ -6,8 +6,6 @@ import router from './router'
 
 import MuseUI from 'muse-ui'
 import 'muse-ui/dist/muse-ui.css'
-// import '!style-loader!css-loader!less-loader!./assets/less/nt.less'
-import './assets/material-icons/material-icons.css'
 
 import 'swiper/dist/css/swiper.css'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
@@ -21,10 +19,10 @@ Vue.use(VueAwesomeSwiper)
 
 Vue.config.productionTip = false
 
-router.goBack = (vm) => {
-  window.history.length > 1
-    ? vm.$router.go(-1)
-    : vm.$router.push('/')
+router.goBack = () => {
+  if ( window.history.length > 1 ) {
+    window.history.go(-1)
+  }
 }
 
 /* eslint-disable no-new */

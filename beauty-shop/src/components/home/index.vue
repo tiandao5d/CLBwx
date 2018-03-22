@@ -14,6 +14,20 @@
           </div>
         </div>
         <div class="tabs-content">
+          <div class="h-total" v-if="listType">
+            <div class="htotal-item">
+              <div class="htotal-p">全省参与站点</div>
+              <div class="htotal-p">{{htotal.selects}}</div>
+            </div>
+            <div class="htotal-item">
+              <div class="htotal-p">累计总票数</div>
+              <div class="htotal-p">{{htotal.participants}}</div>
+            </div>
+            <div class="htotal-item">
+              <div class="htotal-p">总访问量</div>
+              <div class="htotal-p">{{htotal.pageViews}}</div>
+            </div>
+          </div>
           <div class="clearfix plist-ul">
             <product-list
               @voteSubmit="voteSubmit" :status="listType"
@@ -31,7 +45,9 @@
         <mu-flat-button slot="actions" primary @click="sdailogSH('primary')" label="确定"/>
       </mu-dialog>
       <mu-dialog :open="voteDialog" title="投票成功" @close="voteClose">
-        感谢您投的宝贵一票，还差1票就可以获得抽奖机会哦！
+        <p>感谢您投的宝贵一票{{voteGap}}！您可以：</p>
+        <p>1.每天参与投票，每天最多可以投{{voteLimit}}票</p>
+        <p>2.邀请更多小伙伴来参与投票</p>
         <mu-flat-button slot="actions" @click="voteClose" primary label="取消"/>
         <mu-flat-button slot="actions" primary @click="voteClose('confrim')" label="为我拉票"/>
       </mu-dialog>
@@ -44,10 +60,10 @@
 import BannerSwiper from '@/components/sharing/banner'; // banner
 import ProductList from './product_list'; // 商品列表
 import ScrollBottom from '@/components/sharing/scrollbottom'; // 滚动到底部加载
-import ctData from '@/assets/json/city.show.js'; // 省份数据
-import cityList from '@/components/sharing/cityselect'; // 省份列表
+import ctData from '@/assets/json/city.show.js'; // 城市数据
+import cityList from '@/components/sharing/cityselect'; // 城市列表选择组件
 import FootTabs from '@/components/sharing/foot'; // 底部菜单
-import ShareDailog from '@/components/share'; // 底部菜单
+import ShareDailog from '@/components/share'; // 分享弹窗
 export default {
   data () {
     let listParam = {},
@@ -58,7 +74,7 @@ export default {
         totalCount: 1, // 总个数
         pagePage: 1, // 总页数
         recordList: [], // 数据内容
-        ct: ctData[i]
+        ct: ctData[i] // 地区的文字和代号
       };
     }
     return {
@@ -68,22 +84,27 @@ export default {
       bannerList: [], // 储存banner图数据
       titletabs: ctData, // 储存抬头数据
       titleActive: ctData[0].val, // 储存选中的抬头
-      footActive: 'tab1',
-      oldFootA: '', // 记录旧的选择
-      listType: false,
-      voteDialog: false,
-      shareItem: {},
-      sdIptVal: '',
-      dailies: 0, // 此用户今天投票的数量
-      iptErrObj: {
+      listType: false, // 根据状态显示是否可以投票
+      voteDialog: false, // 控制投票后的弹窗显示
+      shareItem: {}, // 记录投票的站点数据，以便于分享
+      voteLimit: 0, // 每天投票上线
+      sdIptVal: '', // 搜索的输入框值
+      iptErrObj: { // 搜索的输入框值报错
         sderr: ''
       },
-      listParam: listParam,
-      tabarr: [
-        {txt: '参选站点', val: 'tab1', href: '/', icon: 'cxzd'},
+      voteGap: '', // 中奖机会字符串，投票后的提示相关
+      htotal: {
+        selects: 0, // 总报名数
+        participants: 0, // 总参与数量
+        pageViews: 0 // 总访问数量
+      },
+      listParam: listParam, // 记录列表翻页数据
+      footActive: 'tab1', // 控制底部菜单选中
+      tabarr: [ // 底部菜单数据
+        {txt: '参选站点', val: 'tab1', href: '/home', icon: 'cxzd'},
         {txt: '搜索', val: 'tab2', href: '', icon: 'ss', fn: this.sdailogSH},
-        {txt: '我的报名', val: 'tab3', href: '/addShop', icon: 'wdbm'},
-        {txt: '活动说明', val: 'tab4', href: '/totalNum', icon: 'hdsm'}
+        {txt: '我的报名', val: 'tab3', href: '/detailsShop?me=1', icon: 'wdbm'},
+        {txt: '我的投票', val: 'tab4', href: '/myVote', icon: 'wdtp'}
       ]
     }
   },
@@ -92,9 +113,6 @@ export default {
     // 页面数据初始化
     that.pageInit();
     that.scroller = that.$el.querySelector('.tabs-content');
-    if ( that.$xljs.actSession().status === 103 ) {
-      that.listType = true;
-    }
   },
   watch: {
     titleActive ( nv, ov ) {
@@ -116,29 +134,92 @@ export default {
     // 页面数据并发请求
     pageInit () {
       let that = this,
-          id = that.$xljs.actSession().id,
-          pid = that.$xljs.localProL().id || 0;
-      that.getWorksList();
-      that.$xljs.ajaxAll([
-        {url: `${that.$xljs.domainUrl}/ushop-api-merchant/api/sns/notify/banner/list/6/${pid}.json`},
-        {url: `/ushop-api-merchant/api/sns/vote/voter/get/${id}`}
-      ], function () {
-        that.bannerInit(arguments[0]);
-        that.dailies = arguments[1].dailies;
+          actdata = that.$xljs.actSession(),
+          harr = actdata.header || '[]';
+      try {
+        harr = JSON.parse(harr);
+      } catch (err) {
+        harr = [];
+      };
+      if ( actdata.status === 103 ) {
+        that.htotal = {
+          selects: actdata.selects, // 总报名数
+          participants: actdata.participants, // 总参与数量
+          pageViews: actdata.pageViews // 总访问数量
+        }
+        that.listType = true;
+        that.tabarr = [
+          {txt: '投票', val: 'tab1', href: '/home', icon: 'tp'},
+          {txt: '搜索', val: 'tab2', href: '', icon: 'ss', fn: that.sdailogSH},
+          {txt: '排行榜', val: 'tab3', href: '/rankingList', icon: 'phb'},
+          {txt: '我的投票', val: 'tab4', href: '/myVote', icon: 'wdtp'}
+        ]
+      }
+      if ( that.$route.params.searchtrue ) {
+        that.footActive = 'tab2';
+      }
+      that.voteLimit = actdata.voteLimit;
+      that.getWorksList(); // 获取作品列表
+      that.bannerInit(harr); // 显示banner图片
+      that.getUserVote(); // 获取用户投票数据
+    },
+    // 获取用户投票数据
+    getUserVote () {
+      let that = this,
+          _url = `/ushop-api-merchant/api/sns/vote/voter/get/${that.$xljs.bsid}`;
+      that.$xljs.ajax(_url, 'get', {}, (data) => {
+        let lp = +new Date(data.prizeTime), // 最后奖励时间
+            lc = +new Date(data.cashTime); // 最后查奖时间
+        try {
+          data.experience = JSON.parse(data.experience);
+        } catch ( err ) {
+          data.experience = [];
+        }
+        that.$xljs.actSession({userVote: data});
+        if ( Math.abs(lp - lc) > 60000 ) {
+          that.getLuckyList( data.cashTime ); // 获取用户的抽奖游戏券
+        }
       });
+    },
+    // 获取用户的抽奖游戏券
+    getLuckyList ( dt = '' ) {
+      let that = this,
+          _url = '/ushop-api-merchant/api/lotto/ticket/user/listBy',
+          _param = {
+            page: 1,
+            gameId: that.$xljs.lcid,
+            status: 1, // 全部=100 未开奖=1 未中奖=2 已中奖-3 已弃奖=6
+            date: dt
+          };
+      that.$xljs.ajax(_url, 'get', _param, (data) => {
+        if ( data.recordList ) {
+          that.getPrize();
+        } else {
+          setTimeout(() => {
+            that.getLuckyList(dt);
+          }, 3000);
+        }
+      }, false); // 后台操作，不需要遮屏
+    },
+    // 领取奖励
+    getPrize () {
+      let that = this,
+          _url = `/ushop-api-merchant/api/sns/vote/canvassing/prize/${that.$xljs.bsid}`;
+      that.$xljs.ajax(_url, 'get', {}, (data) => {
+        // 领奖后台操作，不需要做任何处理
+      }, false); // 后台操作，不需要遮屏
     },
     //查看更多省份列表
     tabs_more () {
       let that = this;
-      that.$refs.province.showCom()
+      that.$refs.province.showCom();
     },
     // banner图初始化
-    bannerInit (obj) {
+    bannerInit ( arr ) {
       let that = this;
-      let arr = obj.recordList || [];
       arr = arr.map((o, i) => {
-        return o.pictureAddress
-      })
+        return o.value;
+      });
       that.bannerList = arr;
     },
     // 搜索显示隐藏
@@ -147,14 +228,16 @@ export default {
       if ( arguments[0] === 'show' ) {
         that.footActive = 'tab2';
       } else {
-        if ( that.sdIptVal ) {
-          // 显示搜索内容
-          console.log(that.sdIptVal);
-        } else if (arguments[0] === 'primary') {
-          that.iptErrObj.sderr = '不能为空';
-          return false;
+        if ( arguments[0] === 'primary' ) {
+          if ( that.sdIptVal ) {
+            // 显示搜索内容
+            that.getWorksList({serialNo: that.sdIptVal, district: '', page: 1}, true);
+          } else {
+            that.iptErrObj.sderr = '不能为空';
+            return false;
+          }
         }
-        that.footActive = that.oldFootA;
+        that.footActive = 'tab1';
       }
     },
     voteClose () {
@@ -164,22 +247,54 @@ export default {
         that.$refs.shareda.show(that.shareItem);
       }
     },
+    // 获取临近的可领奖票数
+    getNearNum ( num = 0 ) {
+      let that = this,
+          adata = that.$xljs.actSession(),
+          maxarr = [];
+      that.$xljs.each(adata.pobj.pPlanC, (i, a) => {
+        if ( i < adata.pobj.pPlan && a[3] > num ) {
+          maxarr[maxarr.length] = num;
+        }
+      });
+      if ( maxarr.length > 1 ) {
+        return (Math.min.apply(null, maxarr) - num);
+      } else if ( maxarr.length === 1 ) {
+        return (maxarr[0] - num);
+      } else {
+        return 0;
+      }
+    },
     // 投票点击事件
     voteSubmit ( item ) {
       let that = this,
-          _url = `/ushop-api-merchant/api/sns/vote/voter/submit/${that.$xljs.actSession().id}/${item.id}`;
-      that.voteDialog = true;
-      that.shareItem = item;
-      return false;
-      if ( that.$xljs.actSession().voteLimit > that.dailies ) {
-        that.$xljs.ajax(_url, 'post', {}, (data) => {
-          if ( data.result === 'SUCCESS' ) {
-            that.voteDialog = true;
-            that.shareItem = item;
-            that.dailies++;
+          cp = that.listParam[('p' + that.titleActive)],
+          gap = 0,
+          _url = `/ushop-api-merchant/api/sns/vote/voter/submit/${that.$xljs.bsid}/${item.id}`;
+          that.voteDialog = true; // 弹出提示成功的窗口
+      that.$xljs.ajax(_url, 'post', {}, (data) => {
+        if ( data.result === 'SUCCESS' ) {
+          that.getLuckyList( data.cashTime ); // 获取用户的抽奖游戏券
+          // that.voteGap = '，还差1票就可以获得抽奖机会哦';
+          that.$xljs.each(cp.recordList, (i, v) => {
+            if ( v.id === item.id ) {
+              v.score += 1; // 给相应的站点票数加1
+              gap = that.getNearNum(v.score);
+              return false;
+            }
+          });
+          if ( gap > 0 ) {
+            that.voteGap = `，还差${gap}票就可以获得抽奖机会哦`;
+          } else {
+            that.voteGap = '';
           }
-        })
-      }
+          that.htotal.participants += 1; // 给总票数加1
+          that.voteDialog = true; // 弹出提示成功的窗口
+          that.shareItem = item; // 记录当前的站点数据
+        } else {
+          that.$xljs.toast( (data.error_description || '未知错误') );
+        }
+      })
     },
     // 获取候选作品列表
     getWorksList ( np ) {
@@ -189,16 +304,26 @@ export default {
           _param = {
             page: cp.currentPage + 1,
             rows: 10,
-            serialNo: cp.ct.txt,
-            electionId: that.$xljs.actSession().id,
+            serialNo: '', // 站点编号
+            district: cp.ct.val, // 地区
+            electionId: that.$xljs.bsid, // 活动ID
             self: ''
           };
       if ( np instanceof Object ) {
         that.$xljs.extend( _param, np );
       }
-      _param = {};
       that.$xljs.ajax(_url, 'get', _param, ( data ) => {
         if ( data.recordList ) {
+          that.loading = false; // 加载更多消失
+          if ( arguments[1] ) {
+            if ( data.totalCount === 0 ) { // 未查到任何数据
+              that.$xljs.toast( '未查询到任何数据' );
+              return false;
+            } else if ( data.totalCount > 0 ) {
+              that.titleActive = data.recordList[0].district;
+              cp = that.listParam[('p' + data.recordList[0].district)]; // 重置cp数据，这是通过站点号直接查询的
+            }
+          }
           cp.currentPage = data.currentPage;
           cp.totalCount = data.totalCount;
           cp.pagePage = data.pagePage;
@@ -207,7 +332,6 @@ export default {
           } else {
             cp.recordList = cp.recordList.concat(data.recordList);
           }
-          that.loading = false; // 加载更多消失
         }
         that.productlist = cp.recordList;
       }, false);
@@ -226,7 +350,6 @@ export default {
     footTabChange ( val ) {
       let that = this,
           item;
-      that.oldFootA = that.footActive;
       that.footActive = val;
       if ( val === 'tab2' ) { // 搜索
         return false;
@@ -312,5 +435,16 @@ export default {
 }
 .foot-tf {
   width: 100%;
+}
+.h-total {
+  display: flex;
+  padding: 8px 0;
+  text-align: center;
+  font-size: 15px;
+  background-color: #fff3e8;
+  color: #535353;
+}
+.htotal-item {
+  flex-grow: 1;
 }
 </style>

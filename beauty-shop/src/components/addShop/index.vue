@@ -68,7 +68,6 @@
           <div class="alert-btn3" @click="alertBtnClick(3)"></div>
         </div>
       </div>
-      <toast-txt ref="toasttxt" />
       <mu-bottom-sheet :open="bottomSheet" @close="bottomSheetSH('hide')">
         <mu-list @change="cityChange">
           <mu-sub-header>请选择</mu-sub-header>
@@ -90,7 +89,6 @@ import pageBg5 from '@/assets/image/bs/add_shop005.png';
 import pageBg6 from '@/assets/image/bs/add_shop006.png';
 
 import CropperBox from '@/components/sharing/crop';
-import ToastTxt from '@/components/sharing/toast';
 
 import cityArr from '@/assets/json/city.show.js';
 
@@ -139,7 +137,7 @@ export default {
         } else if ( data.result === 99 ) {
           that.alertActive = 'alert1'; // 不通过
         } else if ( data.result === 100 ) {
-          // that.alertActive = 'alert2'; // 通过
+          that.alertActive = 'alert2'; // 通过
         }
       });
     },
@@ -176,7 +174,7 @@ export default {
       } else if ( a === 2 ) { // 审核通过
         this.$router.push('/home');
       } else if ( a === 3 ) { // 提交成功，待审
-        this.$router.push('/home');
+        this.$router.push('/detailsShop?me=1');
       }
     },
     //删除图片
@@ -238,13 +236,14 @@ export default {
           me, istrue = true;
       that.$xljs.each(o, ( k, obj ) => {
         if ( !obj.val && obj.valid ) {
-          that.$refs.toasttxt.snackbarSH( 'show', obj.errtxt );
+          that.$xljs.toast(obj.errtxt);
           istrue = false;
           return false;
         }
       });
       return istrue;
     },
+    // 报名未发布100 报名已发布101 投票未发布102 投票已发布103 结束104 下架105
     formSubmit () {
       let that = this,
           _url = '/ushop-api-merchant/api/sns/vote/candidate/signUp',
@@ -255,18 +254,19 @@ export default {
       that.$xljs.each(that.fromData, ( k, o ) => {
         _param[k] = o.val;
       });
+      _param.electionId = that.$xljs.actSession().id;
       _param.province = '42'; // 固定省份只能是湖北省
-      _param.district = that.fromData.district.txt; // 地区暂时用中文
       that.$xljs.ajax(_url, 'post', _param, (data) => {
         if ( data.result === 'SUCCESS' ) {
           that.alertActive = 'alert3'; // 提交成功，进入待审中
+        } else {
+          that.$xljs.toast( (data.error_description || '未知错误') );
         }
       });
     }
   },
   components: {
-    CropperBox,
-    ToastTxt
+    CropperBox
   }
 }
 </script>

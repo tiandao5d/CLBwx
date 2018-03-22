@@ -59,7 +59,7 @@ export default {
       }
     },
     goDetails () {
-      this.$router.push({path: '/detailsShop', params: {item: this.item}})
+      this.$router.push({path: `/detailsShop?serialNo=${this.item.serialNo}`})
     },
     voteSubmit () {
       this.$emit('voteSubmit', this.item);

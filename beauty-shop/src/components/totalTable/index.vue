@@ -83,6 +83,10 @@
         </table>
       </div>
       <div style="height: 40px;"></div>
+      <mu-dialog :open="ttDialog" title="提示" @close="ttClose">
+        活动已经开始，去到主界面
+        <mu-flat-button slot="actions" primary @click="ttClose" label="确定"/>
+      </mu-dialog>
     </div>
   </div>
 </template>
@@ -105,6 +109,7 @@ export default {
       pageBg11,
       pageBg12,
       pageBg13,
+      ttDialog: false,
       signup: 0, // 当前已经报名的数量
       endtt: +(new Date('2018-03-10')),
       ttStatus: ''
@@ -133,6 +138,10 @@ export default {
       let that = this;
       that.atStatus(that.$xljs.actSession());
     },
+    ttClose () {
+      let that = this;
+      that.$router.push('/home');
+    },
     atStatus ( data ) {
       let that = this;
       if ( data.status === 101 ) { // 可以开始报名
@@ -147,9 +156,11 @@ export default {
           that.signup = data.selects;
         }
       } else if ( data.status === 103 ) { // 可以开始投票
-        that.$router.push('/home');
+        that.ttDialog = true;
       } else if ( data.status === 104 ) { // 已经结束了
           that.ttStatus = '3'; // 已结束
+      } else {
+        that.$xljs.toast ( `活动状态不正确，${that.$xljs.actSession().status}`);
       }
     },
     ttItval () {

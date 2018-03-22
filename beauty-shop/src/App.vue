@@ -22,23 +22,27 @@ export default {
     return {
       urlData: {},
       txt: '加载中……',
-      loader: true
+      loader: true,
+      wxistrue: false
     }
   },
   mounted() {
+    let that = this;
     // 页面数据初始化
-    this.pageInit();
-    if ( this.$xljs.isTest() ) {
-      let data = {userId: "888200000002013", token: "88630169E97E8D0CFA3BEBEEC494A94A", timestamp: 1521017026478};
-      this.$xljs.storageL('ls_global_user_id', data.userId);
-      this.$xljs.storageL('ls_global_token', data.token);
+    if ( that.$xljs.getUserId() ) {
+      that.pageInit();
+    } else {
+      that.loginto();
     }
   },
   methods: {
     pageInit() {
       let that = this,
-          ud = that.$xljs.actSession();
-      ud = ud.id ? ud : that.deCodeUrlFn();
+          ud = that.$xljs.actSession(),
+          rd = (that.$xljs.deCodeUrlFn().arr || '').split('_xl_');
+      // /index.html#/totalTable?arr=10015_xl_1
+      ud = ud.id ? ud : {id: rd[1], userid: rd[2]};
+
       if ( !ud.id ) {
         that.txt = '活动ID不存在！';
         return false;
@@ -61,49 +65,149 @@ export default {
         adata = adata || {};
         if ( !adata.id ) {
           that.$xljs.actSession('');
-          that.txt = '未请求到相关活动数据！';
+          if ( (adata.error + '').indexOf('1008000') === 0 ) {
+            that.loginto();
+          }else {
+            that.txt = '未请求到相关活动数据！';
+          }
           return false;
         }
-
-        // 将数据记录在本地
-        that.$xljs.actSession(adata);
-        if ( that.$xljs.isWeixin() ) {
-          if ( window.wxIsTrue ) {
-            that.loader = false;
-          }
-        } else {
-          that.loader = false;
+        // 获取抽奖游戏的奖等数据
+        adata.pobj = that.formatPas(adata.params); // 自定义参数解析params
+        if ( !adata.pobj.pLid ) {
+          that.txt = '没有抽奖数据ID！';
+          return false;
         }
-      });
-      // 微信授权
-      if ( that.$xljs.isWeixin() ) {
-        window.wx.ready(() => {
-          window.wxIsTrue = true;
-          if ( that.$xljs.actSession() ) {
+        // 获取奖等数据
+        that.getLCData(adata.pobj.pLid, (ldata) => {
+          adata.lcobj = ldata; // 记录奖等数据
+          that.$xljs.actSession(adata); // 将数据记录在本地
+          that.$xljs.bsid = adata.id; // 活动的ID
+          that.$xljs.lcid = adata.pobj.pLid; // 活动对应的抽奖ID
+
+          if ( that.$xljs.isWeixin() ) {
+            // 微信授权完成基本数据也请求完成后
+            if ( that.wxistrue ) {
+              that.loader = false; // 去掉遮屏加载
+              taht.getShareData(); // 获取分享的数据，并执行分享监听
+            }
+          } else {
+            // 去掉遮屏加载
             that.loader = false;
           }
         });
+      });
+      // 微信授权
+      if ( that.$xljs.isWeixin() ) {
         that.wxAuthoriseFn(); // 微信授权jsSDK
       }
     },
-    deCodeUrlFn(str = document.URL) {
-      str = str.split('?')[1] || '';
-      str = str.split('#')[0] || '';
-      let a = {};
-      if (str) {
-        let b = str.split('&'),
-          i = 0,
-          s;
-        while (s = b[i++]) {
-          s = (s + '').split('=');
-          a[s[0]] = s[1];
-        }
+    // 自定义参数解析params
+    formatPas (jsonstr) {
+      function fa ( v ) {
+        let arr = v.split('|');
+        arr = arr.map((val, index) => {
+          return (parseInt(val) || 0);
+        });
+        return arr;
       }
-      return a;
+      try {
+        let arr = JSON.parse(jsonstr);
+        return {
+          pPlayMed: arr[0].value, // 玩法
+          pPlan: parseInt(arr[1].value), // 进度
+          pLid: arr[2].value, // 抽奖游戏ID
+          pPlanC: [
+            fa(arr[3].value), // 候选者参加抽奖条件1
+            fa(arr[4].value), // 候选者参加抽奖条件2
+            fa(arr[5].value)  // 候选者参加抽奖条件3
+          ],
+          pPlanV: [
+            fa(arr[6].value), // 投票者参加抽奖条件1
+            fa(arr[7].value), // 投票者参加抽奖条件2
+            fa(arr[8].value) // 投票者参加抽奖条件3
+          ]
+        }
+      } catch ( err ) {
+        return {};
+      }
+    },
+    // 获取抽奖游戏的奖等数据
+    getLCData ( lcid, callback = function () {} ) {
+      let that = this,
+          _url = `${that.$xljs.domainUrl}/ushop-api-merchant/api/lotto/game/get/${lcid}`;
+      that.$xljs.ajax(_url, 'get', {}, (data) => {
+        if ( data.id ) {
+          try {
+            data.prizesArr = JSON.parse(data.prizes);
+          } catch ( err ) {
+            data.prizesArr = [];
+          }
+          callback(data);
+        } else {
+          that.txt = (data.error_description || '未知错误！');
+        }
+      }, false);
+    },
+    // 微信分享事件监听初始化
+    wxShareFn ( slink, ilink, title, desc ) {
+      // 记录对应的数据，以便于其他地方使用
+      that.slink = slink;
+      that.ilink = ilink;
+      that.title = title;
+      that.desc = desc;
+      // http://clb.lotplay.cn/ushop-api-merchant/html/weixinmp/index.html?wxbtnGoto=indiana_xlw_product_details_xlp_arr_xld_1015_xl_1
+      //获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
+      window.wx.onMenuShareTimeline({
+          title: title, // 分享标题
+          // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          link: slink,
+          imgUrl: ilink, // 分享图标
+          success: function () {
+              that.$xljs.toast('分享成功！');
+          },
+          cancel: function () { 
+              that.$xljs.toast('用户取消！');
+          }
+      });
+      
+      //获取“分享给朋友”按钮点击状态及自定义分享内容接口
+      window.wx.onMenuShareAppMessage({
+          title: title, // 分享标题
+          desc: desc, // 分享描述
+          // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          link: slink,
+          imgUrl: ilink, // 分享图标
+          type: 'link', // 分享类型,music、video或link，不填默认为link
+          dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+          success: function () {
+              that.$xljs.toast('分享成功！');
+          },
+          cancel: function () {
+              that.$xljs.toast('用户取消！');
+          }
+      });
+    },
+    // 获取分享的数据，并执行分享监听
+    getShareData () {
+      let slink = `${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/index.html?wxbtnGoto=weixinmp_xlw_bs_xlw_index_xlp_arr_xld_1015_xl_${that.$xljs.actSession().id}_xll_userid_xld_${that.$xljs.getUserId()}`,
+          ilink = `${that.$xljs.domainUrl}/ushop-api-merchant/image/icon/logoicon.png`,
+          title = '最美投注站活动正在投票中，赶紧参与吧~',
+          desc = '火热进行中....';
+      that.wxShareFn(slink, ilink, title, desc); // 初始化事件监听
     },
     // 微信授权
     wxAuthoriseFn() {
       let that = this;
+      window.wx.ready(() => {
+        that.wxistrue = true; // 微信授权完成
+        // 微信授权完成基本数据也请求完成后
+
+        if ( that.$xljs.actSession() ) {
+          that.loader = false; // 去掉遮屏加载
+          taht.getShareData(); // 获取分享的数据，并执行分享监听
+        }
+      });
       var _url = that.$xljs.domainUrl + '/ushop-api-merchant/api/weixin/client/ticket/get?' +
         'type=jsapi&url=' + document.URL;
       that.$xljs.ajax(_url, 'get', {}, function(data) {
@@ -124,9 +228,20 @@ export default {
         signature: signature, // 必填，签名，见附录1
         jsApiList: [ // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
           'chooseImage', // 拍照，从相册选择
-          'getLocalImgData' // 获取本地图片接口
+          'getLocalImgData', // 获取本地图片接口
+          'onMenuShareTimeline', // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
+          'onMenuShareAppMessage' // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
         ]
       });
+    },
+    loginto () {
+      let that = this;
+      if ( that.$xljs.isWeixin() ) {
+        window.location.href = '../index.html?loginOverdue=yes';
+      } else {
+        that.$router.push('/login');
+        that.loader = false;
+      }
     }
   }
 }

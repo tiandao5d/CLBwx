@@ -8,7 +8,7 @@ import axios from 'axios';
 let globaljs = {};
 function isTest () {
   let domainUrl = location.protocol + '//' + location.host;
-  if(domainUrl.indexOf('8080') > 0 || domainUrl === 'file://'){
+  if(domainUrl.indexOf('8080') > 0 || domainUrl.indexOf('8020') > 0 || domainUrl === 'file://'){
     return true;
   }else{
     return false;
@@ -269,6 +269,11 @@ globaljs.install = function (Vue, options) {
         }
       }
     },
+    openPage ( url ) {
+      if ( url ) {
+        window.location.href = url;
+      }
+    },
     deCodeUrlFn (str = document.URL) {
       str = str.split('?')[1] || '';
       str = str.split('#')[0] || '';
@@ -328,7 +333,8 @@ globaljs.install = function (Vue, options) {
     getTT (callback = function () {}, ispros) {
       let that = this;
       let st = that.seaverTs,
-          lt = that.localOs;
+          lt = that.localOs,
+          ds;
       if (st && lt) { // 短时间内不会多次请求时间戳
         ds = (+new Date()) - lt; // 本地的时间差
         if (ds >= 0 && ds < 60000) { // ‘短时间’的时间ms
@@ -345,6 +351,8 @@ globaljs.install = function (Vue, options) {
       axios.get((that.domainUrl + '/ushop-api-merchant/api/user/login/timestamp/'))
       .then((res) => {
         let tt = res && res.data && res.data.timestamp;
+        that.seaverTs = tt;
+        that.localOs = +new Date()
         callback((tt || 0));
         if (ispros !== false) {
           that.loading('hide');
@@ -389,6 +397,11 @@ globaljs.install = function (Vue, options) {
           // 表示签字错误
           if (errstr.indexOf('1008000') >= 0) {
             console.log(errstr);
+            that.rmStorageL(that.userId);
+            that.rmStorageL(that.token);
+            if ( isTest() ) {
+              window.location.reload();
+            }
           }
           callback((data || {}), res);
         })
@@ -490,6 +503,27 @@ globaljs.install = function (Vue, options) {
       box.className = 'loading_box_show loading-box';
       box.innerHTML = str;
       document.body.appendChild(box);
+    },
+    toast ( txt = '没有数据' ) {
+      let that = this,
+          box = document.querySelector('.toast-box');
+      if(box) {
+        box.parentNode.removeChild(box);
+      }
+      clearTimeout(that.toutToast);
+      txt = '<div class="toast-con">' + txt + '</div>';
+      box = document.createElement('div');
+      box.innerHTML = txt;
+      box.className = 'toast-box';
+      document.body.appendChild(box);
+      that.toutToast = setTimeout(function () {
+        if ( box && box.parentNode ) {
+          box.parentNode.removeChild(box);
+        }
+      }, 3000);
+      box.onclick = function () {
+        box.parentNode.removeChild(box);
+      }
     }
   }
 }
