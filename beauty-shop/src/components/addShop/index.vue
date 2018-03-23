@@ -34,9 +34,10 @@
                 <img class="addimg-img" :src="item.bs64">
                 <mu-float-button class="addimg-close" @click="img_close(index)" mini icon="close" backgroundColor="#f00"/>
               </div>
-              <input type="file" accept="image/*" class="form-file" id="form_file0" @change="img_edit">
-              <input type="file" accept="image/*" capture="camera" class="form-file" id="form_file1" @change="img_edit">
-              <input type="file" accept="image/png,image/jpeg" class="form-file" id="form_file2" @change="img_edit">
+              <div class="file-div">
+                <input type="file" accept="image/*" class="form-file" id="form_file0" @change="img_edit">
+                <input type="file" accept="image/*" capture="camera" class="form-file" id="form_file1" @change="img_edit">
+              </div>
               <div class="addimg-btn" v-if="addimgArr.length < 1" @click="addImgClick">
                 <mu-icon value="add" color="#959595" :size="30"/>
                 <span>添加照片</span>
@@ -78,15 +79,6 @@
           </div>
         </mu-list>
       </mu-bottom-sheet>
-      <mu-bottom-sheet :open="fileselect" @close="filesclose">
-        <mu-list @change="fileschange">
-          <mu-sub-header>请选择</mu-sub-header>
-          <div class="city-box">
-            <mu-list-item value="1" title="拍照"/>
-            <mu-list-item value="2" title="相册"/>
-          </div>
-        </mu-list>
-      </mu-bottom-sheet>
     </div>
   </div>
 </template>
@@ -103,6 +95,74 @@ import CropperBox from '@/components/sharing/crop';
 
 import cityArr from '@/assets/json/city.show.js';
 
+function convertImgToBase64(url, newWidth, newHeight, maxSize, callback) {
+  var img = new Image;
+  img.crossOrigin = 'Anonymous';
+  img.src = url;
+  img.onload = function() {
+    var cw = parseInt(newWidth),//表示画布宽度，也就是新图片的宽度
+      ch = parseInt(newHeight),//表示画布的高度，也就是新图片的高度
+      cw_ch,
+      iw = this.width,//记录图片的宽度
+      ih = this.height,//记录图片的高度
+      iw_ih = iw/ih,
+      canvas = document.createElement('canvas'),//创建canvas元素
+      ctx = canvas.getContext('2d'),
+      quality = 0.8,//保存图片质量，如果超出限制，将会循环减小质量直到0
+      dataURL,//用来记录base64的字符串
+      isTrue = true,//用来判断是否超出最大KB数
+      sw = iw, sh = ih,//用来记录最大能够裁剪的宽高
+      ix = 0, iy = 0;//规定裁剪的位置
+    maxSize = parseInt(maxSize);//最大限制的kb
+    if(!cw && !ch){//没有指定新的宽高
+      cw = iw;
+      ch = ih;
+    }else if(cw && !ch){//没有指定新的高度
+      ch = cw/iw_ih;
+    }else if(!cw && ch){//没有指定新的宽度
+      cw = ch*iw_ih;
+    }
+    cw_ch = cw/ch;
+    canvas.width = cw;
+    canvas.height = ch;
+    if(iw_ih > cw_ch){
+      sw = ih*cw_ch;
+    }else{
+      sh = iw/cw_ch;
+    }
+    ix = (iw - sw)/2;
+    iy = (ih - sh)/2;
+    ctx.drawImage(img, ix, iy, sw, sh, 0, 0, cw, ch);
+    dataURL = canvas.toDataURL('image/jpeg', quality);
+    if(maxSize){
+      while(isTrue){
+        if(imgSizeFn(dataURL)/1024 > maxSize){
+          quality -= 0.1;
+          dataURL = canvas.toDataURL('image/jpeg', quality);
+        }else{
+          isTrue = false;
+        }
+        if(quality <= 0){
+          isTrue = false;
+        }
+      }
+    }
+    callback(dataURL);
+    canvas = null;
+  };
+}
+
+//获取base64文件大小，返回值为字节(b)
+function imgSizeFn(base64Url){
+    var str = base64Url.indexOf(',') > 0 ? base64Url.split(',')[1] : base64Url,
+    equalIndex = str.indexOf('=');
+  if(equalIndex > 0){
+      str = str.substring(0, equalIndex);
+  }
+  var strLength = str.length,
+    fileLen = parseInt(strLength - (strLength/8)*2);
+  return fileLen;
+}
 export default {
   data () {
     return {
@@ -112,7 +172,6 @@ export default {
       pageBg4,
       pageBg5,
       pageBg6,
-      fileselect: false,
       alertActive: false, // 弹窗显示否
       addimgArr: [], // 图片数据
       toastsh: true, // 提示框显示否
@@ -132,8 +191,13 @@ export default {
     }
   },
   mounted () {
-    // 页面数据初始化
-    this.pageInit()
+    let that = this;
+    if ( that.$xljs.actSession().status === 101 ) {
+      // 页面数据初始化
+      that.pageInit();
+    } else {
+      that.$xljs.toast('活动状态不正确！');
+    }
   },
   methods: {
     // 页面数据并发请求
@@ -155,45 +219,26 @@ export default {
     },
     // 图片选择显示
     addImgClick () {
-      this.fileselect = true;
-    },
-    // 图片选择
-    filesclose () {
-      this.fileselect = false;
-    },
-    // 选择相册还是拍照
-    fileschange ( val ) {
-      let that = this;
-      that.fileselect = false;
-      if ( that.isios() ) { // IOS
-        document.getElementById('form_file0').click();
-      }else if ( val === '1' ) { // 相机
-        document.getElementById('form_file1').click();
-      } else if ( val === '2' ) { // 相册
-        document.getElementById('form_file2').click();
-      }
-    },
-    // 判断IOS
-    isios () {
-      let ua = navigator.userAgent.toLowerCase();
-      if (ua.match(/iPhone\sOS/i) == "iphone os") {
-          return true;
-      } else {
-          return false;
-      }
+      document.getElementById('form_file0').click();
     },
     // 图片编辑
     img_edit () {
       let that = this;
-      that.$xljs.loading( 'show', '图片解析中……' ); // 遮屏
       let e = arguments[0],
           _file = e.target.files[0],
           rf = new FileReader();
+      if ( !_file ) {
+        return false;
+      }
+      that.$xljs.loading( 'show', '图片解析中……' ); // 遮屏
       rf.readAsDataURL( _file );
-      rf.onload = () => {
+      rf.onload = function () {
         // result是图片的base64数据，可以用img标签显示
-        that.$xljs.loading( 'hide' ); // 解除遮屏
-        that.$refs.cropper.showcrop( rf.result );
+        convertImgToBase64(rf.result, 500, 0, 100, function (b64) {
+          e.target.value = '';
+          that.$xljs.loading( 'hide' ); // 解除遮屏
+          that.$refs.cropper.showcrop( b64 );
+        });
       }
     },
     // 关闭弹窗
@@ -212,7 +257,6 @@ export default {
     },
     //图片编辑后回调
     cropCb ( data ) {
-      this.$xljs.toast(JSON.stringify(data));
       this.addimgArr.push(data);
       this.fromData.url.val = data.url;
     },
@@ -250,12 +294,29 @@ export default {
         }
       });
       return istrue;
+      if ( !checktel(o.phone.val) ) {
+        that.$xljs.toast('联系方式不正确！');
+        return false;
+      }
+      if ( !(o.remark.val.length < 300) ) {
+        that.$xljs.toast('请输入300字以内的介绍文字！');
+        return false;
+      }
+      function checktel ( tel ) {
+        var a = /^1\d{10}$/,
+          b = /^0\d{2,3}-?\d{7,8}$/;
+        return (a.test(tel) || b.test(tel));
+      }
     },
     // 报名未发布100 报名已发布101 投票未发布102 投票已发布103 结束104 下架105
     formSubmit () {
       let that = this,
           _url = '/ushop-api-merchant/api/sns/vote/candidate/signUp',
           _param = {};
+      if ( !(that.$xljs.actSession().status === 101) ) {
+        that.$xljs.toast('活动状态不正确！');
+        return false;
+      }
       if ( !that.getValidData() ) {
         return false;
       }
@@ -361,8 +422,10 @@ export default {
   width: 80px;
   height: 80px;
 }
-.form-file {
-  display: none;
+.file-div {
+  width: 0;
+  height: 0;
+  overflow: hidden;
 }
 .input-group {
   padding-bottom: 10px;

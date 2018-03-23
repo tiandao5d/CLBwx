@@ -41,7 +41,7 @@
       </div>
       <mu-dialog :open="voteDialog" title="投票成功" @close="voteClose">
         感谢您投的宝贵一票，还差1票就可以获得抽奖机会哦！
-        <mu-flat-button slot="actions" @click="voteClose" primary label="取消"/>
+        <mu-flat-button slot="actions" @click="voteClose" primary label="确定"/>
         <mu-flat-button slot="actions" primary @click="voteClose('confrim')" label="为我拉票"/>
       </mu-dialog>
       <share-dailog ref="shareda"/>

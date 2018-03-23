@@ -227,6 +227,8 @@ export default {
         nonceStr: nonceStr, // 必填，生成签名的随机串
         signature: signature, // 必填，签名，见附录1
         jsApiList: [ // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+          'chooseImage', // 拍照，从相册选择
+          'getLocalImgData', // 获取本地图片接口
           'onMenuShareTimeline', // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
           'onMenuShareAppMessage' // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
         ]

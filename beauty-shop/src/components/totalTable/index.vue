@@ -18,9 +18,14 @@
             <router-link to="/addShop" class="tts2-btn"></router-link>
             <div class="tts2-num">已有<span>{{signup}}</span>家投注站完成报名</div>
           </div>
-          <!-- 已结束 -->
+          <!-- 报名已结束 -->
           <div class="tt-status3 tt-status" v-if="ttStatus === '3'">
             <img class="full-img" :src="pageBg13">
+            <div class="tts3-btn"></div>
+          </div>
+          <!-- 活动已结束 -->
+          <div class="tt-status3 tt-status" v-if="ttStatus === '4'">
+            <img class="full-img" :src="pageBg23">
             <div class="tts3-btn"></div>
           </div>
         </div>
@@ -99,6 +104,7 @@ import pageBg10 from '@/assets/image/bs/add_shop010.png';
 import pageBg11 from '@/assets/image/bs/add_shop011.png';
 import pageBg12 from '@/assets/image/bs/add_shop012.png';
 import pageBg13 from '@/assets/image/bs/add_shop013.png';
+import pageBg23 from '@/assets/image/bs/add_shop023.png';
 export default {
   data () {
     return {
@@ -109,9 +115,12 @@ export default {
       pageBg11,
       pageBg12,
       pageBg13,
+      pageBg23,
       ttDialog: false,
       signup: 0, // 当前已经报名的数量
-      endtt: +(new Date('2018-03-10')),
+      endtt: +(new Date('2050-03-10')),
+      nowtt: +(new Date()),
+      inttt: 60000, // 跳动的时间
       ttStatus: ''
     }
   },
@@ -120,10 +129,8 @@ export default {
   },
   computed: {
     dttObj () {
-      let that = this,
-          endtt = that.endtt,
-          newtt = +(new Date());
-      let timeDif = endtt - newtt;
+      let that = this;
+      let timeDif = that.endtt - that.nowtt;
       let d = parseInt((timeDif%8553600000)/(86400000)),
           h = parseInt((timeDif%86400000)/(3600000)),
           i = parseInt((timeDif%3600000)/(60000)),
@@ -149,11 +156,10 @@ export default {
         that.$xljs.toast (  '活动报名未发布' );
       } else if ( data.status === 101 ) { // 可以开始报名
         that.$xljs.getTT((stt) => {
-          let et = +(new Date(data.enrollTime)), //报名时间
-              nt = stt; // 当前时间
-          if ( et > nt ) { // 说明报名时间未到，开启倒计时
+          that.nowtt = stt; // 当前时间
+          that.endtt = ((+(new Date(data.enrollTime))) + 10000); //报名时间，推迟10秒
+          if ( that.endtt > that.nowtt ) { // 说明报名时间未到，开启倒计时
             that.ttStatus = '1'; // 倒计时
-            that.endtt = et;
             that.ttItval();
           } else { // 可是开始报名，显示报名按键
             that.ttStatus = '2'; // 可以报名
@@ -161,21 +167,20 @@ export default {
           }
         }, false);
       } else if ( data.status === 102 ) { // 投票未发布
-        that.$xljs.toast (  '活动投票未发布' );
+          that.ttStatus = '3'; // 报名已结束
       } else if ( data.status === 103 ) { // 可以开始投票
         that.$xljs.getTT((stt) => {
-          let et = +(new Date(data.voteTime)), //投票时间
-              nt = +(new Date()); // 当前时间
-          if ( et > nt ) { // 说明报名时间未到，开启倒计时
+          that.nowtt = stt; // 当前时间
+          that.endtt = ((+(new Date(data.voteTime))) + 10000); //报名时间，推迟10秒
+          if ( that.endtt > that.nowtt ) { // 说明报名时间未到，开启倒计时
             that.ttStatus = '1'; // 倒计时
-            that.endtt = et;
             that.ttItval();
           } else { // 可是开始投票
             that.ttDialog = true;
           }
         }, false);
       } else if ( data.status === 104 ) { // 已经结束了
-          that.ttStatus = '3'; // 已结束
+          that.ttStatus = '4'; // 活动已结束
       } else if ( data.status === 105 ) { // 下架了
         that.$xljs.toast (  '活动已下架' );
       } else {
@@ -183,11 +188,15 @@ export default {
       }
     },
     ttItval () {
-      let that = this,
-          itval = 60000;
-      setInterval(() => {
-        that.endtt -= itval;
-      }, itval);
+      let that = this;
+      setTimeout(() => {
+        that.nowtt += that.inttt;
+        if ( that.nowtt < that.endtt ) {
+          that.ttItval();
+        } else {
+          that.pageInit();
+        }
+      }, that.inttt);
     }
   }
 }

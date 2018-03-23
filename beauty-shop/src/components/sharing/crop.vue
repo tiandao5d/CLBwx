@@ -60,18 +60,15 @@ export default {
                       thumb: 1
                     }],
           _url = '/ushop-api-merchant/api/sns/file/submit';
-      // that.$xljs.ajax(_url, 'post', JSON.stringify(_param), (data) => {
-      //   that.closecrop();
-      //   that.$emit('cropCb', {
-      //     bs64: bs64,
-      //     url: data.urls[0]
-      //   });
-      // });
+      that.$xljs.loading( 'show', '图片上传中……' ); // 遮屏
+      that.$xljs.ajax(_url, 'post', JSON.stringify(_param), (data) => {
+        that.$xljs.loading( 'hide' ); // 遮屏
         that.closecrop();
         that.$emit('cropCb', {
           bs64: bs64,
-          url: ''
+          url: data.urls[0]
         });
+      }, false);
     }
   }
 }

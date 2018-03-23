@@ -48,7 +48,7 @@
         <p>感谢您投的宝贵一票{{voteGap}}！您可以：</p>
         <p>1.每天参与投票，每天最多可以投{{voteLimit}}票</p>
         <p>2.邀请更多小伙伴来参与投票</p>
-        <mu-flat-button slot="actions" @click="voteClose" primary label="取消"/>
+        <mu-flat-button slot="actions" @click="voteClose" primary label="确定"/>
         <mu-flat-button slot="actions" primary @click="voteClose('confrim')" label="为我拉票"/>
       </mu-dialog>
       <share-dailog ref="shareda"/>
@@ -154,6 +154,7 @@ export default {
           {txt: '排行榜', val: 'tab3', href: '/rankingList', icon: 'phb'},
           {txt: '我的投票', val: 'tab4', href: '/myVote', icon: 'wdtp'}
         ]
+        that.getUserVote(); // 获取用户投票数据
       }
       if ( that.$route.params.searchtrue ) {
         that.footActive = 'tab2';
@@ -161,7 +162,6 @@ export default {
       that.voteLimit = actdata.voteLimit;
       that.getWorksList(); // 获取作品列表
       that.bannerInit(harr); // 显示banner图片
-      that.getUserVote(); // 获取用户投票数据
     },
     // 获取用户投票数据
     getUserVote () {
