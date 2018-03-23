@@ -142,25 +142,44 @@ export default {
       let that = this;
       that.$router.push('/home');
     },
+    // 报名未发布100 报名已发布101 投票未发布102 投票已发布103 结束104 下架105
     atStatus ( data ) {
       let that = this;
-      if ( data.status === 101 ) { // 可以开始报名
-        let et = +(new Date(data.enrollTime)), //报名时间
-            nt = +(new Date()); // 当前时间
-        if ( et > nt ) { // 说明报名时间未到，开启倒计时
-          that.ttStatus = '1'; // 倒计时
-          that.endtt = et;
-          that.ttItval();
-        } else { // 可是开始报名，显示报名按键
-          that.ttStatus = '2'; // 可以报名
-          that.signup = data.selects;
-        }
+      if ( data.status === 100 ) { // 报名未发布
+        that.$xljs.toast (  '活动报名未发布' );
+      } else if ( data.status === 101 ) { // 可以开始报名
+        that.$xljs.getTT((stt) => {
+          let et = +(new Date(data.enrollTime)), //报名时间
+              nt = stt; // 当前时间
+          if ( et > nt ) { // 说明报名时间未到，开启倒计时
+            that.ttStatus = '1'; // 倒计时
+            that.endtt = et;
+            that.ttItval();
+          } else { // 可是开始报名，显示报名按键
+            that.ttStatus = '2'; // 可以报名
+            that.signup = data.selects;
+          }
+        }, false);
+      } else if ( data.status === 102 ) { // 投票未发布
+        that.$xljs.toast (  '活动投票未发布' );
       } else if ( data.status === 103 ) { // 可以开始投票
-        that.ttDialog = true;
+        that.$xljs.getTT((stt) => {
+          let et = +(new Date(data.voteTime)), //投票时间
+              nt = +(new Date()); // 当前时间
+          if ( et > nt ) { // 说明报名时间未到，开启倒计时
+            that.ttStatus = '1'; // 倒计时
+            that.endtt = et;
+            that.ttItval();
+          } else { // 可是开始投票
+            that.ttDialog = true;
+          }
+        }, false);
       } else if ( data.status === 104 ) { // 已经结束了
           that.ttStatus = '3'; // 已结束
+      } else if ( data.status === 105 ) { // 下架了
+        that.$xljs.toast (  '活动已下架' );
       } else {
-        that.$xljs.toast ( `活动状态不正确，${that.$xljs.actSession().status}`);
+        that.$xljs.toast ( `活动状态不正确，${that.$xljs.actSession().status}` );
       }
     },
     ttItval () {

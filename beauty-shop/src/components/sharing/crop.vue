@@ -35,6 +35,8 @@ export default {
       imgbox.appendChild(imgobj);
       imgobj.onload = () => {
         that.cropperobj = new Cropper(imgobj, {
+          minCropBoxWidth: 80,
+          minCropBoxHeight: 80,
           autoCropArea: .8, //裁切框大小，0-1，现对于总的图片大小
           aspectRatio: 1/1 //裁切框比例
         });
@@ -50,7 +52,7 @@ export default {
       //cropper.getCroppedCanvas().toDataURL('image/jpeg')
       //cropper.getCroppedCanvas().toBlob(function (blob) {})
       let that = this,
-          canvasele = that.cropperobj.getCroppedCanvas(),
+          canvasele = that.cropperobj.getCroppedCanvas({width: 500, height: 500}),
           bs64 = canvasele.toDataURL('image/jpeg'),
           _param =  [{
                       name: '0.jpg',
@@ -58,13 +60,18 @@ export default {
                       thumb: 1
                     }],
           _url = '/ushop-api-merchant/api/sns/file/submit';
-      that.$xljs.ajax(_url, 'post', JSON.stringify(_param), (data) => {
+      // that.$xljs.ajax(_url, 'post', JSON.stringify(_param), (data) => {
+      //   that.closecrop();
+      //   that.$emit('cropCb', {
+      //     bs64: bs64,
+      //     url: data.urls[0]
+      //   });
+      // });
         that.closecrop();
-        that.$parent.cropCb( {
+        that.$emit('cropCb', {
           bs64: bs64,
-          url: data.urls[0]
-        } );
-      });
+          url: ''
+        });
     }
   }
 }

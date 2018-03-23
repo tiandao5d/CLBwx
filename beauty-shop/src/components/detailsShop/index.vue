@@ -64,7 +64,7 @@ export default {
       status: 0
     }
   },
-  created() {
+  mounted () {
     // 页面数据初始化
     this.pageInit()
   },
