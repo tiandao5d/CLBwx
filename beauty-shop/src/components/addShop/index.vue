@@ -34,8 +34,10 @@
                 <img class="addimg-img" :src="item.bs64">
                 <mu-float-button class="addimg-close" @click="img_close(index)" mini icon="close" backgroundColor="#f00"/>
               </div>
-              <div class="addimg-btn" v-if="addimgArr.length < 1" @click="addimgClick">
-                <input type="file" class="form-file" id="form_file" @change="img_edit">
+              <input type="file" accept="image/*" class="form-file" id="form_file0" @change="img_edit">
+              <input type="file" accept="image/*" capture="camera" class="form-file" id="form_file1" @change="img_edit">
+              <input type="file" accept="image/png,image/jpeg" class="form-file" id="form_file2" @change="img_edit">
+              <div class="addimg-btn" v-if="addimgArr.length < 1" @click="addImgClick">
                 <mu-icon value="add" color="#959595" :size="30"/>
                 <span>添加照片</span>
               </div>
@@ -50,7 +52,7 @@
         </div>
         <div style="height: 30px;"></div>
       </div>
-      <cropper-box ref="cropper"></cropper-box>
+      <cropper-box ref="cropper" @cropCb="cropCb"></cropper-box>
       <div class="alert-box" v-if="alertActive">
         <!-- 不通过 -->
         <div class="alert-item" v-if="alertActive === 'alert1'">
@@ -73,6 +75,15 @@
           <mu-sub-header>请选择</mu-sub-header>
           <div class="city-box">
             <mu-list-item v-for="item, index in cityArr" :key="index" :value="item.val" :title="item.txt"/>
+          </div>
+        </mu-list>
+      </mu-bottom-sheet>
+      <mu-bottom-sheet :open="fileselect" @close="filesclose">
+        <mu-list @change="fileschange">
+          <mu-sub-header>请选择</mu-sub-header>
+          <div class="city-box">
+            <mu-list-item value="1" title="拍照"/>
+            <mu-list-item value="2" title="相册"/>
           </div>
         </mu-list>
       </mu-bottom-sheet>
@@ -101,6 +112,7 @@ export default {
       pageBg4,
       pageBg5,
       pageBg6,
+      fileselect: false,
       alertActive: false, // 弹窗显示否
       addimgArr: [], // 图片数据
       toastsh: true, // 提示框显示否
@@ -119,7 +131,7 @@ export default {
       }
     }
   },
-  created () {
+  mounted () {
     // 页面数据初始化
     this.pageInit()
   },
@@ -141,30 +153,47 @@ export default {
         }
       });
     },
+    // 图片选择显示
+    addImgClick () {
+      this.fileselect = true;
+    },
+    // 图片选择
+    filesclose () {
+      this.fileselect = false;
+    },
+    // 选择相册还是拍照
+    fileschange ( val ) {
+      let that = this;
+      that.fileselect = false;
+      if ( that.isios() ) { // IOS
+        document.getElementById('form_file0').click();
+      }else if ( val === '1' ) { // 相机
+        document.getElementById('form_file1').click();
+      } else if ( val === '2' ) { // 相册
+        document.getElementById('form_file2').click();
+      }
+    },
+    // 判断IOS
+    isios () {
+      let ua = navigator.userAgent.toLowerCase();
+      if (ua.match(/iPhone\sOS/i) == "iphone os") {
+          return true;
+      } else {
+          return false;
+      }
+    },
     // 图片编辑
     img_edit () {
       let that = this;
       that.$xljs.loading( 'show', '图片解析中……' ); // 遮屏
-      if ( that.$xljs.isWeixin() ) {//微信选择图片
-        let localId = arguments[0];
-        window.wx.getLocalImgData({
-          localId: localId, // 图片的localID
-          success ( res ) {
-            that.$xljs.loading( 'hide' ); // 解除遮屏
-            // localData是图片的base64数据，可以用img标签显示
-            that.$refs.cropper.showcrop( res.localData )
-          }
-        });
-      } else { // 本地用于测试的选择图片
-        let e = arguments[0],
-            _file = e.target.files[0],
-            rf = new FileReader();
-        rf.readAsDataURL( _file );
-        rf.onload = () => {
-          // result是图片的base64数据，可以用img标签显示
-          that.$xljs.loading( 'hide' ); // 解除遮屏
-          that.$refs.cropper.showcrop( rf.result );
-        }
+      let e = arguments[0],
+          _file = e.target.files[0],
+          rf = new FileReader();
+      rf.readAsDataURL( _file );
+      rf.onload = () => {
+        // result是图片的base64数据，可以用img标签显示
+        that.$xljs.loading( 'hide' ); // 解除遮屏
+        that.$refs.cropper.showcrop( rf.result );
       }
     },
     // 关闭弹窗
@@ -183,30 +212,9 @@ export default {
     },
     //图片编辑后回调
     cropCb ( data ) {
+      this.$xljs.toast(JSON.stringify(data));
       this.addimgArr.push(data);
       this.fromData.url.val = data.url;
-    },
-    // 点击添加图片
-    addimgClick () {
-      let that = this;
-      if ( that.$xljs.isWeixin() ) {//微信选择图片
-        that.wxImgB64();
-      }else{//本地用于测试的选择图片
-        document.getElementById('form_file').click();
-      }
-    },
-    // 微信图片获取
-    wxImgB64 () {
-      let that = this;
-      window.wx.chooseImage({
-        count: 1, // 默认9
-        sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-        success (res) {
-           // res.localIds 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-          that.img_edit( res.localIds[0] );
-        }
-      });
     },
     // 城市选择显示隐藏
     bottomSheetSH ( type ) {
