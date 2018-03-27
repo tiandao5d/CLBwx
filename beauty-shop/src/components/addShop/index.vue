@@ -23,7 +23,14 @@
             </div>
             <div class="input-group">
               <label>联系方式：</label>
-              <input type="text" v-model="fromData.phone.val" placeholder="请填写正确的联系方式">
+              <input type="number" v-model="fromData.phone.val" placeholder="请填写正确的手机号">
+            </div>
+            <div class="input-group">
+              <label>手机验证码：</label>
+              <div class="code-box">
+                <input type="number" v-model="fromData.warning.val" placeholder="请输入验证码">
+                <button @click="codebtnclick" :disabled="codeObj.dab" class="code-btn">{{codeObj.txt}}</button>
+              </div>
             </div>
             <div class="input-group">
               <label>站点服务及业绩：</label>
@@ -181,12 +188,17 @@ export default {
         serialNo: {val: '', errtxt: '站点号不能为空', valid: true},
         userNo:  {val: '', valid: false},
         phone:  {val: '', errtxt: '请输入联系方式', valid: true},
+        warning:  {val: '', errtxt: '请输入验证码', valid: true},
         province:  {val: '', errtxt: '请输入省份', valid: false},
         district:  {val: '', errtxt: '请输入地区', valid: true},
         remark:  {val: '', errtxt: '请输入站点服务及业绩', valid: true},
         name:  {val: '', errtxt: '请输入站主姓名', valid: true},
         address:  {val: '', errtxt: '请选择所在地址', valid: true},
         url:  {val: '', errtxt: '请添加站点图片', valid: true}
+      },
+      codeObj: {
+        dab: false,
+        txt: '获取验证码'
       }
     }
   },
@@ -281,22 +293,64 @@ export default {
       that.fromData.district.txt = item.txt;
       that.bottomSheet = false;
     },
+    // 发送短信验证码
+    sendCodeFn ( phone, callback = function () {} ) {
+      // 8为功能类型固定值
+      let that = this,
+          _url = `${that.$xljs.domainUrl}/ushop-api-merchant/api/sns/mobile/verify/sendCode/${phone}/8`;
+      that.$xljs.ajax(_url, 'post', {}, (data) => {
+          if( data.result === 1 ){//发送成功
+            callback(1)
+          } else {
+            callback(0)
+          }
+      });
+    },
+    // 点击获取验证码
+    codebtnclick () {
+      let that = this,
+          tt = 60,
+          phone = that.fromData.phone.val;
+      function tout () {
+        setTimeout(() => {
+          tt--;
+          if ( tt < 1 ) {
+            that.codeObj.dab = false;
+            that.codeObj.txt = `重新发送`;
+          } else {
+            that.codeObj.txt = `${tt}s后重发`;
+            tout();
+          }
+        }, 1000);
+      }
+      if ( /^1\d{10}$/.test( phone ) ) {
+        that.sendCodeFn(phone, (ptype) => {
+          if ( ptype === 1 ) {
+            that.codeObj.dab = true;
+            that.codeObj.txt = `${tt}s后重发`;
+            tout();
+          } else {
+            that.$xljs.toast('发送失败，请稍后重试!');
+          }
+        });
+      } else {
+        that.$xljs.toast('请输入正确的手机号!');
+      }
+    },
     // 获取并验证数据
     getValidData () {
       let that = this,
           o = that.fromData,
           me, istrue = true;
-      function checktel ( tel ) {
-        var a = /^1\d{10}$/,
-          b = /^0\d{2,3}-?\d{7,8}$/;
-        return (a.test(tel) || b.test(tel));
-      }
       that.$xljs.each(o, ( k, obj ) => {
         if ( !obj.val && obj.valid ) {
           that.$xljs.toast(obj.errtxt);
           istrue = false;
-        }else if ( (k === 'phone') && !checktel(o.phone.val) ) {
+        } else if ( (k === 'phone') && !(/^1\d{10}$/.test( o.phone.val )) ) {
           that.$xljs.toast('联系方式不正确！');
+          istrue = false;
+        } else if ( (k === 'warning') && !( o.warning.val.length === 6 ) ) {
+          that.$xljs.toast('验证码为六位数字！');
           istrue = false;
         } else if (  (k === 'remark') && !(o.remark.val.length < 300) ) {
           that.$xljs.toast('请输入300字以内的介绍文字！');
@@ -313,10 +367,10 @@ export default {
       let that = this,
           _url = '/ushop-api-merchant/api/sns/vote/candidate/signUp',
           _param = {};
-      // if ( !(that.$xljs.actSession().status === 101) ) {
-      //   that.$xljs.toast('活动状态不正确！');
-      //   return false;
-      // }
+      if ( !(that.$xljs.actSession().status === 101) ) {
+        that.$xljs.toast('活动状态不正确！');
+        return false;
+      }
       if ( !that.getValidData() ) {
         return false;
       }
@@ -490,5 +544,21 @@ export default {
 .city-box {
   max-height: 300px;
   overflow-y: auto;
+}
+.code-box {
+  position: relative;
+}
+.code-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  border: 0;
+  background-color: #ff5534;
+  color: #fff;
+  padding: 0 5px;
+}
+.code-btn[disabled] {
+  background-color: #666;
 }
 </style>

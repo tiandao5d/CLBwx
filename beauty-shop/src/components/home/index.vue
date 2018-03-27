@@ -49,6 +49,12 @@
         <mu-flat-button slot="actions" @click="sdailogSH" primary label="取消"/>
         <mu-flat-button slot="actions" primary @click="sdailogSH('primary')" label="确定"/>
       </mu-dialog>
+      <mu-dialog :open="codeObj.show" title="验证码" @close="codeHideFn">
+        <mu-text-field class="foot-tf" v-model="codeObj.val" type="number" @focus="codeObj.err = ''" :errorText="codeObj.err" hintText="请输入下图验证码"/>
+        <img :src="codeObj.img" width="100" @click="getCodeSer">
+        <mu-flat-button slot="actions" @click="codeHideFn" primary label="取消"/>
+        <mu-flat-button slot="actions" primary @click="codeHideFn('confrim')" label="确定"/>
+      </mu-dialog>
       <mu-dialog :open="voteDialog" title="投票成功" @close="voteClose">
         <p>感谢您投的宝贵一票{{voteGap}}！您可以：</p>
         <p>1.每天参与投票，每天最多可以投{{voteLimit}}票</p>
@@ -69,7 +75,7 @@ import ctData from '@/assets/json/city.show.js'; // 城市数据
 import cityList from '@/components/sharing/cityselect'; // 城市列表选择组件
 import FootTabs from '@/components/sharing/foot'; // 底部菜单
 import ShareDailog from '@/components/share'; // 分享弹窗
-import _ from 'lodash';
+import p31 from '@/assets/image/p300100.png';
 export default {
   data () {
     let listParam = {},
@@ -97,6 +103,12 @@ export default {
       sdIptVal: '', // 搜索的输入框值
       iptErrObj: { // 搜索的输入框值报错
         sderr: ''
+      },
+      codeObj: {
+        show: false,
+        val: '',
+        err: '',
+        img: p31
       },
       autoOwlList: [], // 漂浮窗
       voteGap: '', // 中奖机会字符串，投票后的提示相关
@@ -304,12 +316,23 @@ export default {
       }
     },
     // 投票点击事件
-    voteSubmit ( item ) {
+    voteSubmit ( item, code ) {
       let that = this,
           cp = that.listParam[('p' + that.titleActive)],
           gap = 0,
-          _url = `/ushop-api-merchant/api/sns/vote/voter/submit/${that.$xljs.bsid}/${item.id}`;
-          that.voteDialog = true; // 弹出提示成功的窗口
+          _url = '';
+      if ( !code ) {
+        // 需要有验证码
+        if ( that.$xljs.actSession().securityCode === 100 ) {
+          that.codeObj.show = true; // 验证码弹窗显示
+          that.codeObj.item = item;
+          that.getCodeSer();
+          return false;
+        } else {
+          code = '0';
+        }
+      }
+      _url = `/ushop-api-merchant/api/sns/vote/voter/submit/${that.$xljs.bsid}/${item.id}/${code}`
       that.$xljs.ajax(_url, 'post', {}, (data) => {
         if ( data.result === 'SUCCESS' ) {
           that.getLuckyList( data.cashTime ); // 获取用户的抽奖游戏券
@@ -333,6 +356,26 @@ export default {
           that.$xljs.toast( (data.error_description || '未知错误') );
         }
       })
+    },
+    // 验证码弹窗消失回调
+    codeHideFn ( type ) {
+      let that = this;
+      that.codeObj.show = false;
+      that.codeObj.img = p31;
+      if ( arguments[0] === 'confrim' ) {
+        that.voteSubmit ( that.codeObj.item, that.codeObj.val ); // 重新调用投票
+      }
+    },
+    // 获取验证码图片
+    getCodeSer () {
+        let that = this,
+            _url = `${that.$xljs.domainUrl}/ushop-api-merchant/api/sns/image/verify/code/get`;
+        that.$xljs.ajax(_url, 'get', {}, function(data){
+          if ( !data.code ) {
+            that.$xljs.toast( '验证码获取失败，请稍后重试！' );
+          }
+          that.codeObj.img = data.code || p31;
+        }, false);
     },
     // 获取候选作品列表
     getWorksList ( np ) {
@@ -496,10 +539,16 @@ export default {
   overflow: hidden;
   max-width: 90%;
 }
+.auto-owl > div {
+  transform: translateY(-30px);
+}
 .auto-owl-li {
   color: #fff;
   line-height: 30px;
   font-size: 12px;
+}
+.auto-owl-li:last-child {
+  opacity: 0;
 }
 .flip-list-move {
   transition: transform 1s;
