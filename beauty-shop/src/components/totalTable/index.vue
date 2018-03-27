@@ -88,8 +88,8 @@
         </table>
       </div>
       <div style="height: 40px;"></div>
-      <mu-dialog :open="ttDialog" title="提示" @close="ttClose">
-        活动已经开始，去到主界面
+      <mu-dialog :open="!!ttDialog" title="提示" @close="ttClose">
+        {{ttDialog}}
         <mu-flat-button slot="actions" primary @click="ttClose" label="确定"/>
       </mu-dialog>
     </div>
@@ -116,7 +116,7 @@ export default {
       pageBg12,
       pageBg13,
       pageBg23,
-      ttDialog: false,
+      ttDialog: '',
       signup: 0, // 当前已经报名的数量
       endtt: +(new Date('2050-03-10')),
       nowtt: +(new Date()),
@@ -147,6 +147,7 @@ export default {
     },
     ttClose () {
       let that = this;
+      that.ttDialog = '';
       that.$router.push('/home');
     },
     // 报名未发布100 报名已发布101 投票未发布102 投票已发布103 结束104 下架105
@@ -176,11 +177,12 @@ export default {
             that.ttStatus = '1'; // 倒计时
             that.ttItval();
           } else { // 可是开始投票
-            that.ttDialog = true;
+            that.ttDialog = '活动已经开始，去到主界面';
           }
         }, false);
       } else if ( data.status === 104 ) { // 已经结束了
           that.ttStatus = '4'; // 活动已结束
+          that.ttDialog = '活动已经结束，去到主界面';
       } else if ( data.status === 105 ) { // 下架了
         that.$xljs.toast (  '活动已下架' );
       } else {

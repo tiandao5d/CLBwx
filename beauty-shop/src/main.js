@@ -7,15 +7,12 @@ import router from './router'
 import MuseUI from 'muse-ui'
 import 'muse-ui/dist/muse-ui.css'
 
-import 'swiper/dist/css/swiper.css'
-import VueAwesomeSwiper from 'vue-awesome-swiper'
 
 import './assets/style.css'
 import globaljs from './assets/globaljs.js'
 
 Vue.use(globaljs)
 Vue.use(MuseUI)
-Vue.use(VueAwesomeSwiper)
 
 Vue.config.productionTip = false
 

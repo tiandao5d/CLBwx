@@ -286,37 +286,37 @@ export default {
       let that = this,
           o = that.fromData,
           me, istrue = true;
-      that.$xljs.each(o, ( k, obj ) => {
-        if ( !obj.val && obj.valid ) {
-          that.$xljs.toast(obj.errtxt);
-          istrue = false;
-          return false;
-        }
-      });
-      return istrue;
-      if ( !checktel(o.phone.val) ) {
-        that.$xljs.toast('联系方式不正确！');
-        return false;
-      }
-      if ( !(o.remark.val.length < 300) ) {
-        that.$xljs.toast('请输入300字以内的介绍文字！');
-        return false;
-      }
       function checktel ( tel ) {
         var a = /^1\d{10}$/,
           b = /^0\d{2,3}-?\d{7,8}$/;
         return (a.test(tel) || b.test(tel));
       }
+      that.$xljs.each(o, ( k, obj ) => {
+        if ( !obj.val && obj.valid ) {
+          that.$xljs.toast(obj.errtxt);
+          istrue = false;
+        }else if ( (k === 'phone') && !checktel(o.phone.val) ) {
+          that.$xljs.toast('联系方式不正确！');
+          istrue = false;
+        } else if (  (k === 'remark') && !(o.remark.val.length < 300) ) {
+          that.$xljs.toast('请输入300字以内的介绍文字！');
+          istrue = false;
+        }
+        if ( !istrue ) {
+          return false;
+        }
+      });
+      return istrue;
     },
     // 报名未发布100 报名已发布101 投票未发布102 投票已发布103 结束104 下架105
     formSubmit () {
       let that = this,
           _url = '/ushop-api-merchant/api/sns/vote/candidate/signUp',
           _param = {};
-      if ( !(that.$xljs.actSession().status === 101) ) {
-        that.$xljs.toast('活动状态不正确！');
-        return false;
-      }
+      // if ( !(that.$xljs.actSession().status === 101) ) {
+      //   that.$xljs.toast('活动状态不正确！');
+      //   return false;
+      // }
       if ( !that.getValidData() ) {
         return false;
       }

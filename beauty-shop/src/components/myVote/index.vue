@@ -88,6 +88,10 @@ export default {
           adata = that.$xljs.actSession(),
           params = adata.pobj,
           udata = adata.userVote;
+      if ( !udata ) {
+        that.$xljs.toast('活动未到投票时间！');
+        return false;
+      }
       that.subordinates = udata.subordinates;
       that.votes = udata.votes;
       that.canvasses = udata.canvasses;

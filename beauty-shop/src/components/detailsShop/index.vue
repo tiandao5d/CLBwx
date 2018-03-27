@@ -29,7 +29,7 @@
             <strong>站点服务及业绩：</strong>
             <span class="ds-p-p">{{item.remark}}</span>
           </div>
-          <div class="ds-num" v-if="status === 103">
+          <div class="ds-num" v-if="status === 103 || status === 104">
             <div class="ds-num-p">当前票数：<span>{{item.score}}</span></div>
             <div class="ds-num-p">当前排名：<span>{{item.ranking}}</span></div>
           </div>
@@ -40,7 +40,9 @@
         <mu-raised-button label="分 享" @click="shareClick" class="raised-button right" />
       </div>
       <mu-dialog :open="voteDialog" title="投票成功" @close="voteClose">
-        感谢您投的宝贵一票，还差1票就可以获得抽奖机会哦！
+        <p>感谢您投的宝贵一票{{voteGap}}！您可以：</p>
+        <p>1.每天参与投票，每天最多可以投{{voteLimit}}票</p>
+        <p>2.邀请更多小伙伴来参与投票</p>
         <mu-flat-button slot="actions" @click="voteClose" primary label="确定"/>
         <mu-flat-button slot="actions" primary @click="voteClose('confrim')" label="为我拉票"/>
       </mu-dialog>
@@ -61,6 +63,8 @@ export default {
       item: {},
       voteDialog: false,
       isme: false,
+      voteGap: '', // 中奖机会字符串，投票后的提示相关
+      voteLimit: 0, // 每天投票上线
       status: 0
     }
   },
@@ -72,8 +76,10 @@ export default {
     // 页面数据并发请求
     pageInit() {
       let that = this,
-          ud = that.$xljs.deCodeUrlFn();
-      that.status = that.$xljs.actSession().status;
+          ud = that.$xljs.deCodeUrlFn(),
+          actdata = that.$xljs.actSession();
+      that.status = actdata.status;
+      that.voteLimit = actdata.voteLimit;
       if ( ud.serialNo ) {
         that.getWorksList ( ud.serialNo ); // 查询指定站点
       } else if ( ud.me ) {
@@ -98,7 +104,7 @@ export default {
       that.$xljs.ajax(_url, 'get', _param, ( data ) => {
         if ( data.recordList ) {
           if ( data.totalCount === 0 ) { // 未查到任何数据
-        that.$xljs.toast('您未参与此次活动报名');
+            that.$xljs.toast('您未参与此次活动报名');
             return false;
           }
           that.item = data.recordList[0];
@@ -118,12 +124,37 @@ export default {
         that.$refs.shareda.show(this.item);
       }
     },
+    // 获取临近的可领奖票数
+    getNearNum ( num = 0 ) {
+      let that = this,
+          adata = that.$xljs.actSession(),
+          maxarr = [];
+      that.$xljs.each(adata.pobj.pPlanC, (i, a) => {
+        if ( i < adata.pobj.pPlan && a[3] > num ) {
+          maxarr[maxarr.length] = num;
+        }
+      });
+      if ( maxarr.length > 1 ) {
+        return (Math.min.apply(null, maxarr) - num);
+      } else if ( maxarr.length === 1 ) {
+        return (maxarr[0] - num);
+      } else {
+        return 0;
+      }
+    },
     // 投票点击事件
-    voteSubmit ( item ) {
+    voteSubmit () {
       let that = this,
           _url = `/ushop-api-merchant/api/sns/vote/voter/submit/${that.$xljs.actSession().id}/${that.item.id}`;
       that.$xljs.ajax(_url, 'post', {}, (data) => {
         if ( data.result === 'SUCCESS' ) {
+          that.item.score += 1;
+          gap = that.getNearNum(that.item.score);
+          if ( gap > 0 ) {
+            that.voteGap = `，还差${gap}票就可以获得抽奖机会哦`;
+          } else {
+            that.voteGap = '';
+          }
           that.voteDialog = true;
         } else {
           that.$xljs.toast((data.error_description || '投票失败，未知错误'));

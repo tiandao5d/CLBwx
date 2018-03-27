@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="tabs-content">
-          <div class="h-total" v-if="listType">
+          <div class="h-total" v-if="astatus >= 103">
             <div class="htotal-item">
               <div class="htotal-p">全省参与站点</div>
               <div class="htotal-p">{{htotal.selects}}</div>
@@ -30,7 +30,7 @@
           </div>
           <div class="clearfix plist-ul">
             <product-list
-              @voteSubmit="voteSubmit" :status="listType"
+              @voteSubmit="voteSubmit" :status="astatus"
               v-for="item, index in productlist" :item="item" :key="index">
             </product-list>
           </div>
@@ -38,6 +38,11 @@
         </div>
       </div>
       <foot-tabs :value="footActive" :tabarr="tabarr" @change="footTabChange"></foot-tabs>
+      <div class="auto-owl" v-if="autoOwlList.length > 2">
+        <transition-group name="flip-list" tag="div">
+          <div class="auto-owl-li ellipsis" v-for="item, index in autoOwlList" :key="item.id">{{item.userName}} 获得 {{item.levelObj.title}}</div>
+        </transition-group>
+      </div>
       <city-list ref="province" :ctarr="titletabs"/>
       <mu-dialog :open="footActive === 'tab2'" title="搜索站点编号" @close="sdailogSH">
         <mu-text-field class="foot-tf" v-model="sdIptVal" type="number" @focus="iptErrObj.sderr = ''" :errorText="iptErrObj.sderr" hintText="请输入投注站编号"/>
@@ -64,6 +69,7 @@ import ctData from '@/assets/json/city.show.js'; // 城市数据
 import cityList from '@/components/sharing/cityselect'; // 城市列表选择组件
 import FootTabs from '@/components/sharing/foot'; // 底部菜单
 import ShareDailog from '@/components/share'; // 分享弹窗
+import _ from 'lodash';
 export default {
   data () {
     let listParam = {},
@@ -84,7 +90,7 @@ export default {
       bannerList: [], // 储存banner图数据
       titletabs: ctData, // 储存抬头数据
       titleActive: ctData[0].val, // 储存选中的抬头
-      listType: false, // 根据状态显示是否可以投票
+      astatus: 0, // 根据状态显示是否可以投票
       voteDialog: false, // 控制投票后的弹窗显示
       shareItem: {}, // 记录投票的站点数据，以便于分享
       voteLimit: 0, // 每天投票上线
@@ -92,6 +98,7 @@ export default {
       iptErrObj: { // 搜索的输入框值报错
         sderr: ''
       },
+      autoOwlList: [], // 漂浮窗
       voteGap: '', // 中奖机会字符串，投票后的提示相关
       htotal: {
         selects: 0, // 总报名数
@@ -141,19 +148,21 @@ export default {
       } catch (err) {
         harr = [];
       };
+      that.astatus = actdata.status; // 记录活动状态
       if ( actdata.status === 103 ) {
         that.htotal = {
           selects: actdata.selects, // 总报名数
           participants: actdata.participants, // 总参与数量
           pageViews: actdata.pageViews // 总访问数量
         }
-        that.listType = true;
         that.tabarr = [
           {txt: '投票', val: 'tab1', href: '/home', icon: 'tp'},
           {txt: '搜索', val: 'tab2', href: '', icon: 'ss', fn: that.sdailogSH},
           {txt: '排行榜', val: 'tab3', href: '/rankingList', icon: 'phb'},
           {txt: '我的投票', val: 'tab4', href: '/myVote', icon: 'wdtp'}
         ]
+      }
+      if ( actdata.status > 103 ) {
         that.getUserVote(); // 获取用户投票数据
       }
       if ( that.$route.params.searchtrue ) {
@@ -161,7 +170,8 @@ export default {
       }
       that.voteLimit = actdata.voteLimit;
       that.getWorksList(); // 获取作品列表
-      that.bannerInit(harr); // 显示banner图片
+      that.getWinprizeFn();// 获取中奖信息
+      that.bannerList = harr; // 显示banner图片
     },
     // 获取用户投票数据
     getUserVote () {
@@ -181,6 +191,42 @@ export default {
         }
       });
     },
+    //获取用户票，中奖的，也就是中奖数据，用于轮播
+    getWinprizeFn () {
+        var that = this,
+            adata = that.$xljs.actSession(),
+            _url = `${that.$xljs.domainUrl}/ushop-api-merchant/api/lotto/ticket/topn/listBy/1/${that.$xljs.lcid}/0/2`;
+        that.$xljs.ajax(_url, 'get', {}, (data) => {
+            if(data.totalCount > 0){
+                that.$xljs.each(data.recordList, function(index, obj){
+                    obj.levelObj = {};
+                    that.$xljs.each(adata.lcobj.prizesArr, function(pi, po){
+                        if(po.index == obj.prizeId){
+                            obj.levelObj = po;
+                            return false;
+                        }
+                    });
+                });
+                that.autoOwlList = data.recordList;
+                that.autoOwlFn();
+            }
+        });
+    },
+
+    // 漂浮自动轮播
+    autoOwlFn () {
+      let that = this;
+      setTimeout(() => {
+        if ( that.autoOwlList.length > 2 ) {
+          var arr = that.autoOwlList.slice(),
+              farr = arr.shift();
+          arr.push(farr);
+          that.autoOwlList = arr;
+          that.autoOwlFn();
+        }
+      }, 3000);
+    },
+
     // 获取用户的抽奖游戏券
     getLuckyList ( dt = '' ) {
       let that = this,
@@ -213,14 +259,6 @@ export default {
     tabs_more () {
       let that = this;
       that.$refs.province.showCom();
-    },
-    // banner图初始化
-    bannerInit ( arr ) {
-      let that = this;
-      arr = arr.map((o, i) => {
-        return o.value;
-      });
-      that.bannerList = arr;
     },
     // 搜索显示隐藏
     sdailogSH () {
@@ -446,5 +484,24 @@ export default {
 }
 .htotal-item {
   flex-grow: 1;
+}
+.auto-owl {
+  position: absolute;
+  left: 0;
+  top: 10%;
+  z-index: 50;
+  background-color: rgba(0,0,0,.5);
+  padding: 0 10px;
+  height: 30px;
+  overflow: hidden;
+  max-width: 90%;
+}
+.auto-owl-li {
+  color: #fff;
+  line-height: 30px;
+  font-size: 12px;
+}
+.flip-list-move {
+  transition: transform 1s;
 }
 </style>

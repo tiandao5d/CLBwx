@@ -1,9 +1,11 @@
 <template>
   <div class="banner-box comp-box">
-    <div class="swiper-comps" v-if="listtrue">
+    <div class="swiper-comps" v-if="list.length > 0">
       <div class="swiper-cons">
         <swiper :options="bannerOptions">
-          <swiper-slide v-for="img, index in list" :key="index"><img class="swiper-img" :src="img"/></swiper-slide>
+          <swiper-slide v-for="item, index in list" :key="index">
+            <a :href="item.key"><img class="swiper-img" :src="item.value"/></a>
+          </swiper-slide>
           <div class="swiper-pagination"  slot="pagination"></div>
         </swiper>
       </div>
@@ -13,6 +15,8 @@
 </template>
 
 <script>
+import 'swiper/dist/css/swiper.css'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import img from '@/assets/image/p300100.png'
 export default {
   props: {
@@ -25,7 +29,13 @@ export default {
   data () {
     return {
       bannerDimg: img,
-      bannerOptions: {
+      bannerOptions: this.getSOption()
+    }
+  },
+  methods: {
+    getSOption () {
+      let that = this;
+      return {
         loop: true,
         autoplay: {
           delay: 5000,
@@ -34,19 +44,13 @@ export default {
         },
         pagination: {
           el: '.swiper-pagination'
-        },
-        on: {
-          tap ( e ) {
-            console.log( e )
-          }
         }
       }
     }
   },
-  computed: {
-    listtrue () {
-      return (this.list && this.list.length > 0)
-    }
+  components: {
+    swiper,
+    swiperSlide
   }
 }
 </script>

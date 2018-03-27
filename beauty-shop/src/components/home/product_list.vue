@@ -2,7 +2,7 @@
 <div class="plist-box">
   <div class="plist-img">
     <img :src="item.url || p22" @click="goDetails">
-    <div class="plist-num" v-if="status">
+    <div class="plist-num" v-if="status >= 103">
       <img :src="pageBg18">
       <div class="plist-num-p">
         <div class="plist-num-p1">{{formatNum(item.score || 0)}}</div>
@@ -13,8 +13,11 @@
   <div class="plist-txt">
     <div class="ellipsis">站点编号：{{item.serialNo}}</div>
     <div class="ellipsis">站点地址：{{item.address}}</div>
-    <div class="plist-btn" v-if="status">
+    <div class="plist-btn" v-if="status === 103">
       <mu-raised-button label="为TA投票" @click="voteSubmit" class="raised-button"/>
+    </div>
+    <div class="plist-btn" v-else-if="status === 104">
+      <mu-raised-button label="为TA投票" disabled @click="voteSubmit" class="raised-button disabled"/>
     </div>
   </div>
 </div>
@@ -31,8 +34,8 @@ export default {
       default: {}
     },
     status: {
-      type: Boolean,
-      default: false
+      type: Number,
+      default: 0
     }
   },
   data () {
@@ -120,5 +123,8 @@ export default {
   width: 120px;
   height: 26px;
   line-height: 26px;
+}
+.raised-button.disabled {
+  background-color: #666;
 }
 </style>
