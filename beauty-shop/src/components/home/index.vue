@@ -45,12 +45,12 @@
       </div>
       <city-list ref="province" :ctarr="titletabs"/>
       <mu-dialog :open="footActive === 'tab2'" title="搜索站点编号" @close="sdailogSH">
-        <mu-text-field class="foot-tf" v-model="sdIptVal" type="number" @focus="iptErrObj.sderr = ''" :errorText="iptErrObj.sderr" hintText="请输入投注站编号"/>
+        <mu-text-field class="foot-tf" v-model="sdIptVal" type="text" @focus="iptErrObj.sderr = ''" :errorText="iptErrObj.sderr" hintText="请输入投注站编号"/>
         <mu-flat-button slot="actions" @click="sdailogSH" primary label="取消"/>
         <mu-flat-button slot="actions" primary @click="sdailogSH('primary')" label="确定"/>
       </mu-dialog>
       <mu-dialog :open="codeObj.show" title="验证码" @close="codeHideFn">
-        <mu-text-field class="foot-tf" v-model="codeObj.val" type="number" @focus="codeObj.err = ''" :errorText="codeObj.err" hintText="请输入下图验证码"/>
+        <mu-text-field class="foot-tf" v-model="codeObj.val" type="text" @focus="codeObj.err = ''" :errorText="codeObj.err" hintText="请输入下图验证码"/>
         <img :src="codeObj.img" width="100" @click="getCodeSer">
         <mu-flat-button slot="actions" @click="codeHideFn" primary label="取消"/>
         <mu-flat-button slot="actions" primary @click="codeHideFn('confrim')" label="确定"/>
@@ -326,6 +326,7 @@ export default {
         if ( that.$xljs.actSession().securityCode === 100 ) {
           that.codeObj.show = true; // 验证码弹窗显示
           that.codeObj.item = item;
+          that.codeObj.val = '';
           that.getCodeSer();
           return false;
         } else {

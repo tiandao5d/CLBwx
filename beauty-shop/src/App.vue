@@ -56,10 +56,6 @@ export default {
       if ( userid ) {
         _param.push({url: `/ushop-api-merchant/api/sns/vote/canvassing/canvass/${id}/${userid}`})
       }
-      // 说明不是本地数据，记录进入次数
-      if ( ud.status === 103 && !that.$xljs.actSession() ) {
-        _param.push({url: `/ushop-api-merchant/api/sns/vote/canvassing/visit/${id}`})
-      }
       // 报名未发布100 报名已发布101 投票未发布102 投票已发布103 结束104 下架105
       that.$xljs.ajaxAll(_param, (adata) => {
         adata = adata || {};
@@ -71,6 +67,10 @@ export default {
             that.txt = '未请求到相关活动数据！';
           }
           return false;
+        }
+        // 说明不是本地数据，记录进入次数
+        if ( adata.status === 103 && !that.$xljs.actSession().status ) {
+          that.recordVisit(adata.id);
         }
         // 获取抽奖游戏的奖等数据
         adata.pobj = that.formatPas(adata.params); // 自定义参数解析params
@@ -101,6 +101,15 @@ export default {
       if ( that.$xljs.isWeixin() ) {
         that.wxAuthoriseFn(); // 微信授权jsSDK
       }
+    },
+    // 记录访问次数
+    recordVisit ( id ) {
+      let that = this,
+          _url = `/ushop-api-merchant/api/sns/vote/canvassing/visit/${id}`;
+      that.$xljs.ajax(_url, 'get', {}, (data) => {
+        // 发送访问记录
+        // data.result === 'SUCCESS'
+      }, false);
     },
     // 自定义参数解析params
     formatPas (jsonstr) {
