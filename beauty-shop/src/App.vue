@@ -52,7 +52,7 @@ export default {
       let that = this,
           sesData = that.$xljs.actSession(),
           urlData = (that.$xljs.deCodeUrlFn().arr || '').split('_xl_'),
-          bsid = urlData.id || sesData.id || '';
+          bsid = urlData[1] || sesData.id || '';
       if ( !bsid ) {
         that.txt = '活动ID不存在！';
         return false;
