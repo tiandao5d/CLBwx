@@ -174,7 +174,7 @@ export default {
           {txt: '我的投票', val: 'tab4', href: '/myVote', icon: 'wdtp'}
         ]
       }
-      if ( actdata.status > 103 ) {
+      if ( actdata.status >= 103 ) {
         that.getUserVote(); // 获取用户投票数据
       }
       if ( that.$route.params.searchtrue ) {

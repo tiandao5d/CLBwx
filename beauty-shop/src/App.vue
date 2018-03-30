@@ -30,86 +30,82 @@ export default {
     let that = this;
     // 页面数据初始化
     if ( that.$xljs.getUserId() ) {
-      that.pageInit();
+      // 微信授权
+      if ( that.$xljs.isWeixin() ) {
+        that.wxAuthoriseFn( () => {
+          that.pageInit();
+        }); // 微信授权jsSDK
+      } else {
+        that.pageInit();
+      }
     } else {
-      that.loginto();
+      if ( that.$xljs.isWeixin() ) {
+        window.location.href = '../index.html?loginOverdue=yes';
+      } else {
+        that.txt = '未登录或登录失效！';
+      }
     }
   },
+  // /index.html#/totalTable?arr=10015_xl_1
   methods: {
     pageInit() {
       let that = this,
-          ud = that.$xljs.actSession(),
-          rd = (that.$xljs.deCodeUrlFn().arr || '').split('_xl_');
-      // /index.html#/totalTable?arr=10015_xl_1
-      ud = ud.id ? ud : {id: rd[1], userid: rd[2]};
-
-      if ( !ud.id ) {
+          sesData = that.$xljs.actSession(),
+          urlData = (that.$xljs.deCodeUrlFn().arr || '').split('_xl_'),
+          bsid = urlData.id || sesData.id || '';
+      if ( !bsid ) {
         that.txt = '活动ID不存在！';
         return false;
       }
-      let id = ud.id,
-          userid = ud.userid,
-          _param = [
-            {url: `/ushop-api-merchant/api/sns/vote/election/get/${id}`} // 获取去活动详情
-          ];
+      let lParam = [
+        {url: `/ushop-api-merchant/api/sns/vote/election/get/${bsid}`} // 获取去活动详情
+      ]
       // 说明是推广进来的，记录粉丝
-      if ( userid ) {
-        _param.push({url: `/ushop-api-merchant/api/sns/vote/canvassing/canvass/${id}/${userid}`})
+      if ( urlData.userid ) {
+        lParam.push({url: `/ushop-api-merchant/api/sns/vote/canvassing/canvass/${bsid}/${urlData.userid}`})
+      }
+      // 记录用户访问次数
+      if ( sesData ) {
+        lParam.push({url: `/ushop-api-merchant/api/sns/vote/canvassing/visit/${bsid}`})
       }
       // 报名未发布100 报名已发布101 投票未发布102 投票已发布103 结束104 下架105
-      that.$xljs.ajaxAll(_param, (adata) => {
-        adata = adata || {};
+      that.$xljs.ajaxAll(lParam, (adata) => {
         if ( !adata.id ) {
-          that.$xljs.actSession('');
-          if ( (adata.error + '').indexOf('1008000') === 0 ) {
-            that.loginto();
-          }else {
-            that.txt = '未请求到相关活动数据！';
-          }
+          that.txt = '活动数据请求失败！';
           return false;
         }
-        // 说明不是本地数据，记录进入次数
-        if ( adata.status === 103 && !that.$xljs.actSession().status ) {
-          that.recordVisit(adata.id);
-        }
-        // 获取抽奖游戏的奖等数据
-        adata.pobj = that.formatPas(adata.params); // 自定义参数解析params
+        adata.pobj = that.formatPas(adata.params); // 自定义参数解析
         if ( !adata.pobj.pLid ) {
           that.txt = '没有抽奖数据ID！';
           return false;
         }
-        // 获取奖等数据
+        // 已经到了投票时间
+        if ( adata.status >= 103 ) {
+          that.getUserVote(bsid); // 记录用户票据信息
+        }
         that.getLCData(adata.pobj.pLid, (ldata) => {
           adata.lcobj = ldata; // 记录奖等数据
           that.$xljs.actSession(adata); // 将数据记录在本地
           that.$xljs.bsid = adata.id; // 活动的ID
           that.$xljs.lcid = adata.pobj.pLid; // 活动对应的抽奖ID
-
-          if ( that.$xljs.isWeixin() ) {
-            // 微信授权完成基本数据也请求完成后
-            if ( that.wxistrue ) {
-              that.loader = false; // 去掉遮屏加载
-              taht.getShareData(); // 获取分享的数据，并执行分享监听
-            }
-          } else {
-            // 去掉遮屏加载
-            that.loader = false;
-          }
+          that.loader = false; // 去掉遮屏加载
+          taht.getShareData(); // 获取分享的数据，并执行分享监听
         });
+        that.$xljs.actSession(adata); // 数据记录在本地
       });
-      // 微信授权
-      if ( that.$xljs.isWeixin() ) {
-        that.wxAuthoriseFn(); // 微信授权jsSDK
-      }
     },
-    // 记录访问次数
-    recordVisit ( id ) {
+    // 获取用户投票数据
+    getUserVote ( bsid ) {
       let that = this,
-          _url = `/ushop-api-merchant/api/sns/vote/canvassing/visit/${id}`;
+          _url = `/ushop-api-merchant/api/sns/vote/voter/get/${bsid}`;
       that.$xljs.ajax(_url, 'get', {}, (data) => {
-        // 发送访问记录
-        // data.result === 'SUCCESS'
-      }, false);
+        try {
+          data.experience = JSON.parse(data.experience);
+        } catch ( err ) {
+          data.experience = [];
+        }
+        that.$xljs.actSession({userVote: data}); // 记录用户票据信息
+      });
     },
     // 自定义参数解析params
     formatPas (jsonstr) {
@@ -154,7 +150,7 @@ export default {
           }
           callback(data);
         } else {
-          that.txt = (data.error_description || '未知错误！');
+          that.txt = '抽奖数据请求失败！';
         }
       }, false);
     },
@@ -206,17 +202,9 @@ export default {
       that.wxShareFn(slink, ilink, title, desc); // 初始化事件监听
     },
     // 微信授权
-    wxAuthoriseFn() {
+    wxAuthoriseFn( callback = function () {}) {
       let that = this;
-      window.wx.ready(() => {
-        that.wxistrue = true; // 微信授权完成
-        // 微信授权完成基本数据也请求完成后
-
-        if ( that.$xljs.actSession() ) {
-          that.loader = false; // 去掉遮屏加载
-          taht.getShareData(); // 获取分享的数据，并执行分享监听
-        }
-      });
+      window.wx.ready(callback);
       var _url = that.$xljs.domainUrl + '/ushop-api-merchant/api/weixin/client/ticket/get?' +
         'type=jsapi&url=' + document.URL;
       that.$xljs.ajax(_url, 'get', {}, function(data) {
@@ -242,15 +230,6 @@ export default {
           'onMenuShareAppMessage' // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
         ]
       });
-    },
-    loginto () {
-      let that = this;
-      if ( that.$xljs.isWeixin() ) {
-        window.location.href = '../index.html?loginOverdue=yes';
-      } else {
-        that.$router.push('/login');
-        that.loader = false;
-      }
     }
   }
 }

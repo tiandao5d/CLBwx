@@ -13,6 +13,13 @@
       <div class="test-btn">
         <mu-raised-button label="文字在后面" icon="grade" primary/>
       </div>
+      <button v-on:click="shuffle">Shuffle</button>
+      <button v-on:click="add">add</button>
+      <transition-group name="flip-list" tag="ul">
+        <li v-for="item in items" :key="item" class="tt-list">
+          {{ item }}
+        </li>
+      </transition-group>
     </div>
   </div>
 </template>
@@ -21,7 +28,9 @@ import md5 from 'js-md5';
 export default {
   data () {
     return {
-      formd: {user: '', pwd: ''}
+      formd: {user: '', pwd: ''},
+      items: [1,2,3,4,5,6,7,8,9],
+      nn: 10
     }
   },
   mounted () {
@@ -29,13 +38,19 @@ export default {
     this.formd = fd;
   },
   methods: {
+    shuffle () {
+      this.items.push(this.items.shift())
+    },
+    add () {
+      this.items.push(this.nn);
+      this.nn++;
+    },
     fsubmit () {
       let that = this,
           _url = `${that.$xljs.domainUrl}/ushop-api-merchant/api/user/login/auth/10007/${that.formd.user}/${md5(that.formd.pwd)}`;
       that.$xljs.ajax(_url, 'post', {}, ( data ) => {
-        console.log(data);
         if ( data.userId ) {
-          that.$xljs.storageL('ls_partly_loginfd', that.formd);
+          that.$xljs.storageL('ls_partly_loginfd', {user: that.formd.user, pwd: ''});
           that.$xljs.storageL(that.$xljs.userId, data.userId);
           that.$xljs.storageL(that.$xljs.token, data.token);
           that.$xljs.toast( '登录成功！' );
@@ -58,5 +73,12 @@ export default {
 .test-btn {
   padding: 20px 10px;
   text-align: center;
+}
+.flip-list-enter, .flip-list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.tt-list {
+  transition: transform .3s;
 }
 </style>

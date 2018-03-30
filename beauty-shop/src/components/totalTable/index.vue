@@ -142,8 +142,13 @@ export default {
   methods: {
     // 页面数据并发请求
     pageInit () {
-      let that = this;
-      that.atStatus(that.$xljs.actSession());
+      let that = this,
+          sesData = that.$xljs.actSession();
+      if ( sesData ) {
+        that.atStatus(sesData);
+      } else {
+        window.location.reload(); // 刷新界面
+      }
     },
     ttClose () {
       let that = this;
