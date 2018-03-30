@@ -43,16 +43,20 @@ export default {
         window.location.href = '../index.html?loginOverdue=yes';
       } else {
         that.txt = '未登录或登录失效！';
+        if ( that.$xljs.isTest() ) {
+          that.loader = false;
+          that.$router.push('/login');
+        }
       }
     }
   },
-  // /index.html#/totalTable?arr=10015_xl_1
+  // /index.html#/totalTable?id=1
   methods: {
     pageInit() {
       let that = this,
           sesData = that.$xljs.actSession(),
-          urlData = (that.$xljs.deCodeUrlFn().arr || '').split('_xl_'),
-          bsid = urlData[1] || sesData.id || '';
+          urlData = that.$xljs.deCodeUrlFn(),
+          bsid = urlData.id || sesData.id || '';
       if ( !bsid ) {
         that.txt = '活动ID不存在！';
         return false;
@@ -63,10 +67,6 @@ export default {
       // 说明是推广进来的，记录粉丝
       if ( urlData.userid ) {
         lParam.push({url: `/ushop-api-merchant/api/sns/vote/canvassing/canvass/${bsid}/${urlData.userid}`})
-      }
-      // 记录用户访问次数
-      if ( sesData ) {
-        lParam.push({url: `/ushop-api-merchant/api/sns/vote/canvassing/visit/${bsid}`})
       }
       // 报名未发布100 报名已发布101 投票未发布102 投票已发布103 结束104 下架105
       that.$xljs.ajaxAll(lParam, (adata) => {
@@ -82,6 +82,10 @@ export default {
         // 已经到了投票时间
         if ( adata.status >= 103 ) {
           that.getUserVote(bsid); // 记录用户票据信息
+          // 记录用户访问次数
+          if ( sesData ) {
+            that.recordUserVisit(bsid); // 记录用户访问次数
+          }
         }
         that.getLCData(adata.pobj.pLid, (ldata) => {
           adata.lcobj = ldata; // 记录奖等数据
@@ -94,6 +98,16 @@ export default {
         that.$xljs.actSession(adata); // 数据记录在本地
       });
     },
+
+    // 记录用户访问次数
+    recordUserVisit ( bsid ) {
+      let that = this,
+          _url = `/ushop-api-merchant/api/sns/vote/canvassing/visit/${bsid}`;
+      that.$xljs.ajax(_url, 'get', {}, () => {
+        // 记录用户访问次数
+      });
+    },
+    
     // 获取用户投票数据
     getUserVote ( bsid ) {
       let that = this,
@@ -195,7 +209,7 @@ export default {
     },
     // 获取分享的数据，并执行分享监听
     getShareData () {
-      let slink = `${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/index.html?wxbtnGoto=weixinmp_xlw_bs_xlw_index_xlp_arr_xld_1015_xl_${that.$xljs.actSession().id}_xll_userid_xld_${that.$xljs.getUserId()}`,
+      let slink = `${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/index.html?wxbtnGoto=weixinmp_xlw_bs_xlw_index_xlp_id_xld_${that.$xljs.actSession().id}_xll_userid_xld_${that.$xljs.getUserId()}`,
           ilink = `${that.$xljs.domainUrl}/ushop-api-merchant/image/icon/logoicon.png`,
           title = '最美投注站活动正在投票中，赶紧参与吧~',
           desc = '火热进行中....';

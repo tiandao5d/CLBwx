@@ -168,8 +168,14 @@ export default {
             that.ttStatus = '1'; // 倒计时
             that.ttItval();
           } else { // 可是开始报名，显示报名按键
-            that.ttStatus = '2'; // 可以报名
-            that.signup = data.selects;
+            that.getWorksList((uType) => {
+              if ( uType === 1 ) { // 已经报名
+                that.ttDialog = '您已经报名成功，去到主界面！';
+              } else { // 未报名
+                that.ttStatus = '2'; // 可以报名
+                that.signup = data.selects;
+              }
+            });
           }
         }, false);
       } else if ( data.status === 102 ) { // 投票未发布
@@ -193,6 +199,26 @@ export default {
       } else {
         that.$xljs.toast ( `活动状态不正确，${that.$xljs.actSession().status}` );
       }
+    },
+    // 获取候选作品列表
+    getWorksList ( callback = function () {} ) {
+      let that = this,
+          _url = '/ushop-api-merchant/api/sns/vote/candidate/listBy',
+          _param = {
+            page: 1,
+            rows: 10,
+            serialNo: '', // 站点编号
+            district: '', // 地区
+            electionId: that.$xljs.actSession().id, // 活动ID
+            self: '1'
+          };
+      that.$xljs.ajax(_url, 'get', _param, ( data ) => {
+        if ( data.totalCount > 0 ) {
+          callback(1);
+        } else {
+          callback(0);
+        }
+      });
     },
     ttItval () {
       let that = this;
