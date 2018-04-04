@@ -93,7 +93,9 @@ export default {
           that.$xljs.bsid = adata.id; // 活动的ID
           that.$xljs.lcid = adata.pobj.pLid; // 活动对应的抽奖ID
           that.loader = false; // 去掉遮屏加载
-          taht.getShareData(); // 获取分享的数据，并执行分享监听
+          if ( that.$xljs.isWeixin() ) {
+            that.getShareData(); // 获取分享的数据，并执行分享监听
+          }
         });
         that.$xljs.actSession(adata); // 数据记录在本地
       });
@@ -170,6 +172,7 @@ export default {
     },
     // 微信分享事件监听初始化
     wxShareFn ( slink, ilink, title, desc ) {
+      let that = this;
       // 记录对应的数据，以便于其他地方使用
       that.slink = slink;
       that.ilink = ilink;
@@ -209,7 +212,9 @@ export default {
     },
     // 获取分享的数据，并执行分享监听
     getShareData () {
-      let slink = `${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/index.html?wxbtnGoto=weixinmp_xlw_bs_xlw_index_xlp_id_xld_${that.$xljs.actSession().id}_xll_userid_xld_${that.$xljs.getUserId()}`,
+      let that = this;
+      `weixinmp/bs/index.html#totalTable?id=${that.$xljs.actSession().id}&userid=${that.$xljs.getUserId()}`
+      let slink = `${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/index.html?wxbtnGoto=weixinmp_xlw_bs_xlw_index_xlj_totalTable_xlhw_id_xld_${that.$xljs.actSession().id}_xll_userid_xld_${that.$xljs.getUserId()}`,
           ilink = `${that.$xljs.domainUrl}/ushop-api-merchant/image/icon/logoicon.png`,
           title = '最美投注站活动正在投票中，赶紧参与吧~',
           desc = '火热进行中....';
@@ -217,10 +222,11 @@ export default {
     },
     // 微信授权
     wxAuthoriseFn( callback = function () {}) {
-      let that = this;
+      let that = this,
+          purl = `${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/bs/index.html`;
       window.wx.ready(callback);
       var _url = that.$xljs.domainUrl + '/ushop-api-merchant/api/weixin/client/ticket/get?' +
-        'type=jsapi&url=' + document.URL;
+        'type=jsapi&url=' + purl;
       that.$xljs.ajax(_url, 'get', {}, function(data) {
         if (data.sign) {
           that.configFn(data.timestamp, data.noncestr, data.sign);

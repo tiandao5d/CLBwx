@@ -118,7 +118,7 @@ export default {
 .raised-button {
   border-radius: 8px;
   background-color: #ff6600;
-  color: #fff;
+  color: #fff !important;
   font-size: 12px;
   width: 120px;
   height: 26px;
