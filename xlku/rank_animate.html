@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>列队动画，图片连续播放形成动画效果</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<style type="text/css">
+			body {
+				text-align: center;
+				padding: 100px 0;
+			}
+			
+			@keyframes myfirst {
+				0.00% {
+					background-image: url(yyyimg/long_02.png);
+				}
+				4.35% {
+					background-image: url(yyyimg/long_03.png);
+				}
+				8.70% {
+					background-image: url(yyyimg/long_04.png);
+				}
+				13.04% {
+					background-image: url(yyyimg/long_05.png);
+				}
+				17.39% {
+					background-image: url(yyyimg/long_06.png);
+				}
+				21.74% {
+					background-image: url(yyyimg/long_07.png);
+				}
+				26.09% {
+					background-image: url(yyyimg/long_08.png);
+				}
+				30.43% {
+					background-image: url(yyyimg/long_09.png);
+				}
+				34.78% {
+					background-image: url(yyyimg/long_10.png);
+				}
+				39.13% {
+					background-image: url(yyyimg/long_11.png);
+				}
+				43.48% {
+					background-image: url(yyyimg/long_12.png);
+				}
+				47.83% {
+					background-image: url(yyyimg/long_13.png);
+				}
+				52.17% {
+					background-image: url(yyyimg/long_14.png);
+				}
+				56.52% {
+					background-image: url(yyyimg/long_15.png);
+				}
+				60.87% {
+					background-image: url(yyyimg/long_16.png);
+				}
+				65.22% {
+					background-image: url(yyyimg/long_17.png);
+				}
+				69.57% {
+					background-image: url(yyyimg/long_18.png);
+				}
+				73.91% {
+					background-image: url(yyyimg/long_19.png);
+				}
+				78.26% {
+					background-image: url(yyyimg/long_20.png);
+				}
+				82.61% {
+					background-image: url(yyyimg/long_21.png);
+				}
+				86.96% {
+					background-image: url(yyyimg/long_22.png);
+				}
+				91.30% {
+					background-image: url(yyyimg/long_23.png);
+				}
+				95.65% {
+					background-image: url(yyyimg/long_24.png);
+				}
+			}
+			
+			.animated {
+				animation: myfirst 2s linear infinite both;
+			}
+			
+			.box {
+				display: inline-block;
+				background-image: url(yyyimg/long_02.png);
+				background-size: 100% 100%;
+			}
+			
+			.box img {
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 500px;
+				opacity: 0;
+			}
+			
+			.box img:first-child {
+				position: initial;
+			}
+			
+			.box1 {
+				width: 0;
+				height: 0;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="boxyyy"></div>
+		<div class="box1">
+			<img src="yyyimg/long_02.png"><img src="yyyimg/long_03.png"><img src="yyyimg/long_04.png"><img src="yyyimg/long_05.png"><img src="yyyimg/long_06.png"><img src="yyyimg/long_07.png"><img src="yyyimg/long_08.png"><img src="yyyimg/long_09.png"><img src="yyyimg/long_10.png"><img src="yyyimg/long_11.png"><img src="yyyimg/long_12.png"><img src="yyyimg/long_13.png"><img src="yyyimg/long_14.png"><img src="yyyimg/long_15.png"><img src="yyyimg/long_16.png"><img src="yyyimg/long_17.png"><img src="yyyimg/long_18.png"><img src="yyyimg/long_19.png"><img src="yyyimg/long_20.png"><img src="yyyimg/long_21.png"><img src="yyyimg/long_22.png"><img src="yyyimg/long_23.png"><img src="yyyimg/long_24.png">
+		</div>
+		<script src="js/jquery-2.2.4.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			window.onload = function() {
+				$.get('234.html', function (data) {
+					$('.boxyyy').html(data);
+					abc()
+				});
+			}
+			//			var iarr = (function() {
+			//				var i = 25,
+			//					n, a = [];
+			//				while(i-- > 2) {
+			//					a[a.length] = 'yyyimg/long_' + (i < 10 ? ('0' + i) : i) + '.png'
+			//				}
+			//				return a;
+			//			})()
+			//			iarr.reverse();
+			//			var num = 0,
+			//				astr = '',
+			//				istr = '',
+			//				lgn = iarr.length,
+			//				bn;
+			//			iarr.forEach(function(s, i) {
+			//				bn = (i / lgn * 100).toFixed(2);
+			//				astr += (bn + '%{background-image: url(' + s + ');}');
+			//				istr += '<img src="' + s + '">';
+			//			})
+			//			astr = '@keyframes myfirst {' + astr + '}';
+			//			console.log(istr);
+			//			console.log(astr);
+		</script>
+	</body>
+
+</html>
