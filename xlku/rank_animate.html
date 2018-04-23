@@ -83,6 +83,7 @@
 			}
 			
 			.animated {
+				display: inline-block;
 				animation: myfirst 2s linear infinite both;
 			}
 			
@@ -113,18 +114,15 @@
 	</head>
 
 	<body>
-		<div class="boxyyy"></div>
+		<div class="boxyyy animated">
+			<img src="yyyimg/long_02.png" style="opacity: 0;"/>
+		</div>
 		<div class="box1">
 			<img src="yyyimg/long_02.png"><img src="yyyimg/long_03.png"><img src="yyyimg/long_04.png"><img src="yyyimg/long_05.png"><img src="yyyimg/long_06.png"><img src="yyyimg/long_07.png"><img src="yyyimg/long_08.png"><img src="yyyimg/long_09.png"><img src="yyyimg/long_10.png"><img src="yyyimg/long_11.png"><img src="yyyimg/long_12.png"><img src="yyyimg/long_13.png"><img src="yyyimg/long_14.png"><img src="yyyimg/long_15.png"><img src="yyyimg/long_16.png"><img src="yyyimg/long_17.png"><img src="yyyimg/long_18.png"><img src="yyyimg/long_19.png"><img src="yyyimg/long_20.png"><img src="yyyimg/long_21.png"><img src="yyyimg/long_22.png"><img src="yyyimg/long_23.png"><img src="yyyimg/long_24.png">
 		</div>
-		<script src="js/jquery-2.2.4.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
-			window.onload = function() {
-				$.get('234.html', function (data) {
-					$('.boxyyy').html(data);
-					abc()
-				});
-			}
+			
 			//			var iarr = (function() {
 			//				var i = 25,
 			//					n, a = [];
