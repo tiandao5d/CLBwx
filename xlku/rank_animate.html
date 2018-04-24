@@ -145,6 +145,43 @@
 			//			astr = '@keyframes myfirst {' + astr + '}';
 			//			console.log(istr);
 			//			console.log(astr);
+		<div class="box"></div>
+		<script type="text/javascript">
+			
+			var i = 0, arr = [];
+			while ( ++i <= 19 ) {
+				arr[arr.length] = ('yyyimg/cspn_0' + (i < 10 ? ( '0' + i ) : i) + '.png');
+			}
+			sequencePlay(arr, 2)
+			function sequencePlay ( iarr, s ) {
+				var box = document.querySelector('.box'),
+					img = new Image(),
+					lgn = iarr.length,
+					ms = s*1000/lgn,
+					i = 0;
+				img.src = iarr[0];
+				img.width = '300';
+				box.appendChild(img);
+				rep();
+				function getIarr () {
+					var i = 0, arr = [];
+					while ( ++i <= 19 ) {
+						arr[arr.length] = ('yyyimg/cspn_0' + (i < 10 ? ( '0' + i ) : i) + '.png');
+					}
+				}
+				function rep () {
+					i++;
+					if ( i < lgn ) {
+						setTimeout(function () {
+							img.src = iarr[i];
+							rep();
+						}, ms);
+					} else {
+						i = 0;
+						rep();
+					}
+				}
+			}
 		</script>
 	</body>
 
