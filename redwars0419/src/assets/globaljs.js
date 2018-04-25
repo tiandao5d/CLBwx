@@ -451,6 +451,33 @@ globaljs.install = function (Vue, options) {
       }
       return a
     },
+    // 时间格式化
+    msToTime: function(ms){
+      if(!ms){return ''}
+      let _date = (ms instanceof Date) ? ms : new Date(ms)
+      let _y = _date.getFullYear(),
+          _m = _date.getMonth() + 1,
+          _d = _date.getDate(),
+          _h = _date.getHours(),
+          _i = _date.getMinutes(),
+          _s = _date.getSeconds()
+      let a = {
+            _y: (_y < 10) ? ('0' + _y) : (_y + ''),
+            _m: (_m < 10) ? ('0' + _m) : (_m + ''),
+            _d: (_d < 10) ? ('0' + _d) : (_d + ''),
+            _h: (_h < 10) ? ('0' + _h) : (_h + ''),
+            _i: (_i < 10) ? ('0' + _i) : (_i + ''),
+            _s: (_s < 10) ? ('0' + _s) : (_s + '')
+          }
+      a.em = (a._y + '-' + a._m)
+      a.ed = (a.em + '-' + a._d)
+      a.eh = (a.ed + ' ' + a._h)
+      a.ei = (a.eh + ':' + a._i)
+      a.es = (a.ei + ':' + a._s)
+      a.ms = _date.getTime()
+      a['date'] = _date
+      return a
+    },
     openPage ( url ) {
       if ( url ) {
         window.location.href = url

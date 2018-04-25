@@ -7,7 +7,7 @@
         <div class="list-box" v-if="!!listarr[0]">
           <div class="list-item" v-for="item, index in listarr" :key="index">
             <div class="clearfix">
-              <div class="li-l">5月1日</div>
+              <div class="li-l">{{item.ttime}}</div>
               <div class="li-r">
                 <div>已结束</div>
                 <!-- <div><span style="color: #fe0115;">5</span>元红包</div>
@@ -47,6 +47,11 @@ export default {
       this.$xljs.ajax(_url, 'get', _param, ( data ) => {
         let arr = data.recordList || []
         if ( arr[0] ) {
+          this.$xljs.each(arr, ( i, o ) => {
+            o.rewardValue = JSON.parse(o.rewardValue)
+            o.tdata = this.$xljs.msToTime(o.createTime)
+            o.ttime = o.tdata['_m'] + '月' + o.tdata['_d'] + '日'
+          })
           this.listarr = arr
         } else {
           this.errtxt = '没有数据'
@@ -94,6 +99,10 @@ export default {
   top: 44%;
   bottom: 10.5%;
 }
+.list-box {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 .list-item {
   position: relative;
   height: 16.66666%;
@@ -102,6 +111,18 @@ export default {
   color: #000;
   display: flex;
   align-items: center;
+}
+.list-item:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background-color: #efdcc4;
+}
+.list-item:first-child:before {
+  height: 0;
 }
 .list-item .clearfix {
   width: 100%;

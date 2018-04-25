@@ -20,11 +20,12 @@
       <button @click="userDraw" class="rw-btn03 rw-btn">
         <img class="rw-btn03-i" :src="awi011">
         <div class="rw-num01">
-          <img :src="numarr[numNum]">
+          <img :src="numarr[numNum]" v-if="numarr[numNum]">
+          <span v-else>{{numNum}}</span>
         </div>
       </button>
     </div>
-    <div class="rw-p4">123</div>
+    <div class="rw-p4">{{rewardPool}}</div>
     <!-- 游戏规则 -->
     <xl-grule ref="xlgrule" />
     <!-- 游戏弹窗 -->
@@ -79,6 +80,7 @@ export default {
       awi010,
       awi011,
       awi012,
+      rewardPool: 0, // 奖池金额
       friendNum: 0, // 助力朋友的数量
       paraArr: [],
       imgfNum: 0, // 点亮的祝福数量
@@ -97,6 +99,7 @@ export default {
           aid = actData.id, // 活动ID
           zid = actData.assistanceId, // 助力ID
           zdata = actData.zdata // 助力活动的数据
+      _this.rewardPool = parseInt(actData.rewardPool)
       // 获得本活动可抽奖次数
       _this.getChanceNum(aid, function (data) {
         let count = data.count // 活动剩余可以参与的次数
@@ -165,7 +168,6 @@ export default {
     // 显示中奖弹窗
     // 参数为中奖数据
     showPrize ( obj ) {
-      console.log(obj)
       this.numNum -= 1 // 减少一次抽奖机会
       this.$refs.xlprize.show( obj )
     },
@@ -275,26 +277,47 @@ export default {
 }
 .rw-p4 {
   position: absolute;
-  left: 42%;
-  right: 49%;
+  left: 41%;
+  right: 48%;
   bottom: 5%;
   line-height: 1;
   color: #fe0000;
-  font-size: 14px;
+  font-size: 10px;
   text-align: center;
   font-weight: bold;
+  padding-bottom: 1px;
 }
 .rw-btn {
   display: block;
   background: none;
   border: 0;
 }
+@media screen and (min-width: 350px) {
+    .rw-p4 {
+      font-size: 12px;
+    }
+}
+@media screen and (min-width: 400px) {
+    .rw-p4 {
+      font-size: 14px;
+    }
+}
 @media screen and (min-width: 450px) {
+    .rw-p4 {
+      font-size: 16px;
+    }
+}
+@media screen and (min-width: 500px) {
     .rw-p4 {
       font-size: 18px;
     }
 }
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 550px) {
+    .rw-p4 {
+      font-size: 20px;
+    }
+}
+@media screen and (min-width: 650px) {
     .rw-p4 {
       font-size: 22px;
     }

@@ -54,7 +54,8 @@ export default {
       this.isshow = true
       if ( obj ) { // 中奖了
         this.iswin = true
-        this.cunwp = this.prizey[obj.result.index]
+        // index = 1 表示一等奖，2表示二等奖以此类推
+        this.cunwp = this.prizey[(obj.result.index - 1)]
       } else { // 未中奖
         this.iswin = false
         this.cunwp = this.prizen[Math.floor(Math.random() * this.prizen.length)] // 随机未中奖

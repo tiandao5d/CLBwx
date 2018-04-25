@@ -11,7 +11,7 @@ export default {
   },
   data () {
     return {
-      msgs: new Array(300), //缓冲池，长度越大，屏幕上显示的就越多
+      msgs: new Array(3), //缓冲池，长度越大，屏幕上显示的就越多
       intv: 20, // 重绘的时间，ms
       nexts: 3000, // 下一条出现的时间，ms
       width: 640,
@@ -44,7 +44,7 @@ export default {
         for ( ; i < lgn; i++ ) {
           if ( _this.msgs[i] ) {
             if ( _this.msgs[i].L ) {
-              if (_this.msgs[i].L < -500) {
+              if (_this.msgs[i].L < -this.width) {
                 _this.msgs[i] = null
               } else {
                 _this.msgs[i].L = parseInt(_this.msgs[i].L - _this.msgs[i].S)
