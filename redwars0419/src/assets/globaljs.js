@@ -246,11 +246,10 @@ globaljs.install = function (Vue, options) {
     //是否是在微信中
     isWeixin () {
       let ua = navigator.userAgent.toLowerCase()
-      if ( ua.match(/MicroMessenger/i) === 'micromessenger' ) {
+      if ( ua.indexOf('micromessenger') >= 0 ) {
         return true
-      } else {
-        return false
       }
+      return false
     },
     //是否是测试环境
     isTest () {

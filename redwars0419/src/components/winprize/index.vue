@@ -3,11 +3,18 @@
     <div class="wp-box1">
       <img class="wp-bg wp-bg1 wp-spin" :src="awi028">
       <img class="wp-bg" :src="awi029">
-      <img class="wp-bg" :src="awi030" v-if="iswin">
+      <img class="wp-bg" :src="awi030" v-if="(cunwp instanceof Array)">
       <div class="wp-p1">
-        <img :src="cunwp">
+        <div class="win-ibox" v-if="(cunwp instanceof Array)">
+          <div class="win-it"><img :src="levArr[award]"></div>
+          <div class="win-ib">
+            <img :src="num" v-for="num, index in cunwp" :key="index">
+            <img :src="levArr[0]">
+          </div>
+        </div>
+        <img :src="cunwp" v-else>
       </div>
-      <div class="wp-p2" v-if="iswin">
+      <div class="wp-p2" v-if="(cunwp instanceof Array)">
         <img :src="awi031">
       </div>
       <div class="wp-btn1" @click="hide">
@@ -23,25 +30,39 @@ import awi019 from '@/assets/images/aw_019.png'
 import awi020 from '@/assets/images/aw_020.png'
 import awi021 from '@/assets/images/aw_021.png'
 import awi022 from '@/assets/images/aw_022.png'
-import awi023 from '@/assets/images/aw_023.png'
-import awi024 from '@/assets/images/aw_024.png'
-import awi025 from '@/assets/images/aw_025.png'
-import awi026 from '@/assets/images/aw_026.png'
-import awi027 from '@/assets/images/aw_027.png'
 import awi028 from '@/assets/images/aw_028.png'
 import awi029 from '@/assets/images/aw_029.png'
 import awi030 from '@/assets/images/aw_030.png'
 import awi031 from '@/assets/images/aw_031.png'
 import awi032 from '@/assets/images/aw_032.png'
 
+import num0 from '@/assets/images/num0.png'
+import num1 from '@/assets/images/num1.png'
+import num2 from '@/assets/images/num2.png'
+import num3 from '@/assets/images/num3.png'
+import num4 from '@/assets/images/num4.png'
+import num5 from '@/assets/images/num5.png'
+import num6 from '@/assets/images/num6.png'
+import num7 from '@/assets/images/num7.png'
+import num8 from '@/assets/images/num8.png'
+import num9 from '@/assets/images/num9.png'
+
+import lev1 from '@/assets/images/lev1.png'
+import lev2 from '@/assets/images/lev2.png'
+import lev3 from '@/assets/images/lev3.png'
+import lev4 from '@/assets/images/lev4.png'
+import lev5 from '@/assets/images/lev5.png'
+import levy from '@/assets/images/levy.png'
+
 export default {
   data () {
     return {
       isshow: false,
-      cunwp: awi018, // 显示的奖等或者未中奖文字
+      cunwp: awi018, // 显示的奖等或者未中奖文字，字符串表示未中奖，数组表示中奖
       prizen: [awi018, awi019, awi020, awi021, awi022], // 未中奖文字，随机选择一个
-      prizey: [awi023, awi024, awi025, awi026, awi027], // 中奖的奖等，第一个是一等奖
-      iswin: false, // 是否中奖
+      numArr: [num0, num1, num2, num3, num4, num5, num6, num7, num8, num9], // 数字图片
+      levArr: [levy, lev1, lev2, lev3, lev4, lev5], // 奖等图片
+      award: 0,
       awi028,
       awi029,
       awi030,
@@ -50,14 +71,22 @@ export default {
     }
   },
   methods: {
+    getNumImg ( num ) {
+      let narr = (parseInt(num) + '').split(''),
+          iarr = []
+      this.$xljs.each(narr, ( i, n ) => {
+        iarr[iarr.length] = this.numArr[parseInt(n)]
+      })
+      return iarr
+    },
     show ( obj ) {
       this.isshow = true
       if ( obj ) { // 中奖了
-        this.iswin = true
+        let p = obj.result || {}
         // index = 1 表示一等奖，2表示二等奖以此类推
-        this.cunwp = this.prizey[(obj.result.index - 1)]
+        this.cunwp = this.getNumImg(p.awardValue)
+        this.award = p.index;
       } else { // 未中奖
-        this.iswin = false
         this.cunwp = this.prizen[Math.floor(Math.random() * this.prizen.length)] // 随机未中奖
       }
     },
@@ -110,6 +139,9 @@ export default {
 .wp-btn1 img {
   width: 100%;
 }
+.wp-p1 {
+  height: 19%;
+}
 .wp-p2 {
   top: 57%;
   left: 40%;
@@ -119,5 +151,26 @@ export default {
   top: 66%;
   left: 42%;
   width: 16%;
+}
+.win-it {
+  position: absolute;
+  left: 15%;
+  top: 0;
+  height: 50%;
+  width: 70%;
+  margin: 0 auto;
+}
+.win-ib {
+  position: absolute;
+  left: 0;
+  top: 55%;
+  width: 100%;
+  height: 41%;
+  font-size: 0;
+  text-align: center;
+}
+.win-ib img {
+  height: 100%;
+  width: auto;
 }
 </style>

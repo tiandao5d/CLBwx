@@ -121,7 +121,7 @@ export default {
       // 弹幕数据
       _this.paraArr =  (_this.$xljs.winprizearr && _this.$xljs.winprizearr[0]) ?
                       _this.$xljs.winprizearr :
-                      [{msg: '123'},{msg: 'xulin'},{msg: '徐琳'}]
+                      [{msg: '暂无人中奖'}]
     },
     // 用户执行抽奖
     userDraw () {

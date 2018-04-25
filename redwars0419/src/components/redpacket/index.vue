@@ -9,10 +9,7 @@
             <div class="clearfix">
               <div class="li-l">{{item.ttime}}</div>
               <div class="li-r">
-                <div>已结束</div>
-                <!-- <div><span style="color: #fe0115;">5</span>元红包</div>
-                <div style="color: #01a2fd;">未领取</div>
-                <div style="color: #ff0100;">未领取</div> -->
+                <span style="color: #fe0115;">{{item.money}}</span>元红包
               </div>
             </div>
           </div>
@@ -49,6 +46,7 @@ export default {
         if ( arr[0] ) {
           this.$xljs.each(arr, ( i, o ) => {
             o.rewardValue = JSON.parse(o.rewardValue)
+            o.money = parseInt(o.rewardValue.awardValue)
             o.tdata = this.$xljs.msToTime(o.createTime)
             o.ttime = o.tdata['_m'] + '月' + o.tdata['_d'] + '日'
           })

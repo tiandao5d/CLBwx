@@ -1,128 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 
 	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset='UTF-8'>
+		<meta name='viewport' content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no' />
 		<title>Document</title>
 	</head>
 
 	<body>
-		<canvas style="width: 100%;height: 120px;background-color: rgba(0,0,0,0.2)">你的浏览器不支持canvas</canvas>
+		<canvas style='width: 100%;height: 120px;background-color: rgba(0,0,0,0.2)'>你的浏览器不支持canvas</canvas>
 		<button>按键</button>
 	</body>
-	<script src="js/jquery-2.2.4.js"></script>
+	<script src='js/jquery-2.2.4.js'></script>
 	<script>
-		"use strict";
-
+		'use strict';
 		function Barrager(dom, para) {
-			this.canvas = dom;
-			this.para = para;
-			this.ctx = this.canvas.getContext("2d");
-			this.msgs = new Array(300); //缓冲池，长度越大，屏幕上显示的就越多
-			this.width = 1280; //canvas分辨率1280*720
-			this.height = 720;
-			this.intv = 20; // 重绘的时间，ms
-			this.nexts = 1000; // 下一条出现的时间，ms
-			this.canvas.width = this.width; //上边的两步可以省略，直接在这里赋值
-			this.canvas.height = this.height;
-			this.font = "30px 黑体"; //字体和字体大小
-			this.ctx.font = this.font;
+			this.canvas = dom
+			this.para = para
+			this.ctx = this.canvas.getContext('2d')
+			this.msgs = new Array(300) //缓冲池，长度越大，屏幕上显示的就越多
+			this.width = 600 //canvas分辨率1280*720
+			this.height = dom.offsetHeight*this.width/dom.offsetWidth
+			this.intv = 20 // 重绘的时间，ms
+			this.nexts = 1000 // 下一条出现的时间，ms
+			this.canvas.width = this.width //上边的两步可以省略，直接在这里赋值
+			this.canvas.height = this.height
+			this.font = '30px 黑体' //字体和字体大小
+			this.ctx.font = this.font
 			//颜色数组，在绘制过程中随机从这里取出颜色
-			this.colorArr = ["Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenRod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", "SeaShell", "Sienna", "Silver", "SkyBlue"];
-			this.interval = "";
+			this.colorArr = ['Olive', 'OliveDrab', 'Orange', 'OrangeRed', 'Orchid', 'PaleGoldenRod', 'PaleGreen', 'PaleTurquoise', 'PaleVioletRed', 'PapayaWhip', 'PeachPuff', 'Peru', 'Pink', 'Plum', 'PowderBlue', 'Purple', 'Red', 'RosyBrown', 'RoyalBlue', 'SaddleBrown', 'Salmon', 'SandyBrown', 'SeaGreen', 'SeaShell', 'Sienna', 'Silver', 'SkyBlue']
+			this.interval = ''
 			this.draw = function() { //绘制方法
-				if(this.interval != "") return;
-				var _this = this;
+				if(this.interval != '') return
+				var _this = this
 				this.interval = setInterval(function() { //每隔20毫秒重新绘制一次，间隔最好小于40，要不然效果就跟播放图片差不多
 					//1，清除屏幕
-					_this.ctx.clearRect(0, 0, _this.width, _this.height);
-					_this.ctx.save();
+					_this.ctx.clearRect(0, 0, _this.width, _this.height)
+					_this.ctx.save()
 					//2，循环缓冲区域，把没有设置Left，Top，Speed，Color先赋值，赋值的就改变left值（产生移动效果），left值小于200就会从缓冲区移除
 					for(var i = 0; i < _this.msgs.length; i++) {
-						if(!(_this.msgs[i] == null || _this.msgs[i] == "" || typeof(_this.msgs[i]) == "undefined")) {
-							if(_this.msgs[i].L == null || typeof(_this.msgs[i].L) == "undefined") {
-								_this.msgs[i].L = _this.width; //显示的位置
-								_this.msgs[i].T = parseInt(Math.random() * (_this.height - 30) + 30); // 容器范围内出现
-								_this.msgs[i].S = parseInt(Math.random() * (10 - 4) + 4); //4-9每次更新的位置
-								_this.msgs[i].C = _this.colorArr[Math.floor(Math.random() * _this.colorArr.length)]; //颜色
+						if(!(_this.msgs[i] == null || _this.msgs[i] == '' || typeof(_this.msgs[i]) == 'undefined')) {
+							if(_this.msgs[i].L == null || typeof(_this.msgs[i].L) == 'undefined') {
+								_this.msgs[i].L = _this.width //显示的位置
+								_this.msgs[i].T = parseInt(Math.random() * (_this.height - 30) + 30) // 容器范围内出现
+								_this.msgs[i].S = parseInt(Math.random() * (10 - 4) + 4) //4-9每次更新的位置
+								_this.msgs[i].C = _this.colorArr[Math.floor(Math.random() * _this.colorArr.length)] //颜色
 							} else {
-								if(_this.msgs[i].L < -200) {
-									_this.msgs[i] = null;
+								if(_this.msgs[i].L < -_this.width) {
+									_this.msgs[i] = null
 								} else {
-									_this.msgs[i].L = parseInt(_this.msgs[i].L - _this.msgs[i].S);
-									_this.ctx.fillStyle = _this.msgs[i].C;
-									_this.ctx.fillText(_this.msgs[i].msg, _this.msgs[i].L, _this.msgs[i].T);
-									_this.ctx.restore();
+									_this.msgs[i].L = parseInt(_this.msgs[i].L - _this.msgs[i].S)
+									_this.ctx.fillStyle = _this.msgs[i].C
+									_this.ctx.fillText(_this.msgs[i].msg, _this.msgs[i].L, _this.msgs[i].T)
+									_this.ctx.restore()
 								}
 							}
 						}
 					}
-					_this.num = (_this.num ? (_this.num + _this.intv) : _this.intv);
+					_this.num = (_this.num ? (_this.num + _this.intv) : _this.intv)
 					if(_this.num > _this.nexts) {
-						console.log(123)
-						_this.num = 0;
+						_this.num = 0
 						_this.putMsg([{
-							"msg": _this.gettxt(_this.para)
-						}]);
+							'msg': _this.gettxt(_this.para)
+						}])
 					}
-				}, _this.intv);
-			};
-			//添加数据，数据格式[{"msg":"nihao"}]
+				}, _this.intv)
+			}
+			//添加数据，数据格式[{'msg':'nihao'}]
 			this.putMsg = function(datas) { //循环缓冲区，把位置是空的装填上数据
 				for(var j = 0; j < datas.length; j++) {
 					for(var i = 0; i < this.msgs.length; i++) {
-						if(this.msgs[i] == null || this.msgs[i] == "" || typeof(this.msgs[i]) == "undefined") {
-							this.msgs[i] = datas[j];
-							break;
+						if(this.msgs[i] == null || this.msgs[i] == '' || typeof(this.msgs[i]) == 'undefined') {
+							this.msgs[i] = datas[j]
+							break
 						}
 					}
 				}
-				this.draw();
-			};
+				this.draw()
+			}
 			this.clear = function() { //清除定时器，清除屏幕，清空缓冲区
-				clearInterval(this.interval);
-				this.interval = "";
-				this.ctx.clearRect(0, 0, this.width, this.height);
-				this.ctx.save();
+				clearInterval(this.interval)
+				this.interval = ''
+				this.ctx.clearRect(0, 0, this.width, this.height)
+				this.ctx.save()
 				for(var i = 0; i < this.msgs.length; i++) {
-					this.msgs[i] = null;
+					this.msgs[i] = null
 				}
-			};
+			}
 			this.gettxt = function(data) {
-				return data[parseInt(Math.random() * data.length)].msg;
-			};
+				return data[parseInt(Math.random() * data.length)].msg
+			}
 			this.init = function() {
-				var _this = this;
+				var _this = this
 				_this.putMsg([{
-					"msg": _this.gettxt(_this.para)
-				}]);
-			};
+					'msg': _this.gettxt(_this.para)
+				}])
+			}
 		}
 	</script>
 	<script>
 		var data = [{
-			"msg": "看着不错。。。。"
+			'msg': '看着不错。。。。'
 		}, {
-			"msg": "哈哈哈。。。。"
+			'msg': '哈哈哈。。。。'
 		}, {
-			"msg": "不错不错。。"
+			'msg': '不错不错。。'
 		}, {
-			"msg": "真好客服让我看。。。。"
+			'msg': '真好客服让我看。。。。'
 		}, {
-			"msg": "让我真好佛山市发生看。。。。"
+			'msg': '让我真好佛山市发生看。。。。'
 		}, {
-			"msg": "撒飞洒发真好看。。。。"
+			'msg': '撒飞洒发真好看。。。。'
 		}, {
-			"msg": "真wqw好看。。。。"
+			'msg': '真wqw好看。。。。'
 		}, {
-			"msg": "真好分隔符看。。。。"
+			'msg': '真好分隔符看。。。。'
 		}, {
-			"msg": "真好发给看。。。。"
+			'msg': '真好发给看。。。。'
 		}, {
-			"msg": "真放松放松好看。。。。"
+			'msg': '真放松放松好看。。。。'
 		}, {
-			"msg": "真好复古风格看。。。。"
+			'msg': '真好复古风格看。。。。'
 		}]
 		var api = new Barrager(document.querySelector('canvas'), data);
 		api.init();

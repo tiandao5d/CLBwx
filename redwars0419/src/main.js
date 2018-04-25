@@ -10,9 +10,15 @@ import './assets/style.css'
 import globaljs from './assets/globaljs.js'
 import './vuxc'
 
+import { WechatPlugin } from 'vux'
+
+Vue.use(WechatPlugin)
+
 Vue.use(globaljs)
 
 Vue.use(VueRouter)
+
+window.wx = Vue.wechat
 
 FastClick.attach(document.body)
 
