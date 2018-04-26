@@ -41,11 +41,12 @@ export default {
   width: 100%;
   height: 100%;
   background-color: rgba(0,0,0,.6);
+  z-index: 10;
 }
 .dmi-p1 {
   position: absolute;
   left: 2%;
-  top: 20%;
+  top: 30%;
   width: 96%;
   text-align: center;
 }
@@ -60,7 +61,7 @@ export default {
   width: 76%;
   height: 25%;
   color: #000;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 20px;
   text-align: center;
 }

@@ -2,7 +2,7 @@
   <div class="page-item">
     <img :src="awi008" class="page-bg">
     <div class="barrager-box">
-      <xl-barrager :para="paraArr" />
+      <xl-barrager />
     </div>
     <button class="rw-btn01 rw-btn" @click="showPacket">
       <img :src="awi010">
@@ -32,10 +32,10 @@
     <xl-dialog ref="xldialog" />
     <!-- 我的红包 -->
     <xl-packet ref="xlpacket" />
-    <!-- 中奖弹窗 -->
-    <xl-prize ref="xlprize" />
-    <!--  -->
+    <!-- 财神动画 -->
     <xl-animate @dresult="showPrize" ref="xlanimate" />
+    <!-- 中奖弹窗 -->
+    <xl-prize ref="xlprize" @close="winpClose" />
   </div>
 </template>
 
@@ -66,7 +66,7 @@ import num005 from '@/assets/images/aw_005.png'
 import num006 from '@/assets/images/aw_006.png'
 import num007 from '@/assets/images/aw_007.png'
 
-import XlBarrager from '@/components/share/barrager'
+import XlBarrager from '@/components/share/barrager.vue'
 import XlGrule from '@/components/grule'
 import XlDialog from '@/components/dialog'
 import XlPacket from '@/components/redpacket'
@@ -82,7 +82,6 @@ export default {
       awi012,
       rewardPool: 0, // 奖池金额
       friendNum: 0, // 助力朋友的数量
-      paraArr: [],
       imgfNum: 0, // 点亮的祝福数量
       imgfArr: [[awf011, awf011], [awf020, awf021], [awf030, awf031], [awf040, awf041], [awf050, awf051], [awf060, awf061]],
       numNum: 0, // 祝福红包的数量，可参与次数
@@ -117,11 +116,6 @@ export default {
           _this.friendNum = ((tval >= 0) ? ((_this.imgfNum*zdata.conditionValue) + tval) : 0)
         })
       })
-
-      // 弹幕数据
-      _this.paraArr =  (_this.$xljs.winprizearr && _this.$xljs.winprizearr[0]) ?
-                      _this.$xljs.winprizearr :
-                      [{msg: '暂无人中奖'}]
     },
     // 用户执行抽奖
     userDraw () {
@@ -131,9 +125,12 @@ export default {
       }
       let aid = this.$xljs.aid,
           _url = `/ushop-api-merchant/api/sns/task/wishing/draw/${aid}`
+      this.$refs.xlanimate.show() // 显示开奖动画
       this.$xljs.ajax(_url, 'post', {}, ( data ) => {
         if ( data.requestNo ) {
-          this.showAnimate(data.requestNo)
+          this.$refs.xlanimate.getDrawRe( data.requestNo ) // 请求开奖结果
+        } else {
+          this.$refs.xlanimate.hide() // 隐藏开奖动画
         }
       })
     },
@@ -171,9 +168,10 @@ export default {
       this.numNum -= 1 // 减少一次抽奖机会
       this.$refs.xlprize.show( obj )
     },
-    // 显示抽奖动画
-    showAnimate ( rno ) {
-      this.$refs.xlanimate.show( rno )
+    // 关闭中奖弹窗
+    winpClose () {
+      this.$refs.xlprize.hide() // 中奖弹窗关闭
+      this.$refs.xlanimate.hide() // 动画关闭
     }
   },
   components: {
@@ -324,7 +322,6 @@ export default {
 }
 </style>
 <style>
-
 .rw-btn:active {
   background-color:#f00;
 }

@@ -1,6 +1,11 @@
 <template>
   <div class="modal-item" v-show="isshow">
     <div ref="anibox" class="ani-box"></div>
+    <!-- 提前加载图片 -->
+    <div class="imgloading-box">
+      <img :src="isrc" v-for="isrc, index in iarr" :key="index">
+      <img :src="awi033">
+    </div>
   </div>
 </template>
 
@@ -19,7 +24,6 @@ export default {
       isshow: false,
       rno: 0,
       awi033,
-      tt: +new Date(),
       iarr: getIarr()
     }
   },
@@ -74,6 +78,7 @@ export default {
           i = 0,
           _this = this
       img.src = iarr[0]
+      img.className = 'ani-csimg'
       img.style.width = '100%'
       box.appendChild(img)
       rep()
@@ -87,14 +92,18 @@ export default {
           }, ms)
         // 下红包雨
         } else {
-          img.parentNode.removeChild(img)
-          _this.redRain( awi033, box )
+          if ( _this.isshow ) {
+            setTimeout( () => {
+              img.parentNode.removeChild(img) // 删除财神图片
+            }, 1000)
+            _this.redRain( awi033, box )
+          }
         }
       }
     },
     // 获取抽奖结果
-    getDrawRe () {
-      let _url = `/ushop-api-merchant/api/sns/task/wishing/result/get/${this.rno}`
+    getDrawRe ( rno ) {
+      let _url = `/ushop-api-merchant/api/sns/task/wishing/result/get/${rno}`
       this.$xljs.ajax(_url, 'get', {}, ( data ) => {
         if ( data.status === 102 ) { // 未中奖
           this.handResult()
@@ -106,39 +115,31 @@ export default {
           }
         } else {
           setTimeout(() => {
-            this.getDrawRe()
+            this.getDrawRe(rno)
           }, 5000)
         }
       }, false)
     },
     // 抽奖结果处理，跳转到首页
     handResult ( data ) {
-      let ntt = +new Date()
-      if ( ntt - this.tt > 3000 ) {
-        this.$emit('dresult', data)
-        this.isshow = false
-        this.$refs.anibox.innerHTML = '' // 清空红包容器
-      } else {
-        setTimeout( () => {
-          this.handResult()
-        }, 1000)
-      }
+      this.$emit('dresult', data)
     },
-    show ( rno ) {
-      this.rno = rno || 0
-      if ( this.rno ) {
-        this.isshow = true
-        this.sequencePlay(this.$refs.anibox, this.iarr, 2)
-        this.getDrawRe()
-      } else {
-        this.$vux.toast.text('参数错误！')
-      }
+    show () {
+      this.isshow = true
+      this.sequencePlay(this.$refs.anibox, this.iarr, 2)
+    },
+    hide () {
+      this.isshow = false
+      this.$refs.anibox.innerHTML = '' // 清空红包容器
     }
   }
 }
 </script>
 
 <style scoped>
+.modal-item {
+  z-index: 10;
+}
 .modal-item,
 .ani-box {
   position: absolute;
@@ -172,5 +173,15 @@ export default {
 }
 .animated {
   animation: fttt ease-in-out both;
+}
+.ani-csimg {
+  position: absolute;
+  left: 0;
+  top: 20%;
+}
+.imgloading-box {
+  width: 0;
+  height: 0;
+  overflow: hidden;
 }
 </style>

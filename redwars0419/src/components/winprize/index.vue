@@ -1,27 +1,29 @@
 <template>
-  <div class="modal-item" v-show="isshow">
-    <div class="wp-box1">
-      <img class="wp-bg wp-bg1 wp-spin" :src="awi028">
-      <img class="wp-bg" :src="awi029">
-      <img class="wp-bg" :src="awi030" v-if="(cunwp instanceof Array)">
-      <div class="wp-p1">
-        <div class="win-ibox" v-if="(cunwp instanceof Array)">
-          <div class="win-it"><img :src="levArr[award]"></div>
-          <div class="win-ib">
-            <img :src="num" v-for="num, index in cunwp" :key="index">
-            <img :src="levArr[0]">
+  <transition name="diaani">
+    <div class="modal-item" v-show="isshow">
+      <div class="wp-box1">
+        <img class="wp-bg wp-bg1 wp-spin" :src="awi028">
+        <img class="wp-bg" :src="awi029">
+        <img class="wp-bg" :src="awi030" v-if="(cunwp instanceof Array)">
+        <div class="wp-p1">
+          <div class="win-ibox" v-if="(cunwp instanceof Array)">
+            <div class="win-it"><img :src="levArr[award]"></div>
+            <div class="win-ib">
+              <img :src="num" v-for="num, index in cunwp" :key="index">
+              <img :src="levArr[0]">
+            </div>
           </div>
+          <img :src="cunwp" v-else>
         </div>
-        <img :src="cunwp" v-else>
-      </div>
-      <div class="wp-p2" v-if="(cunwp instanceof Array)">
-        <img :src="awi031">
-      </div>
-      <div class="wp-btn1" @click="hide">
-        <img :src="awi032">
+        <div class="wp-p2" v-if="(cunwp instanceof Array)">
+          <img :src="awi031">
+        </div>
+        <div class="wp-btn1" @click="btnClick">
+          <img :src="awi032">
+        </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -92,6 +94,9 @@ export default {
     },
     hide () {
       this.isshow = false
+    },
+    btnClick () {
+      this.$emit('close')
     }
   }
 }
@@ -106,6 +111,7 @@ export default {
   height: 100%;
   overflow: hidden;
   background-color: rgba(0,0,0,.6);
+  z-index: 20;
 }
 .wp-box1 {
   position: absolute;
@@ -172,5 +178,22 @@ export default {
 .win-ib img {
   height: 100%;
   width: auto;
+}
+.diaani-enter-active {
+  animation: bounce-in .5s;
+}
+.diaani-leave-active {
+  animation: bounce-in .5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>

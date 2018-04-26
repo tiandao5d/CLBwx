@@ -4,23 +4,14 @@
 <script>
 import Barrager from './barrager.js'
 export default {
-  props: {
-    para: {
-      type: Array,
-      required: true
-    }
-  },
-  data () {
-    return {
-      bapi: null
-    }
-  },
-  watch: {
-    para ( arr ) {
-      if ( arr && arr[0] && !this.bapi ) {
-        this.bapi = new Barrager(this.$refs.canvasme, this.para)
-        this.bapi.init()
-      }
+  mounted () {
+    // 弹幕数据
+    let arr =   (this.$xljs.winprizearr && this.$xljs.winprizearr[0]) ?
+                this.$xljs.winprizearr :
+                [{msg: '暂无人中奖'}]
+    if ( arr && arr[0] ) {
+      let api = new Barrager(this.$refs.canvasme, arr)
+      api.init()
     }
   }
 }

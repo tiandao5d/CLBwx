@@ -111,7 +111,7 @@ export default {
     },
     // 微信分享事件监听初始化
     wxShareFn ( slink, ilink, title, desc ) {
-      let that = this;
+      let that = this
       // 记录对应的数据，以便于其他地方使用
       that.slink = slink
       that.ilink = ilink
@@ -125,10 +125,10 @@ export default {
           link: slink,
           imgUrl: ilink, // 分享图标
           success: function () {
-              that.$xljs.toast('分享成功！')
+            that.$vux.toast.text('分享成功！')
           },
-          cancel: function () { 
-              that.$xljs.toast('用户取消！')
+          cancel: function () {
+            that.$vux.toast.text('用户取消！')
           }
       });
       
@@ -142,19 +142,19 @@ export default {
           type: 'link', // 分享类型,music、video或link，不填默认为link
           dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
           success: function () {
-              that.$xljs.toast('分享成功！')
+            that.$vux.toast.text('分享成功！')
           },
           cancel: function () {
-              that.$xljs.toast('用户取消！')
+            that.$vux.toast.text('用户取消！')
           }
       });
     },
     // 获取分享的数据，并执行分享监听
     getShareData ( aid ) {
       let that = this
-      let slink = `${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/index.html?wxbtnGoto=weixinmp_xlw_drawred_xlw_index_xlj__xlw__xlhw_id_xld_${aid}_xll_promoter_xld_${that.$xljs.getUserId()}`,
+      let slink = `${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/index.html?wxbtnGoto=weixinmp_xlw_drawred_xlw_index_xlj__xlw__xlhw_id_xld_${aid}&promoter=${that.$xljs.getUserId()}`,
           ilink = `${that.$xljs.domainUrl}/ushop-api-merchant/image/icon/logoicon.png`,
-          title = '最美投注站活动正在投票中，赶紧参与吧~',
+          title = '抽奖活动进行中，赶紧参与吧~',
           desc = '火热进行中....'
       that.wxShareFn(slink, ilink, title, desc) // 初始化事件监听
     },
@@ -297,5 +297,4 @@ body {
   animation-fill-mode: both;
   display: inline-block;
 }
-
 </style>
