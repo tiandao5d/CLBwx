@@ -1,51 +1,41 @@
 <template>
   <div id="app">
     <router-view v-if="!loading"></router-view>
-    <div class="loader-box" v-if="!!loading">
-      <div class="loader-con">
-        <div class="loader-inner line-scale">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-        <div class="loader-txt">{{txt}}</div>
-      </div>
+    <!-- 提前加载图片 -->
+    <div class="imgloading-box" ref="iload">
+      <img :src="awi008" @load="imgloading">
     </div>
   </div>
 </template>
 
 <script>
+import awi008 from '@/assets/images/aw_008.png'
 export default {
   name: 'app',
   data () {
     return {
+      awi008,
       loading: true,
       txt: '加载中……'
     }
   },
-  mounted () {
-    // 页面数据初始化
-    // 已经登录
-    if ( this.$xljs.getUserId() ) {
-      // 微信授权
-      if ( this.$xljs.isWeixin() ) {
-        this.wxAuthoriseFn( () => {
-          this.init()
-        }) // 微信授权jsSDK
-      } else {
-        this.init()
+  watch: {
+    loading ( a ) {
+      if ( !a ) {
+        // 删除界面中的遮屏加载中，作为缓冲用的
+        let ploading = document.getElementById('page_index_loading')
+        if ( ploading ) {
+          ploading.parentNode.removeChild(ploading)
+        }
       }
-    // 未登录
-    } else {
-      this.$vux.toast.text('未登录或登录失效！')
-      if ( this.$xljs.isWeixin() && !this.$xljs.isTest() ) {
-        this.$xljs.openPage('../index.html?loginOverdue=yes')
-      } else {
-        this.init()
-      }
+    },
+    txt ( t ) {
+      let ploading = document.getElementById('page_index_loading'),
+          tele = ploading.querySelector('.loader-txt')
+      tele.innerHTML = t
     }
+  },
+  mounted () {
   },
   methods: {
     init () {
@@ -58,6 +48,33 @@ export default {
       } else {
         this.txt = '没有ID'
       }
+    },
+    imgInit () {
+      // 页面数据初始化
+      // 已经登录
+      if ( this.$xljs.getUserId() ) {
+        // 微信授权
+        if ( this.$xljs.isWeixin() ) {
+          this.wxAuthoriseFn( () => {
+            this.init()
+          }) // 微信授权jsSDK
+        } else {
+          this.init()
+        }
+      // 未登录
+      } else {
+        this.$vux.toast.text('未登录或登录失效！')
+        if ( this.$xljs.isWeixin() && !this.$xljs.isTest() ) {
+          this.$xljs.openPage('../index.html?loginOverdue=yes')
+        } else {
+          this.init()
+        }
+      }
+    },
+    imgloading () {
+      let box = this.$refs.iload,
+          imgs = box.querySelectorAll('img')
+      this.imgInit()
     },
     // 获取初始基本数据
     getInitData ( callback = function () {} ) {
@@ -203,98 +220,5 @@ body {
   width: 100%;
   height: 100%;
   overflow: auto;
-}
-
-.loader-box {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #ed5565;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  z-index: 999999999;
-}
-.loader-txt {
-  color: #fff;
-  font-size: 16px;
-  padding-top: 10px;
-}
-
-
-/**
- * Lines
- */
-
-@-webkit-keyframes line-scale {
-  0% {
-    -webkit-transform: scaley(1);
-    transform: scaley(1);
-  }
-
-  50% {
-    -webkit-transform: scaley(0.4);
-    transform: scaley(0.4);
-  }
-
-  100% {
-    -webkit-transform: scaley(1);
-    transform: scaley(1);
-  }
-}
-
-@keyframes line-scale {
-  0% {
-    -webkit-transform: scaley(1);
-    transform: scaley(1);
-  }
-
-  50% {
-    -webkit-transform: scaley(0.4);
-    transform: scaley(0.4);
-  }
-
-  100% {
-    -webkit-transform: scaley(1);
-    transform: scaley(1);
-  }
-}
-.line-scale>div:nth-child(1) {
-  -webkit-animation: line-scale 1s 0.1s infinite cubic-bezier(.2, .68, .18, 1.08);
-  animation: line-scale 1s 0.1s infinite cubic-bezier(.2, .68, .18, 1.08);
-}
-
-.line-scale>div:nth-child(2) {
-  -webkit-animation: line-scale 1s 0.2s infinite cubic-bezier(.2, .68, .18, 1.08);
-  animation: line-scale 1s 0.2s infinite cubic-bezier(.2, .68, .18, 1.08);
-}
-
-.line-scale>div:nth-child(3) {
-  -webkit-animation: line-scale 1s 0.3s infinite cubic-bezier(.2, .68, .18, 1.08);
-  animation: line-scale 1s 0.3s infinite cubic-bezier(.2, .68, .18, 1.08);
-}
-
-.line-scale>div:nth-child(4) {
-  -webkit-animation: line-scale 1s 0.4s infinite cubic-bezier(.2, .68, .18, 1.08);
-  animation: line-scale 1s 0.4s infinite cubic-bezier(.2, .68, .18, 1.08);
-}
-
-.line-scale>div:nth-child(5) {
-  -webkit-animation: line-scale 1s 0.5s infinite cubic-bezier(.2, .68, .18, 1.08);
-  animation: line-scale 1s 0.5s infinite cubic-bezier(.2, .68, .18, 1.08);
-}
-
-.line-scale>div {
-  background-color: #fff;
-  width: 4px;
-  height: 35px;
-  border-radius: 2px;
-  margin: 2px;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-  display: inline-block;
 }
 </style>

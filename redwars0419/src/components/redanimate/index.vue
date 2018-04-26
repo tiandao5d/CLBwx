@@ -191,9 +191,4 @@ export default {
   left: 0;
   top: 20%;
 }
-.imgloading-box {
-  width: 0;
-  height: 0;
-  overflow: hidden;
-}
 </style>

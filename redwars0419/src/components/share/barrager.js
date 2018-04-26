@@ -3,7 +3,7 @@ function Barrager(dom, para) {
   this.canvas = dom
   this.para = para
   this.ctx = this.canvas.getContext('2d')
-  this.msgs = new Array(5) // 缓冲池，长度越大，屏幕上显示的就越多
+  this.msgs = new Array((this.para.length > 5 ? 5 : this.para.length)) // 缓冲池，长度越大，屏幕上显示的就越多
   this.width = 600 // canvas分辨率1280*720
   this.height = dom.offsetHeight*this.width/dom.offsetWidth
   this.intv = 20 // 重绘的时间，ms

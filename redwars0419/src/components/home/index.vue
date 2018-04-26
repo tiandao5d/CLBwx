@@ -107,9 +107,10 @@ export default {
       // 获得助力活动可抽奖次数
       // zdata.conditionValue 目标数量
       // zdata.participateTime 可参与次数
-      _this.getChanceNum(zid, function (data) {
+      _this.getZChanceNum(zid, function (data) {
         let count = data.count // 活动剩余可以参与的次数
         _this.imgfNum = ((count >= 0) ? (zdata.participateTime - count) : 0)
+        _this.imgfNum = _this.imgfNum > 0 ? (_this.imgfNum + 1) : 1 // 默认亮一个
         // 获取助力任务完成的进度
         _this.getActProgre(zid, function (data) {
           let tval = data.record && data.record.taskValue // 活动完成进度
@@ -146,6 +147,13 @@ export default {
     // 获取任务完成的进度
     getActProgre ( id, callback = function () {} ) {
       let _url = `/ushop-api-merchant/api/sns/task/progress/get/${id}`
+      this.$xljs.ajax(_url, 'get', {}, ( data ) => {
+        callback(data)
+      })
+    },
+    // 获取助力任务的参与次数
+    getZChanceNum ( id, callback = function () {} ) {
+      let _url = `/ushop-api-merchant/api/sns/task/done/get/${id}`
       this.$xljs.ajax(_url, 'get', {}, ( data ) => {
         callback(data)
       })

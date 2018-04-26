@@ -88,3 +88,10 @@ img {
   color: #333;
   font-size: 14px;
 }
+
+/*页面样式*/
+.imgloading-box {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
