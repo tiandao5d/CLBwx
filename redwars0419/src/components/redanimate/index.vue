@@ -22,16 +22,25 @@ export default {
     }
     return {
       isshow: false,
-      rno: 0,
       awi033,
+      att: 0, // 请求结果的时间
       iarr: getIarr()
     }
   },
   methods: {
     // 红包雨
     redRain ( isrc, box ) {
-      let _this = this
+      let _this = this,
+          anics = box.querySelector('.ani-csimg')
       rdDiv()
+      // 如果财神图存在就删除
+      // 延时，有一定的红包时才会执行
+      setTimeout( () => {
+        if ( anics ) {
+          anics.parentNode.removeChild(anics)
+          _this.$emit('csafter') // 财神动画完成
+        }
+      }, 2000)
       // 最大和最小值之间的随机值
       function rdn () {
         var max = Math.max(arguments[0], arguments[1]),
@@ -40,6 +49,7 @@ export default {
       }
       // 添加图片元素
       function rdDiv () {
+        // 红包数量达到一定数量将不再增加
         if ( box.querySelectorAll('.imgbox').length >= 30 || !_this.isshow ) {
           return false;
         } else {
@@ -92,18 +102,15 @@ export default {
           }, ms)
         // 下红包雨
         } else {
-          if ( _this.isshow ) {
-            setTimeout( () => {
-              img.parentNode.removeChild(img) // 删除财神图片
-            }, 1000)
-            _this.redRain( awi033, box )
-          }
+          _this.redRain( awi033, box ) // 下红包雨
         }
       }
     },
     // 获取抽奖结果
     getDrawRe ( rno ) {
-      let _url = `/ushop-api-merchant/api/sns/task/wishing/result/get/${rno}`
+      let _url = `/ushop-api-merchant/api/sns/task/wishing/result/get/${rno}`,
+          baset = 5000, // 重复请求的基数
+          maxt = 60000 // 判断超时的最大值
       this.$xljs.ajax(_url, 'get', {}, ( data ) => {
         if ( data.status === 102 ) { // 未中奖
           this.handResult()
@@ -113,15 +120,19 @@ export default {
           } else { // 未中奖
             this.handResult()
           }
+        } else if ( this.att > maxt ) { // 请求超时当做未中奖
+          this.handResult()
         } else {
           setTimeout(() => {
+            this.att = this.att ? (this.att + baset) : baset // 重置抽奖结果计时
             this.getDrawRe(rno)
-          }, 5000)
+          }, baset)
         }
       }, false)
     },
     // 抽奖结果处理，跳转到首页
     handResult ( data ) {
+      this.att = 0 // 重置抽奖结果计时
       this.$emit('dresult', data)
     },
     show () {
@@ -129,6 +140,7 @@ export default {
       this.sequencePlay(this.$refs.anibox, this.iarr, 2)
     },
     hide () {
+      this.att = 0 // 重置抽奖结果计时
       this.isshow = false
       this.$refs.anibox.innerHTML = '' // 清空红包容器
     }

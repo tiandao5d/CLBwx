@@ -33,7 +33,7 @@
     <!-- 我的红包 -->
     <xl-packet ref="xlpacket" />
     <!-- 财神动画 -->
-    <xl-animate @dresult="showPrize" ref="xlanimate" />
+    <xl-animate @dresult="showPrize" ref="xlanimate" @csafter="csafter" />
     <!-- 中奖弹窗 -->
     <xl-prize ref="xlprize" @close="winpClose" />
   </div>
@@ -123,10 +123,12 @@ export default {
         this.showDialog( '需要更多好友点亮祝福才能继续领取祝福红包，快去邀请好友来点亮吧！' )
         return false
       }
-      let aid = this.$xljs.aid,
-          _url = `/ushop-api-merchant/api/sns/task/wishing/draw/${aid}`
       this.$refs.xlanimate.show() // 显示开奖动画
-      this.$xljs.ajax(_url, 'post', {}, ( data ) => {
+    },
+    // 财神出现动画完成后，飘红包雨前
+    csafter () {
+      let _url = `/ushop-api-merchant/api/sns/task/wishing/draw/${this.$xljs.aid}`
+      this.$xljs.ajax(_url, 'post', {}, ( data, res ) => {
         if ( data.requestNo ) {
           this.$refs.xlanimate.getDrawRe( data.requestNo ) // 请求开奖结果
         } else {

@@ -101,7 +101,7 @@ export default {
       let arr = [], txt = ''
       try {
         this.$xljs.each( winArr, ( index, obj ) => {
-          txt = `${obj.userName} 获得 ${JSON.parse(obj.rewardValue).awardName}`
+          txt = `${obj.userName.length > 5 ? (obj.userName.substr(0, 3) + '...') : obj.userName} 获得 ${parseInt(JSON.parse(obj.rewardValue).awardValue)}元`
           arr[arr.length] = {msg: txt}
         })
       } catch ( err ) {
