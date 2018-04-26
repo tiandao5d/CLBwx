@@ -1,9 +1,12 @@
 <template>
   <div class="modal-item" v-show="isshow">
-    <div class="dmi-p1">
+    <div class="dmi-p1" v-if="!showp2">
       <img class="dmi-bg1" :src="awi016">
       <div class="dmi-txt">{{txt}}</div>
-      <div class="dmi-btn1" @click="hide"><img :src="awi017"></div>
+      <div class="dmi-btn1" @click="showp2 = true"><img :src="awi017"></div>
+    </div>
+    <div class="dmi-p2" v-if="!!showp2">
+      <img :src="awi034" @click="hide">
     </div>
   </div>
 </template>
@@ -11,6 +14,7 @@
 <script>
 import awi016 from '@/assets/images/aw_016.png'
 import awi017 from '@/assets/images/aw_017.png'
+import awi034 from '@/assets/images/aw_034.png'
 
 export default {
   data () {
@@ -18,7 +22,9 @@ export default {
       isshow: false,
       txt: '没有内容',
       awi016,
-      awi017
+      showp2: false,
+      awi017,
+      awi034
     }
   },
   methods: {
@@ -27,6 +33,7 @@ export default {
       this.txt = txt || '没有内容'
     },
     hide () {
+      this.showp2 = false
       this.isshow = false
     }
   }
@@ -70,5 +77,14 @@ export default {
   left: 40%;
   bottom: 19%;
   width: 20%;
+}
+.dmi-p2 {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+.dmi-p2 img {
+  width: 100%;
 }
 </style>

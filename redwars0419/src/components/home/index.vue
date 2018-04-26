@@ -109,12 +109,12 @@ export default {
       // zdata.participateTime 可参与次数
       _this.getZChanceNum(zid, function (data) {
         let count = data.count // 活动剩余可以参与的次数
-        _this.imgfNum = ((count >= 0) ? (zdata.participateTime - count) : 0)
-        _this.imgfNum = _this.imgfNum > 0 ? (_this.imgfNum + 1) : 1 // 默认亮一个
+        let ofnum = ((count >= 0) ? (zdata.participateTime - count) : 0)
         // 获取助力任务完成的进度
         _this.getActProgre(zid, function (data) {
           let tval = data.record && data.record.taskValue // 活动完成进度
-          _this.friendNum = ((tval >= 0) ? ((_this.imgfNum*zdata.conditionValue) + tval) : 0)
+          _this.friendNum = ((tval >= 0) ? ((ofnum*zdata.conditionValue) + tval) : 0)
+          _this.imgfNum = ofnum > 0 ? (ofnum + 1) : 1 // 默认亮一个
         })
       })
     },
