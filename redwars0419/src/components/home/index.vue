@@ -134,7 +134,7 @@ export default {
         } else {
           this.$refs.xlanimate.hide() // 隐藏开奖动画
         }
-      })
+      }, false) // 有红包雨，不需要加载中圆圈
     },
     // 获取任务可参与的次数
     getChanceNum ( id, callback = function () {} ) {
@@ -325,6 +325,6 @@ export default {
 </style>
 <style>
 .rw-btn:active {
-  background-color:#f00;
+  opacity: .6;
 }
 </style>
