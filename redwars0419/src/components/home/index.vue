@@ -107,13 +107,17 @@ export default {
       // 获得助力活动可抽奖次数
       // zdata.conditionValue 目标数量
       // zdata.participateTime 可参与次数
-      _this.getZChanceNum(zid, function (data) {
-        let count = data.count // 活动剩余可以参与的次数
-        let ofnum = ((count >= 0) ? (zdata.participateTime - count) : 0)
+      _this.getZChanceNum(zid, function (data) { // 活动剩余可以参与的次数
+        let ofnum = ((data.count >= 0) ? ( zdata.participateTime - data.count ) : 0) // 已经参与的次数
+        ofnum = ofnum > 0 ? ofnum : 0 // 值不能小于0
         // 获取助力任务完成的进度
         _this.getActProgre(zid, function (data) {
-          let tval = data.record && data.record.taskValue // 活动完成进度
-          _this.friendNum = ((tval >= 0) ? ((ofnum*zdata.conditionValue) + tval) : 0)
+          let tval = data.record && data.record.taskValue, // 活动完成进度
+              tstatus = data.record && data.record.status // 任务状态
+          if ( tstatus === 101 ) { // 说明有任务在执行
+            ofnum = ofnum > 0 ? (ofnum - 1) : 0
+          }
+          _this.friendNum = ( ofnum*zdata.conditionValue ) + ( tval > 0 ? tval : 0 ) // 好友数量
           _this.imgfNum = ofnum > 0 ? (ofnum + 1) : 1 // 默认亮一个
         })
       })

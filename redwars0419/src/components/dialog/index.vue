@@ -1,11 +1,11 @@
 <template>
   <div class="modal-item" v-show="isshow">
-    <div class="dmi-p1" v-if="!showp2">
+    <div class="dmi-p1" v-show="!showp2">
       <img class="dmi-bg1" :src="awi016">
       <div class="dmi-txt">{{txt}}</div>
       <div class="dmi-btn1" @click="showp2 = true"><img :src="awi017"></div>
     </div>
-    <div class="dmi-p2" v-if="!!showp2">
+    <div class="dmi-p2" v-show="!!showp2">
       <img :src="awi034" @click="hide">
     </div>
   </div>
@@ -53,7 +53,7 @@ export default {
 .dmi-p1 {
   position: absolute;
   left: 2%;
-  top: 30%;
+  top: 35%;
   width: 96%;
   text-align: center;
 }

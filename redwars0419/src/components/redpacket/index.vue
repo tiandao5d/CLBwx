@@ -52,7 +52,7 @@ export default {
           })
           this.listarr = arr
         } else {
-          this.errtxt = '没有数据'
+          this.errtxt = '没有红包'
         }
       }, false)
     },
