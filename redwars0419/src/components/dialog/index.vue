@@ -6,7 +6,8 @@
       <div class="dmi-btn1" @click="showp2 = true"><img :src="awi017"></div>
     </div>
     <div class="dmi-p2" v-show="!!showp2">
-      <img :src="awi034" @click="hide">
+      <img :src="awi034">
+      <div class="dim-share" @click="hide"></div>
     </div>
   </div>
 </template>
@@ -86,5 +87,12 @@ export default {
 }
 .dmi-p2 img {
   width: 100%;
+}
+.dim-share {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
 }
 </style>

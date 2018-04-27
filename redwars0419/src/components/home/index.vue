@@ -1,6 +1,7 @@
 <template>
   <div class="page-item">
     <img :src="awi008" class="page-bg">
+    <div class="page-bg-zp"></div>
     <div class="barrager-box">
       <xl-barrager />
     </div>
@@ -203,13 +204,18 @@ export default {
 .page-bg {
   width: 100%;
 }
-.barrager-box {
+.barrager-box,
+.page-bg-zp {
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   padding-top: 16%;
   overflow: hidden;
+}
+.page-bg-zp {
+  padding: 0;
+  height: 100%;
 }
 .page-item {
   position: relative;
