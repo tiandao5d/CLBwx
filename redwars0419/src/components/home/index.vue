@@ -113,13 +113,18 @@ export default {
         ofnum = ofnum > 0 ? ofnum : 0 // 值不能小于0
         // 获取助力任务完成的进度
         _this.getActProgre(zid, function (data) {
+          if ( !(data.record && data.record.id) ) {
+            return false
+          }
           let tval = data.record && data.record.taskValue, // 活动完成进度
               tstatus = data.record && data.record.status // 任务状态
           if ( tstatus === 101 ) { // 说明有任务在执行
             ofnum = ofnum > 0 ? (ofnum - 1) : 0
+            _this.friendNum = ( ofnum*zdata.conditionValue ) + ( tval > 0 ? tval : 0 ) // 好友数量
+          } else {
+            _this.friendNum = ( ofnum*zdata.conditionValue ) // 好友数量
           }
-          _this.friendNum = ( ofnum*zdata.conditionValue ) + ( tval > 0 ? tval : 0 ) // 好友数量
-          _this.imgfNum = ofnum > 0 ? (ofnum + 1) : 1 // 默认亮一个
+          _this.imgfNum = parseInt( _this.friendNum/zdata.conditionValue ) + 1 // 默认亮一个
         })
       })
     },

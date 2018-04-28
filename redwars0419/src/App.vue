@@ -88,7 +88,7 @@ export default {
             winArr = args[1].recordList || [] // 中奖列表，用于弹幕
         if ( actData.id ) {
           if ( this.$xljs.isWeixin() ) {
-            this.getShareData(actData.id); // 获取分享的数据，并执行分享监听
+            this.getShareData(actData.id, actData.url); // 获取分享的数据，并执行分享监听
           }
           // 获取助力任务数据
           this.getAssActDa(actData.assistanceId, (zdata) => {
@@ -166,13 +166,28 @@ export default {
           }
       });
     },
+    // 编码拼接goto页面，编译为发送到后台的数据字符串
+    engoto ( str ) {
+      str = str.replace(/\//g, '_xlw_')
+            .replace(/\.html\?/g, '_xlp_')
+            .replace(/\.html\#/g, '_xlj_')
+            .replace(/\.html/g, '_xlht_')
+            .replace(/\?/g, '_xlhw_')
+            .replace(/\#/g, '_xlhj_')
+            .replace(/\=/g, '_xld_')
+            .replace(/\&/g, '_xll_');
+        return str;
+    },
     // 获取分享的数据，并执行分享监听
-    getShareData ( aid ) {
+    getShareData ( aid, url ) {
       let that = this
-      let slink = `${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/index.html?wxbtnGoto=weixinmp_xlw_drawred_xlw_index_xlj__xlw__xlhw_id_xld_${aid}&promoter=${that.$xljs.getUserId()}`,
+      let slink = `${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/index.html?wxbtnGoto=${that.engoto('weixinmp/transit.html?gotox=drawred&id=' + aid)}&promoter=${that.$xljs.getUserId()}`,
           ilink = `${that.$xljs.domainUrl}/ushop-api-merchant/image/icon/logoicon.png`,
           title = '抽奖活动进行中，赶紧参与吧~',
           desc = '火热进行中....'
+      if ( !url ) {
+        slink = `${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/index.html?wxbtnGoto=${that.engoto('weixinmp/drawred/index.html#/?id=' + aid)}&promoter=${that.$xljs.getUserId()}`
+      }
       that.wxShareFn(slink, ilink, title, desc) // 初始化事件监听
     },
     // 微信授权
