@@ -81,7 +81,7 @@ export default {
       let aid = this.$xljs.aid,
           aArr = [
             {url: `/ushop-api-merchant/api/sns/task/detail/get/${aid}`}, // 活动详情
-            {url: '/ushop-api-merchant/api/sns/task/wishing/winner/listBy', data: {id: aid, page: 1, rows: 10}, method: 'get'}
+            {url: '/ushop-api-merchant/api/sns/task/wishing/winner/listBy', data: {id: aid, page: 1, rows: 50}, method: 'get'}
           ]
       this.$xljs.ajaxAll(aArr, ( ...args ) => {
         let actData = args[0], // 活动详情数据
@@ -115,11 +115,14 @@ export default {
     },
     // 弹幕数据格式化
     paraFormat ( winArr = [] ) {
-      let arr = [], txt = ''
+      let arr = [], txt = '', rv = null
       try {
         this.$xljs.each( winArr, ( index, obj ) => {
-          txt = `${obj.userName.length > 5 ? (obj.userName.substr(0, 3) + '...') : obj.userName} 获得 ${parseInt(JSON.parse(obj.rewardValue).awardValue)}元`
-          arr[arr.length] = {msg: txt}
+          rv = JSON.parse(obj.rewardValue)
+          if ( rv.index <= 3 ) {
+            txt = `${obj.userName.length > 5 ? (obj.userName.substr(0, 3) + '...') : obj.userName} 获得 ${parseInt(rv.awardValue)}元`
+            arr[arr.length] = {msg: txt}
+          }
         })
       } catch ( err ) {
         arr[arr.length] = {msg: '数据错误'}
@@ -235,5 +238,6 @@ body {
   width: 100%;
   height: 100%;
   overflow: auto;
+  background: #282b2d;
 }
 </style>

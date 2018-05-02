@@ -97,6 +97,65 @@
 				}])
 			}
 		}
+
+    function Barrage () {
+    	this.box = document.getElementById('box'); // 弹幕的容器
+    	this.maxnum = 10; // 屏幕中最大出现的弹幕条数
+    	this.msgarr = ['第一条', '天气不错', '玩的很开心', '这菇凉不错', '游戏真好玩', '游戏真好玩游戏真好玩游戏真好玩游戏真好玩'];
+    	this.divarr = []; // 当前有的弹幕数量
+    	
+    	this.width = this.box.offsetWidth;
+    	this.height = this.box.offsetHeight;
+    	
+    	this.getran = function () {
+    		var max = Math.max(arguments[0], arguments[1]),
+    			min = Math.min(arguments[0], arguments[1]);
+    		return parseInt(Math.random()*(max - min) + min);
+    	}
+    	this.getitem = function () {
+    		var _this = this,
+    			div = document.createElement('div');
+    		div.lindex = _this.divarr.length;
+    		div.className = 'bar-item';
+    		_this.iteminit(div);
+    		div.addEventListener('transitionend', function () {
+    			div.style.left = '100%';
+    			div.style.transition = 'none';
+    			setTimeout(function () {
+    				_this.iteminit(div);
+    			},0);
+    		});
+    		_this.divarr.push(div);
+    		return div;
+    	},
+    	this.iteminit = function ( div ) {
+    		var _this = this,
+    			h = _this.box.offsetHeight/_this.maxnum,
+    			tmin = (h*div.lindex),
+    			tmax = tmin + h - 30;
+    		div.style.transition = 'left ' + (_this.getran(10, 20)) + 's linear'
+    		div.style.top = _this.getran(tmin, tmax) + 'px';
+    		div.innerHTML = _this.gettxt();
+    		setTimeout(function () {
+    			div.style.left = '-' + div.offsetWidth + 'px';
+    		}, 0);
+    	}
+    	this.gettxt = function () {
+    		var _this = this,
+    			lgn = _this.msgarr.length;
+    		return _this.msgarr[(_this.getran(0, lgn))]
+    	}
+    	this.show = function () {
+    		var _this = this;
+    		if ( _this.maxnum > _this.divarr.length ) {
+    			_this.box.appendChild(_this.getitem());
+    			_this.show();
+    		}
+    	}
+    	this.init = function () {
+    		this.show();
+    	}
+    }
 	</script>
 	<script>
 		var data = [{

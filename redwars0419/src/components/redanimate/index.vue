@@ -44,7 +44,7 @@ export default {
       // 最大和最小值之间的随机值
       function rdn () {
         var max = Math.max(arguments[0], arguments[1]),
-          min = Math.min(arguments[0], arguments[1])
+            min = Math.min(arguments[0], arguments[1])
         return parseInt(Math.random() * (max - min) + min)
       }
       // 添加图片元素

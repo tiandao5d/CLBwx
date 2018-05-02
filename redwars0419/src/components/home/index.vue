@@ -1,7 +1,7 @@
 <template>
-  <div class="page-item">
+  <div class="page-item" :class="{wh0000: (appwh > 0.6 && appwh < 0.7)}">
     <img :src="awi008" class="page-bg">
-    <div class="page-bg-zp"></div>
+    <div class="a0000"></div>
     <div class="barrager-box">
       <xl-barrager />
     </div>
@@ -81,6 +81,7 @@ export default {
       awi010,
       awi011,
       awi012,
+      appwh: 0,
       rewardPool: 0, // 奖池金额
       friendNum: 0, // 助力朋友的数量
       imgfNum: 0, // 点亮的祝福数量
@@ -91,6 +92,10 @@ export default {
   },
   mounted () {
     this.init()
+    window.addEventListener('resize', () => {
+      this.appwh = this.$root.$el.offsetWidth/this.$root.$el.offsetHeight
+    })
+    this.appwh = this.$root.$el.offsetWidth/this.$root.$el.offsetHeight
   },
   methods: {
     init () {
@@ -208,9 +213,9 @@ export default {
 <style scoped>
 .page-bg {
   width: 100%;
+  height: 100%;
 }
-.barrager-box,
-.page-bg-zp {
+.barrager-box {
   position: absolute;
   left: 0;
   top: 0;
@@ -218,14 +223,14 @@ export default {
   padding-top: 16%;
   overflow: hidden;
 }
-.page-bg-zp {
-  padding: 0;
-  height: 100%;
-}
 .page-item {
   position: relative;
   max-width: 720px;
   margin: 0 auto;
+  background: #000;
+}
+.page-item.wh0000 {
+  height: 100%;
 }
 .rw-btn01,
 .rw-btn02 {

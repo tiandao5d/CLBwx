@@ -6,6 +6,7 @@
         <img class="wp-bg" :src="awi029">
         <img class="wp-bg" :src="awi030" v-if="(cunwp instanceof Array)">
         <div class="wp-p1">
+          <!-- 中奖 -->
           <div class="win-ibox" v-if="(cunwp instanceof Array)">
             <div class="win-it"><img :src="levArr[award]"></div>
             <div class="win-ib">
@@ -13,11 +14,13 @@
               <img :src="levArr[0]">
             </div>
           </div>
+          <!-- 未中奖 -->
           <img :src="cunwp" v-else>
         </div>
         <div class="wp-p2" v-if="(cunwp instanceof Array)">
           <img :src="awi031">
         </div>
+        <div class="a0000"></div>
         <div class="wp-btn1" @click="btnClick">
           <img :src="awi032">
         </div>
@@ -132,28 +135,26 @@ export default {
   transform-origin:50% 50%;
   animation: spin 8s infinite linear;
 }
-.wp-p1,
-.wp-p2,
-.wp-btn1 {
-  position: absolute;
-  left: 35%;
-  top: 35%;
-  width: 30%;
-}
 .wp-p1 img,
 .wp-p2 img,
 .wp-btn1 img {
   width: 100%;
 }
 .wp-p1 {
+  position: absolute;
+  left: 35%;
+  top: 35%;
+  width: 30%;
   height: 19%;
 }
 .wp-p2 {
+  position: absolute;
   top: 57%;
   left: 40%;
   width: 21%;
 }
 .wp-btn1 {
+  position: absolute;
   top: 66%;
   left: 42%;
   width: 16%;
