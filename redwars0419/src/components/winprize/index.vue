@@ -2,27 +2,33 @@
   <transition name="diaani">
     <div class="modal-item" v-show="isshow">
       <div class="wp-box1">
-        <img class="wp-bg wp-bg1 wp-spin" :src="awi028">
-        <img class="wp-bg" :src="awi029">
-        <img class="wp-bg" :src="awi030" v-if="(cunwp instanceof Array)">
-        <div class="wp-p1">
-          <!-- 中奖 -->
-          <div class="win-ibox" v-if="(cunwp instanceof Array)">
-            <div class="win-it"><img :src="levArr[award]"></div>
-            <div class="win-ib">
-              <img :src="num" v-for="num, index in cunwp" :key="index">
-              <img :src="levArr[0]">
+        <div v-show="!redShow">
+          <img class="wp-bg wp-bg1 wp-spin" :src="awi028">
+          <img class="wp-bg" :src="awi029">
+          <img class="wp-bg" :src="awi030" v-if="(cunwp instanceof Array)">
+          <div class="wp-p1">
+            <!-- 中奖 -->
+            <div class="win-ibox" v-if="(cunwp instanceof Array)">
+              <div class="win-it"><img :src="levArr[award]"></div>
+              <div class="win-ib">
+                <img :src="num" v-for="num, index in cunwp" :key="index">
+                <img :src="levArr[0]">
+              </div>
             </div>
+            <!-- 未中奖 -->
+            <img :src="cunwp" v-else>
           </div>
-          <!-- 未中奖 -->
-          <img :src="cunwp" v-else>
+          <div class="wp-p2" v-if="(cunwp instanceof Array)">
+            <img :src="awi031">
+          </div>
+          <div class="a0000"></div>
+          <div class="wp-btn1" @click="btnClick">
+            <img :src="awi032">
+          </div>
         </div>
-        <div class="wp-p2" v-if="(cunwp instanceof Array)">
-          <img :src="awi031">
-        </div>
-        <div class="a0000"></div>
-        <div class="wp-btn1" @click="btnClick">
-          <img :src="awi032">
+        <div class="wp-bigred" v-show="!!redShow">
+          <img :src="awi035">
+          <div class="a0000" @click="bigredClick"></div>
         </div>
       </div>
     </div>
@@ -40,6 +46,7 @@ import awi029 from '@/assets/images/aw_029.png'
 import awi030 from '@/assets/images/aw_030.png'
 import awi031 from '@/assets/images/aw_031.png'
 import awi032 from '@/assets/images/aw_032.png'
+import awi035 from '@/assets/images/aw_035.png'
 
 import num0 from '@/assets/images/num0.png'
 import num1 from '@/assets/images/num1.png'
@@ -62,7 +69,8 @@ import levy from '@/assets/images/levy.png'
 export default {
   data () {
     return {
-      isshow: false,
+      isshow: true, // 模块显示与否
+      redShow: true, // 红包显示与否
       cunwp: awi018, // 显示的奖等或者未中奖文字，字符串表示未中奖，数组表示中奖
       prizen: [awi018, awi019, awi020, awi021, awi022], // 未中奖文字，随机选择一个
       numArr: [num0, num1, num2, num3, num4, num5, num6, num7, num8, num9], // 数字图片
@@ -72,7 +80,8 @@ export default {
       awi029,
       awi030,
       awi031,
-      awi032
+      awi032,
+      awi035
     }
   },
   methods: {
@@ -85,6 +94,7 @@ export default {
       return iarr
     },
     show ( obj ) {
+      this.redShow = true
       this.isshow = true
       if ( obj ) { // 中奖了
         let p = obj.result || {}
@@ -100,6 +110,9 @@ export default {
     },
     btnClick () {
       this.$emit('close')
+    },
+    bigredClick () {
+      this.redShow = false
     }
   }
 }
@@ -122,7 +135,8 @@ export default {
   top: 6%;
   width: 134%;
 }
-.wp-bg {
+.wp-bg,
+.wp-bigred {
   position: absolute;
   left: 0;
   top: 0;
@@ -137,7 +151,8 @@ export default {
 }
 .wp-p1 img,
 .wp-p2 img,
-.wp-btn1 img {
+.wp-btn1 img,
+.wp-bigred img {
   width: 100%;
 }
 .wp-p1 {
