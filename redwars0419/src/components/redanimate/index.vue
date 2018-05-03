@@ -24,23 +24,15 @@ export default {
       isshow: false,
       awi033,
       att: 0, // 请求结果的时间
+      nowt: 0, // 记录每次进来的时间
       iarr: getIarr()
     }
   },
   methods: {
     // 红包雨
     redRain ( isrc, box ) {
-      let _this = this,
-          anics = box.querySelector('.ani-csimg')
+      let _this = this
       rdDiv()
-      // 如果财神图存在就删除
-      // 延时，有一定的红包时才会执行
-      setTimeout( () => {
-        if ( anics ) {
-          anics.parentNode.removeChild(anics)
-          _this.$emit('csafter') // 财神动画完成
-        }
-      }, 2000)
       // 最大和最小值之间的随机值
       function rdn () {
         var max = Math.max(arguments[0], arguments[1]),
@@ -77,7 +69,7 @@ export default {
         ele.style.width = (rdn(50, 20) + 'px')
         ele.style.left = (rdn(90, 10) + '%')
         ele.style.transform = ('rotate(' + rdn(45, -45) + 'deg)')
-        ele.style.animationDuration = (rdn(8, 4) + 's')
+        ele.style.animationDuration = (rdn(7, 3) + 's')
       }
     },
     // 序列图财神
@@ -100,17 +92,31 @@ export default {
             img.src = iarr[i]
             rep()
           }, ms)
-        // 下红包雨
-        } else {
-          _this.redRain( awi033, box ) // 下红包雨
         }
       }
+    },
+    // 用户抽奖，获取抽奖流水号
+    getUserDraw () {
+      let _url = `/ushop-api-merchant/api/sns/task/wishing/draw/${this.$xljs.aid}`
+      this.$xljs.ajax(_url, 'post', {}, ( data, res ) => {
+        if ( data.requestNo ) {
+          this.getDrawRe( data.requestNo ) // 请求开奖结果
+        } else {
+          this.hide() // 隐藏开奖动画
+        }
+      }, false) // 有红包雨，不需要加载中圆圈
     },
     // 获取抽奖结果
     getDrawRe ( rno ) {
       let _url = `/ushop-api-merchant/api/sns/task/wishing/result/get/${rno}`,
-          baset = 5000, // 重复请求的基数
+          baset = 2000, // 重复请求的基数
           maxt = 60000 // 判断超时的最大值
+      // 如果超过规定时间还未请求到结果，改变重复请求的基数
+      if ( this.att > 5000 ) {
+        baset = 5000
+      } else if ( this.att > 30000 ) {
+        baset = 10000
+      }
       this.$xljs.ajax(_url, 'get', {}, ( data ) => {
         if ( data.status === 102 ) { // 未中奖
           this.handResult()
@@ -132,15 +138,29 @@ export default {
     },
     // 抽奖结果处理，跳转到首页
     handResult ( data ) {
-      this.att = 0 // 重置抽奖结果计时
-      this.$emit('dresult', data)
+      let _this = this
+      ra()
+      function ra () {
+        // 最少要等待一定时间才会显示结果
+        if ( ((+new Date()) - _this.nowt) > 5000 ) {
+          _this.$emit('dresult', data)
+        } else {
+          setTimeout(() => {
+            ra()
+          }, 1000)
+        }
+      }
     },
     show () {
+      let box = this.$refs.anibox
       this.isshow = true
-      this.sequencePlay(this.$refs.anibox, this.iarr, 2)
+      this.nowt = +new Date() // 记录当前的时间
+      this.att = 0 // 重置抽奖结果计时
+      this.sequencePlay(box, this.iarr, 2) // 序列图财神
+      this.redRain( awi033, box ) // 下红包雨
+      this.getUserDraw() // 用户抽奖开始，数据请求
     },
     hide () {
-      this.att = 0 // 重置抽奖结果计时
       this.isshow = false
       this.$refs.anibox.innerHTML = '' // 清空红包容器
     }
@@ -161,6 +181,8 @@ export default {
   width: 100%;
 }
 .ani-box {
+  width: 120%;
+  left: -10%;
   overflow: hidden;
 }
 </style>

@@ -34,7 +34,7 @@
     <!-- 我的红包 -->
     <xl-packet ref="xlpacket" />
     <!-- 财神动画 -->
-    <xl-animate @dresult="showPrize" ref="xlanimate" @csafter="csafter" />
+    <xl-animate @dresult="showPrize" ref="xlanimate" />
     <!-- 中奖弹窗 -->
     <xl-prize ref="xlprize" @close="winpClose" />
   </div>
@@ -140,17 +140,6 @@ export default {
         return false
       }
       this.$refs.xlanimate.show() // 显示开奖动画
-    },
-    // 财神出现动画完成后，飘红包雨前
-    csafter () {
-      let _url = `/ushop-api-merchant/api/sns/task/wishing/draw/${this.$xljs.aid}`
-      this.$xljs.ajax(_url, 'post', {}, ( data, res ) => {
-        if ( data.requestNo ) {
-          this.$refs.xlanimate.getDrawRe( data.requestNo ) // 请求开奖结果
-        } else {
-          this.$refs.xlanimate.hide() // 隐藏开奖动画
-        }
-      }, false) // 有红包雨，不需要加载中圆圈
     },
     // 获取任务可参与的次数
     getChanceNum ( id, callback = function () {} ) {

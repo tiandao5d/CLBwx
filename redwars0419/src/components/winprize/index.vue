@@ -69,8 +69,8 @@ import levy from '@/assets/images/levy.png'
 export default {
   data () {
     return {
-      isshow: true, // 模块显示与否
-      redShow: true, // 红包显示与否
+      isshow: false, // 模块显示与否
+      redShow: false, // 红包显示与否
       cunwp: awi018, // 显示的奖等或者未中奖文字，字符串表示未中奖，数组表示中奖
       prizen: [awi018, awi019, awi020, awi021, awi022], // 未中奖文字，随机选择一个
       numArr: [num0, num1, num2, num3, num4, num5, num6, num7, num8, num9], // 数字图片
