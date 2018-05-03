@@ -22,6 +22,9 @@
             <img :src="awi031">
           </div>
           <div class="a0000"></div>
+          <div class="wp-twocode">
+            <img :src="awi036" class="imgw100">
+          </div>
           <div class="wp-btn1" @click="btnClick">
             <img :src="awi032">
           </div>
@@ -47,6 +50,7 @@ import awi030 from '@/assets/images/aw_030.png'
 import awi031 from '@/assets/images/aw_031.png'
 import awi032 from '@/assets/images/aw_032.png'
 import awi035 from '@/assets/images/aw_035.png'
+import awi036 from '@/assets/images/aw_036.png'
 
 import num0 from '@/assets/images/num0.png'
 import num1 from '@/assets/images/num1.png'
@@ -81,7 +85,8 @@ export default {
       awi030,
       awi031,
       awi032,
-      awi035
+      awi035,
+      awi036
     }
   },
   methods: {
@@ -126,13 +131,12 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: rgba(0,0,0,.6);
   z-index: 20;
 }
 .wp-box1 {
   position: absolute;
   left: -17%;
-  top: 6%;
+  top: 17%;
   width: 134%;
 }
 .wp-bg,
@@ -152,7 +156,8 @@ export default {
 .wp-p1 img,
 .wp-p2 img,
 .wp-btn1 img,
-.wp-bigred img {
+.wp-bigred img,
+.imgw100 {
   width: 100%;
 }
 .wp-p1 {
@@ -194,6 +199,13 @@ export default {
 .win-ib img {
   height: 100%;
   width: auto;
+}
+.wp-twocode {
+  position: absolute;
+  left: 22.4%;
+  top: 65.6%;
+  right: 65.1%;
+  bottom: 21.6%;
 }
 .diaani-enter-active {
   animation: bounce-in .5s;

@@ -171,6 +171,7 @@ export default {
 <style scoped>
 .modal-item {
   z-index: 10;
+  background-color: rgba(0,0,0,.6);
 }
 .modal-item,
 .ani-box {
