@@ -16,7 +16,8 @@ export default {
     return {
       awi008,
       loading: true,
-      txt: '加载中……'
+      txt: '加载中……',
+      firstInit: false // 判断是否首次进入
     }
   },
   watch: {
@@ -35,13 +36,16 @@ export default {
       tele.innerHTML = t
     }
   },
-  mounted () {
-  },
   methods: {
     init () {
       var du = this.$xljs.deCodeUrl(), // 浏览器url记录的参数数据
           ds = this.$xljs.storageL(this.$xljs.sessionAct, null, true) || {}, // 本地储存的活动数据
           aid = du.id || ds.id
+      if ( du.id ) { // 说明是首次进入此活动
+        this.$xljs.storageL(this.$xljs.sessionAct, {id: du.id}, true) // 记录ID数据
+        this.$router.replace('/') // 重置url，去掉id参数，以方便判断是否记录访问次数
+        this.firstInit = true
+      }
       if ( aid ) {
         this.$xljs.aid = aid
         this.getInitData()
@@ -83,6 +87,12 @@ export default {
             {url: `/ushop-api-merchant/api/sns/task/detail/get/${aid}`}, // 活动详情
             {url: '/ushop-api-merchant/api/sns/task/wishing/winner/listBy', data: {id: aid, page: 1, rows: 50}, method: 'get'}
           ]
+      // 记录访问次数
+      if ( this.firstInit ) {
+        aArr[aArr.length] = {
+          url: `/ushop-api-merchant/api/sns/task/record/visit/${aid}`
+        }
+      }
       this.$xljs.ajaxAll(aArr, ( ...args ) => {
         let actData = args[0], // 活动详情数据
             winArr = args[1].recordList || [] // 中奖列表，用于弹幕
@@ -145,6 +155,7 @@ export default {
           link: slink,
           imgUrl: ilink, // 分享图标
           success: function () {
+            that.shareDone(1)
             that.$vux.toast.text('分享成功！')
           },
           cancel: function () {
@@ -162,12 +173,26 @@ export default {
           type: 'link', // 分享类型,music、video或link，不填默认为link
           dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
           success: function () {
+            that.shareDone(2)
             that.$vux.toast.text('分享成功！')
           },
           cancel: function () {
             that.$vux.toast.text('用户取消！')
           }
       });
+    },
+    // 用户执行分享之后
+    shareDone ( type ) {
+      // if ( type === 1 ) { // 分享到朋友圈
+      // } else if ( type === 2 ) { // 分享到朋友
+      // }
+      // 埋点分享成功后
+      let _url = `/ushop-api-merchant/api/sns/task/record/share/${this.$xljs.aid}`
+      this.$xljs.ajax(_url, 'get', {}, () => {
+        // 不需要任何处理
+        // if ( data.result === 'SUCCESS' ) {
+        // }
+      }, false)
     },
     // 编码拼接goto页面，编译为发送到后台的数据字符串
     engoto ( str ) {

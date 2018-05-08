@@ -12,6 +12,7 @@ function Barrager(dom, para) {
   this.canvas.height = this.height
   this.font = '30px 黑体' // 字体和字体大小
   this.ctx.font = this.font
+  // this.cindex = 0 // 用于判断是否按顺序播放，没有则是随机播放
   // 颜色数组，在绘制过程中随机从这里取出颜色
   this.colorArr = ['Olive', 'OliveDrab', 'Orange', 'OrangeRed', 'Orchid', 'PaleGoldenRod', 'PaleGreen', 'PaleTurquoise', 'PaleVioletRed', 'PapayaWhip', 'PeachPuff', 'Peru', 'Pink', 'Plum', 'PowderBlue', 'Purple', 'Red', 'RosyBrown', 'RoyalBlue', 'SaddleBrown', 'Salmon', 'SandyBrown', 'SeaGreen', 'SeaShell', 'Sienna', 'Silver', 'SkyBlue']
   this.interval = ''
@@ -73,6 +74,12 @@ function Barrager(dom, para) {
     }
   }
   this.gettxt = function ( data ) {
+    if ( this.cindex >= 0 ) {
+      if ( this.cindex >= data.length ) {
+        this.cindex = 0
+      }
+      return data[this.cindex++].msg
+    }
     return data[parseInt(Math.random() * data.length)].msg
   }
   this.init = function () {
