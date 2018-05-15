@@ -50,15 +50,15 @@ export default {
           }, 200)
         }
         var imgbox = document.createElement('div')
-        imgbox.className = 'imgbox animated'
+        imgbox.className = 'imgbox animatedr'
         imgbox.innerHTML = '<img src="' + isrc + '">'
         eleCss(imgbox)
         imgbox.addEventListener('animationend', function () {
           if ( _this.isshow ) {
-            this.classList.remove('animated')
+            this.classList.remove('animatedr')
             eleCss(this)
             setTimeout( () => {
-              this.classList.add('animated')
+              this.classList.add('animatedr')
             }, 0)
           }
         })
@@ -102,6 +102,7 @@ export default {
         if ( data.requestNo ) {
           this.getDrawRe( data.requestNo ) // 请求开奖结果
         } else {
+          this.$vux.toast.text('错误：抽奖失败')
           this.hide() // 隐藏开奖动画
         }
       }, false) // 有红包雨，不需要加载中圆圈
@@ -206,7 +207,7 @@ export default {
 .imgbox img {
   width: 100%;
 }
-.animated {
+.animatedr {
   animation: fttt ease-in-out both;
 }
 .ani-csimg {
