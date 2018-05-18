@@ -18,12 +18,9 @@ function isTest () {
 function getDm () {
   let domainUrl = location.protocol + '//' + location.host
   if(isTest()){
-    // domainUrl = 'http://10.35.0.115'
-    // domainUrl = 'http://10.35.0.136:8080'
-    // domainUrl = 'http://10.35.0.66:8080'
-    // domainUrl = 'http://10.35.0.166:8090'
+    domainUrl = 'http://10.35.0.115'
     // domainUrl = 'http://10.35.0.134'
-    domainUrl = 'http://10.13.0.57'
+    // domainUrl = 'http://10.13.0.57'
     // domainUrl = 'http://clbtest.lotplay.cn'
     // domainUrl = 'http://10.13.0.170'
     // domainUrl = 'http://pay.lotplay.cn'
@@ -385,7 +382,7 @@ globaljs.install = function (Vue, options) {
     //arr参数为[{},[],function(){}]形式
     //参数为对象或者数组时，为ajax参数
     //参数为函数时，会直接执行此函数，并必须包含一个回调，否则无法判断执行完成
-    ajaxAll (arr, callback = function () {}) {
+    ajaxAll (arr, callback = function () {}, ispros) {
       let that = this,
           lgn = arr.length,
           rNum = 0,
@@ -400,7 +397,9 @@ globaljs.install = function (Vue, options) {
           }
 
       if ( lgn > 0 ) {
-        that.loading('show')
+        if ( ispros !== false ) {
+          that.loading('show')
+        }
       } else {
         return false
       }

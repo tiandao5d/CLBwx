@@ -3,10 +3,12 @@ import Vue from 'vue'
 import {
   ToastPlugin,
   Group,
+  XInput,
   XButton,
-  XInput
+  LoadingPlugin
 } from 'vux'
 Vue.use(ToastPlugin, {position: 'top'})
+Vue.use(LoadingPlugin)
 
 Vue.component('group', Group)
 Vue.component('x-button', XButton)

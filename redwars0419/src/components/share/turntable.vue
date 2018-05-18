@@ -1,110 +1,243 @@
 <template>
-  <div>
-    <div ref="turntable" class="gb-turntable">
-      <div class="gb-turntable-container"></div>
-      <a class="gb-turntable-btn" href="javascript:;">抽奖</a>
+  <div class="page-item">
+    <img class="w100" :src="tte015">
+    <div class="turn-box" ref="turnbox">
+      <div ref="turntable" class="gb-turntable">
+        <div class="gb-turntable-container"></div>
+        <img class="gb-pointer" :src="tte016">
+      </div>
     </div>
-    <button @click="prizeStart">132</button>
+    <div class="start-btn" ref="startbtn"></div>
+    <div class="turn-txt1"><span>{{pnum}}</span></div>
+    <div class="mpshow-btn" @click="showMyprize"></div>
+    <div class="turn-btxt"><div class="turn-bp">当前还有<span>{{rewardPool}}</span>元奖品待领取</div></div>
+    <!-- 中奖弹窗 -->
+    <xl-prize ref="xlprize" @close="winpClose" />
+    <xl-myprize ref="myprize" />
   </div>
 </template>
 <script>
 import Turntable from './turntable.js'
-import awi023 from '@/assets/images/aw_023.png'
+import XlPrize from '@/components/winprize' // 红包弹窗
+import XlMyprize from '@/components/turntable/myprize.vue' // 中奖列表
+
+import tte015 from '@/assets/images/tte015.jpg'
+import tte016 from '@/assets/images/tte016.png'
 export default {
   data () {
     return {
-      isshow: false
+      gbTurntable: null, // 记录转盘对象
+      att: 0, // 请求结果的时间
+      tte015,
+      tte016,
+      rewardPool: 0, // 奖池金额
+      pnum: '' // 可抽奖次数显示
     }
   },
   mounted () {
-    let gbTurntable = new Turntable() //初始化转盘
-    let _this = this,
-        cwidth = 240,
-        ele = _this.$refs.turntable,
-
-        //抽奖概率和提示信息的配置
-        chance = [{
-            id: 0,
-            txt: '1元红包'
-          },
-          {
-            id: 1,
-            txt: '2元红包'
-          },
-          {
-            id: 2,
-            txt: '3元红包'
-          },
-          {
-            id: 3,
-            txt: '4元红包'
-          },
-          {
-            id: 4,
-            txt: '5元红包'
-          },
-          {
-            id: 5,
-            txt: '6元红包'
-          },
-          {
-            id: 6,
-            txt: '7元红包'
-          },
-          {
-            id: 7,
-            txt: '8元红包'
-          }
-        ],
-        opts = {
-          ele: ele,
-          width: cwidth,
-          config: function(callback) {
-            // 获取奖品信息
-            let carr = []
-            _this.$xljs.each(chance, ( index, obj ) => {
-              carr[carr.length] = `<div class="prize-box"><i style="font-size: ${cwidth * 0.05}px">${obj.txt}</i><img style="width: ${cwidth * 0.125}'px;height: ${cwidth * 0.125}px" src="${awi023}"></div>`
-            })
-            callback && callback(carr)
-          },
-          // 转盘完成后执行
-          gotBack ( data, id ) {
-            let a, i = 0
-            _this.$vux.toast.text(chance[id]['txt'])
-          }
-        }
-    _this.gbTurntable = gbTurntable
-    gbTurntable.init(opts)
+    this.canvasInit()
+    // 屏幕变化时改变转盘的大小
+    window.addEventListener('resize', () => {
+      if ( this.gbTurntable ) {
+        this.gbTurntable.draw({ // 重新绘制内容
+          width: this.$refs.turnbox.offsetWidth
+        })
+      }
+    })
+    this.getChanceNum((data) => {
+      let actData = this.$xljs.storageL(this.$xljs.sessionAct, null, true),
+          cv = parseInt(actData.participateTime) || 0, // 总共可以抽奖的次数
+          count = parseInt(data.count) || 0 // 剩余可以抽奖的次数
+      count = count > 0 ? count : 0
+      this.pnum = ( cv - count ) + '/' + cv
+      this.rewardPool = parseInt(actData.rewardPool)
+    })
   },
   methods: {
-    getTurnConfig () {
-      var actData = this.$xljs.storageL(this.$xljs.sessionAct)
-    },
     // 获取任务可参与的次数
-    getChanceNum ( id, callback = function () {} ) {
-      let _url = `/ushop-api-merchant/api/sns/task/wishing/done/get/${id}`
+    getChanceNum ( callback = function () {} ) {
+      let _url = `/ushop-api-merchant/api/sns/task/wishing/done/get/${this.$xljs.aid}`
       this.$xljs.ajax(_url, 'get', {}, ( data ) => {
         callback(data)
       })
     },
-    // 抽奖开始
-    prizeStart ( num, chances ) {
-      // 获取中奖信息
-      num = (Math.floor(Math.random() * 8)); //对应奖品的数据ID
-      chances = 1; // 可抽奖次数，当值为0时将是最后一次执行
-      this.gbTurntable.pstart([num, chances])
+    // 用户抽奖，获取抽奖流水号
+    getUserDraw ( callback = function () {}) {
+      this.$xljs.ajaxAll([
+        {url: `/ushop-api-merchant/api/sns/task/wishing/draw/${this.$xljs.aid}`, method: 'post'}, // 获取流水号
+        {url: `/ushop-api-merchant/api/sns/task/wishing/done/get/${this.$xljs.aid}`} // 获取抽奖次数
+      ], ( ...args ) => {
+        callback( args[0].requestNo, args[1].count )
+      }, false)
+    },
+    // 获取抽奖结果
+    getDrawRe ( callback ) {
+      this.$vux.loading.show({
+        text: '转盘启动中……'
+      })
+      this.getUserDraw( ( requestNo, count ) => {
+        if ( count > 0 ) {
+          if ( requestNo ) {
+            dr(requestNo)
+          } else {
+            this.$vux.loading.hide()
+            this.$vux.toast.text('错误：抽奖失败')
+          }
+        } else {
+          this.$vux.loading.hide()
+          this.$refs.startbtn.classList.add('disabled')
+          this.$vux.toast.text('抽奖次数用完了')
+        }
+      })
+      function re ( data ) {
+        this.$vux.loading.hide()
+        callback(data)
+      }
+      function dr ( rno ) {
+        let _url = `/ushop-api-merchant/api/sns/task/wishing/result/get/${rno}`,
+            baset = 1000, // 重复请求的基数
+            maxt = 10000 // 判断超时的最大值
+        // 如果超过规定时间还未请求到结果，改变重复请求的基数
+        if ( this.att > 5000 ) {
+          baset = 2000
+        }
+        this.$xljs.ajax(_url, 'get', {}, ( data ) => {
+          if ( data.status === 102 ) { // 未中奖
+            re()
+          } else if ( data.status === 103 ) {
+            if ( data.result ) { // 中奖
+              re(data)
+            } else { // 未中奖
+              re()
+            }
+          } else if ( this.att > maxt ) { // 请求超时当做未中奖
+            re()
+          } else {
+            setTimeout(() => {
+              this.att = this.att ? (this.att + baset) : baset // 重置抽奖结果计时
+              dr(rno)
+            }, baset)
+          }
+        }, false)
+      }
+    },
+    canvasInit () {
+      this.gbTurntable = new Turntable() //初始化转盘
+      this.gbTurntable.init(this.getCotps())
+    },
+    // 获取轮盘参数
+    getCotps () {
+      let _this = this,
+          ele = this.$refs.turntable,
+          cwidth = this.$refs.turnbox.offsetWidth,
+          btn = this.$refs.startbtn,
+          chance = this.getChance()
+      cwidth = ((cwidth > 0) ? cwidth : 240)
+      return  {
+                ele: ele,
+                width: cwidth,
+                config: function(callback) {
+                  // 获取奖品信息
+                  let carr = []
+                  _this.$xljs.each(chance, ( index, obj ) => {
+                    carr[carr.length] = `<div class="prize-box"><i style="font-size: ${cwidth * 0.03}px">${obj.txt}</i><img style="width: ${cwidth * 0.125}'px;height: ${cwidth * 0.125}px" src="${tte016}"></div>`
+                  })
+                  callback && callback(carr)
+                },
+                // 点击按键立马执行
+                getPrize: function(callback) {
+                  // 获取中奖信息
+                  _this.getDrawRe(( obj ) => {
+                    let p = obj.result || {},
+                        num = ( parseInt(p.index) - 1 )
+                    if ( !( num >= 0 ) ) { // 当成未中奖处理
+                      num = ( chance.length - 1 )
+                    }
+                    callback && callback([num, 1])
+                  })
+                },
+                btn: btn,
+                // 转盘完成后执行
+                gotBack ( data, id ) {
+                  let a, i = 0
+                  // _this.showPrize()
+                  _this.$vux.toast.text(chance[id]['txt'])
+                }
+              }
+    },
+    // 过去内容数组
+    getChance () {
+      let actData = this.$xljs.storageL(this.$xljs.sessionAct, null, true), // 活动数据
+          rvarr = JSON.parse(actData.rewardValue), // 奖等数据
+          arr = [],
+          aval = null,
+          lgn = rvarr.length
+      this.$xljs.each(rvarr, ( index, obj ) => {
+        aval = (obj.awardValue + '').split('|')
+        arr[index] = {
+          id: index,
+          txt: ( aval[1] === '999' ) ? ( aval[0] + '元' ) : ( aval[0] + '积分' ),
+          img: obj.ico || '',
+          obj: obj
+        }
+      })
+      arr[lgn] = { // 添加未中奖的格子
+          id: lgn,
+          txt: '未中奖',
+          img: ''
+      }
+      return arr
+    },
+    // 显示中奖弹窗
+    // 参数为中奖数据
+    showPrize ( obj ) {
+      this.$refs.xlprize.show( obj )
+    },
+    // 显示红包列表
+    showMyprize () {
+      this.$refs.myprize.show()
+    },
+    // 关闭中奖弹窗
+    winpClose () {
+      this.$refs.xlprize.hide() // 中奖弹窗关闭
     }
+  },
+  components: {
+    XlPrize,
+    XlMyprize
   }
 }
 </script>
 <style scoped>
+.page-item {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.turn-box {
+  position: absolute;
+  left: 20.6%;
+  right: 20.1%;
+  top: 21.6%;
+  bottom: 41.5%;
+}
+.start-btn {
+  position: absolute;
+  left: 34.8%;
+  top: 82.7%;
+  right: 35%;
+  bottom: 11.5%;
+  border-radius: 5px;
+}
+.start-btn:active,
+.start-btn.disabled {
+  background-color: rgba(0,0,0,.2);
+}
 .gb-turntable {
   position: relative;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  border: 16px solid #E44025;
-  box-shadow: 0 2px 3px #333, 0 0 2px #000;
-  margin: -0 auto;
-  box-sizing: content-box;
 }
 
 .gb-turntable-container {
@@ -117,78 +250,55 @@ export default {
   border-radius: inherit;
   background-clip: padding-box;
   background-color: #ffcb3f;
+  transition: transform 6s ease;
 }
-
-.gb-turntable-btn {
+.gb-pointer {
   position: absolute;
-  z-index: 3;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  color: #F4E9CC;
-  background-color: #E44025;
-  line-height: 80px;
+  left: 39.5%;
+  top: 20%;
+  width: 21%;
+  z-index: 10;
+}
+.turn-txt1 {
+  position: absolute;
+  top: 71.25%;
+  left: 38%;
+  right: 38%;
+  font-size: 16px;
+  color: #fff600;
   text-align: center;
-  font-size: 20px;
-  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.6);
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.6);
-  text-decoration: none;
+  background: linear-gradient(to right, rgba(0,0,0,0),rgba(0,0,0,0.2), rgba(0,0,0,0.2), rgba(0,0,0,0.2), rgba(0,0,0,0));
 }
-
-.gb-turntable-btn::after {
+.turn-btxt {
   position: absolute;
-  display: block;
-  content: '';
-  left: 10px;
-  top: -46px;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  border-width: 30px;
-  border-style: solid;
-  border-color: transparent;
-  border-bottom-color: #E44025;
+  bottom: 3%;
+  left: 0;
+  width: 100%;
+  text-align: center;
 }
-
-.gb-turntable-btn.disabled {
-  pointer-events: none;
-  background: #B07A7B;
-  color: #ccc;
+.turn-bp {
+  display: inline-block;
+  padding: 0 1em;
+  font-size: 16px;
+  color: #fff;
+  background: linear-gradient(to right, rgba(0,0,0,0), #ff960d, #ff960d, #ff960d, rgba(0,0,0,0));
 }
-
-.gb-turntable-btn.disabled::after {
-  border-bottom-color: #B07A7B;
+.turn-bp span {
+  color: #f00;
 }
-
-.gb-turntable-btn:active:after {
-  border-bottom-color: #B07A7B;
-}
-
-.gb-turntable-btn:active {
-  background: #B07A7B;
-}
-
-.gb-turntable a.gb-turntable-btn {
-  border: none;
-}
-
-.linear360 {
-  animation-fill-mode: both;
-  animation-name: lineart;
-  animation-iteration-count: 1;
-  animation-duration: .4s;
-  animation-timing-function: linear;
-}
-
-.easeout360 {
-  transition: all 3s ease-out;
+.mpshow-btn {
+  position: absolute;
+  right: 12%;
+  top: 78%;
+  left: 70%;
+  bottom: 10%;
 }
 @keyframes lineart {
   0% {
     transform: rotate(0deg);
   }
   100% {
-    transform: rotate(360deg);
+    transform: rotate(1080deg);
   }
 }
 </style>
@@ -219,7 +329,7 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  color: #e4370e;
+  color: #fff;
   font-weight: bold;
   line-height: 1;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
@@ -240,6 +350,13 @@ export default {
   display: block;
   width: 30px;
   margin: 5px auto 0;
+}
+.w100 {
+  width: 100%;
+}
+.wh11 {
+  width: 100%;
+  height: 100%;
 }
 </style>
 

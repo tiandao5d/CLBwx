@@ -35,7 +35,16 @@ img {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-
+.imgw100 {
+  width: 100%;
+}
+.imgwh100 {
+  width: 100%;
+  height: 100%;
+}
+.axbtn:active {
+  background-color: rgba(0,0,0,.2);
+}
 @-webkit-keyframes spin {
   0% {
     -webkit-transform: rotate(0deg);

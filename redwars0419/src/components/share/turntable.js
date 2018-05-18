@@ -7,8 +7,10 @@ function CanvasTurntable () {
       prizes,
       btn,
       deg = 0,
+      fnGetPrize,
       fnGotBack,
       optsPrize,
+      isinit = false,
       rtype = '' // 旋转类型，匀速'linear'，停下'easeout'
   
   // 初始化转盘数据
@@ -17,10 +19,11 @@ function CanvasTurntable () {
 
     ele = opts.ele
     container = ele.querySelector('.gb-turntable-container')
-    btn = ele.querySelector('.gb-turntable-btn')
+    btn = opts.btn
     canvas = document.createElement('canvas')
     canvas.className = 'gb-turntable-canvas'
 
+    fnGetPrize = opts.getPrize
     fnGotBack = opts.gotBack
 
     opts.config(function(data) {
@@ -41,18 +44,16 @@ function CanvasTurntable () {
         rotateDeg = 180 / num + 90,
         ctx,
         // 奖项容器
-        prizeItems = document.createElement('ul'),
+        prizeItems = ele.querySelector('.gb-turntalbe-list'),
         // 文字旋转 turn 值
         turnNum = 1 / num,
         // 奖项
-        html = []
-
+        html = [],
+        grd = null
     canvas.width = cw_2 * 2
     canvas.height = cw_2 * 2
     ele.style.width = cw_2 * 2 + 'px'
     ele.style.height = cw_2 * 2 + 'px'
-    btn.style.top = (cw_2 - btn.offsetHeight / 2) + 'px'
-    btn.style.left = (cw_2 - btn.offsetWidth / 2) + 'px'
     if(!canvas.getContext) {
       alert('抱歉！浏览器不支持。')
       return
@@ -75,9 +76,15 @@ function CanvasTurntable () {
 
       // 颜色间隔
       if(i % 2 == 0) {
-        ctx.fillStyle = '#ffb820'
+        grd = ctx.createLinearGradient(0, 0, cw_2, cw_2/2)
+        grd.addColorStop(0, '#bb0216')
+        grd.addColorStop(1, '#fa162d')
+        ctx.fillStyle = grd
       } else {
-        ctx.fillStyle = '#ffcb3f'
+        grd = ctx.createLinearGradient(0,0,cw_2,cw_2/2)
+        grd.addColorStop(0, '#ff7102')
+        grd.addColorStop(1, '#ffbd00')
+        ctx.fillStyle = grd
       }
 
       // 填充扇形
@@ -90,42 +97,26 @@ function CanvasTurntable () {
       // 恢复前一个状态
       ctx.restore()
       // 奖项列表
-      html.push('<li class="gb-turntable-item"> <span style="transform-origin: 50% ' + cw_2 + 'px; transform: rotate(' + i * turnNum + 'turn)">' + opts.prizes[i] + '</span> </li>')
+      html.push('<li class="gb-turntable-item"> <span style="transform-origin: 50% ' + cw_2 + 'px; transform: rotate(' + i * turnNum + 'turn)">' + prizes[i] + '</span> </li>')
       if((i + 1) === num) {
-        container.innerHTML = ''
-        prizeItems.className = 'gb-turntalbe-list'
-        container.appendChild(canvas)
-        container.appendChild(prizeItems)
+        if ( !isinit ) {
+          container.innerHTML = ''
+          container.appendChild(canvas)
+          isinit = true
+        }
+        if ( !prizeItems ) {
+          prizeItems = document.createElement('ul')
+          prizeItems.className = 'gb-turntalbe-list'
+          container.appendChild(prizeItems)
+        }
         prizeItems.innerHTML = html.join('')
       }
-
     }
-
   }
 
   // 旋转转盘
   this.runRotate = function ( adeg ) {
-    if ( adeg ) {
-      container.classList.add('easeout360')
-      setTimeout(() => {
-        container.style['transform'] = 'rotate(' + deg + 'deg)'
-      })
-    } else {
-      container.classList.add('linear360')
-    }
-  }
-
-  this.pstart = function ( data ) {
-    if ( rtype === 'linear' ) { // 必须是点击了抽奖之后才可以执行
-      optsPrize = {
-        prizeId: data[0], // 中奖ID，从0开始
-        chances: data[1] // 剩余抽奖次数
-      }
-      // 计算旋转角度
-      deg = deg || 0
-      deg = deg + (360 - deg % 360) + (360 * 5 - data[0] * (360 / num))
-      rtype = 'easeout'
-    }
+    container.style['transform'] = 'rotate(' + adeg + 'deg)'
   }
   
   // 抽奖事件
@@ -133,21 +124,17 @@ function CanvasTurntable () {
     var _this = this
     btn.addEventListener('click', () => {
       btn.classList.add('disabled')
-      rtype = 'linear' // 匀速旋转
-      _this.runRotate() // 开始旋转
-    });
-
-    // 中奖提示
-    container.addEventListener('animationend', () => {
-      container.classList.remove('linear360')
-      setTimeout(() => {
-        if ( rtype === 'linear' ) {
-          _this.runRotate()
-        } else if ( rtype === 'easeout' ) {
-          _this.runRotate(deg)
+      fnGetPrize(function(data) {
+        optsPrize = {
+          prizeId: data[0], // 中奖ID，从0开始
+          chances: data[1] // 剩余抽奖次数
         }
-      }, 0)
-    }, false)
+        // 计算旋转角度
+        deg = deg || 0;
+        deg = deg + (360 - deg % 360) + (360 * 10 - data[0] * (360 / num))
+        _this.runRotate(deg);
+      });
+    });
     // 中奖提示
     container.addEventListener('transitionend', _this.eGot, false)
   }
