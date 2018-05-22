@@ -8,11 +8,11 @@
           <img class="wp-bg" :src="awi030" v-if="(cunwp instanceof Array)">
           <div class="wp-p1">
             <!-- 中奖 -->
-            <div class="win-ibox" v-if="(cunwp instanceof Array)">
+            <div class="win-ibox a0000" v-if="(cunwp instanceof Array)">
               <div class="win-it"><img :src="levArr[award]"></div>
-              <div class="win-ib">
+              <div class="win-ib" :class="[winclass]">
                 <img :src="num" v-for="num, index in cunwp" :key="index">
-                <img :src="levArr[0]">
+                <img :src=" (funType === '999') ? levArr[0] : levd">
               </div>
             </div>
             <!-- 未中奖 -->
@@ -21,7 +21,7 @@
           <div class="wp-p2" v-if="(cunwp instanceof Array)">
             <img :src="awi031">
           </div>
-          <div class="a0000"></div>
+          <!-- <div class="a0000"></div> -->
           <div class="wp-twocode">
             <img :src="awi036" class="imgw100">
           </div>
@@ -68,7 +68,8 @@ import lev2 from '@/assets/images/lev2.png'
 import lev3 from '@/assets/images/lev3.png'
 import lev4 from '@/assets/images/lev4.png'
 import lev5 from '@/assets/images/lev5.png'
-import levy from '@/assets/images/levy.png'
+import levy from '@/assets/images/tte019.png'
+import levd from '@/assets/images/tte018.png'
 
 export default {
   data () {
@@ -79,6 +80,8 @@ export default {
       prizen: [awi018, awi019, awi020, awi021, awi022], // 未中奖文字，随机选择一个
       numArr: [num0, num1, num2, num3, num4, num5, num6, num7, num8, num9], // 数字图片
       levArr: [levy, lev1, lev2, lev3, lev4, lev5], // 奖等图片
+      levd,
+      funType: '',
       award: 0,
       awi028,
       awi029,
@@ -105,7 +108,9 @@ export default {
         let p = obj.result || {}
         // index = 1 表示一等奖，2表示二等奖以此类推
         this.cunwp = this.getNumImg(p.awardValue)
-        this.award = p.index;
+        this.funType = p.awardValue.split('|')[1]
+        this.award = p.index
+        this.winclass = ( this.cunwp.length > 5 ) ? 'xs' : ( ( this.cunwp.length > 3 ) ? 'md' : '' )
       } else { // 未中奖
         this.cunwp = this.prizen[Math.floor(Math.random() * this.prizen.length)] // 随机未中奖
       }
@@ -130,7 +135,7 @@ export default {
 .wp-box1 {
   position: absolute;
   left: -17%;
-  top: 17%;
+  top: 8%;
   width: 134%;
 }
 .wp-bg,
@@ -184,15 +189,23 @@ export default {
 .win-ib {
   position: absolute;
   left: 0;
-  top: 55%;
+  bottom: 7%;
   width: 100%;
-  height: 41%;
+  height: 32%;
   font-size: 0;
   text-align: center;
 }
 .win-ib img {
   height: 100%;
   width: auto;
+}
+.win-ib.md {
+  bottom: 16%;
+  height: 20%;
+}
+.win-ib.xs {
+  bottom: 16%;
+  height: 16%;
 }
 .wp-twocode {
   position: absolute;

@@ -33,15 +33,6 @@ export default {
 </script>
 
 <style scoped>
-.modal-item {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,.7);
-  z-index: 10;
-}
 .te-img {
   position: absolute;
   width: 85%;

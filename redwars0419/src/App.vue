@@ -1,10 +1,7 @@
 <template>
   <div id="app">
+    <!-- 必须等待相应的数据加载完成才能执行 -->
     <router-view v-if="!loading"></router-view>
-    <!-- 提前加载图片 -->
-    <div class="imgloading-box" ref="iload">
-      <img :src="awi008" @load="imgloading">
-    </div>
   </div>
 </template>
 
@@ -36,6 +33,28 @@ export default {
       tele.innerHTML = t
     }
   },
+  mounted () {
+    // 页面数据初始化
+    // 已经登录
+    if ( this.$xljs.getUserId() ) {
+      // 微信授权
+      if ( this.$xljs.isWeixin() ) {
+        this.wxAuthoriseFn( () => {
+          this.init()
+        }) // 微信授权jsSDK
+      } else {
+        this.init()
+      }
+    // 未登录
+    } else {
+      this.$vux.toast.text('未登录或登录失效！')
+      if ( this.$xljs.isWeixin() && !this.$xljs.isTest() ) {
+        this.$xljs.openPage('../index.html?loginOverdue=yes')
+      } else {
+        this.init()
+      }
+    }
+  },
   methods: {
     init () {
       var du = this.$xljs.deCodeUrl(), // 浏览器url记录的参数数据
@@ -52,35 +71,6 @@ export default {
       } else {
         this.txt = '没有ID'
       }
-    },
-    imgInit () {
-      // this.loading = false
-      // return false
-      // 页面数据初始化
-      // 已经登录
-      if ( this.$xljs.getUserId() ) {
-        // 微信授权
-        if ( this.$xljs.isWeixin() ) {
-          this.wxAuthoriseFn( () => {
-            this.init()
-          }) // 微信授权jsSDK
-        } else {
-          this.init()
-        }
-      // 未登录
-      } else {
-        this.$vux.toast.text('未登录或登录失效！')
-        if ( this.$xljs.isWeixin() && !this.$xljs.isTest() ) {
-          this.$xljs.openPage('../index.html?loginOverdue=yes')
-        } else {
-          this.init()
-        }
-      }
-    },
-    imgloading () {
-      let box = this.$refs.iload,
-          imgs = box.querySelectorAll('img')
-      this.imgInit()
     },
     // 获取初始基本数据
     getInitData ( callback = function () {} ) {

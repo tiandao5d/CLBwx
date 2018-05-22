@@ -1,21 +1,33 @@
 <template>
   <div class="page-item">
-    <img class="w100" :src="tte011">
-    <transition leave-active-class="animated fadeOut" :enter-active-class="'animated ' + anis">
-      <div class="list-item" :key="itemshow" v-if="cunitem">
-        <div class="list-title"><span :style="{'background-image': ('url(' + tte012 + ')')}">{{'第' + chnum[itemshow] + '题'}}</span></div>
-        <div class="list-txt1">{{cunitem.question}}</div>
-        <div @click="answerFn($event, aobj.istrue, cunitem.id)" :class="('list-btn list-btn' + index)" v-for="aobj, index in cunitem.answer">{{ennum[index] + '、' + aobj.txt}}</div>
+    <div class="page-con">
+      <img class="w100" :src="tte011">
+      <transition leave-active-class="animated fadeOut" :enter-active-class="'animated ' + anis">
+        <div class="list-item" :key="itemshow" v-if="cunitem">
+          <div class="list-title"><span :style="{'background-image': ('url(' + tte012 + ')')}">{{'第' + chnum[itemshow] + '题'}}</span></div>
+          <div class="list-txt1">{{cunitem.question}}</div>
+          <div @click="answerFn($event, aobj.istrue, cunitem.id)" :class="('list-btn list-btn' + index)" v-for="aobj, index in cunitem.answer">{{ennum[index] + '、' + aobj.text}}</div>
+        </div>
+      </transition>
+      <div class="done-img" v-if="isdone > 0">
+        <img class="w100" :src="doneimg[isdone]">
+        <div class="done-btn" @click="answerReset" v-if="isdone === 2"></div>
       </div>
-    </transition>
-    <div class="done-img" v-if="isdone > 0">
-      <img class="w100" :src="doneimg[isdone]">
-      <div class="done-btn" @click="answerReset" v-if="isdone === 2"></div>
     </div>
+    <!-- 提前加载图片 -->
+    <div class="imgloading-box" ref="iload">
+      <img :src="tte011" @load="imgloading">
+      <img :src="doneimg[1]" @load="imgloading">
+      <img :src="doneimg[2]" @load="imgloading">
+    </div>
+    <xl-load :isshow="loading"/>
   </div>
 </template>
 
 <script>
+import XlLoad from '@/components/share/loading.vue'
+import { base64 } from 'vux'
+
 import 'animate.css'
 
 import tte011 from '@/assets/images/tte011.jpg'
@@ -26,7 +38,9 @@ import tte014 from '@/assets/images/tte014.jpg'
 export default {
   data () {
     return {
+      loading: true, // 加载中显示
       itemall: 4, // 总共需要回答多少题
+      accuracy: 2, // 需要答对多少题
       itemshow: 0, // 内容显示哪一个
       disablebtn: false, // 是否禁用点击答题
       rightIds: [], // 正确的ID
@@ -37,24 +51,20 @@ export default {
       chnum: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'],
       ennum: ['A', 'B', 'C', 'D'],
       dataarr: [{
-        "id": 1001,
         "question": "3D彩票知识问答1",
-        "answer": [{"txt": "aa1", "istrue": false}, {"txt": "bb1", "istrue": true}, {"txt": "cc1", "istrue": false}, {"txt": "dd1", "istrue": false}],
+        "answer": [{"text": "aa1", "istrue": false}, {"text": "bb1", "istrue": true}, {"text": "cc1", "istrue": false}, {"text": "dd1", "istrue": false}],
         "image": "http"
       }, {
-        "id": 1002,
         "question": "3D彩票知识问答2",
-        "answer": [{"txt": "aa2", "istrue": false}, {"txt": "bb2", "istrue": false}, {"txt": "cc2", "istrue": true}, {"txt": "dd2", "istrue": false}],
+        "answer": [{"text": "aa2", "istrue": false}, {"text": "bb2", "istrue": false}, {"text": "cc2", "istrue": true}, {"text": "dd2", "istrue": false}],
         "image": "http"
       }, {
-        "id": 1003,
         "question": "3D彩票知识问答3",
-        "answer": [{"txt": "aa3", "istrue": false}, {"txt": "bb3", "istrue": false}, {"txt": "cc3", "istrue": true}, {"txt": "dd3", "istrue": false}],
+        "answer": [{"text": "aa3", "istrue": false}, {"text": "bb3", "istrue": false}, {"text": "cc3", "istrue": true}, {"text": "dd3", "istrue": false}],
         "image": "http"
       }, {
-        "id": 1004,
         "question": "3D彩票知识问答4",
-        "answer": [{"txt": "aa4", "istrue": false}, {"txt": "bb4", "istrue": false}, {"txt": "cc4", "istrue": true}, {"txt": "dd4", "istrue": false}],
+        "answer": [{"text": "aa4", "istrue": false}, {"text": "bb4", "istrue": false}, {"text": "cc4", "istrue": true}, {"text": "dd4", "istrue": false}],
         "image": "http"
       }], // 列表内容数组
       anisarr: ['bounceIn','bounceInDown','bounceInLeft','bounceInRight','bounceInUp','fadeIn','fadeInDown','fadeInDownBig','fadeInLeft','fadeInLeftBig','fadeInRight','fadeInRightBig','fadeInUp','fadeInUpBig','flipInX','flipInY','lightSpeedIn','rotateIn','rotateInDownLeft','rotateInDownRight','rotateInUpLeft','rotateInUpRight','slideInUp','slideInDown','slideInLeft','slideInRight','zoomIn','zoomInDown','zoomInLeft','zoomInRight','zoomInUp','jackInTheBox','rollIn'], // 可用特效
@@ -64,9 +74,30 @@ export default {
     }
   },
   mounted () {
+    let actData = this.$xljs.storageL(this.$xljs.sessionAct, null, true), // 活动数据
+        rule = actData.rule ? (actData.rule + '') : '',
+        obj = null
+    rule = rule.split(',')[1] || ''
+    rule.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')
+    rule = base64.decode(rule)
+    obj = JSON.parse(rule)
+    this.dataarr = obj.library // 题库
+    this.itemall = obj.number // 总共需要回答多少道题目
+    this.accuracy = obj.accuracy // 答对多少题算通过
     this.answerReset() // 重置抽奖
   },
   methods: {
+    // 图片加载加载
+    imgloading () {
+      let box = this.$refs.iload,
+          imgs = box.querySelectorAll('img'),
+          num = box.num || 1
+      if ( num >= imgs.length ) {
+        this.loading = false
+      } else {
+        box.num = ++num
+      }
+    },
     // 获取动效
     getAnis () {
       let ns = this.anisarr[parseInt(Math.random()*this.anisarr.length)]
@@ -78,20 +109,25 @@ export default {
     },
     // 获取问题对象
     getQtion () {
-      let obj = this.dataarr[parseInt(Math.random()*this.dataarr.length)],
-          arr = [],
-          ids = [...this.rightIds, ...this.wrongIds]
-      if ( ids.indexOf(obj.id) >= 0 ) {
+      let index = parseInt(Math.random()*this.dataarr.length),
+          indexs = [...this.rightIds, ...this.wrongIds],
+          obj = null
+      if ( indexs.indexOf(index) >= 0 ) {
         return this.getQtion()
       } else {
+        obj = this.dataarr[index]
+        obj.id = index
+        obj.answer = obj.answer.sort(() => {
+          return ( Math.random() > .5 )
+        })
         return obj
       }
     },
     // 答题重置
     answerReset () {
       this.itemshow = 0 // 内容显示哪一个
-      this.rightIds = [] // 正确的ID
-      this.wrongIds = [] // 错误的ID
+      this.rightIds = [] // 正确的角标
+      this.wrongIds = [] // 错误的角标
       this.itemall = 4 // 总共需要回答多少题
       this.isdone = 0 // 答题完成后是对是错，1为错，2为对
       this.disablebtn = false // 可以答题
@@ -125,7 +161,7 @@ export default {
     },
     // 答题完成后执行
     answerDone () {
-      if ( this.rightIds.length >= this.itemall*0.5 ) { // 答题成功
+      if ( this.rightIds.length >= this.accuracy ) { // 答题成功
         this.isdone = 1
         setTimeout(() => {
           this.$router.push('/turntable')
@@ -134,16 +170,14 @@ export default {
         this.isdone = 2
       }
     }
+  },
+  components: {
+    XlLoad
   }
 }
 </script>
 
 <style scoped>
-.page-item {
-  position: relative;
-  max-width: 720px;
-  margin: 0 auto;
-}
 .list-item {
   position: absolute;
   left: 0;

@@ -1,32 +1,34 @@
 <template>
   <div class="page-item" :class="{wh0000: (appwh > 0.6 && appwh < 0.7)}">
-    <img :src="awi008" class="page-bg">
-    <div class="a0000"></div>
-    <div class="barrager-box">
-      <xl-barrager />
-    </div>
-    <button class="rw-btn01 rw-btn" @click="showPacket">
-      <img :src="awi010">
-    </button>
-    <button class="rw-btn02 rw-btn" @click="showGrule">
-      <img :src="awi012">
-    </button>
-    <div class="rw-p1">
-      <div class="wish-img" :class="{open: index < imgfNum}"  v-for="img, index in imgfArr" :key="index"><img :src="index < imgfNum ? img[1] : img[0]"></div>
-    </div>
-    <div class="rw-p2">
-      <p>有{{friendNum}}位好友为您点亮了祝福</p>
-    </div>
-    <div class="rw-p3">
-      <button @click="userDraw" class="rw-btn03 rw-btn">
-        <img class="rw-btn03-i" :src="awi011">
-        <div class="rw-num01">
-          <img :src="numarr[numNum]" v-if="numarr[numNum]">
-          <span v-else>{{numNum}}</span>
-        </div>
+    <div class="page-con">
+      <img :src="awi008" class="page-bg">
+      <div class="a0000"></div>
+      <div class="barrager-box">
+        <xl-barrager />
+      </div>
+      <button class="rw-btn01 rw-btn" @click="showPacket">
+        <img :src="awi010">
       </button>
+      <button class="rw-btn02 rw-btn" @click="showGrule">
+        <img :src="awi012">
+      </button>
+      <div class="rw-p1">
+        <div class="wish-img" :class="{open: index < imgfNum}"  v-for="img, index in imgfArr" :key="index"><img :src="index < imgfNum ? img[1] : img[0]"></div>
+      </div>
+      <div class="rw-p2">
+        <p>有{{friendNum}}位好友为您点亮了祝福</p>
+      </div>
+      <div class="rw-p3">
+        <button @click="userDraw" class="rw-btn03 rw-btn">
+          <img class="rw-btn03-i" :src="awi011">
+          <div class="rw-num01">
+            <img :src="numarr[numNum]" v-if="numarr[numNum]">
+            <span v-else>{{numNum}}</span>
+          </div>
+        </button>
+      </div>
+      <div class="rw-p4">{{rewardPool}}</div>
     </div>
-    <div class="rw-p4">{{rewardPool}}</div>
     <!-- 游戏规则 -->
     <xl-grule ref="xlgrule" />
     <!-- 游戏弹窗 -->
@@ -37,6 +39,11 @@
     <xl-animate @dresult="showPrize" ref="xlanimate" />
     <!-- 中奖弹窗 -->
     <xl-prize ref="xlprize" @close="winpClose" />
+    <!-- 提前加载图片 -->
+    <div class="imgloading-box" ref="iload">
+      <img :src="awi008" @load="imgloading">
+    </div>
+    <xl-load :isshow="loading"/>
   </div>
 </template>
 
@@ -67,6 +74,7 @@ import num005 from '@/assets/images/aw_005.png'
 import num006 from '@/assets/images/aw_006.png'
 import num007 from '@/assets/images/aw_007.png'
 
+import XlLoad from '@/components/share/loading.vue'
 import XlBarrager from '@/components/share/barrager.vue'
 import XlGrule from '@/components/grule'
 import XlDialog from '@/components/dialog'
@@ -77,6 +85,7 @@ import XlAnimate from '@/components/redanimate'
 export default {
   data () {
     return {
+      loading: true, // 加载中显示
       awi008,
       awi010,
       awi011,
@@ -98,6 +107,17 @@ export default {
     this.appwh = this.$root.$el.offsetWidth/this.$root.$el.offsetHeight
   },
   methods: {
+    // 图片加载加载
+    imgloading () {
+      let box = this.$refs.iload,
+          imgs = box.querySelectorAll('img'),
+          num = box.num || 1
+      if ( num >= imgs.length ) {
+        this.loading = false
+      } else {
+        box.num = ++num
+      }
+    },
     init () {
       let _this = this,
           actData = _this.$xljs.storageL(_this.$xljs.sessionAct, null, true), // 活动数据
@@ -194,7 +214,8 @@ export default {
     XlPacket,
     XlPrize,
     XlGrule,
-    XlAnimate
+    XlAnimate,
+    XlLoad
   }
 }
 </script>

@@ -1,31 +1,44 @@
 <template>
   <div class="page-item" :class="{wh0000: (appwh > 0.6 && appwh < 0.7)}">
-    <img class="tbox-bg" :src="tte001">
-    <div class="a0000"></div>
-    <div class="tbox-img1">
-      <img class="w100" :src="tte003">
-      <div class="tbox-time">
-        <img class="w100" :src="tte009">
-      </div>
-      <div class="tbox-stars clearfix">
-        <img :src="stars < 1 ? tte006 : tte007">
-        <img :src="stars < 2 ? tte006 : tte007">
-        <img :src="stars < 3 ? tte006 : tte007">
+    <div class="page-con">
+      <img class="tbox-bg" :src="tte001">
+      <div class="ani-barrager">
+        <xl-anibger />
       </div>
       <div class="a0000"></div>
-      <div class="tbox-txt1">今日已完成答题次数：<span>{{pnum}}</span>次</div>
-      <div class="tbox-btn1" @click="startAnswer"></div>
-      <div class="tbox-btn2" @click="explainShow"></div>
-      <div class="tbox-txt2">
-        <div class="tbox-p1">当前还有<span>{{rewardPool}}</span>元奖品待领取</div>
+      <div class="tbox-img1">
+        <img class="w100" :src="tte003">
+        <div class="tbox-time">
+          <img class="w100" :src="tte009">
+        </div>
+        <div class="tbox-stars clearfix">
+          <img :src="stars < 1 ? tte006 : tte007">
+          <img :src="stars < 2 ? tte006 : tte007">
+          <img :src="stars < 3 ? tte006 : tte007">
+        </div>
+        <div class="a0000"></div>
+        <div class="tbox-txt1">今日已完成答题次数：<span>{{pnum}}</span>次</div>
+        <div class="tbox-btn1" @click="startAnswer"></div>
+        <div class="tbox-btn2" @click="explainShow"></div>
+        <div class="tbox-txt2">
+          <div class="tbox-p1">当前还有<span>{{rewardPool}}</span>元奖品待领取</div>
+        </div>
       </div>
     </div>
     <xl-explain ref="explain" />
+    <!-- 提前加载图片 -->
+    <div class="imgloading-box" ref="iload">
+      <img :src="tte001" @load="imgloading">
+      <img :src="tte003" @load="imgloading">
+    </div>
+    <xl-load :isshow="loading"/>
   </div>
 </template>
 
 <script>
+import XlLoad from '@/components/share/loading.vue'
 import XlExplain from '@/components/dialog/tindex.vue' // 说明
+import XlAnibger from '@/components/share/xlbger.vue' // 弹幕
 
 import tte001 from '@/assets/images/tte001.jpg'
 import tte003 from '@/assets/images/tte003.png'
@@ -36,6 +49,7 @@ import tte009 from '@/assets/images/tte009.png'
 export default {
   data () {
     return {
+      loading: true, // 加载中显示
       tte001,
       tte003,
       tte006,
@@ -57,6 +71,17 @@ export default {
     this.appwh = this.$root.$el.offsetWidth/this.$root.$el.offsetHeight
   },
   methods: {
+    // 图片加载加载
+    imgloading () {
+      let box = this.$refs.iload,
+          imgs = box.querySelectorAll('img'),
+          num = box.num || 1
+      if ( num >= imgs.length ) {
+        this.loading = false
+      } else {
+        box.num = ++num
+      }
+    },
     init () {
       let _this = this,
           actData = _this.$xljs.storageL(_this.$xljs.sessionAct, null, true), // 活动数据
@@ -122,6 +147,7 @@ export default {
     // 开始答题点击
     startAnswer () {
       if ( this.count > 0 ) {
+        this.$xljs.startAnswer = true
         this.$router.push('/answer')
       } else {
         this.$vux.toast.text('分享可增加答题次数')
@@ -129,16 +155,21 @@ export default {
     }
   },
   components: {
-    XlExplain
+    XlExplain,
+    XlAnibger,
+    XlLoad
   }
 }
 </script>
 
 <style scoped>
-.page-item {
-  position: relative;
-  max-width: 720px;
-  margin: 0 auto;
+.ani-barrager {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  padding-top: 30%;
+  z-index: 999;
 }
 /*.page-item.wh0000,
 .page-item.wh0000 .tbox-bg {

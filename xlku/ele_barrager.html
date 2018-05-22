@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<style type="text/css">
+			#box {
+				position: relative;
+				background-color: rgba(255, 0, 0, .2);
+				width: 300px;
+				height: 300px;
+				overflow: hidden;
+			}
+			
+			* {
+				box-sizing: border-box;
+			}
+			
+			.tibarrager-box {
+				position: absolute;
+				font-size: 14px;
+			}
+			
+			.tibarrager-txt {
+				width: 150px;
+				border-radius: 50px;
+				line-height: 2;
+				background-color: rgba(0, 0, 0, .7);
+				color: #fff;
+				padding: 0 1em 0 2em;
+			}
+			
+			.tibarrager-img {
+				position: absolute;
+				left: -2em;
+				top: -1em;
+				width: 4em;
+				height: 4em;
+				line-height: 1;
+				vertical-align: top;
+				border-radius: 50%;
+			}
+			
+			.anibarrager-box {
+				position: absolute;
+				font-size: 14px;
+			}
+			@keyframes anirTol{
+				from{ left: 100%; }
+				to{ left: -200px; }
+			}
+			.anibarrager-box.tomove1 {
+				animation: 5s linear both anirTol;
+			}
+			.anibarrager-box.tomove2 {
+				animation: 6s linear both anirTol;
+			}
+			.anibarrager-box.tomove3 {
+				animation: 7s linear both anirTol;
+			}
+			.anibarrager-txt {
+				width: 150px;
+				border-radius: 50px;
+				line-height: 2;
+				background-color: rgba(0, 0, 0, .7);
+				color: #fff;
+				padding: 0 1em 0 2em;
+			}
+			
+			.anibarrager-img {
+				position: absolute;
+				left: -2em;
+				top: -1em;
+				width: 4em;
+				height: 4em;
+				line-height: 1;
+				vertical-align: top;
+				border-radius: 50%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box"></div>
+		<script type="text/javascript">
+			function BarragerTi(ele, para) {
+				this.box = ele
+				this.para = para
+				this.nexts = 3000 // 下一条出现的时间，ms
+				this.itemh = 56 // 元素最大高度
+				this.itemw = 200 // 元素最大宽度
+				this.colorArr = ['Olive', 'OliveDrab', 'Orange', 'OrangeRed', 'Orchid', 'PaleGoldenRod', 'PaleGreen', 'PaleTurquoise', 'PaleVioletRed', 'PapayaWhip', 'PeachPuff', 'Peru', 'Pink', 'Plum', 'PowderBlue', 'Purple', 'Red', 'RosyBrown', 'RoyalBlue', 'SaddleBrown', 'Salmon', 'SandyBrown', 'SeaGreen', 'SeaShell', 'Sienna', 'Silver', 'SkyBlue']
+				this.width = this.box.offsetWidth // 容器宽度
+				this.height = this.box.offsetHeight // 容器高度
+				this.msgs = new Array((this.para.length > 5 ? 5 : this.para.length)) // 缓冲池，长度越大，屏幕上显示的就越多
+				this.intv = 20 // 重绘时间
+				this.interval = ''
+				this.draw = function() {
+					if(this.interval != '') return
+					this.interval = setInterval(() => {
+						let i = 0,
+							lgn = this.msgs.length,
+							el = null
+						for(i = 0; i < lgn; i++) {
+							el = this.msgs[i]
+							if ( el ) {
+								if ( el.$l < -this.itemw ) { // 超出容器范围删除
+									this.box.removeChild(el)
+									this.msgs[i] = null
+								} else { // 未超出容器范围继续
+									el.$l = parseInt(el.$l - el.$s)
+									el.style.color = el.$c
+									el.style.left = (el.$l + 'px')
+								}
+							}
+						}
+						this.num = (this.num ? (this.num + this.intv) : this.intv)
+						if(this.num > this.nexts) {
+							this.num = 0
+							this.pushMsg(this.para[parseInt(Math.random() * this.para.length)])
+						}
+					}, this.intv)
+				}
+				this.pushMsg = function ( obj ) {
+					let i = 0, lgn = this.msgs.length, el
+					for(i = 0; i < lgn; i++) {
+						if(!this.msgs[i]) {
+							el = this.getDiv(obj)
+							el.$l = this.width //显示的位置
+							el.$s = parseInt(Math.random() * (3 - 1) + 1) // 速度
+							el.$c = this.colorArr[Math.floor(Math.random() * this.colorArr.length)] // 颜色
+							el.style.left = (el.$l + 'px')
+							this.msgs[i] = el
+							this.box.appendChild(el)
+							break
+						}
+					}
+				}
+				this.getDiv = function(obj) {
+					let div = document.createElement('div'),
+						str = `<div class="tibarrager-txt">${obj.txt}<\/div><img class="tibarrager-img" src="${obj.img}" \/>`
+					div.className = 'tibarrager-box'
+					div.style.top = (parseInt(Math.random() * (this.height - this.itemh)) + 'px') // 容器范围内出现
+					div.innerHTML = str
+					return div
+				}
+				this.init = function() {
+					this.draw()
+					this.pushMsg(this.para[parseInt(Math.random() * this.para.length)])
+				}
+			}
+			function BarragerAni(ele, para) {
+				this.box = ele
+				this.para = para
+				this.height = this.box.offsetHeight // 容器高度
+				this.itemh = 56 // 元素最大高度
+				this.pushMsg = function ( obj ) {
+					let div = this.getDiv(obj)
+					this.box.appendChild(div)
+					div.addEventListener('animationend', () => {
+						this.box.removeChild(div)
+					})
+					div.classList.add(('tomove' + (parseInt(Math.random() * (3 - 1) + 1))))
+				}
+				this.getDiv = function(obj) {
+					let div = document.createElement('div'),
+						str = `<div class="anibarrager-txt">${obj.txt}<\/div><img class="anibarrager-img" src="${obj.img}" \/>`
+					div.className = 'anibarrager-box'
+					div.style.top = (parseInt(Math.random() * (this.height - this.itemh)) + 'px') // 容器范围内出现
+					div.innerHTML = str
+					return div
+				}
+				this.init = function() {
+					this.pushMsg(this.para[parseInt(Math.random() * this.para.length)])
+					setInterval(() => {
+						this.pushMsg(this.para[parseInt(Math.random() * this.para.length)])
+					}, 3000)
+				}
+			}
+			var img = 'antd0507/static/media/logo.5d5d9eef.svg'
+			var b = [{
+				txt: 'werer',
+				img: img
+			}, {
+				txt: '中国人',
+				img: img
+			}, {
+				txt: '对方水电费',
+				img: img
+			}, {
+				txt: 'dsfsd订单',
+				img: img
+			}]
+//			var a = new BarragerTi(document.querySelector('#box'), b)
+//			a.init()
+			var a = new BarragerAni(document.querySelector('#box'), b)
+			a.init()
+		</script>
+	</body>
+
+</html>
