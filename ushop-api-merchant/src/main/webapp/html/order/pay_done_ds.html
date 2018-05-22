@@ -1,0 +1,186 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>支付成功</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+/*支付成功的提示*/
+.xlpf-box1 {
+	background: #fff;
+	text-align: center;
+	font-size: 1.3em;
+}
+.xlpf-p1 {
+	color: #fd9c17;
+}
+.xlpf-img1 {
+	width: 5em;
+}
+.xlpf-p2 {
+	display: inline-block;
+	width: 60%;
+	padding: .6em 0;
+}
+.xlpf-p2 .xl-btn {
+	color: #fd9c17;
+	background: #fd8754;
+	color: #fff;
+	font-size: .8em;
+	border: 0;
+	padding: .7em 1.4em;
+}
+.xlpf-p2 .xl-btn:first-child {
+	background: #ff5534;
+	width: 100%;
+	padding: 1em;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">支付成功</h1>
+	</div>
+</div>
+<div class="xlbody-box">
+	<div class="xlpf-box1">
+		<img class="xlpf-img1" src="../../image/icon/right_gg.png">
+		<div class="xlpf-p1">支付完成</div>
+		<div class="xlpf-p2 clearfix">
+			<a class="xl-btn pull-left" href="../weixinmp/shopping_ds.html">继续购物</a>
+			<!--<a class="xl-btn pull-right">立即分享</a>-->
+		</div>
+	</div>
+	<div id="orderListBox"></div>
+</div>
+
+<script id="orderListTemplate"  type="text/template">
+	{{~ it:data}}
+		<div class="xlap-od-item" order-no="{{=data.orderNo}}">
+			{{~ data.merchantArr:mitem}}
+			<div class="xlap-od-p1">
+				<div class="xlo-p1">
+					<span class="xlo-s1"></span>
+					<span class="xlo-s2">
+						<a>{{=mitem.merchantName}}</a>发货
+					</span>
+				</div>
+			</div>
+			<ul class="xlo-ul">
+				{{~mitem.proArr:item}}
+				<li class="xlo-li">
+					{{?item.headImage}}
+					<img src="{{= Common.getImageUrl(item.headImage)}}">
+					{{??}}
+					<img src="../../../image/p200200.png">
+					{{?}}
+					<div class="xlo-body">
+						<div class="xlo-p1">
+							<span class="xlo-s1">{{=item.productName}}</span>
+							<span class="xlo-s2">{{=item.checkedRule.payTypeText}}</span>
+						</div>
+						<div class="xlo-p1">
+							<span class="xlo-s1 xlo-c969696">来自{{=mitem.merchantName}}</span>
+							<span class="xlo-s2">x{{=item.buyCount}}</span>
+						</div>
+					</div>
+				</li>
+				{{~}}
+			</ul>
+			{{?data.merchantArr.length > 1}}
+			<div class="xlap-od-p2">
+				<div class="xlo-p1">
+					<span class="xlo-s1">商品总价：</span>
+					<span class="xlo-s2">{{=mitem.totalText}}</span>
+				</div>
+				<div class="xlo-p1">
+					<span class="xlo-s1">运费：</span>
+					<span class="xlo-s2"><small>￥</small>{{=mitem.totalFreight}}</span>
+				</div>
+				<div class="xlo-p1">
+					<span class="xlo-s1">运单总价：</span>
+					<span class="xlo-s2">{{=mitem.totalTextFM}}</span>
+				</div>
+			</div>
+			{{?}}
+			{{~}}
+			<div class="xlap-od-p2">
+				<div class="xlo-p1">
+					<span class="xlo-s1">商品总价：</span>
+					<span class="xlo-s2">{{=data.totalText}}</span>
+				</div>
+				<div class="xlo-p1">
+					<span class="xlo-s1">运费：</span>
+					<span class="xlo-s2"><small>￥</small>{{=data.totalFreight}}</span>
+				</div>
+				<div class="xlo-p1">
+					<span class="xlo-s1">运单总价：</span>
+					<span class="xlo-s2">{{=data.totalTextFM}}</span>
+				</div>
+			</div>
+			<div class="xlap-slide"></div>
+			<div class="xlap-od-p3 clearfix">
+				<button onclick="onBtnHintSendFn(this)" class="xlbtn">提醒发货</button>
+			</div>
+		</div>
+	{{~}}
+</script>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/doT.min.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/order_data_ds.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+
+//页面启动时，数据初始化
+function pageDataInit(){
+	var orderObj = Common.storageL(Common.localPay);
+//	var orderObj = JSON.parse(globalData.pageParam.orderObj || '{}');
+	if(globalData.pageParam.shopPage === 'orderShop'){
+		OrderData.deleteData(orderObj.proIdArr);//删除购物车中的相关数据
+	}
+	var dataListTemplate = doT.template($('#orderListTemplate').html());
+	$('#orderListBox').html(dataListTemplate([orderObj]));
+}
+//dom事件绑定
+function domEventFn(){
+}
+
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+}
+
+//刷新之后执行函数
+function refreshAfterFn(){
+	if(globalData.refreshComplete >= globalData.requestNum){
+		globalData.refreshComplete = 0;//用来记录请求完成次数
+		globalData.requestNum = 0;//用来记录有多少次用户请求
+		if(globalData.isRefresh == true){
+			globalData.isRefresh = false;
+			Common.toast('刷新成功');
+		}
+	}
+}
+
+//提醒发货
+function onBtnHintSendFn(me){
+	me.disabled = true;
+	Common.toast('提醒成功！');
+	setTimeout(function(){
+		Common.openPage('../weixinmp/home.html');
+	},500);
+}
+</script>
+</body>
+</html>

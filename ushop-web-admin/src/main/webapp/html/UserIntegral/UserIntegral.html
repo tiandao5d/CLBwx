@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>积分管理-用户积分</title>
+
+		<meta name="description" content="Dynamic tables and grids using jqGrid plugin" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../../assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+
+		<!-- page specific plugin styles -->
+		<link rel="stylesheet" href="../../assets/css/jquery-ui.min.css" />
+		<link rel="stylesheet" href="../../assets/css/bootstrap-datetimepicker.min.css"/>
+		<link rel="stylesheet" href="../../assets/css/ui.jqgrid.min.css" />
+		<!-- text fonts -->
+		<link rel="stylesheet" href="../../assets/css/fonts.googleapis.com.css" />
+
+		<!-- ace styles -->
+		<link rel="stylesheet" href="../../assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="../../assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
+		<![endif]-->
+		<link rel="stylesheet" href="../../assets/css/ace-skins.min.css" />
+		<link rel="stylesheet" href="../../assets/css/ace-rtl.min.css" />
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="../../assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+		<!-- ace settings handler -->
+		<script src="../../assets/js/ace-extra.min.js"></script>
+
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="../../assets/js/html5shiv.min.js"></script>
+		<script src="../../assets/js/respond.min.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" href="../../css/style.css" />
+	</head>
+
+	<body class="no-skin">
+		<div id="navbar" class="navbar navbar-default ace-save-state">
+			<div class="navbar-container ace-save-state" id="navbar-container">
+				<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+					<span class="sr-only">Toggle sidebar</span>
+
+					<span class="icon-bar"></span>
+
+					<span class="icon-bar"></span>
+
+					<span class="icon-bar"></span>
+				</button>
+
+				<div class="navbar-header pull-left" id="navbarHeaderLogo"></div>
+
+				<div class="navbar-buttons navbar-header pull-right" role="navigation">
+					<ul class="nav ace-nav">
+
+						<li class="light-blue dropdown-modal">
+							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+								<img class="nav-user-photo" src="../../assets/images/avatars/user.jpg" alt="Jason's Photo" />
+								<span class="user-info" id="navbarUserInfo"></span>
+
+								<i class="ace-icon fa fa-caret-down"></i>
+							</a>
+
+							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+								<li>
+									<a href="#">
+										<i class="ace-icon fa fa-cog"></i> 设置
+									</a>
+								</li>
+
+								<li>
+									<a href="profile.html">
+										<i class="ace-icon fa fa-user"></i> 头像
+									</a>
+								</li>
+
+								<li class="divider"></li>
+
+								<li>
+									<a href="#">
+										<i class="ace-icon fa fa-power-off"></i> 退出
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!-- /.navbar-container -->
+		</div>
+
+		<div class="main-container ace-save-state" id="main-container">
+			<script type="text/javascript">
+				try {
+					ace.settings.loadState('main-container')
+				} catch(e) {}
+			</script>
+
+			<div id="sidebar" class="sidebar responsive ace-save-state">
+				<script type="text/javascript">
+					try {
+						ace.settings.loadState('sidebar')
+					} catch(e) {}
+				</script>
+
+				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+						<button class="btn btn-success">
+							<i class="ace-icon fa fa-dashboard"></i>
+						</button>
+
+						<button class="btn btn-info">
+							<i class="ace-icon fa fa-briefcase"></i>
+						</button>
+
+						<button class="btn btn-warning">
+							<i class="ace-icon fa fa-users"></i>
+						</button>
+
+						<button class="btn btn-danger">
+							<i class="ace-icon fa fa-database"></i>
+						</button>
+					</div>
+
+					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+						<span class="btn btn-success"></span>
+
+						<span class="btn btn-info"></span>
+
+						<span class="btn btn-warning"></span>
+
+						<span class="btn btn-danger"></span>
+					</div>
+				</div>
+				<!-- /.sidebar-shortcuts -->
+
+				<ul class="nav nav-list" id="leftMenuBox">
+					<!-- 左侧菜单内容 -->
+				</ul>
+				<!-- /.nav-list -->
+
+				<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+					<i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+				</div>
+			</div>
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb" id="breadcrumbsUl"></ul>
+						<!-- /.breadcrumb -->
+					</div>
+
+					<div class="page-content">
+						<div class="ace-settings-container" id="ace-settings-container">
+							<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+								<i class="ace-icon fa fa-cog bigger-130"></i>
+							</div>
+
+							<div class="ace-settings-box clearfix" id="ace-settings-box">
+								<div class="pull-left width-50">
+									<div class="ace-settings-item">
+										<div class="pull-left">
+											<select id="skin-colorpicker" class="hide">
+												<option data-skin="no-skin" value="#438EB9">#438EB9</option>
+												<option data-skin="skin-1" value="#222A2D">#222A2D</option>
+												<option data-skin="skin-2" value="#C6487E">#C6487E</option>
+												<option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+											</select>
+										</div>
+										<span>&nbsp; Choose Skin</span>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-navbar" autocomplete="off" />
+										<label class="lbl" for="ace-settings-navbar"> Fixed Navbar</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-sidebar" autocomplete="off" />
+										<label class="lbl" for="ace-settings-sidebar"> Fixed Sidebar</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-breadcrumbs" autocomplete="off" />
+										<label class="lbl" for="ace-settings-breadcrumbs"> Fixed Breadcrumbs</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" autocomplete="off" />
+										<label class="lbl" for="ace-settings-rtl"> Right To Left (rtl)</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-add-container" autocomplete="off" />
+										<label class="lbl" for="ace-settings-add-container">
+											Inside
+											<b>.container</b>
+										</label>
+									</div>
+								</div>
+								<!-- /.pull-left -->
+
+								<div class="pull-left width-50">
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-hover" autocomplete="off" />
+										<label class="lbl" for="ace-settings-hover"> Submenu on Hover</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-compact" autocomplete="off" />
+										<label class="lbl" for="ace-settings-compact"> Compact Sidebar</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-highlight" autocomplete="off" />
+										<label class="lbl" for="ace-settings-highlight"> Alt. Active Item</label>
+									</div>
+								</div>
+								<!-- /.pull-left -->
+							</div>
+							<!-- /.ace-settings-box -->
+						</div>
+						<!-- /.ace-settings-container -->
+
+						<div class="page-header" id="menuPageHeader"></div>
+						<!-- /.page-header -->
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- 页面主体内容开始 -->
+								<div class="xltab-box">
+									<ul class="nav nav-tabs" role="tablist">
+										<li role="presentation">
+											<a href="#itemjfyhjf" role="tab" data-toggle="tab">用户积分</a>
+										</li>
+										<li role="presentation">
+											<a href="#itemjfhdmx" role="tab" data-toggle="tab" class="integralHide hide">积分获得明细</a>
+										</li>
+										<li role="presentation">
+											<a href="#itemjfsymx" role="tab" data-toggle="tab" class="integralHide hide">积分使用明细</a>
+										</li>
+										<li role="presentation">
+											<a href="#itemjfsm" role="tab" data-toggle="tab">积分说明</a>
+										</li>
+									</ul>
+
+									<div class="tab-content" id="xlgridBox">
+										<div role="tabpanel" class="tab-pane tabPane xltable-br-center" id="itemjfyhjf"><!-- 用户积分 -->
+											<div class="form-inline xltab-nav-box">
+												<div class="form-group">
+													<label>用户查询：</label>
+													<input class="form-control userIdSele" type="text">
+												</div>
+												<div class="form-group">
+													<label>时间段：</label>
+													<input type="text" readonly placeholder="点击选择" class="form_datetime dd start form-control">
+													<span>至</span>
+													<input type="text" readonly placeholder="点击选择" class="form_datetime dd end form-control">
+												</div>
+
+												<button class="btn btn-info btn-sm itemSearch">查询</button>
+												<a class="btn btn-sm btn-info" onclick="toExcel(1)" id="exportExcel1">导出excel表格</a>
+											</div>
+											<table class="itemGridTable" id="itemjfyhjfTable"></table>
+											<div class="itemGridPager" id="itemjfyhjfPager"></div>
+										</div><!-- /用户积分 -->
+										<div role="tabpanel" class="tab-pane tabPane" id="itemjfhdmx"><!-- 积分获得明细 -->
+											<div class="form-inline xltab-nav-box">
+												<button class="btn btn-info btn-sm" onclick="goBack()">返回</button>
+												<a class="btn btn-sm btn-info" onclick="toExcel(2)" id="exportExcel2">导出全国积分获得excel表格</a>
+												<a class="btn btn-sm btn-info" onclick="toExcel(3)" id="exportExcel3">导出各省积分获得excel表格</a>
+											</div>
+											<div class="national">
+												<table class="itemGridTable" id="itemjfhdmxTableN"></table>
+												<div class="itemGridPager" id="itemjfhdmxPagerN"></div>
+											</div>
+											<div class="provinces">
+												<table class="itemGridTable" id="itemjfhdmxTableP"></table>
+												<div class="itemGridPager" id="itemjfhdmxPagerP"></div>
+											</div>
+										</div><!-- /积分获得明细 -->
+										<div role="tabpanel" class="tab-pane tabPane" id="itemjfsymx"><!-- 积分使用明细 -->
+											<div class="form-inline xltab-nav-box">
+												<button class="btn btn-info btn-sm" onclick="goBack()">返回</button>
+												<a class="btn btn-sm btn-info" onclick="toExcel(4)" id="exportExcel4">导出全国积分使用excel表格</a>
+												<a class="btn btn-sm btn-info" onclick="toExcel(5)" id="exportExcel5">导出各省积分使用excel表格</a>
+											</div>
+											<div class="national">
+												<table class="itemGridTable" id="itemjfsymxTableN"></table>
+												<div class="itemGridPager" id="itemjfsymxPagerN"></div>
+											</div>
+											<div class="provinces">
+												<table class="itemGridTable" id="itemjfsymxTableP"></table>
+												<div class="itemGridPager" id="itemjfsymxPagerP"></div>
+											</div>
+										</div><!-- /积分使用明细 -->
+										<div role="tabpanel" class="tab-pane tabPane" id="itemjfsm"><!-- 积分说明 -->
+											<div class="integral-pane">
+												<h4>积分兑换</h4>
+												<p>
+													用户购彩积分可用于彩乐宝幸运彩购、体验游戏，在消费时可以实时抵扣，抵扣标准为：1积分=0.01彩钻=0.01人民币
+												</p>
+												<h4>积分获取</h4>
+												<table class="table table-striped table-bordered table-hover">
+													<tr>
+														<th>积分产生</th>
+														<th>说明</th>
+														<th>积分</th>
+													</tr>
+													<tr>
+														<td>中奖晒单</td>
+														<td>晒单行为，晒单成功奖励积分（不能重复晒单）</td>
+														<td>5</td>
+													</tr>
+													<tr>
+														<td>拍彩票</td>
+														<td>按平均每人2天拍1张有效彩票计算</td>
+														<td>5</td>
+													</tr>
+													<tr>
+														<td>消费</td>
+														<td>按消费1元返1个积分计算（游戏、夺宝）</td>
+														<td>1</td>
+													</tr>
+													<tr>
+														<td rowspan="4">玩游戏</td>
+														<td>1小时以内（按当天累计时间）</td>
+														<td>2</td>
+													</tr>
+													<tr>
+														<td>1~2小时以（按当天累计时间）</td>
+														<td>2</td>
+													</tr>
+													<tr>
+														<td>2~4小时以（按当天累计时间）</td>
+														<td>2</td>
+													</tr>
+													<tr>
+														<td>4小时以上（按当天累计时间）</td>
+														<td>2</td>
+													</tr>
+													<tr>
+														<td>社交分享</td>
+														<td>按一年有30%用户分享且被分享用户完善注册计算</td>
+														<td>5</td>
+													</tr>
+													<tr>
+														<td>完善个人资料</td>
+														<td>按全部用户都完成个人资料计算</td>
+														<td>5</td>
+													</tr>
+													<tr>
+														<td>注册</td>
+														<td>新用户注册奖励积分</td>
+														<td>10</td>
+													</tr>
+												</table>
+												<h4>积分使用</h4>
+												<p>
+													全国积分在彩乐宝平台上可用于幸运彩购、体验游戏支付抵扣（特殊情况有说明除外）。各省积分用于各省专场幸运彩购、体验游戏时支付抵扣（特殊情况说明除外）
+												</p>
+											</div>
+										</div><!-- /积分说明 -->
+									</div>
+								</div>
+								<!-- /.xltab-box -->
+
+								<!-- 页面主体内容结束 -->
+							</div>
+							<!-- /.col -->
+						</div>
+						<!-- /.row -->
+					</div>
+					<!-- /.page-content -->
+				</div>
+			</div>
+			<!-- /.main-content -->
+
+			<div class="footer">
+				<div class="footer-inner">
+					<div class="footer-content">
+						<span class="bigger-120">
+							<span class="blue bolder">Ace</span> Application &copy; 2013-2014
+						</span>
+
+						&nbsp; &nbsp;
+						<span class="action-buttons">
+							<a href="#">
+								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+							</a>
+
+							<a href="#">
+								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+							</a>
+
+							<a href="#">
+								<i class="ace-icon fa fa-rss-square orange bigger-150"></i>
+							</a>
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+		</div>
+		<!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+		<script src="../../assets/js/jquery-2.1.4.min.js"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="../../assets/js/jquery-1.11.3.min.js"></script>
+<![endif]-->
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+		</script>
+		<script src="../../assets/js/bootstrap.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+		<script src="../../assets/js/jedate.js"></script>
+		<script src="../../assets/js/excelTxt/html2canvas.js"></script>
+		<script src="../../assets/js/excelTxt/jquery.base64.js"></script>
+		<script src="../../assets/js/excelTxt/tableExport.js"></script>
+		<script src="../../assets/js/bootstrap-datetimepicker.min.js"></script>
+		<script src="../../assets/js/bootstrap-datetimepicker.zh-CN.js"></script>
+		<script src="../../assets/md5.min.js"></script>
+		<script src="../../assets/js/jquery.jqGrid.min.js"></script>
+		<script src="../../assets/js/grid.locale-cn.js"></script>
+		<!-- ace scripts -->
+		<script src="../../assets/js/ace-elements.min.js"></script>
+		<script src="../../assets/js/ace.min.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/UserIntegral/UserIntegral.js"></script>
+	</body>
+
+</html>

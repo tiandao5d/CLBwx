@@ -1,0 +1,270 @@
+<!-- 任务片段文件 -->
+<!-- 签到任务等 -->
+<form class="form-horizontal" id="task_from_box" onsubmit="return false;" role="form">
+	<div class="form-group">
+		<label class="control-label col-xs-3"><span class="red">*</span>活动名称：</label>
+		<div class="col-xs-8">
+			<input type="text" name="name" class="form-control add_form_ipt" data-null="请输入活动名称" placeholder="请输入活动名称">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3"><span class="red">*</span>开始-结束时间：</label>
+		<div class="col-xs-8">
+			<div class="input-group">
+				<input type="text" data-null="请选择开始时间" class="form-control add_form_ipt text-center form_datetime start" name="startDate" readonly placeholder="开始时间">
+				<span class="input-group-addon">至</span>
+				<input type="text" data-null="请选择结束时间" class="form-control add_form_ipt text-center form_datetime end" name="endDate" readonly placeholder="结束时间">
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3"><span class="red">*</span>可参与次数：</label>
+		<div class="col-xs-8">
+			<input type="number" name="participateTime" data-null="请输入可参与次数" placeholder="请输入可参与次数" class="form-control add_form_ipt" style="width: 60%;float:left;">
+			<select name="participateType" class="form-control participateTypeList add_form_ipt" data-null="请选择参与次数类型" style="width: 40%; border-left: 0;float:left;"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3"><span class="red">*</span>省份：</label>
+		<div class="col-xs-8">
+			<select name="province" data-null="请选择省份" class="form-control provinceList add_form_ipt"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3"><span class="red">*</span>用途：</label>
+		<div class="col-xs-8">
+			<select name="usage" data-null="请选择用途" class="form-control fundUsageList add_form_ipt"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3"><span class="red">*</span>奖励规则：</label>
+		<div class="col-xs-8">
+			<input type="text" readonly class="form-control" data-toggle="modal" data-target="#reward_value_t5" placeholder="添加奖励规则" />
+			<div style="height: 5px;"></div>
+			<div class="rewardValueT5"></div>
+		</div>
+	</div>
+	<div class="form-group from_btn_box">
+		<div class="col-xs-3"></div>
+		<div class="col-xs-4">
+			<button class="btn btn-block" onclick="pageSH('.page_box', '#task_list')">返回</button>
+		</div>
+		<div class="col-xs-4">
+			<button class="btn btn-block btn-success" onclick="onAESubmit()">提交</button>
+		</div>
+	</div>
+</form>
+<script>
+"use strict";
+;(function () {
+	selectInitFn(globalData.taskConditionList, 'desc', 'value', '.taskConditionList');
+	selectInitFn(globalData.participateTypeList, 'desc', 'value', '.participateTypeList');
+	selectInitFn(globalData.taskTargetTypeList, 'desc', 'value', '.taskTargetTypeList');
+	selectInitFn(globalData.provinceList, 'desc', 'value', '.provinceList');
+	selectInitFn(globalData.fundUsageList, 'desc', 'value', '.fundUsageList');
+	globalData.avlDataT5 = []; // 记录奖励规则
+	//日期选择器绑定
+	$('.form_datetime').each(function () {
+		laydate.render({
+		  elem: this,
+		  type: 'datetime'
+		});
+	})
+})();
+
+// 获取表单值
+function getFromVal () {
+	var $form = $('#task_from_box'),
+		$me, k, v,
+		p = {};
+	$form.find('.add_form_ipt').each(function() {
+		$me = $(this);
+		k = $me.attr('name');
+		v = $me.val();
+		p[k] = v;
+	});
+	p.rewardValue = (function () {
+		if ( !globalData.avlDataT5[0] ) {
+			return '';
+		}
+		var arr = [];
+		$.each(globalData.avlDataT5, function　( index, obj ){
+			arr[arr.length] = {
+				index: obj.index,
+				awardType: obj.awardType.val,
+				awardValue: obj.awardValue.val
+			}
+		});
+		return arr;
+	})();
+	return p;
+}
+
+
+// 表单赋值
+function fromAssignment ( p ) {
+	var $form = $('#task_from_box'),
+		$me;
+	$.each(p, function( k, v ) {
+		$me = $form.find('[name="' + k + '"]');
+		if ( k === 'rewardValue' ) {
+			globalData.avlDataT5 = (function () {
+				v = JSON.parse(v);
+				var arr = [];
+				$.each(v, function ( index, obj ) {
+					arr[arr.length] = {
+						index: obj.index,
+						awardType: {
+							txt: (function () {
+								var t = obj.awardType;
+								$.each(globalData.awardTypeList, function ( i, o ) {
+									if ( (o.value + '') === (obj.awardType + '') ) {
+										t = o.desc;
+									}
+								});
+								return t;
+							})(),
+							val: obj.awardType
+						},
+						awardValue: {
+							txt: (function () {
+								var t = obj.awardValue,
+									a = obj.awardValue.split('|');
+								$.each(globalData.fundTypeList, function ( i, o ) {
+									if ( (o.value + '') === (a[1] + '') ) {
+										t = o.desc;
+									}
+								});
+								return a[0] + ' ' + t;
+							})(),
+							val: obj.awardValue
+						}
+					}
+				})
+				return arr;
+			})();
+			tableShowT5 ( globalData.avlDataT5 );
+		} else {
+			$me.val(v);
+		}
+	});
+}
+
+//编辑或添加的表单验证
+function fromValid ( p ) {
+	var $form = $('#task_from_box'),
+		$me;
+	if(!(p || $.isEmptyObject(p))) {
+		return false;
+	}
+	//数据是否为空的验证
+	var isTrue = true, dnull = '';
+	$.each(p, function(k, v) {
+		$me = $form.find('[name="' + k + '"]');
+		dnull = $me.attr('data-null');
+		if ( !v ) {
+			if ( k === 'rewardValue' ) {
+				$('#reward_value_t5').modal('show');
+				Common.jBoxNotice('请添加奖励规则！', 'red');
+			} else {
+				bootsToast($me, '<span style="color: #ff961a">' + dnull + '</span>');
+			}
+			isTrue = false;
+		} else if (k === 'endDate' ) {
+			if ( parseInt(p.startDate.replace(/\D/g, '')) >= p.endDate.replace(/\D/g, '') ) {
+				$me = $form.find('[name="startDate"]');
+				bootsToast($me, '<span style="color: #ff961a">起始时间必须小于结束时间</span>');
+				isTrue = false;
+			}
+		}
+		if ( !isTrue ) {
+			return false;
+		}
+	});
+		return isTrue;
+}
+
+// 保存奖励值
+function saveAvlObjT5(){
+	var $box = $('#reward_value_t5'),
+		p = {
+			index: $box.find('[name="index"]').val(),
+			awardType: (function () {
+				var atele = $box.find('[name="awardType"]');
+				return {
+					val: atele.val(),
+					txt: $.trim(atele.find('option:checked').text())
+				}
+			})(),
+			awardValue: (function () {
+				var avele = $box.find('.awardValue'),
+					a1 = avele.eq(0).val() || '',
+					a2 = avele.eq(1).val() || '',
+					a3 = '', a4 = '';
+				if ( avele.length === 2 ) {
+					if ( a1 && a2 ) {
+						a3 = ( a1 + '|' + a2 );
+						a4 = a1 + ' ' + $.trim(avele.find('option:checked').text())
+					} else {
+						a3 = '';
+						a4 = a1;
+					}
+				} else {
+					a3 = a1;
+					a4 = a1;
+				}
+				return {
+					val: a3,
+					txt: a4
+				};
+			})()
+		};
+	if ( !p.awardType.val ) {
+		Common.jBoxNotice('请选择奖励类型', 'red');
+	} else if ( !p.awardValue.val ) {
+		Common.jBoxNotice('请完善奖励值', 'red');
+	} else {
+		globalData.avlDataT5.push(p);
+		tableShowT5(globalData.avlDataT5);
+		$box.modal('hide');
+	}
+}
+
+// 记录表单
+function tableShowT5 ( arr ) {
+	var str = '';
+	if ( !(arr && arr[0]) ) {
+		$('#task_from_box').find('.rewardValueT5').html(str);
+		return false;
+	}
+	$.each(arr, function(index, obj) {
+		str +=
+			'<tr>' +
+			'<td title="第' + obj.index + '天">第' + obj.index + '天</td>' +
+			'<td title="' + obj.awardType.txt + '">' + obj.awardType.txt + '</td>' +
+			'<td title="' + obj.awardValue.txt + '">' + obj.awardValue.txt + '</td>' +
+			'<td>' +
+			' <button class="btn btn-sm btn-danger" onclick="deleteAvlObjT5(' + index + ')">删除</button>' +
+			'</td>' +
+			'</tr>';
+	});
+	str =
+		'<div class="rv_table_box">'+
+		'<table class="table table-striped table-bordered table-hover">' +
+		'<thead class="thin-border-bottom">' +
+		'<tr><th>第几天的奖励</th><th>奖励类型</th><th>奖励值</th><th width="130">操作</th></tr>' +
+		'</thead>' +
+		'<tbody>' +
+		str +
+		'</tbody>' +
+		'</table>'+
+		'</div>';
+	$('#task_from_box').find('.rewardValueT5').html(str);
+}
+
+// 删除
+function deleteAvlObjT5 ( index ) {
+	globalData.avlDataT5.splice(index, 1);
+	tableShowT5 ( globalData.avlDataT5 );
+}
+</script>

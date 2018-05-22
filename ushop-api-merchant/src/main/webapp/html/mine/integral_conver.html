@@ -1,0 +1,229 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>积分兑换</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+.xlic-box1 {
+	text-align: center;
+	padding: 0 15px;
+	color: #666;
+	line-height: 1.5;
+}
+.xlic-box2 {
+	line-height: 2em;
+}
+.xlic-inlineb {
+	display: inline-block;
+}
+.xlic-inlineb .xl-btn {
+	padding: 4px;
+	border-radius: 8px;
+	background: #a0a0a0;
+	color: #fff;
+	border: 0;
+	font-size: 16px;
+}
+.xlic-inlineb .xl-btn.active {
+	background: #f5a623;
+}
+.xl-padding-015 {
+	padding: 0 15px;
+}
+.xl-color-ff5534 {
+	color: #ff5534;
+}
+input {
+	display: block;
+	padding: 10px 15px;
+	width: 100%;
+	margin-bottom: 15px;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">积分兑换</h1>
+	</div>
+</div>
+<div class="xlbody-box">
+	<div class="xlic-box1">
+		<div class="xlic-inlineb" id="converSelect">
+			<div style="height: 15px;"></div>
+			<div class="xlic-p1" style="text-align: left;">甘肃省彩豆：<span class="xl-color-ff5534">1</span>彩豆</div>
+			<div style="height: 15px;"></div>
+			<div class="xlic-p1">选择兑换彩豆</div>
+			<div style="height: 15px;"></div>
+			<button class="xl-btn xl-btn-block active">全国彩豆</button>
+			<div style="height: 10px;"></div>
+			<button class="xl-btn xl-btn-block">即开彩豆</button>
+		</div>
+	</div>
+	<div class="xlic-box2 xl-padding-015" id="converInfo">
+		<p class="xl-color-ff5534">您选择的是：甘肃即开彩豆兑换全国彩豆</p>
+		<p class="xl-color-ff5534">兑换比例为：1:2</p>
+	</div>
+	<div class="xl-padding-015">
+		<input type="number" id="converMoney" placeholder="输入兑换彩豆数">
+		<button type="button" class="xl-btn xl-btn-block" onclick="converSubmitFn()">确定</button>
+	</div>
+</div>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/md5.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+
+//页面启动时，数据初始化
+function pageDataInit(){
+}
+//dom事件绑定
+function domEventFn(){
+}
+
+
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	//刷新数据请求函数
+	globalData.fundType = globalData.pageParam.fundType;//彩豆的类型
+	globalData.balance = parseFloat(globalData.pageParam.balance);//彩豆的数量
+	globalData.platformId = globalData.pageParam.platformId;//彩豆平台
+	pageListShow();//页面列表数据呈现
+}
+
+
+//页面列表数据呈现
+function pageListShow(){
+	var _url = Common.domainUrl + '/ushop-api-merchant/api/user/profile/listExchangeRate';
+	Common.ajax(_url, 'post', JSON.stringify([globalData.fundType]), function(data) {
+		if(data.recordList && data.recordList.length > 0){
+			globalData.recordList = data.recordList;
+			converInitFn(data.recordList[0].secondMoneyId);
+		}else{
+			Common.confirm('提示', '此种彩豆不支持兑换', function(){
+				history.go(-1);
+			}, '返回');
+		}
+	});
+}
+
+//界面默认数据初始化
+function converInitFn(secondMoneyId){
+	var str1 = '', str2 = '', str3 = '';
+	Common.each(globalData.recordList, function(index, obj){
+		if(obj.secondMoneyId == secondMoneyId){
+			str1 =  '<div class="xlic-p1" firstMoneyId="' + obj.firstMoneyId + '">' + obj.firstMoney + '：<span class="xl-color-ff5534">' + globalData.balance + '</span>彩豆</div>'+
+					'<div class="xlic-p1">选择兑换彩豆</div>'+
+					'<button class="xl-btn xl-btn-block active" onclick="changeConverId(this)" secondMoneyId="' + obj.secondMoneyId + '">' + obj.secondMoney + '</button>',
+			str2 =  '<p class="xl-color-ff5534">您选择的是：' + obj.firstMoney + '兑换' + obj.secondMoney + '</p>'+
+					'<p class="xl-color-ff5534">兑换比例为：1:' + obj.rate + '</p>';
+		}else{
+			str3 = '<button class="xl-btn xl-btn-block" onclick="changeConverId(this)" secondMoneyId="' + obj.secondMoneyId + '">' + obj.secondMoney + '</button>';
+		}
+	});
+	document.getElementById('converSelect').innerHTML = str1 + str3;
+	document.getElementById('converInfo').innerHTML = str2;
+}
+
+//更改兑换的目标货币
+function changeConverId(me){
+	var $box = $('#converSelect'),
+		$btns = $box.find('.xl-btn'),
+		$me = $(me),
+		secondMoneyId = $me.attr('secondMoneyId');
+	$btns.removeClass('active');
+	$me.addClass('active');
+	Common.each(globalData.recordList, function(index, obj){
+		if(obj.secondMoneyId == secondMoneyId){
+			var str1 =  '<p class="xl-color-ff5534">您选择的是：' + obj.firstMoney + '兑换' + obj.secondMoney + '</p>'+
+						'<p class="xl-color-ff5534">兑换比例为：1:' + obj.rate + '</p>';
+			document.getElementById('converInfo').innerHTML = str1;
+		}
+	});
+
+}
+
+//兑换提交
+function converSubmitFn(){
+	var $ipt = $('#converMoney'),
+		firstMoneyId = $('[firstMoneyId]').attr('firstMoneyId'),
+		secondMoneyId = $('[secondMoneyId].active').attr('secondMoneyId'),
+		converMoney = parseInt($ipt.val());
+	if(!converMoney){
+		Common.toast('请输入兑换金额');
+		$ipt.focus();
+		return false;
+	}
+	if(globalData.balance < converMoney){
+		Common.toast('拥有彩豆不足！');
+		return false;
+	}
+	if(globalData.platformId == 10){//彩乐宝彩豆兑换
+
+	}else if(globalData.platformId == 20){//即开彩豆兑换
+		var _url = '/ushop-api-merchant/api/jikaipiao/user/transfer/submit/' + firstMoneyId + '/' + secondMoneyId + '/' + converMoney;
+	}else if(globalData.platformId == 21){//彩票彩豆兑换
+		var _url = '/ushop-api-merchant/api/caipiao/user/transfer/submit/' + firstMoneyId + '/' + secondMoneyId + '/' + converMoney;
+	}
+	if(!_url){
+		Common.toast('数据错误，无法兑换！');
+		return false;
+	}
+	Common.ajax(_url, 'post', {}, function(data){
+		if(data.trxNo){
+			queryConverStart(data.trxNo, globalData.platformId);
+		}else{
+    		Common.toast(data.error_description || '兑换失败，未知错误！');
+    	}
+	});
+}
+
+//查询转换状态
+function queryConverStart(trxNo, platformId){
+	var _url
+	if(platformId == 20){//即开彩豆兑换
+		_url = '/ushop-api-merchant/api/jikaipiao/user/transfer/status/get/' + trxNo;
+	}else if(platformId == 21){//彩票彩豆兑换
+		_url = '/ushop-api-merchant/api/caipiao/user/transfer/status/get/' + trxNo;
+	}else{
+		return false;
+	}
+	Common.loadingShow();
+	if(!globalData.setTime){
+		globalData.setTime = setTimeout(function(){
+			globalData.queryConverStart = true;
+		}, 20000);
+	}
+	if(globalData.queryConverStart === true){
+		Common.loadingHide();
+		Common.toast('兑换失败！');
+		return false;
+	}
+	Common.ajax(_url, 'get', {}, function(data){
+		if(data.status == 100){
+			Common.loadingHide();
+			Common.toast('恭喜，兑换成功！');
+		}else{
+			setTimeout(function(){
+				queryConverStart(trxNo, platformId);
+			}, 3000);
+		}
+	}, false);
+
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+        default-autowire="byName" default-lazy-init="false">
+
+	<!-- 用户服务接口 -->
+	<dubbo:reference interface="com.genlot.ucenter.facade.account.service.AccountTradeFacade" id="accountTradeFacade" check="false"  />
+	<dubbo:reference interface="com.genlot.ucenter.facade.account.service.AccountQueryFacade" id="accountQueryFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ucenter.facade.account.service.AccountFundTypeFacade" id="accountFundTypeFacade" check="false"/>
+	<dubbo:reference interface="com.genlot.ucenter.facade.account.service.AccountManagementFacade" id="accountManagementFacade" check="false"/>
+	<dubbo:reference interface="com.genlot.ucenter.facade.account.service.ExchangeRateFacade" id="exchangeRateFacade" check="false"/>
+	<dubbo:reference interface="com.genlot.ucenter.facade.account.service.AccountTransferFacade" id="accountTransferFacade" check="false"/>
+	<dubbo:reference interface="com.genlot.ucenter.facade.account.service.AccountCouponsFacade" id="accountCouponsFacade" check="false"/>
+	<dubbo:reference interface="com.genlot.ucenter.facade.account.service.CouponsCacheFacade" id="couponsCacheFacade" check="false"/>
+	<dubbo:reference interface="com.genlot.ucenter.facade.account.service.AccountBillFacade" id="acconutBillFacade" check="false"/>
+	
+</beans>  

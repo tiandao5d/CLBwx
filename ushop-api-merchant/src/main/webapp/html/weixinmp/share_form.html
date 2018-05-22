@@ -1,0 +1,596 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>晒单</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131" />
+<style>
+/*评分*/
+
+.xlbs-score {
+	color: #777;
+	padding: 0 15px;
+	border-top: solid 1px #ccc;
+}
+
+.xlbs-score h3 {
+	font-size: 18px;
+	color: #333;
+	font-weight: normal;
+}
+
+.xlbs-score-row {
+	padding-bottom: 8px;
+}
+
+.xlbs-score-tt {
+	vertical-align: middle;
+	display: inline-block;
+	font-size: 16px;
+}
+
+.xlbs-score-xx {
+	vertical-align: middle;
+	display: inline-block;
+}
+
+.xlbs-score-xx img {
+	width: 24px;
+	margin-right: 6px;
+}
+/*商品*/
+
+.xlbs-product {
+	padding: .5em 15px;
+	background: #eee;
+	line-height: 3em;
+	font-size: 14px;
+}
+
+.xlbs-product img {
+	width: 3em;
+	height: 3em;
+}
+
+.xlbs-product i {
+	font-style: normal;
+	padding-left: .5em;
+}
+/**/
+
+.xlbs-textarea {
+	padding: 15px;
+}
+
+.xlbs-textarea label {
+	display: block;
+}
+
+.xlbs-textarea textarea {
+	border: solid 1px #999;
+	margin-top: 5px;
+	height: 120px;
+	resize: none;
+	overflow: auto;
+	line-height: 1.6;
+	padding: 10px 15px;
+	margin: 10px 0;
+	width: 100%;
+	border-radius: 3px;
+	outline: 0;
+	background: #f6f6f6;
+}
+/*拍照界面*/
+
+.xl-file {
+	padding: 0 15px;
+}
+
+.xlbs-upload-on {
+	position: relative;
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	margin-left: 1em;
+}
+
+.xlbs-upload-on:first-child {
+	margin-left: 0;
+}
+
+.xlbs-item-img {
+	vertical-align: top;
+	width: 100%;
+	height: 100%;
+}
+
+.xlbs-delete-img {
+	position: absolute;
+	right: -10px;
+	top: -10px;
+	width: 30px;
+	height: 30px;
+}
+
+.xlbs-btn {
+	padding: 15px;
+}
+</style>
+</head>
+
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">晒单</h1>
+	</div>
+</div>
+<div class="xlbody-box">
+	<input type="file" id="fileele" class="hide" />
+	<div class="xlbs-banner">
+		<img src="../../image/img/gongxi1.jpg" width="100%">
+	</div>
+	<div id="shareListBox"></div>
+	<div class="xlbs-score" id="merchantsScore">
+		<div style="height: 10px;"></div>
+		<h3>商家评分</h3>
+		<div class="xlbs-score-row">
+			<span class="xlbs-score-tt">商品质量： </span>
+			<span class="xlbs-score-xx scoreImgBox"></span>
+		</div>
+		<div class="xlbs-score-row">
+			<span class="xlbs-score-tt">商家服务： </span>
+			<span class="xlbs-score-xx scoreImgBox"></span>
+		</div>
+		<div class="xlbs-score-row">
+			<span class="xlbs-score-tt">发货速度： </span>
+			<span class="xlbs-score-xx scoreImgBox"></span>
+		</div>
+	</div>
+	<div class="xlbs-btn">
+		<button type="button" class="xl-btn xl-btn-block" onclick="submitShare()">晒一下</button>
+	</div>
+</div>
+<!--商城数据呈现-->
+<script id="sharetemp_mall"  type="text/template">
+	{{~ it:data}}
+		<div class="shareItemBox" proid="{{=data.productId}}">
+			<div class="xlbs-product">
+				<img src="{{=data.headImage}}">
+				<i>{{=data.productName}}</i>
+			</div>
+			<div class="xlbs-textarea">
+				<label>感言</label>
+				<textarea placeholder="100字以内" class="content"></textarea>
+			</div>
+			<div class="xl-file shareImgBox">
+				<span onclick="selectImage(this)" class="xlbs-upload-on addImgItem">
+					<img class="xlbs-item-img" src="../../image/img/tjzp.png"/>
+				</span>
+				<div style="height: 10px;"></div>
+				<div class="color-999">最多上传3张照片</div>
+				<div style="height: 10px;"></div>
+			</div>
+		</div>
+	{{~}}
+</script>
+<!--夺宝数据呈现-->
+<script id="sharetemp_indiana"  type="text/template">
+	<div class="shareItemBox" spellbuyid="{{=it.spellbuyProductId}}" pid="{{=it.productId}}">
+		<div class="xlbs-product">
+			<img src="{{=it.object.headImage}}">
+			<i>{{=it.object.productName}}</i>
+		</div>
+		<div class="xlbs-textarea">
+			<label>感言</label>
+			<textarea placeholder="100字以内" class="content"></textarea>
+		</div>
+		<div class="xl-file shareImgBox">
+			<span onclick="selectImage(this)" class="xlbs-upload-on addImgItem">
+				<img class="xlbs-item-img" src="../../image/img/tjzp.png"/>
+			</span>
+			<div style="height: 10px;"></div>
+			<div class="color-999">最多上传3张照片</div>
+			<div style="height: 10px;"></div>
+		</div>
+	</div>
+</script>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/md5.js"></script>
+<script src="../../script/doT.min.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+$(function() {
+	globalData.loadReady(); //页面加载完成执行
+	pageDataInit(); //页面数据初始化
+	domEventFn(); //dom初始化事件绑定
+	reloadDataFn(); //所有需要从服务器加载的数据请求
+});
+
+//页面启动时，数据初始化
+function pageDataInit() {
+	//评分渲染
+	globalData.scoreArr = [5, 5, 5];
+	$.each(globalData.scoreArr, function(index, num) {
+		var str = '';
+		for(var i = 0; i < 5; i++) {
+			if(i < num) {
+				str += '<img class="active" src="../../image/icon/Star01.png">';
+			} else {
+				str += '<img src="../../image/icon/Star.png">';
+			}
+		}
+		document.querySelectorAll('.scoreImgBox')[index].innerHTML = str;
+	});
+}
+
+//dom事件绑定
+function domEventFn() {
+	var orderData = Common.storageL('ls_partly_share_order'),
+		shareType = globalData.pageParam.shareType;
+	console.log(orderData)
+	if(orderData && shareType){
+		if(shareType === 'mall'){//商城
+			var proArr = orderData.merchantArr[0].proArr;
+			globalData.orderNo = orderData.orderNo;
+			var dataListTemplate = doT.template(document.getElementById('sharetemp_mall').innerHTML);
+			document.getElementById('shareListBox').innerHTML = dataListTemplate(proArr);
+		}else if(shareType === 'indiana'){//拼购
+			globalData.spellbuyId = orderData.spellbuyProductId;
+			var dataListTemplate = doT.template(document.getElementById('sharetemp_indiana').innerHTML);
+			document.getElementById('shareListBox').innerHTML = dataListTemplate(orderData);
+		}
+	}else{
+		Common.toast('没有相应的产品数据！');
+		return false;
+	}
+	//微信授权
+	if(Common.isWeixin()){
+		wxAuthoriseFn();//微信授权jsSDK
+	}
+	//评分点击效果
+	$('#merchantsScore').on('click', 'img', function() {
+		var $me = $(this),
+			par = $me.parent(),
+			imgs = par.find('img'),
+			imgLgn = imgs.length,
+			num = $me.prevAll('img').length + 1,
+			str = '';
+		for(var i = 0; i < imgLgn; i++) {
+			if(i < num) {
+				imgs.eq(i).attr('src', '../../image/icon/Star01.png').addClass('active');
+			} else {
+				imgs.eq(i).attr('src', '../../image/icon/Star.png').removeClass('active');
+			}
+		}
+	});
+	//用于测试
+	$('#fileele').on('change', function(){
+		var _file = this.files[0],
+			ftype = _file.type.split('/')[1];
+		if((ftype === 'jpeg') || (ftype === 'png')){
+			var rf = new FileReader();
+			rf.readAsDataURL(_file);
+			rf.onload = function(){
+				resultImgB64(rf.result);
+			}
+		}else{
+			Common.toast('暂时只支持jpg,png两种格式图片');
+		}
+	});
+}
+//所有需要从服务器加载的数据请求
+function reloadDataFn() {}
+
+//本地图片上传，测试用
+function resultImgB64(b64){
+	//压缩到100K
+	convertImgToBase64(b64, 500, 0, 100, function(imgB64){
+		var _url = '/ushop-api-merchant/api/sns/file/submit',
+			_param = [{
+				name: '1.jpg',
+				content: (b64.indexOf(',') > 0 ? b64.split(',')[1] : b64),
+				thumb: 1
+			}];
+		Common.ajax(_url, 'post', JSON.stringify(_param), function(data){
+			addImage(globalData.triChangeEle, data.urls);
+		});
+	});
+}
+
+//微信上传图片
+function wxImgB64(){
+	var $me = $(me),
+		$box = $me.parent(),
+		count = (3 - $box.find('.imgItem').length);
+	if(count > 0) {
+		wx.chooseImage({
+			count: count, // 默认9
+			sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
+			sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+			success: function(res) {
+				var localIds = res.localIds, // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+					arr = [],
+					_url = '/ushop-api-merchant/api/sns/file/submit',
+					_param = [];
+				$.each(localIds, function(index, localId) {
+					wx.getLocalImgData({
+						localId: localId, // 图片的localID
+						success: function(res) {
+							// localData是图片的base64数据，可以用img标签显示
+							var b64 = res.localData;
+							arr[arr.length] = b64;
+							_param[_param.length] = {
+								name: (index + '.jpg'),
+								content: (b64.indexOf(',') > 0 ? b64.split(',')[1] : b64),
+								thumb: 1
+							}
+							if(_param.length === localIds.length){
+								Common.ajax(_url, 'post', JSON.stringify(_param), function(data){
+									addImage($me, data.urls);
+								});
+							}
+						}
+					});
+				});
+			}
+		});
+	}
+}
+
+//选择图片
+function selectImage(me) {
+	if(Common.isWeixin()){//微信选择图片
+		if(!globalData.wxIsTrue) {
+			Common.toast('页面初始化中，请稍后！');
+			return false;
+		}
+		wxImgB64();
+	}else{//本地用于测试的选择图片
+		$('#fileele').trigger('click');
+		globalData.triChangeEle = $(me);
+	}
+}
+
+//添加图片
+function addImage($me, imgArr){
+	if(!($me && imgArr && (imgArr.length > 0))){
+		Common.toast('图片上传失败！');
+		return false;
+	}
+	var str = '';
+	$.each(imgArr, function(i, s){
+		str +=  '<span class="xlbs-upload-on imgItem">'+
+					'<img class="xlbs-item-img imgBase64" src="' + s + '"/>'+
+					'<img src="../../image/icon/searchclose.png" class="xlbs-delete-img" onclick="deleteImage(this)">'+
+				'</span>';
+	});
+	$me.before(str);
+}
+
+//删除图片
+function deleteImage(me) {
+	var item = $(me).parent(),
+		box = item.parent();
+	item.remove();
+	if(box.find('.imgItem').length < 3) {
+		box.find('.addImgItem').show();
+	}
+}
+
+//提交分享
+function submitShare() {
+	var shareType = globalData.pageParam.shareType;
+	if(shareType === 'mall'){//商城晒单
+		mallSubmit();
+	}else if(shareType === 'indiana'){//夺宝晒单
+		indianaSubmit();
+	}
+}
+//商城晒单提交
+function mallSubmit(){
+	var _param = {
+		orderNo: globalData.orderNo,
+		scores: (function(){
+			var arr = [];
+			$('#merchantsScore').find('.scoreImgBox').each(function(){
+				arr[arr.length] = $(this).find('img.active').length;
+			});
+			return arr;
+		})(),
+		details: (function(){
+			var arr = [], $me;
+			$('#shareListBox').find('.shareItemBox').each(function(){
+				$me = $(this);
+				arr[arr.length] = {
+					productId: $me.attr('proid'),
+					title: '标题',
+					content: $me.find('.content').val(),
+					files: (function(){
+						var r = [];
+						$me.find('.imgBase64').each(function(){
+							r[r.length] = $(this).attr('src');
+						});
+						return r;
+					})()
+				};
+			});
+			return arr;
+		})()
+	};
+	var _url = '/ushop-api-merchant/api/mall/person/share/private/submit';
+	Common.ajax(_url, 'post', JSON.stringify(_param), function(data){
+		console.log(data);
+		if(data.data == 'SUCCESS'){
+			Common.toast('晒单成功，页面即将跳转');
+			setTimeout(function(){
+				history.go(-1);
+			}, 1000);
+			Common.rmStorageL('ls_partly_share_order');//晒单完成后删除记录
+		}else{
+			Common.toast((data.error_description || '晒单失败！'));
+		}
+	});
+}
+//夺宝晒单提交
+function indianaSubmit(){
+	var $box = $('#shareListBox');
+	var _param = {
+		spellbuyId: globalData.spellbuyId,
+		scores: (function(){
+			var arr = [];
+			$('#merchantsScore').find('.scoreImgBox').each(function(){
+				arr[arr.length] = $(this).find('img.active').length;
+			});
+			return arr;
+		})(),
+		title: '标题',
+		content: $box.find('.content').val(),
+		files: (function(){
+			var r = [];
+			$box.find('.imgBase64').each(function(){
+				r[r.length] = $(this).attr('src');
+			});
+			return r;
+		})()
+	};
+	var _url = '/ushop-api-merchant/api/spellbuy/person/share/private/submit';
+	Common.ajax(_url, 'post', JSON.stringify(_param), function(data){
+		console.log(data);
+		if(data.share){
+			Common.toast('晒单成功，页面即将跳转');
+			setTimeout(function(){
+				history.go(-1);
+			}, 1000);
+			Common.rmStorageL('ls_partly_share_order');//晒单完成后删除记录
+		}else{
+			Common.toast((data.error_description || '晒单失败！'));
+		}
+	});
+}
+
+//configFn(1495764791, 'Kmifefp2whjxfbst', '7ebdce4d83faadb22e3d0d277bcaefe0cd08514e');
+function configFn(timestamp, nonceStr, signature) {
+	wx.config({
+		debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+		appId: Common.getAppId(), // 必填，公众号的唯一标识
+		timestamp: timestamp, // 必填，生成签名的时间戳
+		nonceStr: nonceStr, // 必填，生成签名的随机串
+		signature: signature, // 必填，签名，见附录1
+		jsApiList: [ // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			'chooseImage', //拍照，从相册选择
+			'getLocalImgData' //获取本地图片接口
+		]
+	});
+}
+wx.ready(function() {
+	globalData.wxIsTrue = true;
+});
+
+function wxAuthoriseFn() {
+	var _url = Common.domainUrl + '/ushop-api-merchant/api/weixin/client/ticket/get?' +
+		'type=jsapi&url=' + document.URL;
+	Common.ajax(_url, 'get', {}, function(data) {
+		if(data.sign) {
+			configFn(data.timestamp, data.noncestr, data.sign);
+		}
+	});
+}
+
+
+//将指定地址的图片转为base64文件，只会转为jpeg，不支持png，png图片文件太大，无法压缩
+//url: 图片地址
+//newWidth: 缩放后新图片的宽度，单位px
+//newHeight: 缩放后新图片的高度，单位px
+//如果只有宽或者高，将按给出的宽或高等比缩放，如果都没有则不缩放
+//maxSize：新图片的最大内存大小，单位kb
+//callback：回调函数，参数为新图片的base64字符串
+//图片传输方法的示例
+//convertImgToBase64('images/115.jpg', 100, 100, 10, function(imgB64){
+//	var fd = new FormData();
+//	fd.append('file', convertBase64UrlToBlob(imgB64), 'img.jpeg');
+//	ajax({
+//		url: _url,
+//		type: 'post',
+//		data: fd,
+//		processData: false
+//	}, function(){
+//		console.log(arguments)
+//	});
+//});
+function convertImgToBase64(url, newWidth, newHeight, maxSize, callback) {
+	var img = new Image;
+	img.crossOrigin = 'Anonymous';
+	img.src = url;
+	img.onload = function() {
+		var cw = parseInt(newWidth),//表示画布宽度，也就是新图片的宽度
+			ch = parseInt(newHeight),//表示画布的高度，也就是新图片的高度
+			cw_ch,
+			iw = this.width,//记录图片的宽度
+			ih = this.height,//记录图片的高度
+			iw_ih = iw/ih,
+			canvas = document.createElement('canvas'),//创建canvas元素
+			ctx = canvas.getContext('2d'),
+			quality = 0.8,//保存图片质量，如果超出限制，将会循环减小质量直到0
+			dataURL,//用来记录base64的字符串
+			isTrue = true,//用来判断是否超出最大KB数
+			sw = iw, sh = ih,//用来记录最大能够裁剪的宽高
+			ix = 0, iy = 0;//规定裁剪的位置
+		maxSize = parseInt(maxSize);//最大限制的kb
+		if(!cw && !ch){//没有指定新的宽高
+			cw = iw;
+			ch = ih;
+		}else if(cw && !ch){//没有指定新的高度
+			ch = cw/iw_ih;
+		}else if(!cw && newHeight){//没有指定新的宽度
+			cw = ch*iw_ih;
+		}
+		cw_ch = cw/ch;
+		canvas.width = cw;
+		canvas.height = ch;
+		if(iw_ih > cw_ch){
+			sw = ih*cw_ch;
+		}else{
+			sh = iw/cw_ch;
+		}
+		ix = (iw - sw)/2;
+		iy = (ih - sh)/2;
+		ctx.drawImage(img, ix, iy, sw, sh, 0, 0, cw, ch);
+		dataURL = canvas.toDataURL('image/jpeg', quality);
+		if(maxSize){
+			while(isTrue){
+				if(imgSizeFn(dataURL)/1024 > maxSize){
+					quality -= 0.1;
+					dataURL = canvas.toDataURL('image/jpeg', quality);
+				}else{
+					isTrue = false;
+				}
+				if(quality <= 0){
+					isTrue = false;
+				}
+			}
+		}
+		callback.call(this, dataURL);
+		canvas = null;
+	};
+}
+//获取base64文件大小，返回值为字节(b)
+function imgSizeFn(base64Url){
+    var str = base64Url.indexOf(',') > 0 ? base64Url.split(',')[1] : base64Url,
+		equalIndex = str.indexOf('=');
+	if(equalIndex > 0){
+	    str = str.substring(0, equalIndex);
+	}
+	var strLength = str.length,
+		fileLen = parseInt(strLength - (strLength/8)*2);
+	return fileLen;
+}
+</script>
+</body>
+
+</html>

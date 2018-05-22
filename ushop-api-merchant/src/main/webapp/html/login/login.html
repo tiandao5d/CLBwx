@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>登录</title>
+		<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131" />
+		<script src="../../script/jquery-1.12.4.min.js"></script>
+		<script src="../../script/md5.js"></script>
+		<script src="../../script/common.js?v=20180131"></script>
+		<script src="../../script/defaultxl.js?v=20180131"></script>
+		<style type="text/css">
+			button {
+				padding: 10px 15px;
+				margin: 5px;
+			}
+			
+			.xl-numbox-minus:before {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin: -.5em 0 0 -.5em;
+				padding-top: 1px;
+				font-family: iconfont;
+				content: "\e623";
+				line-height: 1;
+				font-size: 1.6em;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div><input type="text" placeholder="用户名/手机号" id="phone"></div>
+		<div><input type="text" placeholder="请输入密码" id="password"></div>
+		<div><button id="submitBtn" onclick="loginSubmitFn()">登录</button></div>
+		<div style="position:relative;z-index: 30;"><button onclick="testFn()">测试按键</button></div>
+		<div class="box"></div>
+		<script src="../../script/order_data_ds.js?v=20180131" type="text/javascript" charset="utf-8"></script>
+		<script>
+			"use strict";
+			$(function() {
+				document.getElementById('phone').value = '13636363636';
+				document.getElementById('password').value = '111111a';
+				$('#phone, #password').on('keyup', function(e){
+					if(e.keyCode === 13){
+						loginSubmitFn();
+					}
+				});
+			});
+
+			//2017-03-31 15:00
+			//itms-services://?action=download-manifest&url=https://downloadpkg.apicloud.com:443/zip/bf/27/bf27a4be925196fc79458b190c7b9e77.plist
+			//昨天:微信公众号-商品详情页面
+			//今天:继续公众号相关页面开发
+			//登录提交事件函数
+			function loginSubmitFn(callback) {
+				callback = callback || function() {};
+				var userName = document.getElementById('phone').value,
+					passWord = document.getElementById('password').value,
+					appCode = 10007;
+				var _url = Common.domainUrl + '/ushop-api-merchant/api/user/login/auth/' + appCode + '/' + userName + '/' + hex_md5(passWord);
+				Common.ajax(_url, 'post', {}, function(data) {
+					console.log(data);
+					if(data.userId){
+						Common.toast('登录成功！');
+						Common.storageL(Common.userId, data.userId);
+						Common.storageL(Common.token, data.token);
+						Common.openPage('../weixinmp/home.html')
+					}else{
+						Common.toast(data.error_description || '未知错误');
+					}
+
+				});
+			}
+			function testFn() {
+				Common.confirm('抬头', '内容', function(index){
+					console.log(index)
+					return false;
+				});
+//				var _url = 'http://10.35.0.115/ushop-api-merchant/api/sns/image/verify/code/get';
+//				Common.ajax(_url, 'get', {}, function(data){
+//					console.log(data);
+//				});
+			}
+			
+		</script>
+	</body>
+
+</html>

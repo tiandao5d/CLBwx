@@ -1,0 +1,409 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>最新揭晓</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+.xl-product-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	font-size: .8em;
+}
+.xl-product-list .xl-product-cell {
+	float: left;
+	width: 33.33333%;
+	padding: 10px 5px;
+	border: solid 1px #f6f6f6;
+	background: #fff;
+	margin: -1px 0 0 0;
+	border-left: 0;
+}
+@media (max-width: 500px){
+	.xl-product-list .xl-product-cell {
+		width: 50%;
+	}
+}
+.xl-product-list .xl-product-pic img {
+	display: block;
+	width: 100%;
+}
+.xl-product-list .xl-product-pic {
+	position: relative;
+	width: 50%;
+	margin: 0 auto;
+}
+.xl-product-list .xl-data-img {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.xl-product-list .xl-product-p1 {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	color: #333;
+	line-height: 1.4;
+	padding-top: 8px;
+}
+
+
+.xlac-p1 {
+	color: #888;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.xlac-s2 {
+	float: left;
+	position: relative;
+	height: 1.4em;
+	width: 1.4em;
+	border-radius: 50%;
+	background: #ff4680;
+	margin-top: 1px;
+}
+.xlac-s2:before {
+	content: '';
+	position: absolute;
+	left: 50%;
+	top: 0;
+	height: 50%;
+	background: #fff;
+	width: 1px;
+}
+.xlac-s2:after {
+	content: '';
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 50%;
+	background: #fff;
+	height: 1px;
+}
+.xlac-s1 {
+	float: left;
+	color: #ff4680;
+	padding: 2px 3px 1px;
+}
+.xl-countdown-box {
+	float: left;
+}
+
+.ban-em {
+	display: inline-block;
+	width: .5em;
+}
+
+.xltab-content {
+	padding-top: 3em;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">最新揭晓</h1>
+	</div>
+</div>
+<div class="xlbody-box">
+	<div class="xltab-box" id="xltabBoxEle">
+		<div class="xltab-head">
+			<div class="xltab-head-body">
+			<a class="xltab-hItme active" typeNum="1" href="#xltabItme1">即将揭晓</a>
+			<a class="xltab-hItme" typeNum="2" href="#xltabItme2">已揭晓</a>
+			</div>
+		</div>
+		<div class="xltab-content">
+			<div class="xltab-cItme active" id="xltabItme1">
+			    <ul class="clearfix xl-product-list">
+			        <!--<li class="xl-product-cell">
+				        <div class="xl-product-body">
+			                <a class="xl-product-img">
+			                	<div class="xl-product-pic">
+				                	<img src="../../image/p200200.png">
+				                	<img class="xl-data-img" src="../../image/p200200.png">
+			                	</div>
+			                	<div class="xl-product-p1">三星曲面电视</div>
+			                </a>
+			                <div class="xlac-p1">期号：<span class="color-ff5534">1</span></div>
+			                <div class="xlac-p2">
+			                	<div class="xlac-s2"></div>
+			                	<div class="xlac-s1">即将开奖</div>
+			                	<div class="xl-countdown-box xlplCountdown clearfix" timeNum="2017-07-03 11:07:00">
+			                		<span>00</span>
+			                		<span>00</span>
+			                		<span>00</span>
+			                	</div>
+			                </div>
+				        </div>
+			        </li>
+			        <li class="xl-product-cell">
+				        <div class="xl-product-body">
+			                <a class="xl-product-img">
+			                	<div class="xl-product-pic">
+				                	<img src="../../image/p200200.png">
+				                	<img class="xl-data-img" src="../../image/p200200.png">
+			                	</div>
+			                	<div class="xl-product-p1">三星曲面电视</div>
+			                </a>
+			                <div class="xlac-p1">期号：<span class="color-ff5534">20164585</span></div>
+			                <div class="xlac-p1">获<i class="ban-em"></i>奖<i class="ban-em"></i>者：</div>
+			                <div class="xlac-p1">本期参与：<span class="color-ff5534">10</span>人次</div>
+			                <div class="xlac-p1">幸运号码：15151515</div>
+			                <div class="xlac-p1">揭晓时间：2015-05-11 01:01:01</div>
+				        </div>
+			        </li>-->
+			    </ul>
+			    <div class="xl-refresh-prompt refreshPrompt"></div>
+			</div>
+			<div class="xltab-cItme" id="xltabItme2">
+				<ul class="clearfix xl-product-list"></ul>
+				<div class="xl-refresh-prompt refreshPrompt"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+globalData.isProgress = false;
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+//页面启动时，数据初始化
+function pageDataInit(){
+}
+//dom事件绑定
+function domEventFn(){
+	var tabBox = $('#xltabBoxEle'),
+		tabItemHs = tabBox.find('.xltab-hItme'),
+		tabItemCs = tabBox.find('.xltab-cItme');
+	tabItemHs.on('click', function(){
+		var $me = $(this),
+			tabItemC = $($me.attr('href')),
+			typeNum = $me.attr('typeNum');
+		if(!$me.hasClass('active')){
+			tabItemHs.removeClass('active');
+			$me.addClass('active');
+			tabItemCs.removeClass('active');
+			tabItemC.addClass('active');
+			delayedSearchFn(typeNum);
+		}
+		return false;
+	});
+	//到底部加载
+	Common.scrollBottom(function(){
+		productShowFn(tabBox.find('.xltab-hItme.active').attr('typeNum'));
+	});
+}
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	listParamInt();//列表参数初始化
+	
+	productShowFn('1');//列表请求显示
+}
+//刷新之后执行函数
+function refreshAfterFn(){
+	if(globalData.refreshComplete >= globalData.requestNum){
+		globalData.refreshComplete = 0;//用来记录请求完成次数
+		globalData.requestNum = 0;//用来记录有多少次用户请求
+		if(globalData.isRefresh == true){
+			globalData.isRefresh = false;
+			Common.toast('刷新成功');
+		}
+	}
+}
+
+//列表参数初始化
+function listParamInt(){
+	var tabBox = $('#xltabBoxEle'),
+		tabItemHs = tabBox.find('.xltab-hItme'),
+		tabItemCs = tabBox.find('.xltab-cItme');
+	//页面刷新时，数据初始化
+	tabItemHs.each(function(index, item){
+		var typeNum = $(item).attr('typeNum');
+		globalData['currentPage' + typeNum] = 0;//当前页
+		globalData['pagePage' + typeNum] = 1;//总页数
+	});
+	
+	tabItemHs.removeClass('active');
+	tabItemCs.removeClass('active');
+	tabItemHs.eq(0).addClass('active');
+	tabItemCs.eq(0).addClass('active');
+}
+
+//延迟搜索
+function delayedSearchFn(typeNum){
+	if(!typeNum){return false;}
+	//用来规定刷新频率
+	if(globalData['isReloadPageData' + typeNum] === undefined || globalData['isReloadPageData' + typeNum] === true){
+		globalData['currentPage' + typeNum] = 0;
+		globalData['pagePage' + typeNum] = 1;
+		productShowFn(typeNum);
+		globalData['isReloadPageData' + typeNum] = false;
+		setTimeout(function(){
+			globalData['isReloadPageData' + typeNum] = true;
+		},30000);
+	}
+};
+
+//列表请求显示
+//选项卡式产品列表示例
+function productShowFn(typeNum){
+	typeNum = typeNum || $('#xltabBoxEle').find('.xltab-hItme').attr('typeNum');
+	typeNum += '';
+	globalData['currentPage' + typeNum]++;
+	if(globalData['currentPage' + typeNum] > globalData['pagePage' + typeNum]){//说明已经是最后一页了
+		return false;
+	}
+	var listItem = $('#xltabItme' + typeNum),//列表项目
+		listContent = listItem.find('ul'),//列表容器
+		refreshPrompt = listItem.find('.refreshPrompt');//加载中提示容器
+	if(refreshPrompt.find('.isLoadingTrue').length > 0){//说明正在加载中……
+		return false;
+	}
+	refreshPrompt.html(Common.listLoadingHTML());
+	var _url = Common.domainUrl + '/ushop-api-merchant/api/spellbuy/product/lottery/listByAnnounced/' + globalData['currentPage' + typeNum] + '/10';
+	if(typeNum == '1'){//这里是揭晓中
+		_url = Common.domainUrl + '/ushop-api-merchant/api/spellbuy/product/lottery/listByAnnouncing/' + globalData['currentPage' + typeNum] + '/10';
+	}
+	Common.ajax(_url, 'get', {}, function(data){
+		if(data.totalCount >= 0){//表示数据请求成功
+			globalData['currentPage' + typeNum] = data.currentPage;
+			globalData['pagePage' + typeNum] = data.pagePage;
+			if(data.totalCount === 0){//表示请求到的数据为0
+				listContent.html('');
+				refreshPrompt.html('没有数据');
+				return false;
+			}
+			if(globalData['currentPage' + typeNum] < globalData['pagePage' + typeNum]){
+				refreshPrompt.html('上拉加载');
+			}else{
+				refreshPrompt.html('没有更多了');
+			}
+			
+			var str = '', rate, productImage = '../../image/p200200.png';
+			$.each(data.recordList, function(index, obj){
+				if(typeNum == '1'){//揭晓中
+					if(obj.object.headImage){
+						productImage = Common.getImageUrl(obj.object.headImage);
+					}
+					str +=  
+				        '<li class="xl-product-cell">'+
+					        '<div class="xl-product-body">'+
+				                '<a class="xl-product-img">'+
+				                	'<div class="xl-product-pic">'+
+					                	'<img src="../../image/p200200.png">'+
+					                	'<img class="xl-data-img" src="' + productImage + '">'+
+				                	'</div>'+
+				                	'<div class="xl-product-p1">' + obj.object.productName + '</div>'+
+				                '</a>'+
+				                '<div class="xlac-p1">期号：<span class="color-ff5534">' + obj.productPeriod + '</span></div>'+
+				                '<div class="xlac-p2">'+
+				                	'<div class="xlac-s2"></div>'+
+				                	'<div class="xlac-s1">即将开奖</div>'+
+				                	'<div class="xl-countdown-box xlplCountdown clearfix" timeNum="' + obj.announceEndDate + '">'+
+				                		'<span>00</span>'+
+				                		'<span>00</span>'+
+				                		'<span>00</span>'+
+				                	'</div>'+
+				                '</div>'+
+					        '</div>'+
+				        '</li>';
+				}else{//已揭晓
+					if(obj.productImage){
+						
+						productImage = Common.getImageUrl(obj.productImage);
+					}
+					str +=  
+				        '<li class="xl-product-cell">'+
+					        '<div class="xl-product-body">'+
+				                '<a class="xl-product-img">'+
+				                	'<div class="xl-product-pic">'+
+					                	'<img src="../../image/p200200.png">'+
+					                	'<img class="xl-data-img" src="' + productImage + '">'+
+				                	'</div>'+
+				                	'<div class="xl-product-p1">' + obj.productName + '</div>'+
+				                '</a>'+
+				                '<div class="xlac-p1">期号：<span class="color-ff5534">' + obj.productPeriod + '</span></div>'+
+				                '<div class="xlac-p1">获<i class="ban-em"></i>奖<i class="ban-em"></i>者：' + Common.phoneEncryption(obj.userName) + '</div>'+
+				                '<div class="xlac-p1">本期参与：<span class="color-ff5534">' + obj.buyNumberCount + '</span>人次</div>'+
+				                '<div class="xlac-p1">幸运号码：' + obj.randomNumber + '</div>'+
+				                '<div class="xlac-p1">揭晓时间：' + obj.announcedTime + '</div>'+
+					        '</div>'+
+				        '</li>';
+				}
+			});
+			if(globalData['currentPage' + typeNum] == 1){//说明是这个项目容器第一页
+				listContent.html(str);
+			}else{
+				listContent.html(listContent.html() + str);
+			}
+			countdownFn();//倒计时
+		}else{
+			refreshPrompt.html('加载失败！');
+		}
+	});
+}
+//倒计时函数
+function countdownFn(){
+	var box = $('.xlplCountdown'),
+//		timestamp = (new Date()).getTime(),//现在的时间
+		timeInter = globalData.interCountdown || [],//记录倒计时的ID
+		interTime = 100;//倒计时跳动间隔时间单位：ms
+	Common.getServiceTT(function(timestamp){
+		$.each(timeInter, function(index, val){
+			clearInterval(val);
+		});
+		timeInter = [];
+		box.each(function(index, me){
+			var $me = $(me),
+				timeNum = $me.attr('timeNum'),
+				timeEle = $me.find('span'),
+				timeDif = (new Date(timeNum.replace(/-/g, '/'))).getTime() - timestamp;//时间间隔的毫秒数
+			if(timeEle.length != 3){
+				return false;
+			}
+			timeInter[timeInter.length] = setInterval(function(){
+				if(timeDif > interTime){
+				    var i = parseInt((timeDif%3600000)/(60000)),
+				    	s = parseInt((timeDif%60000)/1000),
+				    	m = parseInt((timeDif%1000)/interTime);
+				    i = i < 10 ? ('0' + i) : i;
+				    s = s < 10 ? ('0' + s) : s;
+				    m = m < 10 ? ('0' + m) : m;
+					timeEle[0].innerHTML = i;
+					timeEle[1].innerHTML = s;
+					timeEle[2].innerHTML = m;
+					timeDif = timeDif - interTime;
+				}else if(timeDif < -interTime){
+					clearInterval(timeInter[index]);
+					$me.parents('li').remove();
+				}else if(timeDif <= interTime){
+					timeEle[0].innerHTML = '00';
+					timeEle[1].innerHTML = '00';
+					timeEle[2].innerHTML = '00';
+					timeDif = timeDif - interTime;
+				}else{
+					clearInterval(timeInter[index]);
+				}
+			}, interTime);
+		});
+		globalData.interCountdown = timeInter;
+	});
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>注册</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+.disabledBtn {
+	color: #888 !important;
+	background: #ccc !important;
+	opacity: 1 !important;
+}
+
+.xlform-p1 {
+	position: relative;
+	background: #fff;
+	margin-bottom: 1px;
+}
+.xlform-p1 label {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 3.8em;
+	text-align: right;
+	padding-top: .7em;
+}
+.xlform-p1 label img {
+	height: 1.6em;
+}
+.xlform-p1 input {
+	height: 3em;
+	padding: .7em .5em;
+	width: 100%;
+	border: 0;
+	background: none;
+	padding-left: 4.2em;
+}
+.xlform-p1 .xlform-code {
+	position: absolute;
+	right: .8em;
+	top: 50%;
+	color: #fff;
+	border: 0;
+	background: #f88c32;
+	margin-top: -1em;
+	font-size: .8em;
+	padding: .5em;
+	line-height: 1;
+	border-radius: .8em;
+}
+.xlform-p1 .xlform-code:active {
+	opacity: 0.8;
+}
+
+.xlci-box1 {
+	padding: .8em;
+}
+.xlci-btn {
+	padding: 2em .5em;
+}
+.xlci-btn .xl-btn {
+	font-size: 1.4em;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">注册</h1>
+	</div>
+</div>
+<div class="xlbody-box">
+	<form class="xlci-box2">
+		<div class="xlform-p1">
+			<label><img src="../../image/icon/phone.png"/></label>
+			<input type="text" id="mobileNo" placeholder="请输入手机号">
+		</div>
+		<div class="xlform-p1">
+			<label><img src="../../image/icon/hqyzm.png"/></label>
+			<input type="number" id="code" placeholder="请输入验证码">
+			<a class="xlform-code" onclick="gainCodeFn(this)">获取验证码</a>
+		</div>
+		<div class="xlform-p1">
+			<label><img src="../../image/icon/pswtip.png"/></label>
+			<input type="password" id="password" placeholder="6-15位数字或字母组成">
+		</div>
+		<div class="xlform-p1">
+			<label><img src="../../image/icon/pswtip.png"/></label>
+			<input type="password" id="confirmPwd" placeholder="确认登录密码">
+		</div>
+		<div class="xlform-p1">
+			<label><img src="../../image/icon/pswtip.png"/></label>
+			<input type="text" id="promoter" placeholder="推广员用户">
+		</div>
+	</form>
+	<div class="xlci-btn">
+		<button class="xl-btn xl-btn-block" onclick="registeredFn()">注册</button>
+	</div>
+</div>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/md5.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+//页面启动时，数据初始化
+function pageDataInit(){
+}
+//dom事件绑定
+function domEventFn(){
+}
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	//刷新数据请求函数
+	$('.xlform-p1 input').on('keyup', function(e){
+		if(e.keyCode === 13){
+			registeredFn();
+		}
+	});
+}
+
+function registeredFn(){
+	var mobileNoE = $('#mobileNo'),
+		passwordE = $('#password'),
+		codeE = $('#code'),
+		promoterE = $('#promoter'),
+		mobileNoV = mobileNoE.val(),
+		passwordV = passwordE.val(),
+		codeV = codeE.val(),
+		promoterV = promoterE.val(),
+		locationV = '62';
+	var _url = Common.domainUrl + '/ushop-api-merchant/api/user/login/registerPhone',
+		_param = '?mobileNo=' + mobileNoV + '&password=' + hex_md5(passwordV) + '&code=' + codeV + '&promoter=' + promoterV + '&location=' + locationV;
+	_url = _url + _param;
+	Common.ajax(_url, 'post', {}, function(data){
+		console.log(data)
+		if ( data.loginName ) {
+			Common.toast('注册成功！');
+		} else {
+			Common.toast((data.error_description || '未知错误'));
+		}
+	});
+}
+
+
+//发送验证码的按键点击事件
+//验证功能类型
+//发送短信的功能类型 在common文件中的userNote对象中 这里是注册账号
+//me为当前点击的元素
+function gainCodeFn(me){
+	if(me.classList.contains('disabled')){return false;}
+	var phone = document.getElementById('mobileNo').value;
+	if(!(Common.regExpPhone.test(phone))){
+		Common.toast('手机号有误');
+		return false;
+	}
+	me.classList.add('disabled');
+	var _url = Common.domainUrl + '/ushop-api-merchant/api/sns/mobile/verify/sendCode/' + phone + '/' + userCodeNote.bindPhone;
+	Common.ajax(_url, 'post', {}, function(data){
+    	if(data.result == 1){//发送成功后计时，并且按键无法点击
+    		countdownFn(me);
+    		Common.toast('发送成功');
+    	}else{
+    		me.classList.remove('disabled');
+    		Common.toast('发送失败');
+    	}
+	});
+}
+
+//倒计时按键
+//me显示内容的元素对象DOM对象，必填
+//timeNum 计时的时间num，可选默认为60
+//className 计时期间添加的类名，str，可选默认为disabled
+function countdownFn(me, timeNum, className){
+	if(me.classList.contains(className)){return false;}
+	var timeNum = timeNum ? parseInt(timeNum) : 60,
+		className = className || 'disabled';
+	me.innerHTML = timeNum + 's后可重发';
+	me.classList.add(className);
+	globalData.pwdInterval = setInterval(function(){
+		timeNum--;
+		if(timeNum <= 0){
+			clearInterval(globalData.pwdInterval);
+			me.classList.remove(className);
+			me.innerHTML = '重新发送';
+			return false;
+		}
+		me.innerHTML = timeNum + 's后可重发';
+	},1000);
+}
+</script>
+</body>
+</html>

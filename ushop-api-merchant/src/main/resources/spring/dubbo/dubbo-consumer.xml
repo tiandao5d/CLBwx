@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+        default-autowire="byName" default-lazy-init="false">
+
+	<!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+	<dubbo:application name="ushop-api-merchant" />
+
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<!-- 多注册中心配置，竖号分隔表示同时连接多个不同注册中心，同一注册中心的多个集群地址用逗号分隔 -->
+	<!-- 注册中心地址 -->
+	<dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" />
+	
+	<!-- 监控中心配置，protocol="registry"，表示从注册中心发现监控中心地址 -->
+	<dubbo:monitor protocol="registry"/>
+		
+	<!-- 超时时间 暂时测试使用 -->
+	<dubbo:consumer timeout="60000" retries="0" />
+		
+	<!-- 用户子系统服务接口引用 -->
+	<import resource="dubbo-reference-ucenter-account.xml" />
+	<import resource="dubbo-reference-ucenter-user.xml" />
+	<import resource="dubbo-reference-ushop-product.xml" />
+	<import resource="dubbo-reference-ushop-order.xml" />
+	<import resource="dubbo-reference-ushop-sns.xml" />
+	<import resource="dubbo-reference-ucenter-promotion.xml" />
+	<import resource="dubbo-reference-ushop-game.xml" />
+	<import resource="dubbo-reference-ulotplay-frontend.xml" />
+	<import resource="dubbo-reference-ushop-lotto.xml" />
+</beans>  

@@ -1,0 +1,610 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>商品详情</title>
+<link rel="stylesheet" type="text/css" href="../../css/owl.carousel.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+.xlbanner-box {
+	padding-top: 50%;
+}
+.xlpd-fotter {
+	bottom: 0;
+}
+.xlpd-fotter .xlele-content {
+	line-height: 40px;
+	border-top: solid 1px #959595;
+	padding: 0 15px;
+}
+.xlpd-fotter-t {
+	font-size: 14px;
+	font-weight: bold;
+	color: #616161;
+}
+.xlpd-ft-con {
+	color: #ff5534;
+	font-size: 1.2em;
+	font-weight: normal;
+}
+.xlpd-fotter .xl-btn {
+	position: absolute;
+	right: 0;
+	top: 0;
+	font-size: 15px;
+	background: #ff7200;
+	padding: 0 15px;
+	line-height: 40px;
+	height: 100%;
+	border-radius: 0;
+}
+.xlli-menu-right:before {
+	font-size: 1.4em;
+	color: #8a8a8a;
+}
+
+.xlpd-li {
+	position: relative;
+	padding: 0 15px;
+	background: #fff;
+	font-size: 15px;
+	margin-top: 2px;
+	height: 40px;
+}
+.xlpd-li .xllr-l {
+	line-height: 40px;
+}
+.xlpd-li .xllr-r {
+	top: 50%;
+	right: 15px;
+	margin-top: -14px;
+}
+.xlpd-li1 {
+	
+}
+.xlpd-li.xlpd-li1 .xllr-r {
+	margin-top: -11px;
+}
+.xlpd-li1 .xl-btn {
+	color: #ff7a19;
+	border: solid 1px #ff7a19;
+	border-radius: 5px;
+	padding: 3px 10px;
+	background: #fff;
+}
+.xlpd-li2 {
+	background: #f8f8f8;
+}
+.xlpd-li2 .xlpd-li-l {
+	line-height: 40px;
+	margin-right: 30px;
+	overflow-x: auto;
+	font-size: 12px;
+	white-space: nowrap;
+}
+.xlpd-li2 .xlpd-li-l img {
+	width: 18px;
+	height: 18px;
+	vertical-align: middle;
+}
+
+
+/*numbox盒子*/
+.xl-numbox {
+	height: 28px;
+	width: 95px;
+	vertical-align: top;
+}
+.xl-numbox button {
+	width: 30%;
+}
+.xl-numbox .xl-numbox-input {
+	width: 40%;
+}
+.xl-numbox .xl-numbox-minus {
+	border-radius: 6px 0 0 6px;
+	background: #eee;
+}
+.xl-numbox .xl-numbox-plus {
+	border-radius: 0 6px 6px 0;
+	background: #eee;
+}
+
+.xlpd-box2 {
+	background: #fff;
+	padding: 8px 15px;
+}
+.xlpd-cp1 {
+	font-size: 15px;
+}
+.xlpd-cp4 {
+	color: #bdbdbd;
+	margin-top: 5px;
+}
+.xldd-ptext-s {
+	color: #ff5534;
+	display: inline-block;
+	margin-left: .6em;
+	font-size: 1.6em;
+}
+.xldd-ptext-s:first-child {
+	margin-left: 0;
+}
+.xldd-ptext-s .icon {
+	font-size: .8em;
+	font-weight: bold;
+	color: #888;
+}
+.xldd-ptext-s .icon:before {
+	content: '\e71f';
+}
+.xldd-ptext-s.active .icon:before {
+	color: #ff5534;
+}
+/*图片详情*/
+.xlad-img-box img {
+	width: 100%;
+	vertical-align: top;
+}
+.xlad-product-str {
+	padding: 15px;
+}
+
+/*服务说明容器*/
+.xlpd-ensure-m .tmodal-html {
+	padding: 0;
+	min-height: 0;
+}
+.mt-title {
+	text-align: center;
+	font-size: 18px;
+	padding: .5em 0;
+	color: #333;
+}
+.mt-li {
+	font-size: 14px;
+	color: #999;
+	padding: .8em;
+	padding-left: 2.6em;
+	border-top: solid 1px #f6f6f6;
+}
+.mt-li:first-child {
+	border-top: 0;
+}
+.mt-p1 {
+	margin-left: -1.8em;
+	color: #666;
+}
+.mt-p2 {
+	font-size: .8em;
+}
+.mt-p1 img {
+	height: 1.3em;
+	width: 1.3em;
+	vertical-align: middle;
+	margin-right: .3em;
+}
+.mt-btn {
+	color: #fff;
+	background: #ff532b;
+	display: block;
+	width: 100%;
+	padding: .6em;
+	border: 0;
+	border-radius: 0;
+	font-size: 1.2em;
+}
+
+/*文字抬头*/
+.xlpd-txt-title {
+	position: relative;
+	padding: 8px 0;
+	background: #fff;
+	text-align: center;
+}
+.xlpd-txt-title i {
+	position: relative;
+	background: #fff;
+	color: #737373;
+	z-index: 1;
+	padding: 0 3px;
+}
+.xlpd-txt-title:before {
+	content: '';
+	height: 1px;
+	width: 50%;
+	position: absolute;
+	left: 25%;
+	top: 50%;
+	background: #777;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">商品详情</h1>
+	</div>
+</div>
+<div class="xlbody-box">
+	<div class="xlbanner-box">
+		<img class="xlbanner-pla-img" src="../../image/p200100.png">
+		<div id="bannerBox" class="owl-carousel owl-theme xlbanner-body"></div>
+	</div>
+	<div style="height: 2px;"></div>
+	<div class="xlpd-box2" id="productInfo">
+		<div class="xlpd-cp1">商品名称</div>
+		<div class="xldd-ptext-p3">
+			<div class="xldd-ptext-s">
+				<span class="icon"></span><small>￥</small><span>00.00</span>
+			</div>
+			<div class="xldd-ptext-s">
+				<span class="icon"></span><small>￥</small>00.00<small>+</small>00<small>彩豆</small>
+			</div>
+		</div>
+		<div class="xllr-box xlpd-cp4">
+			<div class="xllr-l">快递费：￥00</div>
+			<div class="xllr-r">库存：00</div>
+		</div>
+	</div>
+	<div class="xlpd-box1">
+		<div class="xlpd-li xlpd-li2 xlli-menu-right hide">
+			<div class="xlpd-li-l" id="mer_ensure"></div>
+		</div>
+		<div class="xllr-box xlpd-li" id="numbox_pnum">
+			<div class="xllr-l">数量</div>
+			<div class="xllr-r">
+				<div class="xl-numbox" id="selectJoinNum" minnum="1" maxnum="10" stepnum="1">
+					<button class="xl-numbox-minus">
+						<img class="xl-numbox-icon1" src="../../image/icon/Jian.png"/>
+						<img class="xl-numbox-icon2" src="../../image/icon/Jian01.png"/>
+					</button>
+					<input class="xl-numbox-input" value="1" type="number">
+					<button class="xl-numbox-plus">
+						<img class="xl-numbox-icon1" src="../../image/icon/Jia.png"/>
+						<img class="xl-numbox-icon2" src="../../image/icon/Jia01.png"/>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="xllr-box xlpd-li xlpd-li1" id="mer_href">
+			<div class="xllr-l">店铺</div>
+		</div>
+	</div>
+	<div style="height: 1px;"></div>
+	<div class="xlpd-txt-title"><i>商品详情</i></div>
+	<div id="imageListBox"></div>
+</div>
+<div style="height: 3.12em;"></div>
+<div class="xlele-box xlpd-fotter">
+	<div class="xlele-content">
+		<div class="xlpd-fotter-t">总价：
+			<i class="xlpd-ft-con" id="foot_total"><small>￥</small><span>00</span></i>
+		</div>
+		<div class="xl-btn" onclick="buySubmitFn()">立即购买</div>
+	</div>
+</div>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/md5.js"></script>
+<script src="../../script/owl.carousel.min.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/order_data_ds.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+globalData.modalTxtArr = [
+	{id: 1, title: '全国联保', txt: '商品在线报修，直达品牌售后', imgSrc: '../../image/icon/detail_icon2.png'},
+	{id: 2, title: '正品保证', txt: '本商店承诺正品行货', imgSrc: '../../image/icon/detail_icon3.png'},
+	{id: 3, title: '全国包邮', txt: '本商品全国包邮', imgSrc: '../../image/icon/detail_icon4.png'},
+	{id: 4, title: '七天包退换', txt: '本商品支持七天无理由退换货', imgSrc: '../../image/icon/detail_icon5.png'}
+];
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+
+//页面启动时，数据初始化
+function pageDataInit(){
+}
+//dom事件绑定
+function domEventFn(){
+}
+
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	//刷新数据请求函数
+	var pid = globalData.pageParam.productId;
+	globalData.productId = pid;
+	Common.ajaxAll([
+		{url: (Common.domainUrl + '/ushop-api-merchant/api/mall/product/detail/getProductImageById/' + pid + '.json')},
+		productDataInit
+	], function(){
+		//产品数据赋值
+		globalData.detailsParam = ((arguments[1] || {}).detail || {}).productDetails || '';
+		//图片数据整理赋值
+		globalData.bannerImg = [];//banner图的图片数据
+		globalData.detailsImg = [];//图片详情的图片数据
+		$.each((arguments[0].images || []), function(index, obj){
+			if(obj.imageType == 1){
+				globalData.bannerImg.push(obj);
+			}else{
+				globalData.detailsImg.push(obj);
+			}
+		});
+		getImageDataFn();//图片数据显示
+	});
+}
+
+
+//产品信息请求
+function productDataInit(callback){
+	callback = callback || function(){};
+	OrderData.getProductData(globalData.productId, function(itemData, status, data){
+		callback((data || {}));
+		if(status != 'success'){return false;};
+		globalData.itemData = itemData;
+		globalData.productDelivery = (data.detail.productDelivery ? (data.detail.productDelivery + '') : '');
+		if(isFic()){//虚拟物品不能选择数量
+			$('#numbox_pnum').hide();
+		}
+		modaltxtListShow(((data.detail.serviceDesc + '').split('')));
+		var priceStr = '', a = '';
+		$.each(itemData.ruleArr, function(ri, ro){
+			if(ro.flag == 1){
+				a = ' active';
+			}
+			priceStr += '<div class="buyTypeEle xldd-ptext-s' + a + '" ruleid="' + ro.id + '" onclick="selectRuleFn(this)">';
+			if(itemData.ruleArr.length > 1){
+				priceStr += '<span class="icon"></span>';
+			}
+			priceStr += ro.payTypeText + '</div>';
+		});
+		var str = 
+				'<div class="xlpd-cp1">' + itemData.productName + '</div>'+
+				'<div class="xldd-ptext-p3">'+
+					priceStr+
+				'</div>'+
+				'<div class="xllr-box xlpd-cp4">'+
+					'<div class="xllr-l">快递费：￥' + itemData.freight + '</div>'+
+					'<div class="xllr-r">库存：' + itemData.stock + '</div>'+
+				'</div>';
+		$('#productInfo').html(str);//产品基本数据初始化
+		str = 
+			'<div class="xllr-l">' + itemData.merchantName + '</div>'+
+			'<div class="xllr-r">'+
+				'<a class="xl-btn" href="../indiana/product_list.html?merchantId=' + itemData.merchantId + '&merchantName=' + itemData.merchantName + '">进店逛逛</a>'+
+			'</div>';
+		$('#mer_href').html(str);
+		showProTotal();//显示总计数量
+		$('#selectJoinNum').attr('maxnum', itemData.stock);//设置输入框的最大值
+		numboxFn();//输入框数据初始化
+	});
+}
+
+//显示总计数量价格
+function showProTotal(){
+	var num = parseInt($('#numbox_pnum').find('.xl-numbox-input').val()) || 0,
+		cr = (function(){
+			var rid = parseInt($('.buyTypeEle.active').attr('ruleid')),
+				c;
+			$.each(globalData.itemData.ruleArr, function(index, obj){
+				if(obj.id === rid){
+					c = obj;
+					return false;
+				}
+			});
+			return c;
+		})();
+	var txt = OrderData.getTotalCr([{
+		num: num,
+		cr: cr
+	}]) || '00';
+	$('#foot_total').html(txt);
+}
+
+
+//是否虚拟物品，依赖商品的 'productDelivery' 属性值
+function isFic(productDelivery){
+	var a = productDelivery || globalData.productDelivery || '',
+		pt = a.split('|')[0];//商品类型，0为普通商品，1，2为虚拟商品
+	if(!pt){
+		return false;
+	}
+	if(pt === '1' || pt === '2'){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+//获取图片信息
+function getImageDataFn(){
+	if(globalData.bannerImg[0]){
+		var strb = '',
+			img = new Image(),
+			bannerBox = $("#bannerBox");
+		strb = '';
+		img.src = Common.getImageUrl(globalData.bannerImg[0].imagePath);
+		$.each(globalData.bannerImg, function(index, obj){
+			strb += '<div class="item"><img src="' + Common.getImageUrl(obj.imagePath) + '"></div>';
+		});
+		img.onload = function(){
+			bannerBox.html(strb);
+			bannerBox.owlCarousel({
+				items: 1
+			});
+		}
+	}
+	if(globalData.detailsImg[0]){
+		var strd = '';
+		$.each(globalData.detailsImg, function(index, obj){
+			strd += '<div class="xlad-img-box"><img src="' + Common.getImageUrl(obj.imagePath) + '"/></div>';
+		});
+		strd += '<div class="xlad-product-str">' + globalData.detailsParam + '</div>';
+		document.getElementById('imageListBox').innerHTML = strd;
+	}
+}
+
+//选择支付的方式
+function selectRuleFn(me){
+	var $me = $(me),
+		lis = $me.parent().find('.buyTypeEle');
+	if(!$me.hasClass('active')){
+		lis.removeClass('active');
+		$me.addClass('active');
+		showProTotal();//统计
+	}
+}
+
+//初始化numbox输入框
+function numboxFn(){
+	var numbox, ps = '.xl-numbox';
+	$('.xl-numbox').each(function(){
+		numbox = $(this);
+		numChangeFn(numbox);
+		numbox.find('.xl-numbox-minus')
+		.off('click.numbox').on('click.numbox', function(e){
+			numChangeFn($(this).parents(ps), 'minus', e);
+		});
+		numbox.find('.xl-numbox-plus')
+		.off('click.numbox').on('click.numbox', function(e){
+			numChangeFn($(this).parents(ps), 'plus', e);
+		});
+		numbox.find('.xl-numbox-input')
+		.off('input.numbox change.numbox').on('input.numbox change.numbox', function(e){
+			numChangeFn($(this).parents(ps), 'ipt', e);
+		});
+	});
+}
+
+//numbox输入框数据改变执行
+function numChangeFn(numbox, status, e){
+	var md = 'minus_disabled',
+		pd = 'plus_disabled';
+	var minus = numbox.find('.xl-numbox-minus'),
+		plus = numbox.find('.xl-numbox-plus'),
+		ipt = numbox.find('.xl-numbox-input'),
+		minNum = parseInt(numbox.attr('minNum')),
+		maxNum = parseInt(numbox.attr('maxNum')),
+		stepNum = parseInt(numbox.attr('stepNum')) || 1,
+		valNum = parseInt(ipt.val());
+	minNum = ((minNum === 0) || minNum) ? minNum : 1;
+	maxNum = ((maxNum === 0) || maxNum) ? maxNum : 10000;
+	if(minNum >= maxNum){
+		numbox.addClass(md);
+		numbox.addClass(pd);
+		ipt.val(maxNum);
+		return false;
+	}
+	if((e && e.type) != 'input'){
+		valNum = ((valNum === 0) || valNum) ? valNum : minNum;
+	}
+	if(status === 'minus'){
+		valNum -= stepNum;
+	}else if(status === 'plus'){
+		valNum += stepNum;
+	}
+	if((valNum < maxNum) && (valNum > minNum)){
+		numbox.removeClass(md + ' ' + pd);
+	}else if(valNum >= maxNum){
+		numbox.addClass(pd);
+		numbox.removeClass(md);
+		valNum = maxNum;
+	}else if(valNum <= minNum){
+		numbox.addClass(md);
+		numbox.removeClass(pd);
+		valNum = minNum;
+	}
+	if((e && e.type) === 'input'){
+		ipt.val(valNum || '');
+	}else{
+		ipt.val(valNum);
+	}
+	showProTotal();//统计
+}
+
+
+//提交立即参与
+function buySubmitFn(){
+	var buyTypeId = $('.buyTypeEle.active').attr('ruleid'),
+		buyVal = parseInt($('#selectJoinNum').find('.xl-numbox-input').val()),
+		productId = globalData.productId;
+	if(!buyTypeId){
+		Common.toast('请选择支付方式！');
+		return false;
+	}
+	if(!buyVal){
+		Common.toast('请输入购买数量！');
+		return false;
+	}
+	if(!productId){
+		Common.toast('商品数据错误，无法购买！');
+		return false;
+	}
+	var itemData = globalData.itemData;
+	itemData.buyCount = buyVal;
+	if(!(itemData.stock >= buyVal)){
+		Common.toast('库存不足！');
+		return false;
+	}
+	$.each(itemData.ruleArr, function(index, obj){
+		if(obj.id == buyTypeId){
+			itemData.checkedRule = obj;
+			return false;
+		}
+	});
+	var toUrl = '../order/confirm_order.html';
+	if(isFic()){
+		toUrl += '?fiction=yes';
+	}
+	var _url = '/ushop-api-merchant/api/mall/cart/settlement/check',
+		_param = [
+			{productId: productId, buyCount: buyVal}
+		];
+	Common.ajax(_url, 'post', JSON.stringify(_param), function(data) {
+		if(data.recordList){
+			var orderObj = OrderData.splitOrderFn([itemData]);
+			orderObj.userMoney = data.balance;
+			orderObj.userPoint = data.point;
+			Common.storageL(Common.localPay, orderObj);
+			Common.openPage(toUrl);
+		}else if (data.error_description) {
+			Common.toast(data.error_description);
+		} else {
+			Common.toast('结算失败！');
+		}
+	});
+}
+//服务说明的数据赋值
+function modaltxtListShow(arr){
+	arr = arr || [];
+	var str = '', str1 = '';
+	$.each(globalData.modalTxtArr, function(index, obj){
+		if((arr[index] + '') === '1'){
+			str +=
+				'<div class="mt-li">'+
+					'<div class="mt-p1"><img src="' + obj.imgSrc + '">' + obj.title + '</div>'+
+					'<div class="mt-p2">' + obj.txt + '</div>'+
+				'</div>';
+			str1 += '<img src="../../image/icon/detail_icon1.png"> ' + obj.title + '　';
+		}
+	});
+	if(str1 && str){
+		str = 
+				'<div class="mt-title">服务说明</div>'+
+				'<div class="mer_ul">' + str + '</div>'+
+				'<button class="mt-btn" onclick="Common.tmodal(\'hide\')">确定</button>';
+		globalData.ensureHtmlStr = str;
+		$('#mer_ensure').html(str1).parent().removeClass('hide').on('click', function(){
+			Common.tmodal('bottom', globalData.ensureHtmlStr, 'xlpd-ensure-m');
+		});
+	}
+}
+</script>
+</body>
+</html>

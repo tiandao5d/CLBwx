@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+        default-autowire="byName" default-lazy-init="false">
+
+	<!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+	<dubbo:application name="ushop-web-admin" />
+
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<!-- 多注册中心配置，竖号分隔表示同时连接多个不同注册中心，同一注册中心的多个集群地址用逗号分隔 -->
+	<!-- 注册中心地址 -->
+	<dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" />
+	
+	
+	<!-- 监控中心配置，protocol="registry"，表示从注册中心发现监控中心地址 -->
+	<dubbo:monitor protocol="registry"/>
+	<dubbo:reference interface="com.genlot.ucenter.facade.user.service.UserManagementFacade" id="userManagementFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ucenter.facade.user.service.UserOperatorFacade" id="userOperatorFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ucenter.facade.user.service.MerchantFacade" id="merchantFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ucenter.facade.user.service.MerchantFileFacade" id="merchantFileFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ucenter.facade.user.service.UserQueryFacade" id="userQueryFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ucenter.facade.user.service.MemberInfoFacade" id="memberInfoFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ucenter.facade.user.service.UserBindRelationFacade" id="userBindRelationFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ucenter.facade.account.service.CouponsFacade" id="couponsFacade" check="false" />   
+    <dubbo:reference interface="com.genlot.ucenter.facade.account.service.AccountCouponsFacade" id="accountCouponsFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ucenter.facade.account.service.ExchangeRateFacade" id="exchangeRateFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ucenter.facade.account.service.CouponsCacheFacade" id="couponsCacheFacade" check="false" /> 
+    <dubbo:reference interface="com.genlot.ucenter.facade.account.service.AccountQueryFacade" id="accountQueryFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ucenter.facade.account.service.AccountManagementFacade" id="accountManagementFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ucenter.facade.account.service.AccountFundTypeFacade" id="accountFundTypeFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ucenter.facade.account.service.AccountBillFacade" id="accountBillFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ucenter.facade.oauth.service.OAuthManagementFacade" id="oauthManagementFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ucenter.facade.pms.service.PmsFacade" id="pmsFacade" check="false"/>
+    <dubbo:reference interface="com.genlot.ucenter.facade.account.service.AccountTransferFacade" id="accountTransferFacade" check="false"/>
+    
+    
+    
+    <dubbo:reference interface="com.genlot.ucenter.facade.promotion.service.PromoterFacade" id="promoterFacade" check="false"/>
+    <dubbo:reference interface="com.genlot.ucenter.facade.promotion.service.PromotionQueryFacade" id="promotionQueryFacade" check="false"/>
+    <dubbo:reference interface="com.genlot.ucenter.facade.promotion.service.PromoterSubordinateFacade" id="promoterSubordinateFacade" check="false"/>   
+    
+	<dubbo:reference interface="com.genlot.ushop.facade.order.service.OrderQueryFacade" id="orderQueryFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ushop.facade.order.service.OrderManagementFacade" id="orderManagementFacade" check="false" />
+    
+	<dubbo:reference interface="com.genlot.ushop.facade.product.service.ProductTypeFacade" id="productTypeFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ushop.facade.product.service.ProductManagementFacade" id="productManagementFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ushop.facade.product.service.ProductQueryFacade" id="productQueryFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ushop.facade.product.service.ProductImageFacade" id="productImageFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ushop.facade.product.service.ProductCacheFacade" id="productCacheFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ushop.facade.product.service.ProductActivityFacade" id="productActivityFacade" check="false"/>
+ 
+    <dubbo:reference interface="com.genlot.ushop.facade.product.service.SpellBuyProductQueryFacade" id="spellBuyProductQueryFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ushop.facade.product.service.SpellBuyRecordFacade" id="spellBuyRecordFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ushop.facade.product.service.RandomNumberFacade" id="randomNumberFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ushop.facade.product.service.SpellBuyProductFacade" id="spellBuyProductFacade" check="false" />
+    <dubbo:reference interface="com.genlot.ushop.facade.product.service.SpellBuyProductCacheFacade" id="spellBuyProductCacheFacade" check="false"/>
+    <dubbo:reference interface="com.genlot.ushop.facade.product.service.SpellBuyOrderFacade" id="spellBuyOrderFacade" check="false"/>
+    <dubbo:reference interface="com.genlot.ushop.facade.product.service.SpellBuyRobotFacade" id="spellBuyRobotFacade" check="false"/>
+    <dubbo:reference interface="com.genlot.ushop.facade.lottery.service.LatestLotteryFacade" id="latestLotteryFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ushop.facade.lottery.service.LotteryExpressFacade" id="lotteryExpressFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ushop.facade.lottery.service.LotteryReplacementFacade" id="lotteryReplacementFacade" check="false" />   
+	<dubbo:reference interface="com.genlot.ushop.facade.product.service.ProductOrderFacade" id="productOrderFacade" check="false"/>
+ 
+    <dubbo:reference interface="com.genlot.ushop.facade.game.service.LottoGameManagementFacade" id="lottoGameManagementFacade" check="false" />   
+    <dubbo:reference interface="com.genlot.ushop.facade.game.service.LottoGameQueryFacade" id="lottoGameQueryFacade" check="false"/>
+    <dubbo:reference interface="com.genlot.ushop.facade.game.service.LottoGameIssueQueryFacade" id="lottoGameIssueQueryFacade" check="false"/>
+    <dubbo:reference interface="com.genlot.ushop.facade.game.service.LottoGameTicketQueryFacade" id="lottoGameTicketQueryFacade" check="false"/>
+ 
+    <dubbo:reference interface="com.genlot.ushop.facade.sms.service.PushFacade" id="pushFacade" check="false"/>
+	<dubbo:reference interface="com.genlot.ushop.facade.sns.service.ShareManagementFacade" id="shareManagementFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ushop.facade.sns.service.ShareQueryFacade" id="shareQueryFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ushop.facade.sns.service.BannerFacade" id="bannerFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ushop.facade.sns.service.BannerCacheFacade" id="bannerCacheFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ushop.facade.sns.service.NotifyManagementFacade" id="notifyManagementFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ushop.facade.sns.service.VipInfoFacade" id="vipInfoFacade" check="false"/>	
+	<dubbo:reference interface="com.genlot.ushop.facade.sns.service.VipLevelFacade" id="vipLevelFacade" check="false"/>	
+	<dubbo:reference interface="com.genlot.ushop.facade.sns.service.AdvertisementFacade" id="advertisementFacade" check="false"/>  
+	<dubbo:reference interface="com.genlot.ushop.facade.sns.service.VipInfoCacheFacade" id="vipInfoCacheFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ushop.facade.ticket.service.LotteryTicketFacade" id="lotteryTicketFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ushop.facade.task.service.TaskFacade" id="taksFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ushop.facade.task.service.TaskRecordFacade" id="taskRecordFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ushop.facade.update.service.AppVersionFacade" id="appVersionFacade" check="false" />
+	<dubbo:reference interface="com.genlot.ushop.facade.update.service.AppChannelFacade" id="appChannelFacade" check="false" />	
+	
+	<dubbo:reference interface="com.genlot.uplatform.facade.application.service.UploadFileFacade" id="uploadFileFacade" check="false" />	
+	<dubbo:reference interface="com.genlot.uplatform.facade.channel.service.ChannelInterfaceFacade" id="channelfaceFacade" check="false"/>
+	
+	<dubbo:reference interface="com.genlot.uplatform.facade.application.service.AppQueryFacade" id="appQueryFacade" check="false" />
+	
+	<dubbo:reference interface="com.genlot.ushop.facade.vote.service.CandidateFacade" id="candidateFacade" check="false"/>
+    <dubbo:reference interface="com.genlot.ushop.facade.vote.service.ElectionFacade" id="electionFacade" check="false"/>
+    <dubbo:reference interface="com.genlot.ushop.facade.vote.service.VoteManagementFacade" id="voteManagementFacade" check="false"/>
+    <dubbo:reference interface="com.genlot.ushop.facade.vote.service.VoteRecordFacade" id="voteRecordFacade" check="false"/>
+    <dubbo:reference interface="com.genlot.ushop.facade.vote.service.VoterFacade" id="voterFacade" check="false"/>
+    
+    <dubbo:reference interface="com.genlot.ushop.facade.product.service.SpellBuySettlementFacade" id="spellBuySettlementFacade" check="false"/>
+    
+	
+	<!--<import resource="dubbo-reference-user.xml" />-->
+</beans>  

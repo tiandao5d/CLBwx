@@ -1,0 +1,692 @@
+<!-- 任务片段文件 -->
+<!-- 抽奖任务 -->
+<form class="form-horizontal" id="task_from_box" onsubmit="return false;" role="form">
+	<div class="form-group">
+		<label class="control-label col-xs-3"><span class="red">*</span>活动名称：</label>
+		<div class="col-xs-8">
+			<input type="text" name="name" class="form-control add_form_ipt" data-null="请输入活动名称" placeholder="请输入活动名称">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3">中转URL：</label>
+		<div class="col-xs-8">
+			<input type="text" name="url" class="form-control add_form_ipt" placeholder="请输入中转URL">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3">活动描述：</label>
+		<div class="col-xs-8">
+			<input type="text" readonly name="remark" class="form-control add_form_ipt" placeholder="点击编辑描述" data-toggle="modal" data-target="#ace_wysiwyg_modal">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3"><span class="red">*</span>开始-结束时间：</label>
+		<div class="col-xs-8">
+			<div class="input-group">
+				<input type="text" data-null="请选择开始时间" class="form-control add_form_ipt text-center form_datetime start" name="startDate" readonly placeholder="开始时间">
+				<span class="input-group-addon">至</span>
+				<input type="text" data-null="请选择结束时间" class="form-control add_form_ipt text-center form_datetime end" name="endDate" readonly placeholder="结束时间">
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3"><span class="red">*</span>可参与次数：</label>
+		<div class="col-xs-8">
+			<input type="number" name="participateTime" data-null="请输入可参与次数" placeholder="请输入可参与次数" class="form-control add_form_ipt" style="width: 60%;float:left;">
+			<select name="participateType" class="form-control participateTypeList add_form_ipt" data-null="请选择参与次数类型" style="width: 40%; border-left: 0;float:left;"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3"><span class="red">*</span>省份：</label>
+		<div class="col-xs-8">
+			<select name="province" data-null="请选择省份" class="form-control provinceList add_form_ipt"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3"><span class="red">*</span>用途：</label>
+		<div class="col-xs-8">
+			<select name="usage" data-null="请选择用途" class="form-control fundUsageList add_form_ipt"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3"><span class="red">*</span>祝福语：</label>
+		<div class="col-xs-8">
+			<input type="text" name="wishing" placeholder="祝福语，多个以管道符分隔，如：test1|test2" data-null="请输入祝福语" class="form-control add_form_ipt" />
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3">题库：</label>
+		<div class="col-xs-8">
+			<input type="text" name="rule" class="form-control add_form_ipt" placeholder="上传json题库文件" readonly>
+			<input type="file" name="rule_file" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; opacity: 0;">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3"><span class="red">*</span>抽奖模板：</label>
+		<div class="col-xs-8">
+			<div class="radio add_form_radio">
+				<label>
+					<input name="template" checked value="1" type="radio" class="ace">
+					<span class="lbl"> 红包雨</span>
+				</label>
+				<label>
+					<input name="template" value="2" type="radio" class="ace">
+					<span class="lbl"> 转轮盘</span>
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3">助力任务ID：</label>
+		<div class="col-xs-8">
+			<input type="text" onclick="selectActId(this, 2)" readonly name="assistanceId" placeholder="助力任务ID" class="form-control add_form_ipt" />
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3"><span class="red">*</span>中奖方式：</label>
+		<div class="col-xs-8">
+			<div class="radio add_form_radio">
+				<label>
+					<input name="randomMode" checked value="1" type="radio" class="ace">
+					<span class="lbl"> 单次随机</span>
+				</label>
+				<label>
+					<input name="randomMode" value="2" type="radio" class="ace">
+					<span class="lbl"> 多次随机</span>
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3"><span class="red">*</span>奖励规则：</label>
+		<div class="col-xs-8 rewardValue"></div>
+	</div>
+	<div class="form-group from_btn_box">
+		<div class="col-xs-4">
+			<button class="btn btn-block btn-warning" onclick="usePrevData()">上次记录</button>
+		</div>
+		<div class="col-xs-4">
+			<button class="btn btn-block" onclick="pageSH('.page_box', '#task_list')">返回</button>
+		</div>
+		<div class="col-xs-4">
+			<button class="btn btn-block btn-success" onclick="onAESubmit()">提交</button>
+		</div>
+	</div>
+</form>
+<script>
+"use strict";
+;(function () {
+	selectInitFn(globalData.taskConditionList, 'desc', 'value', '.taskConditionList');
+	selectInitFn(globalData.participateTypeList, 'desc', 'value', '.participateTypeList');
+	selectInitFn(globalData.taskTargetTypeList, 'desc', 'value', '.taskTargetTypeList');
+	selectInitFn(globalData.provinceList, 'desc', 'value', '.provinceList');
+	selectInitFn(globalData.fundUsageList, 'desc', 'value', '.fundUsageList');
+	randomRvStr(); // 默认呈现随机值奖励模式
+	globalData.avlData = []; // 用于记录奖励值
+	globalData.ssStaParam = 'ss_partly_task_param3'; // sessionStorage，用于记录表单数据，带上对应的任务类型数字
+	
+	var $form = $('#task_from_box');
+	//日期选择器绑定
+	$('.form_datetime').each(function () {
+		laydate.render({
+		  elem: this,
+		  type: 'datetime'
+		});
+	})
+	var $rvMd = $('#reward_value');
+	// 库存限制变化，触发事件风控
+	$rvMd.find('[name="stockLimitType"]').on('change', function () {
+		sltChange($(this));
+	});
+	// 模态框显示之前执行
+	$rvMd.on('show.bs.modal', function (e) {
+		addIptMo();
+	});
+	addQuestionArr($form.find('[name="rule"]'), $form.find('[name="rule_file"]'));
+})();
+
+// 使用上次记录的数据
+function usePrevData () {
+	var p = Common.storageL(globalData.ssStaParam, null, true);
+	if ( p instanceof Object ) {
+		fromAssignment(p);
+	} else {
+		Common.jBoxNotice('没有上次的记录', 'red');
+	}
+}
+
+// 获取表单值
+function getFromVal () {
+	var $form = $('#task_from_box'),
+		$me, k, v,
+		$avlBox,
+		p = {};
+	$form.find('.add_form_ipt').each(function() {
+		$me = $(this);
+		k = $me.attr('name');
+		v = $me.val();
+		p[k] = v;
+	});
+	$form.find('.add_form_radio').each(function () {
+		$me = $(this).find('input:checked');
+		k = $me.attr('name');
+		v = $me.val();
+		p[k] = v;
+	});
+	p['rewardValue'] = (function() {
+		if ( !globalData.avlData[0] ) {
+			return '';
+		}
+		var arr = [];
+		$.each(globalData.avlData, function　( index, obj ){
+			arr[index] = {};
+			$.each(obj, function ( kk, kv ) {
+				arr[index][kk] = kv.val;
+			});
+			// 添加index值，第一个就是一等奖
+			arr[index]['index'] = ((index + 1) + '');
+		});
+		return arr;
+	})();
+	Common.storageL(globalData.ssStaParam, p, true); // 记录表单数据
+	return p;
+}
+
+//编辑或添加的表单验证
+function fromValid ( p ) {
+	var $form = $('#task_from_box'),
+		$me;
+	if(!(p || $.isEmptyObject(p))) {
+		return false;
+	}
+	//数据是否为空的验证
+	var isTrue = true,
+		dnll = '';
+	$.each(p, function(k, v) {
+		$me = $form.find('[name="' + k + '"]');
+		dnll = $me.attr('data-null');
+		if ( !v ) {
+			if( k === 'rewardValue' ) {
+				Common.jBoxNotice('请添加奖励规则', 'red');
+				$('#reward_value').modal('show');
+				isTrue = false;
+			} else if ( $me[0] && $me.is(':visible') && dnll ) {
+				bootsToast($me, '<span style="color: #ff961a">' + dnll + '</span>');
+				isTrue = false;
+			}
+		} else if (k === 'endDate' ) {
+			if ( parseInt(p.startDate.replace(/\D/g, '')) >= p.endDate.replace(/\D/g, '') ) {
+				$me = $form.find('[name="startDate"]');
+				bootsToast($me, '<span style="color: #ff961a">起始时间必须小于结束时间</span>');
+				isTrue = false;
+			}
+		} else if( k === 'rewardValue' ) {
+			// 单次随机，概率值相加必须等于100%
+			if ( (p.randomMode + '') === '1' ) {
+				var ap = 0;
+				$.each(p.rewardValue, function ( index, obj ) {
+					ap += parseFloat(parseFloat(obj.probability).toFixed(2));
+				})
+				ap = parseFloat(ap.toFixed(2));
+				if ( !(ap === 100) ) {
+					Common.jBoxNotice('单次随机，奖励规则和值必须是100%', 'red');
+					isTrue = false;
+				}
+			}
+		}
+		if ( !isTrue ) {
+			return false;
+		}
+	});
+	return isTrue;
+}
+
+// 表单赋值
+function fromAssignment ( p ) {
+	var $form = $('#task_from_box'),
+		$me;
+	$.each(p, function( k, v ) {
+		$me = $form.find('[name="' + k + '"]');
+		if ( k === 'rewardValue' ) {
+			// 不做任何处理
+		} else {
+			$me.val(v);
+		}
+	});
+	try {
+		globalData.avlData = (function () {
+			var v = ( (typeof p.rewardValue) === 'string' ) ? JSON.parse(p.rewardValue) : p.rewardValue;
+			var arr = [];
+			$.each(v, function ( index, obj ) {
+				arr[index] = {};
+				$.each(obj, function ( kk, kv ) {
+					arr[index][kk] = {
+						val: kv,
+						txt: kv
+					}
+				});
+			});
+			return arr;
+		})();
+		randomRvStr(globalData.avlData);
+	} catch ( err ) {}
+}
+
+
+// 库存限制改变
+function sltChange ( $me, arr ) {
+	var $rvMd = $('#reward_value'),
+		v = $me.val(),
+		$box = null;
+	$rvMd.find('.risk_control').remove();
+	if ( v === '1' ) { // 每天
+		$box = tlvDateEvent('h', arr);
+	} else if ( v === '2' ) { // 全程
+		$box = tlvDateEvent('d', arr);
+	}
+	$rvMd.find('[name="stockLimitValue"]')
+	.parents('.form-group').after($box);
+}
+
+// 时间风控的时间控制
+function tlvDateEvent ( dh, arr ) {
+	var $box = $('<div class="form-group risk_control"></div>'),
+		str =
+		'<label class="control-label col-xs-4">时间风控：</label>'+
+		'<div class="col-xs-8">'+
+			'<div class="risk_table">' + riskTableStr(arr) + '</div>'+
+			'<div style="height: 5px;"></div>'+
+			'<div class="input-group">'+
+				'<input type="text" data-null="请选择开始时间" class="form-control text-center form_tlv start" name="start" readonly placeholder="开始时间">'+
+				'<span class="input-group-addon">至</span>'+
+				'<input type="text" data-null="请选择结束时间" class="form-control text-center form_tlv end" name="end" readonly placeholder="结束时间">'+
+			'</div>'+
+			'<div style="height: 5px;"></div>'+
+			'<input type="number" name="value" placeholder="发放个数" class="form-control" />'+
+			'<div style="height: 5px;"></div>'+
+			'<button type="button" class="btn btn-success" onclick="addRiskT()">添加</button>'+
+		'</div>';
+	globalData.riskArr = arr || []; // 将数据重置或记录
+	$box.html(str);
+	if ( dh === 'd' ) {
+		$box.find('.form_tlv').each(function () {
+			laydate.render({
+			  elem: this,
+			  type: 'datetime'
+			});
+		});
+} else if ( dh === 'h' ) {
+		$box.find('.form_tlv').each(function () {
+			laydate.render({
+			  elem: this,
+			  type: 'time'
+			});
+		});
+	}
+	return $box;
+}
+
+
+// 风控表格呈现
+function riskTableStr ( arr ) {
+	if ( !(arr && arr[0]) ) {
+		return '';
+	}
+	var str = '';
+	$.each(arr, function(index, obj) {
+		str +=
+			'<tr>' +
+			'<td title="' + obj.start + '">' + obj.start + '</td>' +
+			'<td title="' + obj.end + '">' + obj.end + '</td>' +
+			'<td title="' + obj.value + '">' + obj.value + '</td>' +
+			'<td>' +
+			' <button class="btn btn-sm btn-danger" onclick="deleteRiskObj(' + index + ')">删除</button>' +
+			'</td>' +
+			'</tr>';
+	});
+	str =
+		'<div class="rv_table_box">'+
+			'<table style="width: 400px;" class="table table-striped table-bordered table-hover">' +
+			'<thead class="thin-border-bottom">' +
+			'<tr><th>开始时间</th><th>结束时间</th><th>发放个数</th><th width="130">操作</th></tr>' +
+			'</thead>' +
+			'<tbody>' +
+			str +
+			'</tbody>' +
+			'</table>'+
+		'</div>';
+	return str;
+}
+
+// 删除一行时间风控
+function deleteRiskObj ( index ) {
+	globalData.riskArr.splice(index, 1);
+	$('#reward_value').find('.risk_table').html(riskTableStr(globalData.riskArr));
+}
+
+// 添加一行时间风控
+function addRiskT () {
+	var $box = $('#reward_value').find('.risk_control'),
+		p = {
+			start: $box.find('[name="start"]').val(),
+			end: $box.find('[name="end"]').val(),
+			value: $box.find('[name="value"]').val()
+		};
+	p.value = parseInt(p.value);
+	if ( !riskValid(p) ) {
+		return false;
+	}
+	globalData.riskArr.push(p);
+	$box.find('.risk_table').html(riskTableStr(globalData.riskArr));
+	$box.find('input').val('');
+}
+
+// 风控数据验证
+function riskValid ( p ) {
+	var cunV =  (function () {
+			var v = 0;
+			$.each(globalData.riskArr, function ( index, obj ) {
+				v += obj.value;
+			});
+			return v;
+		})(),
+		totalV = (function () {
+			var v = $('#reward_value').find('[name="stockLimitValue"]').val();
+			return (parseInt(v) || 0)
+		})();
+	if ( !totalV ) {
+		Common.jBoxNotice('请先输入最多产出数量', 'red');
+		return false;
+	}
+	if ( !p.start ) {
+		Common.jBoxNotice('请选择开始时间', 'red');
+		return false;
+	}
+	if ( !p.end ) {
+		Common.jBoxNotice('请选择结束时间', 'red');
+		return false;
+	}
+	if ( !( parseInt(p.end.replace(/\D/g, '')) > parseInt(p.start.replace(/\D/g, '')) ) ) {
+		Common.jBoxNotice('结束时间必须大于开始时间', 'red');
+		return false;
+	}
+	if ( !p.value ) {
+		Common.jBoxNotice('请选择发放个数', 'red');
+		return false;
+	}
+	if ( !(cunV + p.value <= totalV) ) {
+		Common.jBoxNotice('总个数必须小于最多产出', 'red');
+		return false;
+	}
+	return true;
+}
+
+// 奖励值表单需要额外添加的参数
+function addIptMo () {
+	var $form = $('#reward_value').find('form'),
+		pobj = $form.data('pobj') || {},
+		p = pobj.p;
+	if ( !$form.find('.unitPrice_box')[0] ) {
+		var $box = $('<div class="unitPrice_box"></div>'),
+			str =
+			'<div class="form-group">'+
+				'<label class="control-label col-xs-4"><span class="red">*</span>奖励值单价：</label>'+
+				'<div class="col-xs-8">'+
+					'<input type="number" value="' + (p ? p.unitPrice.val : '') + '" name="unitPrice" data-null="请输入奖励值单价" placeholder="奖励值单价" class="form-control add_form_ipt" />'+
+				'</div>'+
+			'</div>';
+		$box.html(str);
+		$form.append($box);
+	}
+}
+
+// 随机奖励
+function randomRvStr ( arr ) {
+	var $form = $('#task_from_box'),
+		str = '';
+	if ( !(arr && arr[0]) ) {
+		$form.find('div.rewardValue').html('<button class="btn btn-success" onclick="addAvlObj()">新增</button>');
+		return false;
+	}
+	$.each(arr, function(index, obj) {
+		str +=
+			'<tr>' +
+			'<td title="' + (index + 1) + '">' + (index + 1) + '</td>' +
+			'<td title="' + obj.awardValue.txt + '">' + obj.awardValue.txt + '</td>' +
+			'<td title="' + obj.probability.txt + '">' + obj.probability.txt + '</td>' +
+			'<td title="' + obj.winLimitType.txt + '">' + obj.winLimitType.txt + '</td>' +
+			'<td title="' + obj.winLimitValue.txt + '">' + obj.winLimitValue.txt + '</td>' +
+			'<td title="' + obj.stockLimitType.txt + '">' + obj.stockLimitType.txt + '</td>' +
+			'<td title="' + obj.stockLimitValue.txt + '">' + obj.stockLimitValue.txt + '</td>' +
+			'<td>' +
+			'<button class="btn btn-sm btn-success" onclick="editAvlObj(' + index + ')">编辑</button>' +
+			' <button class="btn btn-sm btn-danger" onclick="deleteAvlObj(' + index + ')">删除</button>' +
+			'</td>' +
+			'</tr>';
+	});
+	str =
+		'<div class="rv_table_box">'+
+		'<div class="alert alert-info" role="alert">表格的第一行就是一等奖，以此类推</div>'+
+		'<table class="table table-striped table-bordered table-hover">' +
+		'<thead class="thin-border-bottom">' +
+		'<tr><th>奖等</th><th>奖励值</th><th>概率</th><th>中奖限制</th><th>最多中奖</th><th>库存限制</th><th>最多产出</th><th width="130">操作</th></tr>' +
+		'</thead>' +
+		'<tbody>' +
+		str +
+		'</tbody>' +
+		'</table>' +
+		'<button class="btn btn-success" onclick="addAvlObj()">新增</button>'+
+		'</div>';
+	$form.find('div.rewardValue').html(str);
+}
+
+// 添加奖励规则
+function addAvlObj() {
+	var $rvMd = $('#reward_value'),
+		$form = $rvMd.find('form');
+	resetAvl(); // 重置表单
+	$form.data('pobj', ''); // 判断是否编辑数据
+	$rvMd.modal('show');
+}
+// 编辑奖励规则
+function editAvlObj ( index ) {
+	var $rvMd = $('#reward_value'),
+		$form = $rvMd.find('form'),
+		data = globalData.avlData[index];
+	resetAvl(); // 重置表单
+	assignmentAvl(data);
+	$form.data('pobj', {p: data, index: index}); // 判断是否编辑数据
+	$rvMd.modal('show');
+}
+
+// 奖励规则赋值
+function assignmentAvl ( p ) {
+	var $form = $('#reward_value').find('form'),
+		$me;
+	p = JSON.parse(JSON.stringify(p)); // 复制对象
+	$.each(p, function ( k, v ) {
+		$me = $form.find('[name="' + k + '"]');
+		if ( k === 'awardValue' ) { // 奖励值
+			awardTypeChange($form.find('[name="awardType"]'), v.val);
+		} else if ( k === 'timeLimitValue' ) { // 时间风控
+			if ( p.stockLimitType.val === '1' && v.val instanceof Array ) { // 每天
+				// 此时需要把时间恢复到只有时分秒
+				$.each(v.val, function( i, o ) {
+					o.end = o.end.substr(11);
+					o.start = o.start.substr(11);
+				});
+			}
+			sltChange($form.find('[name="stockLimitType"]'), v.val )
+		} else {
+			$me.val(v.val);
+		}
+	});
+}
+
+//删除奖励规则
+function deleteAvlObj(index) {
+	globalData.avlData.splice(index, 1);
+	randomRvStr(globalData.avlData);
+}
+
+//保存奖励内容，随机奖励
+function saveAvlObj() {
+	var $modal = $('#reward_value'),
+		$form = $modal.find('form'),
+		obj = getAvlVal(),
+		pobj = $form.data('pobj');
+	//数据验证
+	if( !avlValidFn(obj) ) {
+		return false;
+	}
+	if ( pobj ) {
+		globalData.avlData[pobj.index] = obj;
+	} else {
+		globalData.avlData.push(obj);
+	}
+	randomRvStr(globalData.avlData);
+	$modal.modal('hide');
+}
+
+// 重置奖励规则表单
+function resetAvl () {
+	var $modal = $('#reward_value'),
+		$form = $modal.find('form');
+	$form.find('input, select').val('');
+	awardTypeChange($form.find('[name="awardType"]'));
+	sltChange($form.find('[name="stockLimitType"]'));
+}
+
+// 过去奖励规则的奖励值数据
+function getAvlVal () {
+	var $modal = $('#reward_value'),
+		$me, v, txt, k, obj = {};
+	$modal.find('.add_form_ipt').each(function() {
+		$me = $(this);
+		v = $me.val();
+		k = $me.attr('name');
+		txt = (this.tagName.toLowerCase() === 'select') ? $me.find('option:checked').text().trim() : v;
+		obj[k] = {
+			val: v,
+			txt: txt
+		};
+		if(k === 'awardType') {
+			obj['awardValue'] = getFAV ($modal.find('.awardValue'));
+		} else if ( k === 'probability' ) {
+			v = parseFloat(parseFloat(v).toFixed(2));
+			obj[k] = {
+				val: v,
+				txt: txt
+			};
+		} else if ( k === 'stockLimitType' ) {
+			// 时间风控
+			obj['timeLimitValue'] = (function () {
+				if ( !(globalData.riskArr && globalData.riskArr[0]) ) {
+					return {
+						val: '',
+						txt: ''
+					};
+				}
+				var arr = [];
+				$.each(globalData.riskArr, function ( index, obj ) {
+					if ( obj.start.indexOf('-') < 0 ) {
+						obj.start = '2018-08-08 ' + obj.start;
+						obj.end = '2018-08-08 ' + obj.end;
+					}
+					arr[index] = obj;
+					arr[index]['index'] = ((index + 1) + '');
+				});
+				return {
+					val: arr,
+					txt: JSON.stringify(arr)
+				};
+			})();
+		}
+	});
+	return obj;
+}
+
+// 获取对应奖励值类型的奖励值
+function getFAV (avele) {
+	var a1 = avele.eq(0).val() || '',
+		a2 = avele.eq(1).val() || '',
+		a3 = '', a4 = '';
+	if ( avele.length === 2 ) {
+		if ( a1 && a2 ) {
+			a3 = ( a1 + '|' + a2 );
+			a4 = a1 + ' ' + $.trim(avele.find('option:checked').text())
+		} else {
+			a3 = '';
+			a4 = a1;
+		}
+	} else {
+		a3 = a1;
+		a4 = a1;
+	}
+	return {
+		val: a3,
+		txt: a4
+	};
+}
+
+//奖励规则数据验证
+function avlValidFn(p) {
+	var $modal = $('#reward_value'),
+		$me;
+	if(!(p || $.isEmptyObject(p))) {
+		return false;
+	}
+	//数据是否为空的验证
+	var isTrue = true, //默认值不是空
+		dnll = '';
+	$.each(p, function(k, v) {
+		$me = $modal.find('[name="' + k + '"]');
+		dnll = $me.attr('data-null');
+		if ( !v.val ) {
+			if ( k === 'awardValue' ) { //奖励值不定，所以单独列出
+				Common.jBoxNotice('请完善奖励值', 'red');
+				isTrue = false;
+			} else if ( k === 'timeLimitValue' ) {
+				// 不需要验证
+			} else {
+				if ( dnll ) {
+					Common.jBoxNotice(dnll, 'red');
+					isTrue = false;
+				}
+			}
+		} else if ( k === 'probability' ) {
+			if ( !(parseInt(v.val) >= 0 && parseInt(v.val) <= 100) ) {
+				Common.jBoxNotice('概率为0-100之间的数字', 'red');
+				isTrue = false;
+			}
+		}
+		if ( !isTrue ) {
+			return false;
+		}
+	});
+	return isTrue;
+}
+
+// 添加问题库，json文件
+// 显示框
+// 文件选择框
+function addQuestionArr ( ed, ef ) {
+	ef.on('change', function() {
+		var me = this,
+			rf = new FileReader(),
+			_file = this.files[0];
+		if(_file) {
+			rf.readAsDataURL(_file);
+			rf.onload = function() {
+				// result是图片的base64数据，可以用img标签显示
+				var b64 = rf.result || '';
+				if ( b64.toLowerCase().indexOf('data:application/json;') === 0 ) {
+					ed.val(b64);
+				} else {
+					Common.jBoxNotice('不是json文件', 'red');
+				}
+			}
+		}
+	});
+}
+</script>

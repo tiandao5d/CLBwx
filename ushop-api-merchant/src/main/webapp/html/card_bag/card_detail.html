@@ -1,0 +1,278 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>卡片详情</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+.xlcd-p1 {
+	line-height: 30px;
+	color: #434343;
+	text-align: center;
+}
+.xlcd-p2 {
+	position: relative;
+	width: 208px;
+	height: 208px;
+	margin: 0 auto;
+}
+.qrcode_er {
+	position: absolute;
+	/*left: 27.9%;
+	top: 7.5%;
+	bottom: 44%;
+	right: 27.9%;*/
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	border: dashed 2px #ff811a;
+	padding: 6px;
+	border-radius: 6px;
+	background: #fff;
+}
+.xlcd-p2 img {
+	width: 100%;
+}
+.xlcd-p3 {
+	padding: 0 0 15px;
+	color: #434343;
+	text-align: center;
+}
+.xlcd-p4 {
+	color: #434343;
+	font-size: 15px;
+	text-align: center;
+	line-height: 2em;
+}
+
+.xlcd-box2 .xl-li {
+	margin: 0;
+}
+.xlcd-box2 .xl-li:after {
+	content: '';
+	position: absolute;
+	right: 0;
+	left: 0;
+	top: 0;
+	height: 1px;
+	-webkit-transform: scaleY(.3);
+	transform: scaleY(.3);
+	background: #434343;
+}
+.xlcd-box2 .xl-li:first-child:after {
+	height: 0;
+}
+.xlcd-box2 .xl-li > a {
+	padding: 10px 15px;
+}
+.xlcd-box2 .xl-li .xl-li-txt {
+	line-height: 24px;
+	color: #434343;
+}
+.xlcd-box2 .xlli-menu-right:before {
+	font-size: 18px;
+}
+.xlcd-box2 .xl-li .xl-li-txt .pull-right {
+	color: #a0a0a0;
+	padding-right: 10px;
+}
+
+/*站点选择*/
+.xlcd-site {
+	position: fixed;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	background: #eee;
+	z-index: 100;
+	-webkit-transform: translateX(100%);
+	transform: translateX(100%);
+	-webkit-transition: all .3s;
+	transition: all .3s;
+}
+.xlcd-site.active {
+	-webkit-transform: translateX(0);
+	transform: translateX(0);
+}
+.xlcd-site-title {
+	line-height: 28px;
+	color: #434343;
+	font-size: 15px;
+	padding: 0 15px;
+}
+.xlcd-site-li {
+	position: relative;
+	padding: 0 15px;
+	line-height: 1;
+	color: #959595;
+	background: #fff;
+	height: 45px;
+}
+.xlcd-site-p1 {
+	color: #434343;
+	padding: 9px 0 6px;
+}
+.xlcd-site-p3 {
+	position: absolute;
+	right: 26px;
+	top: 10px;
+}
+.xlcd-site-s1 {
+	position: relative;
+	line-height: 26px;
+	display: inline-block;
+}
+.xlcd-site-s1:before {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: -8px;
+	width: 1px;
+	background: #959595;
+	-webkit-transform: scaleX(.5);
+	transform: scaleX(.5);
+}
+.xlcd-site-p3 img {
+	height: 26px;
+	margin-left: 13px;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">卡片详情</h1>
+	</div>
+</div>
+<div class="xlbody-box">
+	<div class="xlcd-box1">
+		<div class="xlcd-p4">中国福利彩票中心</div>
+		<div class="xlcd-p2" onclick="qrcodeModalFn()">
+			<img src="../../image/icon/card_icon003.png">
+			<div id="qrcode_elel" class="qrcode_er"></div>
+		</div>
+		<div class="xlcd-p1" id="fund_name">　</div>
+		<div class="xlcd-p3" id="deadline">有效期：0000.00.00</div>
+	</div>
+	<div class="xlcd-box2">
+		<ul class="xl-ul">
+			<li class="xl-li">
+				<a>
+					<div class="xl-li-txt">到门店兑换</div>
+				</a>
+			</li>
+			<li class="xl-li xlli-menu-right">
+				<a>
+					<div class="xl-li-txt">使用须知</div>
+				</a>
+			</li>
+			<li class="xl-li xlli-menu-right">
+				<a onclick="siteSHFn('show')">
+					<div class="xl-li-txt">适合门店
+						<!--<div class="pull-right">附近570米</div>-->
+					</div>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="xlcd-site" id="site_box">
+	<div class="xlcd-site-title">共33家站点</div>
+	<div class="xlcd-site-ul">
+		<div class="xlcd-site-li" onclick="siteSHFn('hide')">
+			<div class="xlcd-site-p1">中国店</div>
+			<div class="xlcd-site-p2">（中国的地址来着）</div>
+			<!--<div class="xlcd-site-p3">
+				<div class="xlcd-site-s1">570m</div>
+				<img src="../../image/icon/card_icon001.png"/>
+			</div>-->
+		</div>
+	</div>
+</div>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/jquery.qrcode.min.js"></script>
+<script src="../../script/md5.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+
+//页面启动时，数据初始化
+function pageDataInit(){
+	$('#deadline').html('截止：' + (globalData.pageParam.deadline || '0000.00.00'));
+	$('#fund_name').html(globalData.pageParam.fundTypeName || '　');
+	globalData.qrcodeStr = globalData.pageParam.codeStr;
+	qrcodeFn(encodeURIComponent(globalData.qrcodeStr));
+}
+//dom事件绑定
+function domEventFn(){
+}
+
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+}
+
+//刷新之后执行函数
+function refreshAfterFn(){
+	if(globalData.refreshComplete >= globalData.requestNum){
+		globalData.refreshComplete = 0;//用来记录请求完成次数
+		globalData.requestNum = 0;//用来记录有多少次用户请求
+		if(globalData.isRefresh == true){
+			globalData.isRefresh = false;
+			Common.toast('刷新成功');
+		}
+	}
+}
+
+function siteSHFn(type){
+	if(typeof type != 'string'){return false;}
+	var box = $('#site_box');
+	if(type === 'hide'){
+		box.removeClass('active');
+	}else if(type === 'show'){
+		box.addClass('active');
+	}
+}
+
+//生成二维码
+function qrcodeFn(codeStr){
+	var box = $('#qrcode_elel');
+	box.qrcode({width: box.width(),height: box.height(), text: codeStr});
+}
+//生成二维码
+function qrcodeModalFn(){
+	var str = '<div style="text-align: center;"><div id="qrcode_ele" style="width: 200px; height: 200px; display: inline-block;"></div></div>';
+	Common.confirm('提示', str, null, '确定');
+	$('#qrcode_ele').qrcode({width: 200,height: 200,text: globalData.qrcodeStr});
+}
+
+
+//虚拟商品兑换，用来测试，不用老是跑到微信中去
+function siteExchangeFn(str){
+	str = decodeURIComponent(str.split('_xll_')[1]);
+	var arr = str.split('_xl_'),
+		_url = '/ushop-api-merchant/api/user/coupons/gift/use',
+		_param = {
+			ownerNo: arr[0],
+			couponsNo: arr[1]
+		};
+	console.log(_param)
+	Common.ajax(_url, 'post', _param, function(data){
+		console.log(data)
+	});
+}
+</script>
+</body>
+</html>

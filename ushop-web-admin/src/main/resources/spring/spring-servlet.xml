@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd"
+	default-autowire="byName" default-lazy-init="false">
+
+	<!-- 配置自定扫描的包 -->
+	<context:component-scan base-package="com.genlot.ushop.web.admin"></context:component-scan>
+
+	<!-- 在实际开发中通常都需配置 mvc:annotation-driven 标签 -->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    
+    <!-- default-servlet-handler 将在 SpringMVC 上下文中定义一个 DefaultServletHttpRequestHandler, 
+        它会对进入 DispatcherServlet 的请求进行筛查, 如果发现是没有经过映射的请求, 就将该请求交由 WEB 应用服务器默认的 Servlet 
+        处理. 如果不是静态资源的请求， 才由 DispatcherServlet 继续处理 一般 WEB 应用服务器默认的 Servlet 的名称都是 
+        default. 若所使用的 WEB 服务器的默认 Servlet 名称不是 default，则需要通过 default-servlet-name 
+        属性显式指定 -->
+    <mvc:default-servlet-handler />
+
+    <!-- 配置视图解析器: 如何把 handler 方法返回值解析为实际的物理视图 -->
+    <bean
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/views/"></property>
+        <property name="suffix" value=".jsp"></property>
+        <property name="viewClass"
+            value="org.springframework.web.servlet.view.JstlView" />
+    </bean>
+
+    <bean id="mappingJacksonHttpMessageConverter"
+        class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/html;charset=UTF-8</value>
+                <value>text/json;charset=UTF-8</value>  
+                <value>application/json;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
+
+
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="mappingJacksonHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+	
+	
+	 <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    	<property name="defaultEncoding" value="UTF-8"/> 
+    	<property name="uploadTempDir" value="fileUpload/temp"/>   
+    	<property name="maxInMemorySize" value="40960"/>
+    	<property name="maxUploadSize" value="1048576"/>
+    </bean> 
+    
+  <!--  拦截器	 -->
+    <mvc:interceptors> 
+     <mvc:interceptor>  
+        <mvc:mapping path="/product/**"/>  
+        <mvc:mapping path="/account/**"/> 
+        <mvc:mapping path="/admin/**"/> 
+        <mvc:mapping path="/sns/**"/> 
+        <mvc:mapping path="/pay/**"/> 
+        <mvc:mapping path="/lotteryTickets/**"/>         
+        <mvc:mapping path="/order/**"/> 
+        <mvc:mapping path="/user/merchant/**"/> 
+        <mvc:mapping path="/user/player/**"/> 
+        <mvc:mapping path="/user/robot/**"/> 
+        <mvc:mapping path="/user/relation/**"/> 
+        <mvc:mapping path="/points/**"/> 
+        <mvc:mapping path="/promoter/**"/> 
+        <mvc:mapping path="/spellBuy/**"/> 
+        <mvc:mapping path="/mall/**"/>  
+        <mvc:mapping path="/vipInfo/**"/>
+        <mvc:mapping path="/account/**"/>
+        <mvc:mapping path="/vote/**"/>
+        <mvc:mapping path="/task/**"/>
+        <mvc:mapping path="/platform/**"/>
+        <mvc:mapping path="/spellBuy/**"/>
+    	<bean class="com.genlot.shop.web.admin.interceptor.OAuthInterceptor"/> 
+    </mvc:interceptor> 
+    </mvc:interceptors> 
+
+</beans>

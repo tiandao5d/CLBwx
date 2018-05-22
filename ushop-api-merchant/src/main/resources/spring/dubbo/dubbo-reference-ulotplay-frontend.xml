@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+        default-autowire="byName" default-lazy-init="false">
+
+	<!-- 即开票服务接口 -->
+	<dubbo:reference interface="com.genlot.uplatform.facade.frontend.hotline.caipiao2.service.CaiPiao2Facade" id="caiPiao2Facade" check="false" />
+	<!-- 彩票积分服务接口 -->
+	<dubbo:reference interface="com.genlot.uplatform.facade.frontend.hotline.caipiao.service.CaiPiaoFacade" id="caiPiaoFacade" check="false" />
+    <!-- 微信服务接口 url="dubbo://10.35.0.115:8081"  -->
+	<dubbo:reference interface="com.genlot.uplatform.facade.frontend.weixin.service.WeiXinFacade" id="weiXinFacade" check="false" />
+    <!-- 支付宝服务接口  -->
+	<dubbo:reference interface="com.genlot.uplatform.facade.frontend.alipay.service.AliFacade" id="aliFacade" check="false"/>
+</beans>  

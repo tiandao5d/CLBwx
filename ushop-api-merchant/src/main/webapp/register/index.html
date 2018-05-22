@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>欢乐加入彩乐宝</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			body {
+				width: 100%;
+				height: 100%;
+				background: #F6F6F7;
+			}
+			
+			.register {
+				width: 90%;
+				position: absolute;
+				top: 68%;
+				left: 5%;
+			}
+			
+			.info {
+				width: 100%;
+				background: white;
+				border-radius: 20px;
+				margin-bottom: 16px;
+			}
+			
+			.info div {
+				width: 80%;
+				margin: 0 auto;
+				border-bottom: 1px solid #e5e5e5;
+				height: 60px;
+				padding-left: 30px;
+			}
+			
+			.info div input {
+				width: 60%;
+				border: none;
+				outline: none;
+				padding: 22px 0 0 10px;
+			}
+			
+			.info div img {
+				width: 26px;
+				height: 26px;
+				float: right;
+				margin-top: 12px;
+			}
+			
+			.info .tel {
+				background: url(img/tel.png) no-repeat left center;
+			}
+			
+			.info .mess {
+				background: url(img/mess.png) no-repeat left center;
+			}
+			
+			.info .password {
+				background: url(img/password.png) no-repeat left center;
+				border-bottom: none;
+			}
+			
+			.mess span {
+				display: inline-block;
+				height: 50px;
+				float: right;
+				line-height: 60px;
+				color: #478EDD;
+			}
+			
+			.checkbox {
+				margin: 0 0 30px 30px;
+				font-size: 14px;
+			}
+			
+			.checkbox a {
+				text-decoration: none;
+				color: #478EDD;
+			}
+			
+			.checkbox input[type=checkbox] {
+				position: absolute;
+				width: 20px;
+				height: 20px;
+				margin-left: -26px;
+			}
+			
+			.enter {
+				width: 100%;
+				height: 50px;
+				background-color: #FF5534;
+				border-radius: 5px;
+				text-align: center;
+				color: white;
+				line-height: 50px;
+				margin-bottom: 10px;
+			}
+			
+			.rule {
+				font-size: 14px;
+				color: #474747;
+				padding-bottom: 30px;
+			}
+			/* 模态框样式 */
+			
+			.modal-data {
+				position: absolute;
+				left: 0%;
+				top: 0%;
+				z-index: 1001;
+				overflow: auto;
+				height: 100%;
+				width: 100%;
+				background-color: #fff;
+				text-align: justify;
+			}
+			
+			.modal-data p {
+				text-indent: 2em;
+				font-size: 14px;
+				color: #474747;
+				margin: 16px;
+			}
+			
+			.modal-data h4 {
+				margin-left: 4px;
+			}
+			
+			.hidden {
+				display: none;
+			}
+			
+			.download {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				z-index: 1000;
+				top: 0;
+				left: 0;
+			}
+			
+			.done_bg {
+				width: 100%;
+				height: 100%;
+			}
+			
+			.done_button {
+				width: 60%;
+				position: absolute;
+				bottom: 15%;
+				left: 20%;
+			}
+			
+			.done_button:active {
+				box-shadow: 4px 5px 5px #EF2EC4;
+				border-radius: 20px;
+			}
+			/*提示框*/
+			
+			.alert {
+				display: none;
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+				min-width: 200px;
+				/*margin-left: -100px;*/
+				z-index: 2010;
+				padding: 15px;
+				border: 1px solid transparent;
+				border-radius: 4px;
+				text-align: center;
+				font-weight: 100;
+			}
+			
+			.alert-success {
+				color:white;
+				background-color: #dff0d8;
+				border-color: #d6e9c6;
+			}
+			
+			.alert-danger {
+				color: #fefefe;
+				background-color: #ce4545;
+				/*border-color: #ebccd1;*/
+			}
+		</style>
+	</head>
+
+	<body>
+		<div style="position: relative;" class="main">
+			<img src="img/banner.png" alt="" style="width: 100%;margin-top: -14px;" />
+			<div class="register" id='formRegister'>
+				<div class="info" id='formRegister'>
+					<div class="tel"><input type="number" placeholder="请输入手机号" value="" class="userPhone" /><img src="img/searchclose.png" alt="" /></div>
+					<div class="mess"><input type="text" placeholder="验证码" value="" class="verificationCode" />
+						<span id='verificationCode'>获取验证码</span>
+					</div>
+					<div class="password"><input type="password" placeholder="请输入密码" value="" class="userPwd" /><img src="img/searchclose.png" alt="" /></div>
+				</div>
+				<div class="checkbox"><label><input type="checkbox" checked class="agreement"/>我已阅读并同意</label>
+					<a onclick="overlay('show')">《娱乐平台用户协议》</a>
+				</div>
+				<div class="enter" id="registerBtn">立即注册</div>
+				<h4 style="margin-bottom: 10px;">活动规则</h4>
+				<div class="rule">
+
+					<div>
+						1、彩豆会自动存入彩乐宝账户，可用于电商购物、游戏消耗；
+					</div>
+					<div>
+						2、下载彩乐宝，更多彩豆等你来赚。
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+		<!--模态框-->
+		<div id="hidden" class="hidden">
+			<div class="modal-data" onclick="overlay()">
+				<h3 style="text-align: center;margin: 20px 0;">娱乐平台用户协议</h3>
+				<h4>
+一、总则
+</h4>
+				<p>
+					1.1 彩乐宝平台的所有权和运营权归深圳掌中彩乐游科技有限公司所有。
+				</p>
+				<p>
+					1.2 用户在注册之前，应当仔细阅读本协议，并同意遵守本协议后方可成为注册用户。一旦注册成功，则用户与彩乐宝平台之间形成协议关系，用户应当受本协议的约束。用户在使用特殊的服务或产品时，应当同意接受相关协议后方能使用。
+				</p>
+				<p>
+					1.3 本协议细则由彩乐宝平台实时更新，用户应当及时关注并同意本平台不承担通知义务。本平台的通知、公告、声明或其它类似内容是本协议的一部分。
+				</p>
+				<h4>
+二、服务内容
+</h4>
+				<p>
+					2.1 本平台产品和服务的具体内容由彩乐宝根据实际情况提供，平台保留随时变更、中断或终止部分或全部产品和服务的权利。
+				</p>
+				<p>
+					2.2 本平台通过服务器端设备接入互联网为用户提供产品和服务，除此之外与产品或服务有关的设备（如手机及其他与接入互联网有关的装置）及所需的费用（如为接入互联网而支付的电话费及上网费）等均应由用户自行负担。
+				</p>
+				<p>
+					2.3 用户应使用正版软件接受产品和服务，软件费用由用户自行负担。
+				</p>
+				<h4>
+三、用户帐号
+</h4>
+				<p>
+					3.1 用户阅读并同意本条款，成功完成注册后即成为正式用户，可以获得本平台规定用户所应享有的一切权限；未经认证仅享有本站规定的部分用户权限。彩乐宝有权对用户的权限设计进行变更。
+				</p>
+				<p>
+					3.2用户有义务保证密码和帐号的安全，用户利用该密码和帐号所进行的一切活动引起的任何损失或损害，由用户自行承担全部责任，本站不承担任何责任。如用户发现帐号遭到未授权的使用或发生其他任何安全问题，应立即修改帐号密码并妥善保管，如有必要，请通知本平台。因黑客行为或用户的保管疏忽导致帐号非法使用，本站不承担任何责任。
+				</p>
+				<p>
+					3.3用户同意，与本平台帐号相关的一切资料、数据和记录（包括但不限于登录记录、登录后行为记录等）均以本平台系统记录的数据为准。
+				</p>
+				<h4>
+四、用户信息
+</h4>
+				<p>
+					4.1为了向用户提供更好的产品和服务，在用户自愿选择使用本平台的产品和服务的情况下，本平台可能会收集用户信息，并可能对这些信息进行分析和整合。在用户使用本平台的产品和服务时，服务器可能会自动记录部分用户信息，这些信息都将成为本平台商业秘密的一部分。
+				</p>
+				<p>
+					4.2保护用户的隐私是本平台的一项基本原则。本平台一贯积极地采取技术与管理等方面的合理措施保障用户信息的安全、保密。
+				</p>
+				<p>
+					4. 3除以下所列六项情形之外，本平台保证不对外公开或向第三方披露、提供用户信息。六项除外情形如下：
+				</p>
+				<p>
+					（1）用户（或者用户的监护人）要求或同意本平台披露用户信息；
+				</p>
+				<p>
+					（2）有关法律法规、监管机构规章或自律组织规则要求本平台披露用户信息；
+				</p>
+				<p>
+					（3）司法机关或行政机关基于法定程序要求本平台披露用户信息；
+				</p>
+				<p>
+					（4）为保护本平台的知识产权和其他权益，需要披露用户信息；
+				</p>
+				<p>
+					（5）在紧急情况下为保护其他用户和社会公众的利益，需要披露用户信息；
+				</p>
+				<p>
+					（6）根据本条款其他条款的规定，本平台认为确有必要披露用户信息的其他情况。
+				</p>
+				<p>
+					4.4 为了向用户正常地提供产品和服务，本平台可能需要向本平台的技术服务商、关联公司或其他第三方传送部分用户信息，在这些第三方承诺其将承担至少与本平台同等的保密义务的前提下，本平台将向这些第三方传送用户信息，用户对此予以理解和同意。
+				</p>
+				<p>
+					4.5 在不透露单个用户隐私资料的前提下，本平台有权对整个用户信息数据库进行技术分析并对已进行分析、整理后的用户数据库进行商业上的利用。
+				</p>
+				<p>
+					4.6 本平台将采取商业上合理可行的方式保护用户的个人信息的安全。本平台使用通常可以获得的安全技术和程序来保护用户的个人信息不被未经授权地访问、使用或泄漏。对于非因本平台的故意及重大过失而造成用户帐号的丢失或用户个人信息的泄密，本平台不承担任何责任。
+				</p>
+				<h4>
+五、使用规则
+</h4>
+				<p>
+					5.1 遵守中华人民共和国相关法律法规，包括但不限于《中华人民共和国计算机信息系统安全保护条例》、《计算机软件保护条例》、《最高人民法院关于审理涉及计算机网络著作权纠纷案件适用法律若干问题的解释(法释[2004]1号)》、《全国人大常委会关于维护互联网安全的决定》、《互联网电子公告服务管理规定》、《互联网新闻信息服务管理规定》、《互联网著作权行政保护办法》和《信息网络传播权保护条例》等有关计算机互联网规定和知识产权的法律和法规、实施办法。
+				</p>
+				<p>
+					5.2 用户对其自行发表、上传或传送的内容负全部责任，所有用户不得在本平台任何页面发布、转载、传送含有下列内容之一的信息，否则本站有权自行处理并不通知用户：
+				</p>
+				<p>
+					(1)违反宪法确定的基本原则的；
+				</p>
+				<p>
+					(2)危害国家安全，泄漏国家机密，颠覆国家政权，破坏国家统一的；
+				</p>
+				<p>
+					(3)损害国家荣誉和利益的；
+				</p>
+				<p>
+					(4)煽动民族仇恨、民族歧视，破坏民族团结的；
+				</p>
+				<p>
+					(5)破坏国家宗教政策，宣扬邪教和封建迷信的；
+				</p>
+				<p>
+					(6)散布谣言，扰乱社会秩序，破坏社会稳定的；
+				</p>
+				<p>
+					(7)散布淫秽、色情、赌博、暴力、恐怖或者教唆犯罪的；
+				</p>
+				<p>
+					(8)侮辱或者诽谤他人，侵害他人合法权益的；
+				</p>
+				<p>
+					(9)煽动非法集会、结社、游行、示威、聚众扰乱社会秩序的；
+				</p>
+				<p>
+					(10)以非法民间组织名义活动的；
+				</p>
+				<p>
+					(11)含有法律、行政法规禁止的其他内容的。
+				</p>
+				<p>
+					5.3用户承诺对其发表或者上传于本站的所有信息合乎法律法规规定，当第三方认为用户发表或者上传于本站的信息侵犯其权利，并根据《信息网络传播权保护条例》或者相关法律规定向本平台发送权利通知书时，用户同意本平台可以自行判断决定删除涉嫌侵权信息，除非用户提交书面证据材料排除侵权的可能性，本平台将不会自动恢复上述删除的信息；
+				</p>
+				<p>
+					(1)不得为任何非法目的而使用网络服务系统；
+				</p>
+				<p>
+					(2)遵守所有与网络服务有关的网络协议、规定和程序；
+				</p>
+				<p>
+					(3)不得利用本站进行任何可能对互联网的正常运转造成不利影响的行为；
+				</p>
+				<p>
+					(4)不得利用本平台进行任何不利于本平台的行为。
+				</p>
+				<p>
+					5.4 如用户在使用网络服务时违反上述任何规定，本平台有权要求用户改正或直接采取一切必要的措施(包括但不限于删除用户张贴的内容、暂停或终止用户使用网络服务的权利)以减轻用户不当行为而造成的影响。
+				</p>
+				<h4>
+六、服务变更、中断或终止
+</h4>
+				<p>
+					6.1鉴于网络服务的特殊性，用户同意本平台有权根据业务发展情况随时变更、中断或终止部分或全部的网络服务而无需通知用户，也无需对任何用户或任何第三方承担任何责任；
+				</p>
+				<p>
+					6.2 本平台需要定期或不定期地进行系统维护和升级，如因此类情况而造成网络服务在合理时间内的中断，本平台无需为此承担任何责任。
+				</p>
+				<p>
+					6.3 如发生下列任何一种情形，本平台有权随时中断或终止向用户提供本《协议》项下的网络服务（包括收费网络服务）而无需对用户或任何第三方承担任何责任：
+				</p>
+				<p>
+					（1）用户提供的个人资料不真实；
+				</p>
+				<p>
+					（2）用户违反本《协议》中规定的使用规则。
+				</p>
+				<h4>
+七、责任声明
+</h4>
+				<p>
+					7.1 用户明确同意其使用本平台网络服务所存在的风险及一切后果将完全由用户本人承担，彩乐宝对此不承担任何责任。
+				</p>
+				<p>
+					7.2 本平台无法保证网络服务一定能满足用户的要求，也不保证网络服务的及时性、安全性、准确性。
+				</p>
+				<p>
+					7.3 对于因不可抗力或本平台不能控制的原因造成的网络服务中断或其它缺陷，本平台不承担任何责任，但将尽力减少因此而给用户造成的损失和影响。
+				</p>
+				<p>
+					7.4 对于本平台向用户提供的下列产品或者服务的质量缺陷本身及其引发的任何损失，本平台无需承担任何责任：
+				</p>
+				<p>
+					(1)本平台向用户免费提供的各项网络服务；
+				</p>
+				<p>
+					(2)本平台向用户赠送的任何产品或者服务。
+				</p>
+				<p>
+					7.5 本平台有权于任何时间暂时或永久修改或终止本服务(或其任何部分)，而不另对用户进行通知。本协议的各项内容，本平台拥有最终解释权。
+				</p>
+			</div>
+		</div>
+		<!--下载页面-->
+		<div class="download hidden">
+			<img src="img/done_bg.png" alt="" class="done_bg" />
+			<a href="http://www.1leyou.cn/downloadclb/downloadclb.html" class="done"><img src="img/done_button.png" class="done_button" /></a>
+
+		</div>
+	</body>
+
+</html>
+<script src="js/jquery.min.js"></script>
+<script src="js/md5.min.js"></script>
+<script src="../script/common.js"></script>
+<script>
+	if(!Common){
+		var Common = {
+			domainUrl: 'http://clb.lotplay.cn',
+		}
+	}
+	var globalData = {};
+	globalData.regExpName = /^[0-9A-Za-z]{6,20}$/;
+	globalData.regExpPhone = /^1(3|4|5|7|8)\d{9}$/;
+	globalData.regExpPwd = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$/;
+	globalData.regExpEmail = /(^[a-zA-Z0-9_-]+\.?[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+$)|(^$)/;
+	globalData.regExpChinese = /[\u4E00-\u9FA5]/g;
+	globalData.sendCode = false;
+
+	function registerFn() {
+		var formRegister = $('#formRegister'),
+			userPwd = formRegister.find('.userPwd').val(),
+			userPhone = formRegister.find('.userPhone').val(),
+			agreement = formRegister.find('.agreement:checked'),
+			verificationCode = formRegister.find('.verificationCode').val();
+
+		if(!globalData.regExpPhone.test(userPhone)) {
+			prompt('请输入正确的手机号', 'alert-danger', 2000);
+			return false;
+		}
+		if(!/^[0-9]{6}$/.test(verificationCode)) {
+			prompt('手机验证码为6位纯数字', 'alert-danger', 2000);
+			return false;
+		}
+		if(!globalData.regExpPwd.test(userPwd)) {
+			prompt('密码为6-15位字母数则组合', 'alert-danger', 2000);
+			return false;
+		}
+
+		if(agreement.length <= 0) {
+			prompt('请阅读注册协议', 'alert-danger', 2000);
+			return false;
+		}
+		//手机注册参数
+		var _url = Common.domainUrl + '/ushop-api-merchant/api/user/login/registerPhone',
+			_param = '?mobileNo=' + userPhone + '&password=' + md5(userPwd) + '&code=' + verificationCode + '&promoter=' + (deCodeUrlFn().promoter || '') + '&location=' + 62,
+			newUrl = _url + _param;
+		$.ajax({
+			type: "POST",
+			url: newUrl,
+			dataType: 'json',
+			success: function(data) {
+				if(data.loginName) {
+					var timeOut = $('#verificationCode');
+					timeOut.addClass('fa-inbox');
+					timeOut.removeAttr("disabled");
+					timeOut.html("获取验证码");
+					$('#registerBtn').attr('disabled', true);
+					globalData.sendCode = false;
+					globalData.clearTimeout = true;
+					$(".download").removeClass('hidden');
+					$(".main").addClass('hidden');
+				} else if(data.error_description == '验证码不正确') {
+					prompt('验证码错误，请重新验证', 'alert-danger', 2000);
+
+				} else if(data.error_description == '用户已存在') {
+					prompt('用户已存在', 'alert-danger', 2000);
+				} else {
+					prompt('注册失败！', 'alert-danger', 2000);
+
+				}
+
+			},
+			error: function(data) {
+				prompt('注册失败！', 'alert-danger', 2000);
+			}
+		});
+
+	}
+
+	//获取url参数
+	function  deCodeUrlFn(dataStr) {
+		var  str  =  dataStr  ||  (document.URL  +  '').split('?')[1];
+		if(str) {
+			var  a  =   {},
+				b  =  str.split('&'),
+				i  =  0,
+				 s;
+			while(s  =  b[i++]) {
+				s  =   (s  +  '').split('=');
+				a[s[0]]  =  s[1];
+			}
+			return  a;
+		}
+		return  {};
+	}
+
+	$(document).ready(function(e) {
+
+		//清除输入框内容
+		clear(".tel img", '.tel input');
+		clear(".password img", '.password input');
+		//立即注册
+		$('#registerBtn').on('click', function() {
+			registerFn.call(this);
+		});
+		/*点击发送验证码 */
+		$('#verificationCode').on('click', function() {
+			if(globalData.sendCode) {
+				return false;
+			} else {
+				countdown = 60;
+			}
+			var formRegister = $('#formRegister'),
+				userPhone = formRegister.find('.userPhone').val();
+			globalData.userPhone = userPhone;
+			if(!globalData.regExpPhone.test(userPhone)) {
+			prompt('请输入正确的手机号！', 'alert-danger', 2000);
+				return false;
+			}
+			globalData.clearTimeout = false;
+			verificationCode.call(this);
+		});
+	});
+
+	//手机验证码函数
+	var countdown = 60;
+
+	function verificationCode(e) {
+		globalData.sendCode = true;
+
+		if(globalData.clearTimeout) {
+			return false
+		}
+		var timeOut = $('#verificationCode');
+		var _url = Common.domainUrl + '/ushop-api-merchant/api/sns/mobile/verify/sendCode/' + globalData.userPhone + '/1'
+		if(countdown == 60) {
+			$.ajax({
+				type: "POST",
+				url: _url,
+				dataType: 'json',
+				success: function(data) {},
+				error: function(data) {
+				prompt('注册失败！', 'alert-danger', 2000);
+				}
+			});
+		}
+		if(countdown == 0) {
+			timeOut.addClass('fa-inbox');
+			timeOut.removeAttr("disabled");
+			timeOut.html("获取验证码");
+			globalData.sendCode = false;
+			countdown = 60;
+			return false
+		} else {
+			timeOut.attr('disabled', true);
+			timeOut.removeClass('fa-inbox');
+			timeOut.html(countdown + "秒");
+			countdown--;
+		}
+		var a = setTimeout(function() {
+			verificationCode()
+		}, 1000)
+	}
+	/*点击删除 清空输入框的内容*/
+	function clear(a, b) {
+		$(a).click(function() {
+			$(b).val('');
+		});
+	}
+	//弹窗
+	function overlay(type) {
+		if(type == 'show') {
+			$("#hidden").removeClass('hidden');
+		} else {
+			$("#hidden").addClass('hidden');
+		}
+	}
+	//提示框
+	function prompt(message, style, time) {
+		style = (style === undefined) ? 'alert-success' : style;
+		time = (time === undefined) ? 1200 : time;
+		$('<div>')
+			.appendTo('body')
+			.addClass('alert ' + style)
+			.html(message)
+			.show()
+			.delay(time)
+			.fadeOut();
+	};
+</script>

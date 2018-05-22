@@ -1,0 +1,251 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>充值</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+.xlr-p1 {
+	font-size: 1.2em;
+	color: #555;
+	padding: 1em .8em;
+	background: #fff;
+}
+.xlr-p2 {
+	margin-bottom: 1px;
+}
+.xlr-p2 span {
+	float: left;
+	width: 33.3333%;
+	padding: .5em .8em;
+}
+.xlr-p2 span i {
+	display: block;
+	line-height: 2.4em;
+	width: 100%;
+	text-align: center;
+	background: #fff;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	padding: 0 .3em;
+}
+.xlr-p2 span i.active {
+	color: #fff;
+	background: #ff5534;
+}
+.xlr-modal-ipt {
+	display: block;
+	width: 100%;
+	height: 2.4em;
+	line-height: 1;
+	font-size: 1.2em;
+	padding: .7em .8em;
+	border: 0;
+	background: #ddd;
+}
+
+.xlr-box2 .xl-li.active .icon {
+	color: #0f0;
+}
+.xlr-box3 {
+	padding: 2em .8em 0;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">充值</h1>
+	</div>
+</div>
+<div class="xlbody-box">
+	<div class="xlr-box1">
+		<div class="xlr-p1">选择充值金额（1元=1余额）</div>
+		<div class="xlr-p2 clearfix" id="selectMoneyBox">
+			<span><i valNum="20" class="active">20元</i></span>
+			<span><i valNum="50">50元</i></span>
+			<span><i valNum="100">100元</i></span>
+			<span><i valNum="200">200元</i></span>
+			<span><i valNum="500">500元</i></span>
+			<span><i valNum="1" class="custom">自定义</i></span>
+		</div>
+	</div>
+	<div class="xlr-box2">
+		<ul class="xl-ul">
+			<li class="xl-li xl-lii active" payType="weixin">
+				<a>
+					<img class="xl-li-img" src="../../image/icon/wxzf.png">
+					<div class="xl-li-txt">微信支付<span></span></div>
+					<span class="xl-li-icon icon icon-radio"></span>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div class="xlr-box3">
+		<button class="xl-btn xl-btn-block" onclick="placeOrder()">立即购买</button>
+	</div>
+</div>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/md5.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+globalData.isProgress = false;
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+
+//页面启动时，数据初始化
+function pageDataInit(){
+}
+//dom事件绑定
+function domEventFn(){
+	var moneyItem = $('#selectMoneyBox').find('i');
+	moneyItem.on('click', function(){
+		var $me = $(this);
+		if(!$me.hasClass('active')){
+			moneyItem.removeClass('active');
+			$me.addClass('active');
+		}
+		if($me.hasClass('custom')){
+			var str = '<input class="xlr-modal-ipt modalIptMoney" type="number">',
+				val = $me.attr('valNum') || '1';
+			Common.confirm('请输入', str, function(index){
+				if(index == 1){
+					val = $('.modalIptMoney').val() || 1;
+				}
+				$me.attr('valNum', val).html(val + '元');
+			});
+		}
+	});
+}
+
+
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	//刷新数据请求函数
+}
+
+//刷新之后执行函数
+function refreshAfterFn(){
+	if(globalData.refreshComplete >= globalData.requestNum){
+		globalData.refreshComplete = 0;//用来记录请求完成次数
+		globalData.requestNum = 0;//用来记录有多少次用户请求
+		if(globalData.isRefresh == true){
+			globalData.isRefresh = false;
+			Common.toast('刷新成功');
+		}
+	}
+}
+
+//下单请求
+function placeOrder() {
+	var activeI = $('#selectMoneyBox').find('i.active');
+	if(activeI.length == 0) {
+		Common.toast('请选择充值金额！');
+		return false;
+	}
+	Common.loadingShow();
+	var money = parseFloat(activeI.attr('valNum')) || 1,
+		_url = '/ushop-api-merchant/api/spellbuy/cart/settlement/recharge/' + money;
+	Common.ajax(_url, 'post', {}, function(data){
+		if(data.orderNo){
+			globalData.payOrderNo = data.orderNo;
+			weixinPay();
+		}else{
+			Common.loadingHide();
+		}
+	});
+}
+
+//微信支付
+function weixinPay(){
+	if (typeof WeixinJSBridge == "undefined"){
+	   if( document.addEventListener ){
+	       document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+	   }else if (document.attachEvent){
+	       document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+	       document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+	   }
+	}else{
+	   onBridgeReady();
+	}
+}
+function onBridgeReady(){
+	var _url = '/ushop-api-merchant/api/payment/weixinpay/pay/' + globalData.payOrderNo;
+	Common.ajax(_url, 'post', {}, function(data){
+		if(data.orderNo){
+			WeixinJSBridge.invoke(
+		    	'getBrandWCPayRequest', {
+		        	"appId": data.appId,//公众号名称，由商户传入
+		        	"timeStamp": data.timeStamp,//时间戳，自1970年以来的秒数
+		        	"nonceStr": data.nonceStr, //随机串
+		        	"package": data.package,
+		        	"signType": data.signType,//微信签名方式
+		        	"paySign":  data.paySign //微信签名
+		    	},
+		    	function(res){
+		    		//使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+		        	if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+		        		Common.toast('微信支付成功！');
+						setTimeout(function(){
+							queryPayResult(globalData.payOrderNo);
+						}, 1000);
+		        	}else{
+		        		Common.toast('微信支付失败！');
+		        	}
+		    	}
+			); 
+		}else{
+			Common.toast('微信调用错误！');
+			Common.loadingHide();
+		}
+	});
+}
+
+
+//智付结束后回调，确认订单状态
+function queryPayResult(orderNo){
+	if(!globalData.payStatusAjaxNo){
+		globalData.payStatusAjaxNo = 1;
+	}else{
+		globalData.payStatusAjaxNo += 1;
+	}
+	Common.loadingShow('支付结果查询中……');
+	var _url = '/ushop-api-merchant/api/spellbuy/cart/settlement/recharge/status/' + orderNo;
+	Common.ajax(_url, 'get', {}, function(data){
+		if(data.orderNo){
+			if((data.status + '') === '100'){
+				Common.loadingHide();
+				Common.confirm('提示', '恭喜，支付成功！', function(){
+				}, '确定');
+			}else if(globalData.payStatusAjaxNo <= 3){
+				setTimeout(function(){
+					queryPayResult(orderNo);
+				}, 3000);
+			}else if(globalData.payStatusAjaxNo > 3){
+				Common.loadingHide();
+				globalData.payStatusAjaxNo = 0;
+				Common.confirm('提示','支付结果查询超时，是否继续查询您的支付结果？',function (index) {
+					if(index == 1){
+						queryPayResult(orderNo);
+					}
+				},['取消','继续查看']);
+			}
+		}else {
+			Common.loadingHide();
+		}
+	}, false);
+}
+
+</script>
+</body>
+</html>

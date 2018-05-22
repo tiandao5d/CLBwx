@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>领彩豆</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+.xlg-box1 {
+	background: #ff8a09;
+	color: #fff;
+	font-size: 1.3em;
+	text-align: center;
+	padding: 1em 0 3em;
+	border-radius: 0 0 3em 3em;
+}
+.xlg-box1 .xlg-p1 {
+	font-size: 1.2em;
+}
+.xlg-box2 {
+	position: relative;
+	top: -3em;
+	width: 90%;
+	margin: 0 auto;
+}
+.xl-lii .xl-li-txt .xlg-li-p1 {
+	color: #888;
+	font-size: .8em;
+}
+.xl-li .xl-li-img {
+	width: 3em;
+	height: 3em;
+	margin-top: -1.5em;
+}
+.xl-li > a {
+	padding-left: 4.6em;
+	opacity: 1 !important;
+}
+.xl-li > a:active,
+.xl-li > a:hover {
+	background: #eee;
+}
+.xl-lii .xl-li-txt {
+	line-height: 1.4em;
+	font-size: 1.3em;
+	padding-right: 1.5em;
+	padding-left: 0;
+}
+.xlli-menu-right:before {
+	font-size: 1.8em;
+	color: #ff890d;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">赚彩豆</h1>
+	</div>
+</div>
+<div class="xlbody-box">
+	<div class="xlg-box1">
+		<div>我的彩豆</div>
+		<div class="xlg-p1" id="integralEle">00</div>
+	</div>
+	<div class="xlg-box2">
+		<ul class="xl-ul">
+			<li class="xl-li xlli-menu-right xl-lii">
+				<a onclick="Common.toast('功能开发中！')">
+					<img class="xl-li-img" src="../../image/icon/xsrw.png">
+					<div class="xl-li-txt">
+						<div class="ellipsis">新手任务</div>
+						<div class="xlg-li-p1 ellipsis">新人福利，彩豆多多，快来参与吧</div>
+					</div>
+				</a>
+			</li>
+			<li class="xl-li xlli-menu-right xl-lii">
+				<a onclick="Common.toast('功能开发中！')">
+					<img class="xl-li-img" src="../../image/icon/mrqd.png">
+					<div class="xl-li-txt">
+						<div class="ellipsis">每日签到</div>
+						<div class="xlg-li-p1 ellipsis">连续签到更有额外彩豆奖励哦</div>
+					</div>
+				</a>
+			</li>
+			<li class="xl-li xlli-menu-right xl-lii">
+				<a onclick="Common.toast('功能开发中！')">
+					<img class="xl-li-img" src="../../image/icon/zjsd.png">
+					<div class="xl-li-txt">
+						<div class="ellipsis">中奖晒单<small class="xl-color-ff5534">　10彩豆/次</small></div>
+						<div class="xlg-li-p1 ellipsis">参与彩豆购，确认收货后晒单分享</div>
+					</div>
+				</a>
+			</li> 
+			<li class="xl-li xlli-menu-right xl-lii">
+				<a onclick="Common.toast('功能开发中！')">
+					<img class="xl-li-img" src="../../image/icon/pcp.png">
+					<div class="xl-li-txt">
+						<div class="ellipsis">拍彩票<small class="color-ff5534">　1元/彩豆</small></div>
+						<div class="xlg-li-p1 ellipsis">彩票面额越大，奖励越多</div>
+					</div>
+				</a>
+			</li>
+			<li class="xl-li xlli-menu-right xl-lii">
+				<a onclick="Common.toast('功能开发中！')">
+					<img class="xl-li-img" src="../../image/icon/jfg.png">
+					<div class="xl-li-txt">
+						<div class="ellipsis">彩豆购<small class="xl-color-ff5534">　1元/彩豆</small></div>
+						<div class="xlg-li-p1 ellipsis">彩豆购消费订单满1元及以上参与</div>
+					</div>
+				</a>
+			</li>
+			<li class="xl-li xlli-menu-right xl-lii">
+				<a onclick="Common.toast('功能开发中！')">
+					<img class="xl-li-img" src="../../image/icon/yqhy.png">
+					<div class="xl-li-txt">
+						<div class="ellipsis">邀请好友<small class="xl-color-ff5534">　10彩豆/个</small></div>
+						<div class="xlg-li-p1 ellipsis">分享练级，邀请好友注册彩乐宝即奖励</div>
+					</div>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+globalData.isProgress = false;
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+
+
+//页面启动时，数据初始化
+function pageDataInit(){
+}
+//dom事件绑定
+function domEventFn(){
+}
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	balanceFn();//彩豆数据请求
+}
+//刷新之后执行函数
+function refreshAfterFn(){
+	//说明页面所有请求都已经完成
+	if(globalData.refreshComplete >= globalData.requestNum){
+		globalData.refreshComplete = 0;//用来记录请求完成次数，记录归零
+		globalData.requestNum = 0;//用来记录有多少次用户请求，记录归零
+		if(globalData.isRefresh == true){
+			globalData.isRefresh = false;
+			Common.toast('刷新成功');
+		}
+	}
+}
+
+//彩豆获取，显示
+function balanceFn(){
+	var _url = Common.domainUrl + '/ushop-api-merchant/api/user/account/point/listBy/' + Common.getUserId();
+	Common.ajax(_url, 'get', {}, function(data){
+		if(data.recordList){
+			var balance = 0;
+			$.each(data.recordList, function(index, obj){
+				balance += parseInt(obj.balance);
+			});
+			$('#integralEle').text(balance);
+		}
+	});
+}
+
+</script>
+</body>
+</html>

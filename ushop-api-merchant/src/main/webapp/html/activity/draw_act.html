@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>GB Canvas Turntable</title>
+		<link rel="stylesheet" href="../../css/style.css?v=20180131" />
+		<style>
+			body {
+				margin: 0;
+			}
+			
+			a {
+				-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+				tap-highlight-color: rgba(0, 0, 0, 0);
+			}
+			
+			.body-box {
+				position: absolute;
+				left: 0;
+				top: 0;
+				bottom: 0;
+				right: 0;
+				overflow: hidden;
+			}
+			
+			.body-content {
+				width: 100%;
+				min-height: 100%;
+				margin: 0 auto;
+				max-width: 720px;
+				background: #ff811a;
+			}
+			
+			.gb-turntable {
+				position: relative;
+				border-radius: 50%;
+				border: 16px solid #E44025;
+				box-shadow: 0 2px 3px #333, 0 0 2px #000;
+				margin: -70px auto 0;
+				box-sizing: content-box;
+			}
+			
+			.gb-turntable-container {
+				position: absolute;
+				left: 0;
+				top: 0;
+				z-index: 1;
+				width: inherit;
+				height: inherit;
+				border-radius: inherit;
+				background-clip: padding-box;
+				background-color: #ffcb3f;
+				-webkit-transition: all 6s ease;
+				transition: all 6s ease
+			}
+			
+			.gb-turntable-container canvas {
+				border-radius: 50%
+			}
+			
+			.gb-turntable ul,
+			.gb-turntable li {
+				margin: 0;
+				padding: 0;
+				list-style: none
+			}
+			
+			.gb-turntalbe-list {
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				z-index: 2
+			}
+			
+			.gb-turntable-item {
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				color: #e4370e;
+				font-weight: bold;
+				line-height: 1;
+				text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6)
+			}
+			
+			.gb-turntable-item span {
+				position: relative;
+				display: block;
+				padding-top: 10px;
+				margin: 0 auto;
+				text-align: center;
+			}
+			
+			.gb-turntable-item i {
+				font-style: normal;
+			}
+			
+			.gb-turntable-btn {
+				position: absolute;
+				z-index: 3;
+				width: 80px;
+				height: 80px;
+				border-radius: 50%;
+				color: #F4E9CC;
+				background-color: #E44025;
+				line-height: 80px;
+				text-align: center;
+				font-size: 20px;
+				text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.6);
+				box-shadow: 0 3px 5px rgba(0, 0, 0, 0.6);
+				text-decoration: none
+			}
+			
+			.gb-turntable-btn::after {
+				position: absolute;
+				display: block;
+				content: '';
+				left: 10px;
+				top: -46px;
+				width: 0;
+				height: 0;
+				overflow: hidden;
+				border-width: 30px;
+				border-style: solid;
+				border-color: transparent;
+				border-bottom-color: #E44025
+			}
+			
+			.gb-turntable-btn.disabled {
+				pointer-events: none;
+				background: #B07A7B;
+				color: #ccc
+			}
+			
+			.gb-turntable-btn.disabled::after {
+				border-bottom-color: #B07A7B
+			}
+			
+			.gb-turntable-btn:active:after {
+				border-bottom-color: #B07A7B;
+			}
+			
+			.gb-turntable-btn:active {
+				background: #B07A7B;
+			}
+			
+			.gb-run {
+				-webkit-transition: all 6s ease;
+				transition: all 6s ease
+			}
+			
+			.gb-turntable a.gb-turntable-btn {
+				border: none;
+			}
+			
+			.prize-box img {
+				display: block;
+				width: 30px;
+				margin: 5px auto 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="body-box">
+			<div class="body-content">
+				<img src="../../image/img/draw_act001.png" width="100%" />
+				<div id="turntable" class="gb-turntable">
+					<div class="gb-turntable-container">
+						<canvas class="gb-turntable-canvas" width="200" height="200">抱歉！浏览器不支持。</canvas>
+					</div>
+					<a class="gb-turntable-btn" href="javascript:;">抽奖</a>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../script/jquery-1.12.4.min.js"></script>
+		<script src="../../script/md5.js"></script>
+		<script src="../../script/common.js?v=20180131"></script>
+		<script src="../../script/defaultxl.js?v=20180131"></script>
+		<script>
+			"use strict";
+			$(function() {
+				globalData.loadReady(); //页面加载完成执行
+				pageDataInit(); //页面数据初始化
+				domEventFn(); //dom初始化事件绑定
+				reloadDataFn(); //所有需要从服务器加载的数据请求
+			});
+			//页面启动时，数据初始化
+			function pageDataInit() {
+				var activId = globalData.pageParam.activId;
+				if(activId) {
+					pageInit(activId);
+				} else {
+					defaultLottery();
+				}
+			}
+			//dom事件绑定
+			function domEventFn() {}
+			//所有需要从服务器加载的数据请求
+			function reloadDataFn() {}
+			// 初始化函数
+			function pageInit(activId) {
+				getLotteryInfo(activId, function(chanceArr, ulArr, cwidth, data) {
+					canvasTurntable(); //初始化转盘
+					var num, //对应奖品的数据ID
+						chances = 1; // 可抽奖次数，当值为0时将是最后一次执行
+					gbTurntable.init({
+						id: 'turntable',
+						width: cwidth,
+						config: function(callback) {
+							// 获取奖品信息
+							callback && callback(ulArr);
+						},
+						getPrize: function(callback) {
+							// 获取中奖信息
+							num = (Math.floor(Math.random() * (chanceArr.length)))
+							callback && callback([num, chances]);
+						},
+						gotBack: function(data) {
+							var a, i = 0;
+							while(a = chanceArr[i++]) {
+								if(parseInt(a.id) == num) {
+									break;
+								};
+							}
+							Common.toast(a.awardName);
+						}
+					});
+				});
+			}
+
+			//获取所有抽奖数据包括基本展示数据，和当次的抽奖结果数据
+			function getPageLotteryData(activId, callback) {
+				callback = callback || function() {};
+				getLotteryInfo(activId, function() {
+					if(globalData.lotteryData && globalData.lotteryData.lotteryResult) {
+						callback(globalData.lotteryData);
+					}
+				});
+				getLotteryResult(activId, function() {
+					if(globalData.lotteryData && globalData.lotteryData.lotteryInfo) {
+						callback(globalData.lotteryData);
+					}
+				});
+			}
+			//请求抽奖信息
+			function getLotteryInfo(activId, callback) {
+				callback = callback || function() {};
+				var chanceArr, //抽奖数据
+					ulArr, //抽奖列表数据，呈现在页面的数据
+					cwidth, //转盘的宽度，宽高相等，必须是圆形
+					bodyW = document.querySelector('.body-content').offsetWidth;
+				if(bodyW >= 500) {
+					cwidth = 400;
+				} else if(bodyW >= 360) {
+					cwidth = 300;
+				} else {
+					cwidth = 240;
+				}
+				var _url1 = Common.domainUrl + '/ushop-api-merchant/api/sns/task/detail/get/' + activId;
+				Common.ajax(_url1, 'get', {}, function(data) {
+					var rewardValue = data.rewardValue ? (data.rewardValue + '') : '';
+					if(rewardValue.indexOf('[{') == 0) {
+						chanceArr = [];
+						ulArr = [];
+						Common.each(JSON.parse(rewardValue), function(index, obj) {
+							obj.chance = 1 / rewardValue.length;
+							obj.id = index;
+							chanceArr[chanceArr.length] = obj;
+							ulArr[ulArr.length] = '<div class="prize-box" sequence0><i style="font-size: ' + cwidth * 0.05 + 'px">' + obj.awardName + '</i><img style="width: ' + cwidth * 0.125 + 'px;height: ' + cwidth * 0.125 + 'px" src="' + obj.ico + '"></div>';
+						});
+						if(!globalData.lotteryData) {
+							globalData.lotteryData = {};
+						}
+						globalData.lotteryData.chanceArr = chanceArr;
+						globalData.lotteryData.ulArr = ulArr;
+						globalData.lotteryData.cwidth = cwidth;
+						globalData.lotteryData.lotteryInfo = data;
+						callback(chanceArr, ulArr, cwidth, data);
+					} else {
+						defaultLottery(); //默认配置
+					}
+				});
+			}
+
+			//抽奖结果查询
+			function getLotteryResult(activId, callback) {
+				callback = callback || function() {};
+				var _url2 = '/ushop-api-merchant/api/sns/task/lottery/draw/' + activId;
+				Common.ajax(_url2, 'post', {}, function(data1) {
+					if(data1.requestNo) {
+						var _url3 = '/ushop-api-merchant/api/sns/task/lottery/get/' + data1.requestNo;
+						Common.ajax(_url3, 'post', {}, function(data2) {
+							if(data.status == 100) { //已揭晓
+								if(!globalData.lotteryData) {
+									globalData.lotteryData = {};
+								}
+								globalData.lotteryData.lotteryResult = data2;
+								callback(data2);
+							}
+						});
+					}
+				});
+			}
+
+			function defaultLottery() {
+				Common.toast('配置错误！');
+				canvasTurntable(); //初始化转盘
+				//抽奖概率和提示信息的配置
+				var chance = [{
+							id: 0,
+							chance: '',
+							txt: '1元红包'
+						},
+						{
+							id: 1,
+							chance: 0.4,
+							txt: '2元红包'
+						},
+						{
+							id: 2,
+							chance: 0.3,
+							txt: '3元红包'
+						},
+						{
+							id: 3,
+							chance: 0.05,
+							txt: '4元红包'
+						},
+						{
+							id: 4,
+							chance: 0.04,
+							txt: '5元红包'
+						},
+						{
+							id: 5,
+							chance: 0.03,
+							txt: '6元红包'
+						},
+						{
+							id: 6,
+							chance: 0.02,
+							txt: '7元红包'
+						},
+						{
+							id: 7,
+							chance: 0.01,
+							txt: '8元红包'
+						}
+					],
+					cwidth,
+					bodyW = document.querySelector('.body-content').offsetWidth;
+				globalData.chances = 3; //可抽奖的次数
+				if(bodyW >= 500) {
+					cwidth = 400;
+				} else if(bodyW >= 360) {
+					cwidth = 300;
+				} else {
+					cwidth = 240;
+				}
+				gbTurntable.init({
+					id: 'turntable',
+					width: cwidth,
+					config: function(callback) {
+						// 获取奖品信息
+						callback && callback([
+							'<div class="prize-box" sequence0><i style="font-size: ' + cwidth * 0.05 + 'px">1元红包</i><img style="width: ' + cwidth * 0.125 + 'px;height: ' + cwidth * 0.125 + 'px" src="../../image/icon/logoicon.png"></div>',
+							'<div class="prize-box" sequence1><i style="font-size: ' + cwidth * 0.05 + 'px">2元红包</i><img style="width: ' + cwidth * 0.125 + 'px;height: ' + cwidth * 0.125 + 'px" src="../../image/icon/logoicon.png"></div>',
+							'<div class="prize-box" sequence2><i style="font-size: ' + cwidth * 0.05 + 'px">3元红包</i><img style="width: ' + cwidth * 0.125 + 'px;height: ' + cwidth * 0.125 + 'px" src="../../image/icon/logoicon.png"></div>',
+							'<div class="prize-box" sequence3><i style="font-size: ' + cwidth * 0.05 + 'px">4元红包</i><img style="width: ' + cwidth * 0.125 + 'px;height: ' + cwidth * 0.125 + 'px" src="../../image/icon/logoicon.png"></div>',
+							'<div class="prize-box" sequence4><i style="font-size: ' + cwidth * 0.05 + 'px">5元红包</i><img style="width: ' + cwidth * 0.125 + 'px;height: ' + cwidth * 0.125 + 'px" src="../../image/icon/logoicon.png"></div>',
+							'<div class="prize-box" sequence5><i style="font-size: ' + cwidth * 0.05 + 'px">6元红包</i><img style="width: ' + cwidth * 0.125 + 'px;height: ' + cwidth * 0.125 + 'px" src="../../image/icon/logoicon.png"></div>',
+							'<div class="prize-box" sequence6><i style="font-size: ' + cwidth * 0.05 + 'px">7元红包</i><img style="width: ' + cwidth * 0.125 + 'px;height: ' + cwidth * 0.125 + 'px" src="../../image/icon/logoicon.png"></div>',
+							'<div class="prize-box" sequence7><i style="font-size: ' + cwidth * 0.05 + 'px">8元红包</i><img style="width: ' + cwidth * 0.125 + 'px;height: ' + cwidth * 0.125 + 'px" src="../../image/icon/logoicon.png"></div>',
+						]);
+					},
+					// 点击按键立马执行
+					getPrize: function(callback) {
+						// 获取中奖信息
+						var num = (Math.floor(Math.random() * 8)), //对应奖品的数据ID
+							chances = 1; // 可抽奖次数，当值为0时将是最后一次执行
+						callback && callback([num, chances]);
+					},
+					// 转盘完成后执行
+					gotBack: function(data) {
+						var a, i = 0;
+						while(a = chance[i++]) {
+							if(a.id == parseInt(data.match(/sequence\d/)[0].substr(-1))) {
+								break;
+							};
+						}
+						Common.toast(a.txt);
+					}
+				});
+			}
+
+			/**
+			 * GB-canvas-turntable.js
+			 * @class gbTurntable
+			 * @see https://github.com/givebest/GB-canvas-turntable
+			 * @author givenlovs@msn.com
+			 * @(c) 2016
+			 **/
+
+			function canvasTurntable() {
+				var $,
+					ele,
+					container,
+					canvas,
+					num,
+					prizes,
+					btn,
+					deg = 0,
+					fnGetPrize,
+					fnGotBack,
+					optsPrize;
+
+				var cssPrefix,
+					eventPrefix,
+					vendors = {
+						'': '',
+						Webkit: 'webkit',
+						Moz: '',
+						O: 'o',
+						ms: 'ms'
+					},
+					testEle = document.createElement('p'),
+					cssSupport = {};
+
+				// 嗅探特性
+				Object.keys(vendors).some(function(vendor) {
+					if(testEle.style[vendor + (vendor ? 'T' : 't') + 'ransitionProperty'] !== undefined) {
+						cssPrefix = vendor ? '-' + vendor.toLowerCase() + '-' : '';
+						eventPrefix = vendors[vendor];
+						return true;
+					}
+				});
+
+				/**
+				 * [兼容事件前缀]
+				 * @param  {[type]} name [description]
+				 * @return {[type]}      [description]
+				 */
+				function normalizeEvent(name) {
+					return eventPrefix ? eventPrefix + name : name.toLowerCase();
+				}
+
+				/**
+				 * [兼容CSS前缀]
+				 * @param  {[type]} name [description]
+				 * @return {[type]}      [description]
+				 */
+				function normalizeCss(name) {
+					name = name.toLowerCase();
+					return cssPrefix ? cssPrefix + name : name;
+				}
+
+				cssSupport = {
+					cssPrefix: cssPrefix,
+					transform: normalizeCss('Transform'),
+					transitionEnd: normalizeEvent('TransitionEnd')
+				}
+
+				var transform = cssSupport.transform;
+				var transitionEnd = cssSupport.transitionEnd;
+
+				// alert(transform);
+				// alert(transitionEnd);
+
+				function init(opts) {
+					fnGetPrize = opts.getPrize;
+					fnGotBack = opts.gotBack;
+
+					opts.config(function(data) {
+						prizes = opts.prizes = data;
+						num = prizes.length;
+						draw(opts);
+					});
+
+					events();
+				}
+
+				/**
+				 * @param  {String} id
+				 * @return {Object} HTML element
+				 */
+				$ = function(id) {
+					return document.getElementById(id);
+				};
+
+				/**
+				 * [绘制转盘]
+				 * @param  {String} id
+				 * @param  {Number} 奖品份数
+				 */
+				function draw(opts) {
+					opts = opts || {};
+					if(!opts.id || num >>> 0 === 0) return;
+					var cw_2 = parseInt(opts.width / 2) || 130,
+						id = opts.id,
+						// 扇形回转角度
+						rotateDeg = 180 / num + 90,
+						ctx,
+						// 奖项容器
+						prizeItems = document.createElement('ul'),
+						// 文字旋转 turn 值
+						turnNum = 1 / num,
+						// 奖项
+						html = [];
+
+					ele = $(id);
+					canvas = ele.querySelector('.gb-turntable-canvas');
+					container = ele.querySelector('.gb-turntable-container');
+					btn = ele.querySelector('.gb-turntable-btn');
+					canvas.width = cw_2 * 2;
+					canvas.height = cw_2 * 2;
+					ele.style.width = cw_2 * 2 + 'px';
+					ele.style.height = cw_2 * 2 + 'px';
+					btn.style.top = (cw_2 - btn.offsetHeight / 2) + 'px';
+					btn.style.left = (cw_2 - btn.offsetWidth / 2) + 'px';
+					if(!canvas.getContext) {
+						alert('抱歉！浏览器不支持。');
+						return;
+					}
+					// 获取绘图上下文
+					ctx = canvas.getContext('2d');
+
+					for(var i = 0; i < num; i++) {
+						// 保存当前状态
+						ctx.save();
+						// 开始一条新路径
+						ctx.beginPath();
+						// 位移到圆心，下面需要围绕圆心旋转
+						ctx.translate(cw_2, cw_2);
+						// 从(0, 0)坐标开始定义一条新的子路径
+						ctx.moveTo(0, 0);
+						// 旋转弧度,需将角度转换为弧度,使用 degrees * Math.PI/180 公式进行计算。
+						ctx.rotate((360 / num * i - rotateDeg) * Math.PI / 180);
+						// 绘制圆弧
+						ctx.arc(0, 0, cw_2, 0, 2 * Math.PI / num, false);
+
+						// 颜色间隔
+						if(i % 2 == 0) {
+							ctx.fillStyle = '#ffb820';
+						} else {
+							ctx.fillStyle = '#ffcb3f';
+						}
+
+						// 填充扇形
+						ctx.fill();
+						// 绘制边框
+						ctx.lineWidth = 0.5;
+						ctx.strokeStyle = '#e4370e';
+						ctx.stroke();
+
+						// 恢复前一个状态
+						ctx.restore();
+						// 奖项列表
+						html.push('<li class="gb-turntable-item"> <span style="transform-origin: 50% ' + cw_2 + 'px;' + transform + ': rotate(' + i * turnNum + 'turn)">' + opts.prizes[i] + '</span> </li>');
+						if((i + 1) === num) {
+							prizeItems.className = 'gb-turntalbe-list';
+							container.appendChild(prizeItems);
+							prizeItems.innerHTML = html.join('');
+						}
+
+					}
+
+				}
+
+				/**
+				 * [初始化转盘]
+				 * @return {[type]} [description]
+				 */
+				/*  function runInit() {
+					removeClass(container, 'gb-run');
+					container.style[transform] = 'rotate(0deg)';
+					container.style[transform] = '';
+				  }*/
+
+				/**
+				 * 旋转转盘
+				 * @param  {[type]} deg [description]
+				 * @return {[type]}     [description]
+				 */
+				function runRotate(deg) {
+					container.style[transform] = 'rotate(' + deg + 'deg)';
+				}
+
+				/**
+				 * 抽奖事件
+				 * @return {[type]} [description]
+				 */
+				function events() {
+					bind(btn, 'click', function() {
+						/*      var prizeId,
+								  chances;*/
+
+						addClass(btn, 'disabled');
+
+						fnGetPrize(function(data) {
+							optsPrize = {
+								prizeId: data[0], // 中奖ID，从0开始
+								chances: data[1] // 剩余抽奖次数
+							}
+							// 计算旋转角度
+							deg = deg || 0;
+							deg = deg + (360 - deg % 360) + (360 * 10 - data[0] * (360 / num))
+							runRotate(deg);
+						});
+
+						// 中奖提示
+						bind(container, transitionEnd, eGot);
+					});
+				}
+
+				function eGot() {
+					if(optsPrize.chances) removeClass(btn, 'disabled');
+					fnGotBack(prizes[optsPrize.prizeId]);
+				}
+
+				/**
+				 * Bind events to elements
+				 * @param {Object}    ele    HTML Object
+				 * @param {Event}     event  Event to detach
+				 * @param {Function}  fn     Callback function
+				 */
+				function bind(ele, event, fn) {
+					if(typeof addEventListener === 'function') {
+						ele.addEventListener(event, fn, false);
+					} else if(ele.attachEvent) {
+						ele.attachEvent('on' + event, fn);
+					}
+				}
+
+				/**
+				 * Unbind events to elements
+				 * @param {Object}    ele    HTML Object
+				 * @param {Event}     event  Event to detach
+				 * @param {Function}  fn     Callback function
+				 */
+				/*  function unbind(ele, event, fn) {
+					  if (typeof removeEventListener === 'function') {
+						  ele.removeEventListener(event, fn, false);
+					  } else if (ele.detachEvent) {
+						  ele.detach('on' + event, fn);
+					  }
+				  }*/
+
+				/**
+				 * hasClass
+				 * @param {Object} ele   HTML Object
+				 * @param {String} cls   className
+				 * @return {Boolean}
+				 */
+				function hasClass(ele, cls) {
+					if(!ele || !cls) return false;
+					if(ele.classList) {
+						return ele.classList.contains(cls);
+					} else {
+						return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+					}
+				}
+
+				// addClass
+				function addClass(ele, cls) {
+					if(ele.classList) {
+						ele.classList.add(cls);
+					} else {
+						if(!hasClass(ele, cls)) ele.className += '' + cls;
+					}
+				}
+
+				// removeClass
+				function removeClass(ele, cls) {
+					if(ele.classList) {
+						ele.classList.remove(cls);
+					} else {
+						ele.className = ele.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+					}
+				}
+
+				var gbTurntable = {
+					init: function(opts) {
+						return init(opts);
+					}
+				}
+
+				// (@see https://github.com/madrobby/zepto/blob/master/src/zepto.js)
+				window.gbTurntable === undefined && (window.gbTurntable = gbTurntable);
+
+				// AMD (@see https://github.com/jashkenas/underscore/blob/master/underscore.js)
+				if(typeof define == 'function' && define.amd) {
+					define('GB-canvas-turntable', [], function() {
+						return gbTurntable;
+					});
+				}
+
+			};
+		</script>
+	</body>
+
+</html>

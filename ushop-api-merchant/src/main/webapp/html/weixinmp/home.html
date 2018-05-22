@@ -1,0 +1,1209 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>首页</title>
+<link rel="stylesheet" type="text/css" href="../../css/owl.carousel.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+/*选择地址*/
+.localize-box {
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	z-index: 1000;
+}
+.localize-box .xlele-content {
+	width: 100%;
+	height: 100%;
+	overflow-y: auto;
+	background: #fff;
+}
+.xllb-title {
+	font-size: 1.2em;
+	color: #666;
+	background: #f6f6f6;
+	padding: .5em .8em;
+}
+.xllb-title small {
+	color: #ff5534;
+	font-size: .8em;
+}
+.xllb-con {
+	padding: .5em;
+}
+.xllb-con span {
+	float: left;
+	width: 20%;
+	padding: .5em;
+}
+.xllb-con span i {
+	display: block;
+	padding: .5em 0;
+	text-align: center;
+	border-radius: .3em;
+	border: solid 1px #555;
+	color: #555;
+}
+.xllb-con span.active i {
+	background: #ff5534;
+	border-color: #ff5534;
+	color: #fff;
+}
+
+/*跑马灯*/
+.xlad-trot-box {
+	position: relative;
+	height: 40px;
+	overflow: hidden;
+	background: #fff;
+}
+.xlul-box {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+}
+.xlul-box .xlli-box {
+	display: block;
+	height: 40px;
+	line-height: 40px;
+	padding: 0 2.5em 0 .8em;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	font-size: 10px;
+	white-space: nowrap;
+	color: #888;
+}
+.xlul-box .xls-span1 {
+	color: #888;
+}
+.xlul-box .xls-span2 {
+	color: #3171bb;
+}
+.xlul-box.ani_move {
+	-webkit-animation: topMove .5s linear;
+	animation: topMove .5s linear;
+}
+@-webkit-keyframes topMove{
+	from{top: 0}
+	to{top: -40px}
+}
+@keyframes topMove{
+	from{top: 0}
+	to{top: -40px}
+}
+
+/*九宫格*/
+.xlh-box1.xlmenu-box {
+	padding: 3px 8px;
+}
+.xlh-box1.xlmenu-box .xl9g-img {
+	width: 40px;
+	height: 40px;
+	display: inline-block;
+}
+.xlh-box1.xlmenu-box .xl9g-text {
+	line-height: 1;
+	padding: 7px 0 0;
+	color: #727272;
+}
+.xlh-box1.xlmenu-box .xlmenu-item > a {
+	padding: 5px 0;
+}
+.xlh-box1.xlmenu-box .owl-theme .owl-dots {
+	position: initial;
+	text-align: center;
+}
+.xlh-box1.xlmenu-box .owl-theme .owl-dots .owl-dot span {
+	border-color: #888;
+}
+.xlh-box1.xlmenu-box .owl-theme .owl-dots .owl-dot.active span,
+.xlh-box1.xlmenu-box .owl-theme .owl-dots .owl-dot:hover span {
+	background: #888;
+}
+
+/*橱窗*/
+.showcase-item {
+	margin-top: 2px;
+	background: #fff;
+}
+.showcase-head {
+	position: relative;
+	line-height: 30px;
+	padding: 0 15px;
+}
+.showcase-head-left {
+	font-size: 15px;
+}
+.showcase-head-left img {
+	height: 17px;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+.showcase-head-right {
+	position: absolute;
+	top: 0;
+	right: 15px;
+	color: #565656;
+}
+.showcase-head-right .icon {
+	font-size: 14px;
+	color: #565656;
+}
+.showcase-citem {
+	position: relative;
+	height: 82px;
+	float: left;
+	width: 33.333333%;
+	border-top: solid 1px #f6f6f6;
+	border-right: solid 1px #f6f6f6;
+	line-height: 1;
+	padding: 0 5px;
+}
+.showcase-img {
+	position: absolute;
+	right: 2px;
+	bottom: 7px;
+	width: 50px;
+	height: 50px;
+}
+.showcase-img img {
+	width: 100%;
+	height: 100%;
+}
+.showcase-citem1 {
+	padding-left: 14px;
+}
+.showcase-citem2 .showcase-img {
+	right: 14px;
+}
+.showcase-citem3 {
+	padding-left: 14px;
+}
+.showcase-citem4 {
+}
+.showcase-citem5 .showcase-img {
+	right: 14px;
+}
+.showcase-p1 {
+	font-size: 13px;
+	padding-top: 7px;
+	color: #626262;
+}
+.showcase-p2 {
+	font-size: 10px;
+	padding: 7px 52px 0 0;
+}
+.showcase-money {
+	position: absolute;
+	bottom: 7px;
+	color: #fff;
+	padding: 2px 5px;
+	border-radius: 3px;
+	z-index: 2;
+	font-size: 11px;
+}
+.showcase-citem1,
+.showcase-citem2 {
+	width: 50%;
+}
+.showcase-citem1 .showcase-p1,
+.showcase-citem1 .showcase-p2 {
+	padding-right: 75px;
+}
+.showcase-citem2 .showcase-p1,
+.showcase-citem2 .showcase-p2 {
+	padding-right: 88px;
+}
+.showcase-citem1 .showcase-img,
+.showcase-citem2 .showcase-img {
+	width: 73px;
+	height: 73px;
+	bottom: 4px;
+}
+.showcase-ff7917 .showcase-head-left,
+.showcase-ff7917 .showcase-p2 {
+	color: #ff7917;
+}
+.showcase-ff7917 .showcase-money {
+	background: #ff7917;
+}
+.showcase-17a5ff .showcase-head-left,
+.showcase-17a5ff .showcase-p2 {
+	color: #17a5ff;
+}
+.showcase-17a5ff .showcase-money {
+	background: #17a5ff;
+}
+.showcase-ff194a .showcase-head-left,
+.showcase-ff194a .showcase-p2 {
+	color: #ff194a;
+}
+.showcase-ff194a .showcase-money {
+	background: #ff194a;
+}
+
+/*游戏橱窗*/
+.showcase-ghead {
+	position: relative;
+	color: #fff;
+}
+.showcase-ghead-left {
+	display: inline-block;
+	font-size: 15px;
+	line-height: 25px;
+	background: -webkit-linear-gradient(left, #ffa505 , #ffc600); /* Safari 5.1 - 6.0 */
+	background: linear-gradient(to right, #ffa505 , #ffc600); /* 标准的语法 */
+	border-radius: 0 50px 50px 0;
+	padding: 0 15px;
+}
+.showcase-ghead-left img {
+	height: 14px;
+	vertical-align: middle;
+	margin-right: 5px;
+	margin-top: -2px;
+}
+.showcase-ghead-right {
+	position: absolute;
+	top: 4px;
+	right: 10px;
+	line-height: 18px;
+	border-radius: 50px;
+	background: rgba(255, 203, 23, .9);
+	width: 60px;
+	text-align: center;
+}
+.showcase-ghead-right .icon {
+	color: #fff;
+	font-size: 13px;
+}
+.showcase-gcon {
+	margin-top: -13px;
+}
+.showcase-gcon img {
+	width: 100%;
+}
+
+/*悬浮抬头样式*/
+.head-fixed-box {
+	top: 0;
+}
+.head-fixed-box .xlele-content {
+	background: #5a5a5a;
+	height: 38px;
+	color: #fff;
+}
+.head-fixed-left {
+	position: absolute;
+	left: 0;
+	width: 46px;
+	height: 100%;
+	text-align: center;
+	line-height: 1;
+	font-size: 11px;
+	padding-top: 2px;
+}
+.head-fixed-left:before {
+	content: '';
+	position: absolute;
+	right: 0;
+	top: 3px;
+	bottom: 3px;
+	width: 1px;
+	background: #fff;
+}
+.head-fixed-left img {
+	height: 22px;
+}
+.head-fixed-right {
+	padding: 4px 0 0 56px;
+	line-height: 30px;
+}
+.head-fixed-right img {
+	width: 30px;
+	height: 30px;
+	margin-right: 5px;
+}
+.head-fixed-right .xl-btn {
+	padding: 6px 10px;
+	background: #ff851a;
+	margin: 3px 0 0 5px;
+}
+
+/*定位样式*/
+.pro-position {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	background: rgba(0,0,0,.6);
+	border-radius: 6px;
+	z-index: 10;
+	color: #fff;
+	padding: 2px 8px;
+}
+.pro-position img {
+	height: 12px;
+	vertical-align: middle;
+}
+.pro-position span {
+	display: inline-block;
+	vertical-align: middle;
+	padding: 0 3px;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">商城彩购</h1>
+	</div>
+</div>
+
+<!--暂不使用-->
+<!--<div class="xlele-box head-fixed-box">
+	<div class="xlele-content">
+		<div class="head-fixed-left" onclick="showProPageFn('', 'show')">
+			<img src="../../image/icon/home_icon008.png"/>
+			<div class="user_province">深圳</div>
+		</div>
+		<div class="head-fixed-right">
+			<img src="../../image/icon/logoicon.png"/>
+			<span>下载APP，参与更多活动！</span>
+			<a class="xl-btn" href="http://www.1leyou.cn/downloadclb/downloadclb.html">立即下载</a>
+		</div>
+	</div>
+</div>
+<div style="height: 38px;"></div>-->
+<div class="xlbody-box">
+	<div class="xlbanner-box">
+		<img class="xlbanner-pla-img" src="../../image/p300100.png">
+		<div id="bannerBox"></div>
+		<div class="pro-position" onclick="showProPageFn('', 'show')">
+			<img src="../../image/icon/home_icon008.png"/>
+			<span class="user_province">深圳</span>
+		</div>
+	</div>
+	<div id="noticeListBox" class="xlad-trot-box xlli-menu-right">
+		<div class="xlul-box">
+			<div class="xlli-box">暂无通告</div>
+			<!--<div class="xlli-box"><span class="xls-span1">恭喜</span><span class="xls-span2">中国人</span><span class="xls-span1">1小时前获得</span>苹果手机</div>-->
+		</div>
+	</div>
+	<div style="height: 5px;"></div>
+	<div id="menu_box" class="xlmenu-box xlh-box1"></div>
+	<div class="showcase-box" id="product_advert_box"></div>
+	<div style="height: 5px;"></div>
+	<div class="showcase-game" id="game_advert_box"></div>
+</div>
+<script id="game_advert_tpl" type="text/template">
+	{{~it:data}}
+	<div class="showcase-ghead">
+		<div class="showcase-ghead-left">
+			<img src="../../image/icon/home_icon012.png">热门游戏
+		</div>
+		<div class="showcase-ghead-right">更多<i class="icon icon-right"></i></div>
+	</div>
+	<div class="showcase-gcon">
+		<img src="{{=(data.imageUrl || '../../image/p500100.png')}}">
+	</div>
+	{{~}}
+</script>
+<script id="product_advert_tpl"  type="text/template">
+	{{~it:data}}
+	<div class="showcase-item {{=('showcase-' + data.txtColor)}}">
+		<div class="showcase-head">
+			<div class="showcase-head-left">
+				{{?data.iconSrc}}<img src="{{=data.iconSrc}}">{{?}}{{=data.name}}
+			</div>
+			{{?data.morePages == 1}}
+			<div class="showcase-head-right" onclick="advertMoreFn('{{=data.moreRelation}}', '{{=data.pointsSpecial}}', '{{=data.fundType}}')">更多<i class="icon icon-right"></i></div>
+			{{?}}
+		</div>
+		<div class="showcase-con clearfix">
+			{{~data.cArr:item:index}}
+			{{?item.relationId}}
+			<div class="showcase-citem  {{=('showcase-citem' + (index + 1))}}" onclick="bannerClickFn('{{=item.relationId}}', '{{=item.relationType}}')">
+				<div class="showcase-p1 ellipsis">{{=item.name}}</div>
+				<div class="showcase-p2 ellipsis">{{=item.content}}</div>
+				<div class="showcase-money">{{=item.payTypeText}}</div>
+				<div class="showcase-img">
+					<img src="{{=(item.imageUrl || '../../image/p200200.png')}}">
+				</div>
+			</div>
+			{{??}}
+			<div class="showcase-citem {{=('showcase-citem' + (index + 1))}}">
+				<div class="showcase-p1 ellipsis"></div>
+				<div class="showcase-p2 ellipsis"></div>
+				<div class="showcase-money">￥0.0</div>
+				<div class="showcase-img">
+					<img src="../../image/p200200.png">
+				</div>
+			</div>
+			{{?}}
+			{{~}}
+		</div>
+	</div>
+	{{~}}
+</script>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
+<script src="../../script/doT.min.js"></script>
+<script src="../../script/md5.js"></script>
+<script src="../../script/owl.carousel.min.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/order_data_ds.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+globalData.gameIdArr = [//用于判断扫描到的彩票属于哪一种，从而进入相应的详情页面
+    {gameId: '2', val: 'ssq'},
+    {gameId: '4', val: '3d'}
+];
+globalData.advertContrast = [//橱窗数据
+	{id: '001', cval: 'ff7917', isrc: '../../image/icon/home_icon009.png', name: '商城彩购',
+	gotoFn: function(){
+		Common.openPage('../weixinmp/shopping_ds.html');
+	}},
+	{id: '002', cval: '17a5ff', isrc: '../../image/icon/home_icon010.png', name: '积分专场',
+	gotoFn: function(activeId, fundType){
+		Common.toast('未开放，请期待！');
+	}},
+	{id: '003', cval: 'c028ff', isrc: '../../image/icon/home_icon013.png', name: '彩豆抽奖',
+	gotoFn: function(){
+		Common.openPage('../draw_lottery/shopping.html');
+	}},
+	{id: '004', cval: 'ff194a', isrc: '../../image/icon/home_icon011.png', name: '限时特惠',
+	gotoFn: function(){
+		Common.openPage('../indiana/odds_list.html');
+	}},
+	{id: '005', cval: 'ffffff', isrc: '../../image/icon/home_icon012.png', name: '热门游戏',
+	gotoFn: function(){
+		Common.toast('未开放，请期待！');
+	}}
+];
+globalData.grid9List = [//九宫格数据
+	{isrc: '../../image/icon/home_icon001.png', txt: '扫一扫', href: '', clickFn: 'ticketLottery()'},
+//	{isrc: '../../image/icon/home_icon002.png', txt: '扫描记录', href: '../mine/my_lottery_list.html?showItem=tabContent1', clickFn: ''},
+	{isrc: '../../image/icon/home_icon005.png', txt: '开奖公告', href: '../lottery/lottery_notice.html', clickFn: ''},
+	{isrc: '../../image/icon/home_icon006.png', txt: '开奖走势', href: '../lottery/trend.html', clickFn: ''},
+	{isrc: '../../image/icon/home_icon003.png', txt: '领彩豆', href: '../discover/signin.html', clickFn: ''},
+	{isrc: '../../image/icon/home_icon003.png', txt: '测试用', href: '', clickFn: 'testSeFn()'}
+//	{isrc: '../../image/icon/home_icon007.png', txt: '常见问题', href: '../instruction/common_problems.html', clickFn: ''}
+];
+function testSeFn() {
+	if ( !Common.getUserId() ) {
+		Common.toast('请先登录！');
+		Common.openPage('../login/login.html');
+		return false;
+	}
+	var str = '<input type="text" style="width: 100%; height: 34px; padding: 10px; background: #eee; border: 0;" id="testSeIpt">'
+	Common.confirm('请输入ID', str, function (index) {
+		if ( index === 1 ) {
+			var v = $('#testSeIpt').val();
+			if ( v ) {
+				Common.openPage(('drawred/index.html#/?id=' + v));
+			} else {
+				Common.toast('没有ID');
+				return false;
+			}
+		}
+	});
+}
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+//页面启动时，数据初始化
+function pageDataInit(){
+	//微信授权
+	if(Common.isWeixin()){
+		wxAuthoriseFn();//微信授权jsSDK
+	}
+	//初始化定位数据
+	$('.user_province').text(Common.localProL().name);
+	grid9ShowFn();//九宫格菜单
+}
+//dom事件绑定
+function domEventFn(){
+}
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	var pId = Common.localProL().id || '00';
+	Common.ajaxAll([
+		//banner图显示
+		{url: (Common.domainUrl + '/ushop-api-merchant/api/sns/notify/banner/list/5/' + pId + '.json')},
+		//橱窗
+		{url: (Common.domainUrl + '/ushop-api-merchant/api/sns/notify/advert/list/' + pId + '.json')},
+		//跑马灯
+		noticeListFn
+	], function(){
+		bannerShowFn(arguments[0]);//banner数据
+		getAdvertDataFn(arguments[1]);//橱窗数据
+	});
+}
+
+//九宫格菜单列表
+function grid9ShowFn(){
+	var $box = $('#menu_box'),
+		str = '',
+		aStr = '',
+		a,
+		lgn = globalData.grid9List.length;
+	$.each(globalData.grid9List, function(index, obj){
+		a = obj.href ? 'href="' + obj.href + '"' : 'onclick="' + obj.clickFn + '"';
+		aStr += 
+			'<div class="xlmenu-item">'+
+				'<a ' + a + '>'+
+					'<img  class="xl9g-img" src="' + obj.isrc + '">'+
+					'<span class="xl9g-text">' + obj.txt + '</span>'+
+				'</a>'+
+			'</div>';
+		if((index + 1)%8 === 0){
+			str += '<div class="clearfix">' + aStr + '</div>';
+			aStr = '';
+		}
+	});
+	if(aStr){
+		str = str + '<div class="clearfix">' + aStr + '</div>';
+	}
+	if(lgn > 8){
+		str = '<div class="owl-carousel owl-theme">' + str + '</div>';
+		$box.html(str);
+		$box.find('.owl-carousel').owlCarousel({
+			items: 1
+		});
+	}else{
+		$box.html(str);
+	}
+}
+
+//banner图显示
+function bannerShowFn(data){
+	if(data.recordList && data.recordList.length > 0){
+		var str = '',
+			img = new Image(),
+			bannerBox = $("#bannerBox"),
+			hr = 'javascript:;', activityId,
+			loop = false;
+		img.src = Common.getImageUrl(data.recordList[0].pictureAddress);
+		$.each(data.recordList, function(index, obj){
+			activityId = obj.relationWebId;
+			$.each(globalActivity, function(i, o){
+				if(activityId == o.id){
+					hr = o.url;
+					return false;
+				}
+			});
+			str += '<div class="item"><a onclick="bannerClickFn(\'' + obj.relationWebId + '\', \'' + obj.relationType + '\')"><img src="' + Common.getImageUrl(obj.pictureAddress) + '"></a></div>';
+		});
+		str = '<div class="owl-carousel owl-theme xlbanner-body">' + str + '</div>';
+		if(data.recordList.length > 1){
+			loop = true;
+		}
+		img.onload = function(){
+			bannerBox.html(str);
+			bannerBox.find('.owl-carousel').owlCarousel({
+				autoplay: true,
+				autoplayTimeout: 5000,
+				items: 1,
+				loop: loop
+			});
+		}
+	} else {
+		$("#bannerBox").html('');
+	}
+}
+
+
+
+//banner图点击事件
+function bannerClickFn(relationWebId, relationType){
+	if(!(relationWebId && relationType)){
+		Common.toast('关联配置错误！');
+		return false;
+	}
+	if(relationType == '1'){//为活动配置
+		var relArr = (relationWebId + '').split('|');
+		var pageUrl = '', pageName;
+		Common.each(globalActivity, function(index, obj){
+			if(relArr[0] == obj.id){
+				pageUrl = obj.url;
+				pageName = obj.pageName;
+				return false;
+			}
+		});
+		if(pageUrl){
+			if ( relArr[0] === '1015' ) { // 最美投注站活动
+				Common.openPage(pageUrl, {id: relArr[1]});
+				return false;
+			}
+			Common.openPage(pageUrl, {activeId: (relArr[1] || ''), fundType: (relArr[2] || '')});
+		}else{
+			Common.toast('关联配置错误！');
+		}
+	}else if(relationType == '2'){//为游戏配置
+		
+	}else if(relationType == '3'){//为商品配置
+		var relArr = (relationWebId + '').split('|');
+		if(relArr[0] && relArr[1]){
+			if(relArr[0] == '1'){//表示拼购的ID
+				Common.openPage('../indiana/product_details.html?productId=' + relArr[1]);
+				return false;
+			}else if(relArr[0] == '2'){//表示电商的ID
+				Common.openPage('../indiana/product_details_ds.html?productId=' + relArr[1]);
+				return false;
+			}
+		}
+		Common.toast('关联配置错误！');
+	}else if(relationType == '4'){//为H5页面配置
+
+	}
+}
+
+
+//通告列表请求显示
+function noticeListFn(callback){
+	callback = callback || function(){};
+	function showNotice(data){
+		if(!(data.recordList && (data.recordList.length > 0))){
+			return false;
+		}
+		var str = '';
+		if(!globalData.noticeData){
+			data.recordList.reverse();
+		}
+		$.each(data.recordList, function(index, obj) {
+			obj.lid = index;
+			obj.un = obj.sender ? substra(obj.sender, 4, '**') : '';
+			if(obj.type === 1) {//夺宝
+				str += '<div onclick="noticeClickFn(' + obj.lid + ')" class="xlli-box">恭喜<i style="color: #3171bb;"> ' + obj.un + ' </i>' + timeDistance(obj.beginTime) + ' 获得<i style="color: #333;"> ' + obj.content + '</i></div>';
+			}else if(obj.type === 2){//抽奖游戏
+				str += '<div onclick="noticeClickFn(' + obj.lid + ')" class="xlli-box">恭喜<i style="color: #3171bb;"> ' + obj.un + ' </i>参加抽奖游戏获得<i style="color: #333;"> ' + obj.param2 + '</i></div>';
+			}else if(obj.type === 3){//游戏
+				str += '<div onclick="noticeClickFn(' + obj.lid + ')" class="xlli-box">' + obj.content + '</div>';
+			}else if(obj.type === 4){//扫彩票
+				obj.num = formatnum(obj.param1);
+				str += '<div onclick="noticeClickFn(' + obj.lid + ')" class="xlli-box">恭喜 <i style="color: #3171bb;"> ' + obj.un + ' </i>扫票获得<i style="color: #333;"> ' + obj.num + '</i>积分</div>';
+			}
+		});
+		globalData.noticeData = data;//数据赋值，避免多次请求
+		$('#noticeListBox').find('.xlul-box').html(str);
+		applayNoticeList();//轮播动画
+	}
+	//避免多次请求
+	if(globalData.noticeData && globalData.noticeData.recordList){
+		callback(globalData.noticeData);
+		showNotice(globalData.noticeData);
+	}else{
+		var _url = Common.domainUrl + '/ushop-api-merchant/api/sns/notify/marquee/read';
+		Common.ajax(_url, 'get', {}, function(data){
+			callback(data);
+			showNotice(data);
+		});
+	}
+}
+
+//数字格式化，万，亿
+function formatnum(num){
+	var n = parseInt(num) || 0;
+	if(n >= 100000000){
+		return ((n/100000000).toFixed(2) + '亿');
+	}else if(n >= 100000){
+		return ((n/10000).toFixed(2) + '万');
+	}else{
+		return n + '';
+	}
+}
+
+//console.log(substra('wo625', 4, '**', true));
+//截取字符串，分双字节和单字节
+//str 源字符串
+//max 最大数
+//suffix 后缀
+//pla 后缀是否占最大值
+function substra(str, max, suffix, pla){
+	function maxc(str, max){
+		if(lgn(str) > max){
+			var i = max + 1, a;
+			while(i--){
+				a = str.substr(0, i);
+				if(lgn(a) <= max){
+					break;
+				}
+			}
+			return a;
+		}else{
+			return str;
+		}
+	}
+	function lgn(str){
+		var l = str.length,
+			i = 0;
+		while(l--){
+			if(str.charCodeAt(l) > 255){
+				i += 2;
+			}else{
+				i += 1;
+			}
+		}
+		return i;
+	}
+	var a = str + '',
+		m = parseInt(max) || 4,
+		s = (suffix || '') + '';
+	var c = maxc(a, m);
+	if(c !== str){
+		if(pla === true){
+			var sl = lgn(s);
+			if(sl < m){
+				return maxc(a, (m - sl)) + s;
+			}
+		}
+		return c + s;
+	}
+	return c;
+}
+
+//公告的点击事件
+function noticeClickFn(lid){
+    var pId = Common.localProL().id || '62',
+		obj = (function(){
+		var a = {};
+		$.each(globalData.noticeData.recordList, function(i, o){
+			if(o.lid === lid){
+				a = o;
+				return false;
+			}
+		});
+		return a;
+	})();
+	if(obj.type === 1) {//夺宝
+		Common.openPage('../indiana/product_details.html', {spellbuyId: obj.param1});
+	}else if(obj.type === 2){//抽奖游戏
+		Common.openPage('../lucky_draw/lucky_home.html', {activeId: obj.param1});
+	}else if(obj.type === 3){//游戏
+		var _url = Common.domainUrl + '/ushop-api-merchant/api/game/getById/' + obj.param1;
+		Common.ajax(_url, 'get', {}, function(data){
+			if((data.appInfo.appRuntimeEnv === 3) && (data.appInfo.province === parseInt(pId))){
+				Common.openPage('../game/game_details.html', {gameId: obj.param1});
+			}else{
+				Common.openPage('../game/game_list.html');
+			}
+		});
+	}else if(obj.type === 4){//扫彩票
+		try{
+			ticketLottery();
+		}catch(err){
+			Common.openPage('../weixinmp/home.html', {scanQRCode: 'yes'});
+		}
+	}
+}
+
+//通告轮播
+function applayNoticeList() {
+	var box = $('#noticeListBox'),
+		ul = box.find('.xlul-box'),
+		li = ul.find('.xlli-box'),
+		lgn = li.length;
+	if(lgn > 1){
+		ul.off('webkitAnimationEnd animationend').on('webkitAnimationEnd animationend', function(){
+			ul.find('.xlli-box').eq(0).appendTo(ul);
+			ul.removeClass('ani_move');
+		});
+		clearInterval(globalData.setinter);
+		globalData.setinter = setInterval(function() {
+			ul.addClass('ani_move');
+		}, 4000);
+	}
+}
+
+//时间差，st为字符串时间格式
+function timeDistance(st){
+	var wT = 7*24*60*60*1000,
+		dT = 24*60*60*1000,
+		hT = 60*60*1000,
+		iT = 60*1000;
+	var intervalTime = (new Date()).getTime() - (new Date(st)).getTime(),
+		txt;
+	if(parseInt(intervalTime/wT) > 0){
+		txt = parseInt(intervalTime/wT) + '星期前';
+	}else if(parseInt(intervalTime/dT) > 0){
+		txt = parseInt(intervalTime/dT) + '天前';
+	}else if(parseInt(intervalTime/hT) > 0){
+		txt = parseInt(intervalTime/hT) + '小时前';
+	}else if(parseInt(intervalTime/iT) > 0){
+		txt = parseInt(intervalTime/iT) + '分钟前';
+	}else{
+		txt = '刚刚';
+	}
+	return txt;
+}
+
+
+
+//橱窗数据请求
+function getAdvertDataFn(data){
+	var p = [], g = [], d;
+	Common.each(data.recordList, function(index, obj){
+		if(!obj.isLeaf){
+			obj.iconSrc = '';
+			obj.txtColor = 'ff7917';
+			d = obj.moreRelation || '';
+			obj.moreRelation = d;
+			obj.pointsSpecial = data.pointsSpecial || '';
+			obj.fundType = data.fundType || '';
+			Common.each(globalData.advertContrast, function(i, o){
+				if(o.id == d){
+					obj.iconSrc = o.isrc;
+					obj.txtColor = o.cval;
+					return false;
+				}
+			});
+			obj.name = obj.name.split('|')[0];
+			if(obj.windowType == 1){//商品父元素
+				obj.cArr = [];
+				p[p.length] = obj;
+			}else if(obj.windowType == 2){//游戏父元素
+				obj.cArr = [];
+				g[g.length] = obj;
+			}
+		}
+	});
+
+	//遍历分离出所有的商品或游戏数据
+	Common.each(data.recordList, function(index, obj){
+		//表示有对应的ID存在，说明是属于子元素
+		if(obj.isLeaf){
+			if(obj.windowType == 1){//商品子元素
+				Common.each(p, function(i, o){
+					if(o.id == obj.isLeaf){
+						obj.payTypeText = '';
+						if(obj.rule){
+							var ruleObj = OrderData.formatRule(obj.rule),
+								checkedRule = ruleObj.checkedRule;
+							if(typeof checkedRule === 'number'){
+								obj.payTypeText = checkedRule + '<small>彩豆</small>';
+							}else{
+								obj.payTypeText = checkedRule.payTypeText;
+							}
+						}
+						o.cArr[(parseInt(obj.position) - 1)] = obj;
+						return false;
+					}
+				});
+			}else if(obj.windowType == 2){//游戏子元素
+				Common.each(g, function(i, o){
+					if(o.id == obj.isLeaf){
+						o.cArr[(parseInt(obj.position) - 1)] = obj;
+						return false;
+					}
+				});
+			}
+		}
+	});
+	//这里将会输出p(商品的数据列表),g(游戏的数据列表)
+	var productListTpl = doT.template(document.getElementById('product_advert_tpl').innerHTML),
+		gameListTpl = doT.template(document.getElementById('game_advert_tpl').innerHTML);
+	document.getElementById('product_advert_box').innerHTML = productListTpl(p);
+	document.getElementById('game_advert_box').innerHTML = gameListTpl(g);
+}
+
+//橱窗更多的点击事件
+function advertMoreFn(contrastId, activeId, fundType){
+	var isTrue = true;
+	Common.each(globalData.advertContrast, function(i, o){
+		if(o.id == contrastId){
+			o.gotoFn(activeId, fundType);
+			isTrue = false;
+			return false;
+		}
+	});
+	if(isTrue === true){
+		Common.toast('配置错误！')
+	}
+}
+
+
+
+//彩票扫描
+function ticketLottery(){
+	if(Common.phoneValid() === false){
+		return false;
+	}
+	if(!Common.isWeixin()){
+		Common.toast('只能在微信中使用！');
+		return false;
+	}
+	if(globalData.isTicketLottery != true){
+		Common.toast('初始化中，请稍后重试！')
+		return false;
+	}
+	globalData.isProgress = true;
+	realNameValid(function(){
+		wx.scanQRCode({
+		    needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+		    scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+		    success: function (res) {
+		    	var resultStr = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+		    	if(resultStr.indexOf('exchange_card_xll_') === 0){
+		    		Common.generalL(function(data){
+						if(data.id){
+							var type = data.type;
+							if(type === 1){
+								siteExchangeFn(decodeURIComponent(resultStr.split('_xll_')[1]));
+							}else{
+								Common.toast(((type === 2) ? '您不是站主！' : '数据错误'));
+							}
+						}
+					});
+		    	}else{
+		    		lotteryDecodeFn(resultStr);
+		    	}
+			}
+		});
+	});
+}
+
+//虚拟商品兑换
+function siteExchangeFn(str){
+	var arr = str.split('_xl_'),
+		_url = '/ushop-api-merchant/api/user/coupons/gift/use',
+		_param = {
+			ownerNo: arr[0],
+			couponsNo: arr[1]
+		};
+	Common.ajax(_url, 'post', _param, function(data){
+		if(data.userNo){
+			Common.confirm('提示', ('成功兑换 “' + data.fundTypeName + '”'), null, '确定')
+		}else{
+			Common.toast('兑换失败！')
+		}
+	});
+}
+
+//查询用户实名制情况
+function realNameValid(callback){
+    callback = callback || function(){};
+    if(Common.getUserId()){
+    	Common.userInfoL(function(data){
+    		if(data.cardNo){
+				callback();
+    		}else if(data.userNo){
+                Common.confirm('提示', '您还没有实名制，无法操作此功能，请先实名认证！', function(index){
+                    if(index == 1){
+                        Common.openPage('../weixinmp/user_info.html')
+                    }
+                }, ['取消', '去认证']);
+            }else{
+                Common.toast('未知错误！');
+            }
+    	});
+    }else{
+        Common.goLogin();
+    }
+}
+
+//彩票扫描解析
+function lotteryDecodeFn(lotteryCode){
+	lotteryCode = (lotteryCode.indexOf(',') >= 0) ? lotteryCode.split(',')[1] : lotteryCode;
+	var province = Common.localProL().id || 62,//彩票所属省份，62为甘肃省，以全国省份代码取两位有效
+		platform = 21;//接口所属平台，我方后台自定义
+	if(lotteryCode){
+		var _url = '/ushop-api-merchant/api/caipiao/hotline/ticket/check/' + province + '/' + platform + '/' + lotteryCode + '/4';
+        Common.ajax(_url, 'post', {}, function(data){
+            if(data.relation){//说明此用户已经关联了彩票用户
+                lotteryDetailFn(data.province, data.platform, data.game, data.issue, lotteryCode);//将彩票绑定此用户get
+    		}else if(data.game){//说明此用户没有关联了彩票用户
+    			lotteryLinkFn(data.province, data.platform, data.game, data.issue, lotteryCode);//彩票账号授权关联auth
+    		}else{
+                Common.toast(data.error_description || 'get：未知错误！');
+            }
+		});
+	}else{
+		Common.toast('彩票解析失败');
+	}
+}
+
+//彩票账号授权
+function lotteryLinkFn(province, platform, game, issue, lotteryCode){
+	var _url = '/ushop-api-merchant/api/caipiao/user/login/auth/' + province + '/' + platform + '/' + game;
+	Common.ajax(_url, 'post', {}, function(data){
+		if(data.result == 1){//说明请求成功
+            lotteryDetailFn(province, platform, game, issue, lotteryCode);
+		}else if(data.error_description){
+			Common.toast(data.error_description);
+		}else{
+			Common.toast('auth：未知错误');
+		}
+	});
+}
+
+//获取票面详情绑定到用户
+function lotteryDetailFn(province, platform, game, issue, lotteryCode){
+	var _url = '/ushop-api-merchant/api/caipiao/hotline/ticket/get/' + province + '/' + platform + '/' + game + '/' + issue + '/' + lotteryCode + '/4';
+	Common.ajax(_url, 'post', {}, function(data){
+		if(data.featureCode){//说明请求成功
+            var str = '';
+            $.each(globalData.gameIdArr, function(index, obj){
+                if(obj.gameId == data.gameId){
+                    str = obj.val;
+                    return false;
+                }
+            });
+            if(str){
+                Common.openPage('../mine/lottery_detail_' + str + '.html', {lotteryData: JSON.stringify(data)});
+            }else{
+                Common.toast('数据错误！');
+            }
+		}else if(data.error_description){
+			Common.toast(data.error_description);
+		}else{
+			Common.toast('get：未知错误');
+		}
+	});
+}
+
+//获取地理位置
+function getLocaltion(){
+	wx.getLocation({
+	    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+	    success: function (res) {
+	    	res = res || {};
+		    var geocoder = new qq.maps.Geocoder({
+		        complete : function(result){
+		        	var result = result || {},
+		        		detail = result.detail || {},
+		        		addObj = detail.addressComponents || {},
+		        		province = addObj.province || '',
+		        		proid = Common.localProL().id;
+		        	if(province){
+		        		$.each(commonProvinceData, function(index, obj) {
+		        			if((obj.name.indexOf(province) >= 0) || province.indexOf(obj.name) >= 0){
+		        				Common.localProL({
+		        					id: obj.id,
+		        					name: obj.name,
+		        					timestamp: (+new Date())
+		        				});
+		        				//要再更新省份数据后面执行
+		        				if(obj.id != proid){
+		        					reloadDataFn();//刷新界面数据
+		        					$('.user_province').text(obj.name);
+		        				}
+		        				return false;
+		        			}
+		        		});
+		        	}
+		        }
+		    });
+		    geocoder.getAddress(new qq.maps.LatLng(res.latitude, res.longitude));
+	    }
+	});
+}
+
+
+//选择省份，用户选择省份界面
+function showProPageFn(proid, status){
+	proid = proid || Common.localProL().id || '62';
+	var box = $('.localize-box')
+	if((status === 'show') && (box.length > 0)){
+		if(proid){
+			box.find('.proid_' + proid).addClass('active');
+		}
+		box.show();
+		return false;
+	}else if(status === 'hide'){
+		if(box.length > 0){
+			box.hide();
+		}
+		return false;
+	}
+	
+	box = $('<div class="localize-box xlele-box"></div>');
+	var str = '';
+	$.each(commonProvinceData, function(index, obj) {
+		if(proid === obj.id){
+			str += '<span onclick="onSelectProFn(\'' + obj.id + '\', this)" class="active" class="proid_' + obj.id + '"><i>' + obj.name + '</i></span>';
+		}else{
+			str += '<span onclick="onSelectProFn(\'' + obj.id + '\', this)"><i class="proid_' + obj.id + '">' + obj.name + '</i></span>';
+		}
+	});
+	str = 
+		'<div class="xlele-content">'+
+			'<div class="xllb-title">合作地区<small>（拍彩票奖彩豆）</small></div>'+
+			'<div class="xllb-con clearfix">'+
+			str+
+			'</div>'+
+		'</div>';
+	box.html(str);
+	box.appendTo('body');
+}
+
+//选择城市
+function onSelectProFn(proid, me){
+	$(me).parent().find('span').removeClass('active');
+	$(me).addClass('active');
+	if(proid && (proid != Common.localProL().id)){
+		$.each(commonProvinceData, function(index, obj) {
+			if(proid === obj.id){
+				Common.localProL({
+					id: obj.id,
+					name: obj.name,
+					timestamp: (+new Date())
+				});
+				reloadDataFn();//刷新界面数据
+				$('.user_province').text(obj.name);
+			}
+		});
+	}
+	showProPageFn('', 'hide');
+}
+
+
+//微信授权接口
+function wxAuthoriseFn(){
+	var _url =  Common.domainUrl + '/ushop-api-merchant/api/weixin/client/ticket/get?'+
+				'type=jsapi&url=' + document.URL;
+	Common.ajax(_url, 'get', {}, function(data) {
+		if(data.sign){
+			configFn(data.timestamp, data.noncestr, data.sign);
+		}
+	});
+}
+
+//微信配置接口
+//configFn(1495764791, 'Kmifefp2whjxfbst', '7ebdce4d83faadb22e3d0d277bcaefe0cd08514e');
+function configFn(timestamp, nonceStr, signature){
+	wx.config({
+	    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+	    appId: Common.getAppId(), // 必填，公众号的唯一标识
+	    timestamp: timestamp, // 必填，生成签名的时间戳
+	    nonceStr: nonceStr, // 必填，生成签名的随机串
+	    signature: signature,// 必填，签名，见附录1
+	    jsApiList: [// 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+	        'scanQRCode',//扫码
+	        'getLocation'//获取定位
+	    ]
+	});
+}
+
+//微信初始化完成执行
+wx.ready(function(){
+	globalData.isTicketLottery = true;
+	if(globalData.pageParam.scanQRCode == 'yes'){
+		ticketLottery();
+	}
+	if(!(((+new Date()) - Common.localProL().timestamp) < 86400000)){
+		getLocaltion();
+	}
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>彩豆明细</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+.xlir-li {
+	padding: 1em .8em;
+	background: #fff;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">彩豆明细</h1>
+	</div>
+</div>
+<div class="xlbody-box">
+	<div class="xlsh-box1" id="integralListBox">
+		<ul class="xlir-ul"></ul>
+		<div class="xl-refresh-prompt refreshPrompt"></div>
+	</div>
+</div>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+globalData.isProgress = false;
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+
+//页面启动时，数据初始化
+function pageDataInit(){
+	globalData.fundType = globalData.pageParam.fundType;//彩豆类型
+}
+//dom事件绑定
+function domEventFn(){
+	//到底部加载
+	Common.scrollBottom(function(){
+		integralListDataFn();
+	});
+}
+
+
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	//页面刷新时，数据初始化
+	globalData.currentPage = 0;//当前页
+	globalData.pagePage = 1;//总页数
+	
+	//刷新数据请求函数
+	integralListDataFn();
+}
+
+//刷新之后执行函数
+function refreshAfterFn(){
+	if(globalData.refreshComplete >= globalData.requestNum){
+		globalData.refreshComplete = 0;//用来记录请求完成次数
+		globalData.requestNum = 0;//用来记录有多少次用户请求
+		if(globalData.isRefresh == true){
+			globalData.isRefresh = false;
+			Common.toast('刷新成功');
+		}
+	}
+}
+
+
+//晒单数据请求
+function integralListDataFn(){
+	globalData.currentPage++;
+	if(globalData.currentPage > globalData.pagePage){//说明已经是最后一页了
+		return false;
+	}
+	var listItem = $('#integralListBox'),//列表项目
+		listContent = listItem.find('.xlir-ul'),//列表容器
+		refreshPrompt = listItem.find('.refreshPrompt');//加载中提示容器
+	if(refreshPrompt.find('.isLoadingTrue').length > 0){//说明正在加载中……
+		return false;
+	}
+	refreshPrompt.html(Common.listLoadingHTML());
+	var _url = Common.domainUrl + '/ushop-api-merchant/api/user/account/point/usage/listBy/' + globalData.currentPage + '/30/' + Common.getUserId() + '/' + globalData.fundType;
+	Common.ajax(_url, 'get', {}, function(data){
+		if(data.totalCount >= 0){
+			globalData.currentPage = data.currentPage;
+			globalData.pagePage = data.pagePage;
+			if(data.totalCount === 0){//表示请求到的数据为0
+				listContent.html('');
+				refreshPrompt.html('');
+				Common.blankPageFn(listContent);//显示空白界面
+				return false;
+			}
+			Common.blankPageFn(listContent, 'hide');//隐藏空白界面
+			if(globalData.currentPage == globalData.pagePage){
+				refreshPrompt.html('没有更多了');
+			}else{
+				refreshPrompt.html('上拉加载');
+			}
+			
+			
+			var str = '', fromTo = '', lift = '';
+			$.each(data.recordList, function(index, obj){
+				switch(obj.groupId){
+					case '1000': fromTo = '注册';
+					break;
+					case '1001': fromTo = '完善资料';
+					break;
+					case '1002': fromTo = '购彩';
+					break;
+					case '1003': fromTo = '游戏消费';
+					break;
+					case '1005': fromTo = '晒单分享';
+					break;
+					case '1006': fromTo = '社交分享';
+					break;
+					default:  fromTo = '其他';
+				}
+				switch(obj.groupName){
+					case '123': lift = '+';
+					break;
+					case '321': lift = '-';
+					break;
+				}
+				str +=  
+						'<li class="xlir-li">'+
+							'<div class="xllr-box">'+
+								'<div class="xlir-p1">' + fromTo + '<small class="color-999">（' + obj.groupParam + '）</small></div>'+
+								'<div class="xllr-r">' + lift + ' <span class="color-ff5534">' + obj.groupValue + '</span>彩豆</div>'+
+							'</div>'+
+						'</li>';
+			});
+			if(globalData.currentPage == 1){//说明是这个项目容器第一页
+				listContent.html(str);
+			}else{
+				listContent.html(listContent.html() + str);
+			}
+		}else{
+			refreshPrompt.html(data.error_description || '未知错误');
+		}
+	});
+}
+
+</script>
+</body>
+</html>

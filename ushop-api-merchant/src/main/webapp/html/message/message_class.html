@@ -1,0 +1,352 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>消息</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+/*消息分类*/
+.xl-li > a {
+	padding: 10px 15px;
+	line-height: 24px;
+}
+.xl-li .xl-li-img {
+	left: 15px;
+}
+.badge {
+	display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px 4px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #f00;
+    border-radius: 10px;
+}
+.xl-li .badge {
+	position: absolute;
+	right: 30px;
+	top: 50%;
+	margin-top: -9px;
+	display: none;
+}
+.xl-li.show-badge .badge {
+	display: block;
+}
+
+/*消息列表*/
+.xlnr-ul {
+	padding: 15px 0;
+}
+.xlnr-li {
+	position: relative;
+	padding: 15px;
+	margin: 15px 15px 0;
+	background: #fff;
+	border: solid 1px #ccc;
+	border-radius: 5px;
+}
+.xlnr-li:first-child {
+	margin-top: 0;
+}
+.xlnr-title {
+	font-size: 15px;
+	font-weight: bold;
+	padding-right: 80px;
+	color: #333;
+	padding-bottom: 6px;
+}
+.xlnr-time {
+	position: absolute;
+	right: 15px;
+	top: 18px;
+}
+.xlnr-content {
+	padding-bottom: 3px;
+	text-indent: 2em;
+}
+.xlnr-more {
+	text-align: right;
+}
+.xlnr-more a {
+	display: inline-block;
+	color: #007aff;
+	padding: 5px 10px;
+}
+
+
+/*模态框*/
+.xlnr-modal {
+	left: 100%;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	-webkit-transition: left .3s;
+	transition: left .3s;
+	background: #eee;
+}
+.xlnr-modal.active {
+	left: 0;
+}
+.xlnrd-box {
+	padding: 15px;
+	background: #fff;
+}
+.xlnr-modal .blank-box {
+	position: absolute;
+}
+.xlnr-modal .xlele-content {
+	height: 100%;
+	overflow-y: auto;
+	background: #eee;
+}
+.xlnr-modal h5 {
+	font-size: 16px;
+	text-align: center;
+	color: #333;
+	font-weight: bold;
+}
+.xlnr-modal p {
+	font-size: 13px;
+	color: #888;
+	text-indent: 2em;
+	text-align: justify;
+}
+.xlnr-modal .xlnrd-time {
+	font-size: 12px;
+	color: #888;
+	text-align: center;
+}
+</style>
+</head>
+<body>
+<div class="xlbody-box">
+	<div class="xl-ul">
+		<div class="xl-li xlli-menu-right xl-lii" id="tzgg_li">
+			<a href="#list_content_xl_tzgg">
+				<img class="xl-li-img" src="../../image/icon/message_icon001.png">
+				<div class="xl-li-txt">通知公告</div>
+				<span class="badge">00</span>
+			</a>
+		</div>
+		<div class="xl-li xlli-menu-right xl-lii" id="zxhd_li">
+			<a href="#list_content_xl_zxhd">
+				<img class="xl-li-img" src="../../image/icon/message_icon002.png">
+				<div class="xl-li-txt">最新活动</div>
+				<span class="badge">00</span>
+			</a>
+		</div>
+		<div class="xl-li xlli-menu-right xl-lii" id="xtxx_li">
+			<a href="#list_content_xl_xtxx">
+				<img class="xl-li-img" src="../../image/icon/message_icon003.png">
+				<div class="xl-li-txt">系统消息</div>
+				<span class="badge">00</span>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="xlele-box xlnr-modal" id="list_content"></div>
+<div class="xlele-box xlnr-modal" id="details_modal"></div>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/md5.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+//页面启动时，数据初始化
+function pageDataInit(){
+}
+//dom事件绑定
+function domEventFn(){
+	$(window).on('hashchange', hashChangeFn);
+}
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	noticeInit();//消息数据请求初始化
+}
+
+//消息数据请求初始化
+function noticeInit(){
+	var userId = Common.getUserId(),
+		messData;
+	if(!userId){return false};
+	messData = storageMessage();
+	if((+new Date()) - messData.tt < (6000*5)){//短时间内不去重复请求
+		noticeCallback(messData);
+		hashChangeFn();
+		return false;
+	}
+	//ajax并发请求
+	//拉取
+	Common.ajaxAll([
+		//通知公告
+		{url: (Common.domainUrl + '/ushop-api-merchant/api/sns/notify/announce/pull/1/' + userId)},
+		//最新活动
+		{url: (Common.domainUrl + '/ushop-api-merchant/api/sns/notify/announce/pull/2/' + userId)},
+		//系统消息
+		{url: (Common.domainUrl + '/ushop-api-merchant/api/sns/notify/remain/pull/' + userId)}
+	],function(){
+		var a1 = (arguments[0] || {}).recordCount || 0,
+			a2 = (arguments[1] || {}).recordCount || 0,
+			a3 = (arguments[2] || {}).recordCount || 0;
+		//请求对应的数据
+		getListData(a1, a2, a3, function(o1, o2, o3){
+			hashChangeFn();
+			messData = 	storageMessage({
+										tzgg: o1,
+										zxhd: o2,
+										xtxx: o3,
+										tt: (+new Date())
+									});
+		});
+	});
+	//储存数据
+	function storesData(ls, nd, lgn){
+		var obj = messData[ls] || {},//本地储存的数据一个对象，arr，num两个属性
+			ld = obj.arr || [],//arr属性储存列表
+			num = obj.num || 0,//arr属性储存新的数据条数
+			nd = nd || [];
+		num += nd.length;//记录原有的未读数据和新加的未读数据
+		num > lgn ? num = lgn : '';//不能超过lgn条数据
+		ld = nd.concat(ld);
+		ld.length > lgn ? ld.length = lgn : '';//不能超过lgn条数据
+		return {
+			arr: ld,
+			num: num
+		};
+	}
+	//读取
+	function getListData(a1, a2, a3, callback){
+		callback = callback || function(){};
+		var ajaxArr = [null, null, null],
+			//通知公告
+			readUrl1 = Common.domainUrl + '/ushop-api-merchant/api/sns/notify/announce/read/1/' + userId,
+			//最新活动
+			readUrl2 = Common.domainUrl + '/ushop-api-merchant/api/sns/notify/announce/read/2/' + userId,
+			//系统消息
+			readUrl3 = Common.domainUrl + '/ushop-api-merchant/api/sns/notify/remain/read/' + userId;
+		if(a1 > 0){
+			ajaxArr[0] = {url: readUrl1};
+		}
+		if(a2 > 0){
+			ajaxArr[1] = {url: readUrl2};
+		}
+		if(a3 > 0){
+			ajaxArr[2] = {url: readUrl3};
+		}
+		Common.ajaxAll(ajaxArr, function(){
+			var l1 = (arguments[0] || {}).recordList || [],
+				l2 = (arguments[1] || {}).recordList || [],
+				l3 = (arguments[2] || {}).recordList || [];
+			callback(storesData('tzgg', l1, 50), storesData('zxhd', l2, 50), storesData('xtxx', l3, 50));
+		});
+	}
+}
+
+//消息数据更新后回调
+function noticeCallback(data){
+	var o1 = data.tzgg || {},
+		o2 = data.zxhd || {},
+		o3 = data.xtxx || {};
+	if(o1.num > 0){
+		$('#tzgg_li').addClass('show-badge').find('.badge').text(o1.num);
+	}
+	if(o2.num > 0){
+		$('#zxhd_li').addClass('show-badge').find('.badge').text(o2.num);
+	}
+	if(o3.num > 0){
+		$('#xtxx_li').addClass('show-badge').find('.badge').text(o3.num);
+	}
+}
+
+//重置或者获取当前的消息数据
+function storageMessage(data){
+	if(data){
+		Common.storageL(Common.messageG(), data);
+		noticeCallback(data);//消息数据更新后回调
+		return data;
+	}else{
+		return (Common.storageL(Common.messageG()) || {})
+	}
+}
+
+
+//消息数据请求初始化
+function getNotice(type){
+	if(!type){return false;}
+	var messData = storageMessage(),
+		obj = messData[type],
+		str = '';
+	if(obj.arr.length === 0){
+		return Common.blankPageFn();
+	}
+	$.each(obj.arr, function(i, o){
+		str += 
+			'<div class="xlnr-li">'+
+	    		'<div class="xlnr-title ellipsis">' + o.title + '</div>'+
+	    		'<div class="xlnr-time">' + o.time.substr(0, 10) + '</div>'+
+	    		'<div class="xlnr-p1 ellipsis">内容：</div>'+
+	    		'<div class="xlnr-content ellipsis">' + o.content + '</div>'+
+	    		'<div class="xlnr-more"><a href="#details_modal_xl_' + type + '_xl_' + o.id + '">查看详情</a></div>'+
+			'</div>';
+	});
+	str = '<div class="xlele-content"><div class="xlnr-ul">' + str + '</div></div>';
+	messData[type]['num'] = 0;//清除读取变化，去掉未读数据
+	storageMessage(messData);
+	return str;
+}
+
+//获取详情数据
+function getDetails(type, id){
+	var messData = storageMessage(),
+		obj = messData[type],
+		str = '';
+	$.each(obj.arr, function(i, o){
+		if(id === o.id){
+			str = 
+				'<div class="xlele-content">'+
+					'<div class="xlnrd-box">'+
+						'<h5>' + o.title + '</h5>'+
+						'<div class="xlnrd-time">' + o.time + '</div>'+
+						'<p>' + o.content + '</p>'+
+					'</div>'+
+				'</div>';
+			return false;
+		}
+	});
+	return str;
+}
+
+//哈希变化
+function hashChangeFn(){
+	var arr = location.hash.split('_xl_'),
+		h = arr[0],
+		id, type;
+	if(h === '#list_content'){
+		type = arr[1];
+		$('#details_modal').removeClass('active');
+		$(h).html(getNotice(type)).addClass('active');
+	}else if(h === '#details_modal'){
+		type = arr[1];
+		id = parseInt(arr[2]);
+		$(h).html(getDetails(type, id)).addClass('active');
+	}else{
+		$('#list_content').removeClass('active');
+		$('#details_modal').removeClass('active');
+	}
+}
+</script>
+</body>
+</html>

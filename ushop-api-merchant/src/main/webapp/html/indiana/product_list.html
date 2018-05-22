@@ -1,0 +1,381 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>店家列表</title>
+<link rel="stylesheet" type="text/css" href="../../css/owl.carousel.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+.xllist-box {
+	position: relative;
+}
+.xllist-menu .xllist-menu-content {
+	background: #fff;
+	max-width: 720px;
+	margin: 0 auto;
+	border-bottom: solid 1px #f6f6f6;
+}
+.xllist-menu-placeholder.xllist-menu {
+	position: relative;
+	top: 0;
+	opacity: 0;
+	filter: alpha(opacity=0);
+}
+.xllist-menu .xllist-menu-item {
+	position: relative;
+	float: left;
+	width: 33.3333%;
+	text-align: center;
+	padding: .5em 0;
+	cursor: pointer;
+	font-size: 1.2em;
+	line-height: 1em;
+}
+.xllist-menu .xllist-menu-item.active {
+	color: #ff5534;
+}
+.xllist-menu .xllist-menu-item span {
+	position: relative;
+	z-index: 2;
+}
+.xllist-menu .xli-sort-bg {
+	padding-right: .8em;
+	display: inline-block;
+	background: url(../../image/icon/shop_icon21.png) right center no-repeat;
+	background-size: .5em;
+}
+.xllist-menu-item.active[sort="1"] .xli-sort-bg {
+	background: url(../../image/icon/shop_icon22.png) right center no-repeat;
+	background-size: 8px;
+}
+.xllist-menu-item.active[sort="2"] .xli-sort-bg {
+	background: url(../../image/icon/shop_icon23.png) right center no-repeat;
+	background-size: 8px;
+}
+.xllist-menu-class {
+	background: #ff9c37 !important;
+	color: #fff !important;
+	border-radius: 8px 8px 0 0;
+}
+
+
+/*首页产品列表*/
+.xl-product-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	font-size: .8em;
+}
+.xl-product-list .xl-product-cell {
+	float: left;
+	width: 33.33333%;
+	padding: 10px 5px;
+	border: solid 1px #f6f6f6;
+	background: #fff;
+	margin: -1px 0 0 0;
+	border-left: 0;
+}
+@media (max-width: 500px){
+	.xl-product-list .xl-product-cell {
+		width: 50%;
+	}
+}
+.xl-product-list .xl-product-pic img {
+	display: block;
+	width: 100%;
+}
+.xl-product-list .xl-product-pic {
+	position: relative;
+	width: 50%;
+	margin: 0 auto;
+}
+.xl-product-list .xl-data-img {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.xl-product-purchase {
+	position: relative;
+	padding: 0 5px;
+	color: #ff5534;
+	font-size: 1.4em;
+}
+.xl-product-list .xl-product-p1 {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	color: #333;
+	line-height: 1.4;
+	padding: 8px 5px;
+}
+
+
+/*商标抬头样式*/
+.xlp-store-bg {
+	overflow:hidden;
+	width: 100%;
+	background: url(../../image/icon/dp_bg.png) no-repeat;
+	background-size: 100% 100%;
+}
+.xlp-store {
+	background: #fff;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 2px;
+	height: 86px;
+	padding: 15px;
+}
+.xlp-store-p1 {
+	line-height: 25px;
+	font-size: 18px;
+}
+.xlp-store-p1 img {
+	width: 2em;
+	height: 2em;
+	vertical-align: middle;
+	display: inline-block;
+}
+.xlp-store-p1 span {
+	vertical-align: middle;
+	display: inline-block;
+}
+
+/*悬浮抬头*/
+.xl-tab-fixed {
+	top: 0;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">彩豆彩购</h1>
+	</div>
+</div>
+<div style="height: 120px;"></div>
+<div class="xlbody-box">
+	<div class="xllist-box" id="productListBox">
+		<div class="xlele-box xl-tab-fixed">
+			<div class="xlele-content">
+				<div class="xlp-store-bg">
+					<div class="xlp-store">
+						<div class="xlp-store-p1" id="merchantEle">
+							<!--<img src="../../image/icon/logoicon.png">-->
+							<span>彩乐宝</span>
+						</div>
+					</div>
+				</div>
+				<div class="xllist-menu listTitle">
+					<div class="xllist-menu-content clearfix">
+						<div class="xllist-menu-item titleItem" typenum="1" sort="1" onclick="onTabTitleFn(this)">
+							<span class="xli-sort-bg">最新</span>
+						</div>
+						<div class="xllist-menu-item titleItem" typenum="2" sort="1" onclick="onTabTitleFn(this)">
+							<span class="xli-sort-bg">价格</span>
+						</div>
+						<div class="xllist-menu-item titleItem" typenum="3" sort="1" onclick="onTabTitleFn(this)">
+							<span class="xli-sort-bg">销量</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="listContent11" class="xllist-item xllistItem">
+		    <ul class="clearfix xl-product-list"></ul>
+		    <div class="xl-refresh-prompt refreshPrompt"></div>
+		</div>
+		<div id="listContent12" class="xllist-item xllistItem">
+		    <ul class="clearfix xl-product-list"></ul>
+		    <div class="xl-refresh-prompt refreshPrompt"></div>
+		</div>
+		<div id="listContent21" class="xllist-item xllistItem">
+		    <ul class="clearfix xl-product-list"></ul>
+		    <div class="xl-refresh-prompt refreshPrompt"></div>
+		</div>
+		<div id="listContent22" class="xllist-item xllistItem">
+		    <ul class="clearfix xl-product-list"></ul>
+		    <div class="xl-refresh-prompt refreshPrompt"></div>
+		</div>
+		<div id="listContent31" class="xllist-item xllistItem active">
+		    <ul class="clearfix xl-product-list"></ul>
+		    <div class="xl-refresh-prompt refreshPrompt"></div>
+		</div>
+		<div id="listContent32" class="xllist-item xllistItem active">
+		    <ul class="clearfix xl-product-list"></ul>
+		    <div class="xl-refresh-prompt refreshPrompt"></div>
+		</div>
+	</div>
+</div>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/md5.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/order_data_ds.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+globalData.isProgress = false;
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+
+
+//页面启动时，数据初始化
+function pageDataInit(){
+	$('#merchantEle').html(('<span>' + (globalData.pageParam.merchantName || '彩乐宝') + '</span>'));
+}
+//dom事件绑定
+function domEventFn(){
+	//到底部加载
+	Common.scrollBottom(function(){
+		var activeEle = $('#productListBox').find('.titleItem.active'),
+			typenum = activeEle.attr('typenum'),
+			sort = activeEle.attr('sort') || '1';
+		productShowFn(typenum, sort);
+	});
+}
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	listParamInt();//列表参数初始化
+	
+	//刷新数据请求函数
+	onTabTitleFn($('.titleItem')[0]);//产品列表请求显示
+}
+//刷新之后执行函数
+function refreshAfterFn(){
+	if(globalData.refreshComplete >= globalData.requestNum){
+		globalData.refreshComplete = 0;//用来记录请求完成次数
+		globalData.requestNum = 0;//用来记录有多少次用户请求
+		if(globalData.isRefresh == true){
+			globalData.isRefresh = false;
+			Common.toast('刷新成功');
+		}
+	}
+}
+//列表参数初始化
+function listParamInt(){
+	//页面刷新时，数据初始化
+	var listBox = $('#productListBox'),
+		listItems = listBox.find('.xllistItem');
+	listItems.each(function(index, item){
+		var eleId = $(item).attr('id');
+		globalData['currentPage' + eleId] = 0;//当前页
+		globalData['pagePage' + eleId] = 1;//总页数
+	});
+}
+
+//列表抬头点击事件
+function onTabTitleFn(me){
+	var listBox = $('#productListBox'),
+		titleItems = listBox.find('.titleItem'),
+		listItems = listBox.find('.xllistItem'),
+		$me = $(me),//需要显示的抬头信息
+		typenum = $me.attr('typenum'),//请求的参数
+		sort = $me.attr('sort') || '1';//排序数字，1代表顺，2代表倒
+	if($me.attr('sort') && $me.hasClass('active')){//说明没有排序，并且为选中状态
+		sort = (sort == '1') ? '2' : '1';
+		$me.attr('sort', sort);
+	}
+	var eleId = 'listContent' + typenum + sort,//需要显示的容器的ID
+		$item = $('#' + eleId),//需要显示的容器
+		nowTime = (new Date()).getTime(),//当前的时间
+		oldTime = $item.data('oldTime') || 0;//上一次请求的时间
+	titleItems.removeClass('active');
+	listItems.removeClass('active');
+	$me.addClass('active');
+	$item.addClass('active');
+	if(oldTime && (nowTime - oldTime < 300000)){//时间间隔超过5分钟才允许重新请求
+		return false;
+	}else{
+		globalData['currentPage' + eleId] = 0;//当前页
+		globalData['pagePage' + eleId] = 1;//总页数
+	}
+	productShowFn(typenum, sort);
+}
+
+//产品列表请求显示
+//选项卡式产品列表示例
+function productShowFn(typenum, sort){
+	var listItem = $('#listContent' + typenum + sort),//列表项目
+		listContent = listItem.find('ul'),//列表容器
+		refreshPrompt = listItem.find('.refreshPrompt'),//加载中提示容器
+		suffixStr = 'listContent' + typenum + sort,
+		currentPage = globalData['currentPage' + suffixStr],
+		pagePage = globalData['pagePage' + suffixStr];
+	var merchantId = globalData.pageParam.merchantId;//记录商家ID
+	if(!merchantId){
+		Common.toast('商家不存在');
+		return false;
+	}
+	if(refreshPrompt.find('.isLoadingTrue').length > 0){//说明正在加载中……
+		return false;
+	}
+	currentPage++;
+	if(currentPage > pagePage){//说明已经是最后一页了
+		return false;
+	}
+	refreshPrompt.html(Common.listLoadingHTML());
+	var _url = Common.domainUrl + '/ushop-api-merchant/api/mall/product/search/listByMerchant/' + merchantId + '/' + typenum + '/' + sort + '/' + currentPage;
+	Common.ajax(_url, 'get', {}, function(data){
+		listItem.data('oldTime', (new Date()).getTime());//记录此次请求的时间，用来做延时用的
+		if(data.totalCount >= 0){//表示数据请求成功
+			currentPage = data.currentPage;
+			pagePage = data.pagePage;
+			globalData['currentPage' + suffixStr] = currentPage;
+			globalData['pagePage' + suffixStr] = pagePage;
+			if(data.totalCount == 0){//表示请求到的数据为0
+				listContent.html('');
+				refreshPrompt.html('没有数据');
+				return false;
+			}
+			if(currentPage < pagePage){
+				refreshPrompt.html('上拉加载');
+			}else{
+				refreshPrompt.html('没有更多了');
+			}
+			
+			var str = '', rate, headImage = '', ruleObj;
+			$.each(data.recordList, function(index, obj){
+				ruleObj = OrderData.formatRule(obj.rule);
+				obj.ruleArr = ruleObj.ruleArr;
+				obj.checkedRule = ruleObj.checkedRule;
+				
+				rate = parseInt(100*obj.spellbuyCount/obj.spellbuyPrice);
+				headImage = obj.headImage ? '<img class="xl-data-img" src="' + Common.getImageUrl(obj.headImage) + '">' : '';
+				
+				str +=
+					'<li class="xl-product-cell">'+
+				        '<div class="xl-product-body">'+
+			                '<a class="xl-product-img" href="../indiana/product_details_ds.html?productId=' + obj.id + '">'+
+			                	'<div class="xl-product-pic">'+
+				                	'<img src="../../image/p200200.png">'+
+				                	headImage+
+			                	'</div>'+
+			                	'<div class="xl-product-p1">' + obj.productName + '</div>'+
+			                '</a>'+
+				            '<div class="xl-product-purchase">'+
+				            obj.checkedRule.payTypeText+
+				            '</div>'+
+				        '</div>'+
+			        '</li>';
+			});
+			if(currentPage == 1){//说明是这个项目容器第一页
+				listContent.html(str);
+			}else{
+				listContent.html(listContent.html() + str);
+			}
+		}else{
+			refreshPrompt.html('加载失败！');
+		}
+	});
+}
+
+</script>
+</body>
+</html>

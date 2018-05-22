@@ -1,0 +1,254 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>积分游戏</title>
+<link rel="stylesheet" type="text/css" href="../../css/owl.carousel.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+.xl-li {
+	margin: 5px 5px 0;
+}
+.xl-li > a {
+	padding: 10px 15px;
+	border-radius: 5px;
+}
+.xl-li .xl-li-img {
+	width: 50px;
+	height: 50px;
+	margin-top: -25px;
+	border-radius: 100px;
+	left: 15px;
+}
+.xl-lii .xl-li-txt {
+	padding-left: 60px;
+	line-height: 25px;
+	font-size: 16px;
+}
+.xldf-p1 {
+	color: #888;
+	font-size: 14px;
+}
+
+.xlli-menu-right:before {
+	font-size: 17px;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">游戏</h1>
+	</div>
+</div>
+<div class="xlbody-box">
+	<div class="xlbanner-box">
+		<img class="xlbanner-pla-img" src="../../image/p300100.png">
+		<div id="bannerBox"></div>
+	</div>
+	<div style="height: 4px;"></div>
+	<div class="xlgl-box1">
+		<div class="xl-ul clearfix" id="list_content"></div>
+       <div class="xl-refresh-prompt refreshPrompt"></div>
+	</div>
+</div>
+<script id="template_box"  type="text/template">
+    {{~ it:data}}
+		<div class="xl-li xl-lii xlli-menu-right">
+			<a href="../game/game_details.html?gameId={{=data.id}}">
+				<img class="xl-li-img" src="{{=data.appIcon || '../../image/p200200.png'}}">
+				<div class="xl-li-txt">
+					<div class="ellipsis">{{=data.appName}}</div>
+					<div class="ellipsis xldf-p1">{{=data.appContent}}</div>
+				</div>
+			</a>
+		</div>
+    {{~}}
+</script>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/owl.carousel.min.js"></script>
+<script src="../../script/doT.min.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+globalData.isProgress = false;
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+
+
+//页面启动时，数据初始化
+function pageDataInit(){
+}
+//dom事件绑定
+function domEventFn(){
+	//到底部加载
+	Common.scrollBottom(function(){
+		getGameListFn();
+	});
+}
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	bannerShowFn();//banner图显示
+	getGameListFn();//获取游戏数据
+}
+//刷新之后执行函数
+function refreshAfterFn(){
+	//说明页面所有请求都已经完成
+	if(globalData.refreshComplete >= globalData.requestNum){
+		globalData.refreshComplete = 0;//用来记录请求完成次数，记录归零
+		globalData.requestNum = 0;//用来记录有多少次用户请求，记录归零
+		if(globalData.isRefresh == true){
+			globalData.isRefresh = false;
+			Common.toast('刷新成功');
+		}
+	}
+}
+
+
+//banner图显示
+function bannerShowFn(pId){
+	pId = pId || Common.localProL().id || '00';
+	var _url =  Common.domainUrl + '/ushop-api-merchant/api/sns/notify/banner/list/5/' + pId + '.json';
+	Common.ajax(_url, 'get', {}, function(data){
+		if(data.recordList && data.recordList.length > 0){
+			var str = '',
+				img = new Image(),
+				bannerBox = $("#bannerBox"),
+				hr = 'javascript:;', activityId,
+				loop = false;
+			img.src = Common.getImageUrl(data.recordList[0].pictureAddress);
+			$.each(data.recordList, function(index, obj){
+				activityId = obj.relationWebId;
+				$.each(globalActivity, function(i, o){
+					if(activityId == o.id){
+						hr = o.url;
+						return false;
+					}
+				});
+				str += '<div class="item"><a onclick="bannerClickFn(\'' + obj.relationWebId + '\', \'' + obj.relationType + '\')"><img src="' + Common.getImageUrl(obj.pictureAddress) + '"></a></div>';
+			});
+			str = '<div class="owl-carousel owl-theme xlbanner-body">' + str + '</div>';
+			if(data.recordList.length > 1){
+				loop = true;
+			}
+			img.onload = function(){
+				bannerBox.html(str);
+				bannerBox.find('.owl-carousel').owlCarousel({
+					autoplay: true,
+					autoplayTimeout: 5000,
+					items: 1,
+					loop: loop
+				});
+			}
+		}
+	});
+}
+
+
+
+//banner图点击事件
+function bannerClickFn(relationWebId, relationType){
+	if(!(relationWebId && relationType)){
+		Common.toast('关联配置错误！');
+		return false;
+	}
+	if(relationType == '1'){//为活动配置
+		var relArr = (relationWebId + '').split('|');
+		var pageUrl = '', pageName;
+		Common.each(globalActivity, function(index, obj){
+			if(relArr[0] == obj.id){
+				pageUrl = obj.url;
+				pageName = obj.pageName;
+				return false;
+			}
+		});
+		if(pageUrl){
+			Common.openPage(pageUrl, {activeId: (relArr[1] || ''), fundType: (relArr[2] || '')});
+		}else{
+			Common.toast('关联配置错误！');
+		}
+	}else if(relationType == '2'){//为游戏配置
+		
+	}else if(relationType == '3'){//为商品配置
+		var relArr = (relationWebId + '').split('|');
+		if(relArr[0] && relArr[1]){
+			if(relArr[0] == '1'){//表示拼购的ID
+				Common.openPage('../indiana/product_details.html?productId=' + relArr[1]);
+				return false;
+			}else if(relArr[0] == '2'){//表示电商的ID
+				Common.openPage('../indiana/product_details_ds.html?productId=' + relArr[1]);
+				return false;
+			}
+		}
+		Common.toast('关联配置错误！');
+	}else if(relationType == '4'){//为H5页面配置
+
+	}
+}
+
+
+//获取游戏数据
+function getGameListFn(){
+	var listContent = document.getElementById('list_content'),//列表数据容器
+		refreshPrompt = document.querySelector('.refreshPrompt'),//加载中提示容器
+		template = document.getElementById('template_box'),//模板容器
+		currentPage = globalData['currentPage'] || 0,//当前页
+		pagePage = globalData['pagePage'] || 1;//总页数
+	currentPage++;
+	if(currentPage > pagePage){//说明已经是最后一页了
+		return false;
+	}
+	var pId = pId || Common.localProL().id || '00';
+	refreshPrompt.innerHTML = Common.listLoadingHTML();
+    var _url =  Common.domainUrl + '/ushop-api-merchant/api/game/listPageByUp/'+
+    			currentPage + '/10/3/' + pId;
+    Common.ajax(_url, 'get', {}, function(data){
+    	if(data.totalCount >= 0){
+			currentPage = data.currentPage;
+			pagePage = data.pagePage;
+			globalData['currentPage'] = currentPage;
+			globalData['pagePage'] = pagePage;
+			if(data.totalCount === 0){//表示请求到的数据为0
+                listContent.innerHTML = '';
+    			refreshPrompt.innerHTML = '这是什么也没有！';
+				return false;
+			}
+			if(currentPage === pagePage){
+				refreshPrompt.innerHTML = '没有更多了';
+			}else{
+				refreshPrompt.innerHTML = '上拉加载';
+			}
+			
+			Common.each(data.recordList, function(index, obj){
+				Common.each(data.appTypeList, function(i, o){
+					if(obj.appType === o.id){
+						obj.appTypeName = o.typeName;
+						return false;
+					}
+				});
+			});
+			
+            globalData['gameListData'] = globalData['gameListData']?
+            							 globalData['gameListData'].concat(data.recordList):
+            							 (data.recordList || []);
+            
+            
+			var dataListTemplate = doT.template(template.innerHTML);
+			listContent.innerHTML = dataListTemplate(globalData['gameListData']);
+    	}else{
+            refreshPrompt.innerHTML = '数据错误';
+    	}
+    });
+}
+
+</script>
+</body>
+</html>

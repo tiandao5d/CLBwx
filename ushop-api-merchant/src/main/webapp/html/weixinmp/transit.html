@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>中转界面</title>
+<link rel="stylesheet" href="../../css/style.css?v=20180131" />
+<style>
+.loader-box {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #ed5565;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	z-index: 999999999;
+}
+
+.loader-txt {
+	color: #fff;
+	font-size: 16px;
+	padding-top: 10px;
+}
+@-webkit-keyframes line-scale {
+	0% {
+		-webkit-transform: scaley(1);
+		transform: scaley(1);
+	}
+	50% {
+		-webkit-transform: scaley(0.4);
+		transform: scaley(0.4);
+	}
+	100% {
+		-webkit-transform: scaley(1);
+		transform: scaley(1);
+	}
+}
+
+@keyframes line-scale {
+	0% {
+		-webkit-transform: scaley(1);
+		transform: scaley(1);
+	}
+	50% {
+		-webkit-transform: scaley(0.4);
+		transform: scaley(0.4);
+	}
+	100% {
+		-webkit-transform: scaley(1);
+		transform: scaley(1);
+	}
+}
+
+.line-scale>div:nth-child(1) {
+	-webkit-animation: line-scale 1s 0.1s infinite cubic-bezier(.2, .68, .18, 1.08);
+	animation: line-scale 1s 0.1s infinite cubic-bezier(.2, .68, .18, 1.08);
+}
+
+.line-scale>div:nth-child(2) {
+	-webkit-animation: line-scale 1s 0.2s infinite cubic-bezier(.2, .68, .18, 1.08);
+	animation: line-scale 1s 0.2s infinite cubic-bezier(.2, .68, .18, 1.08);
+}
+
+.line-scale>div:nth-child(3) {
+	-webkit-animation: line-scale 1s 0.3s infinite cubic-bezier(.2, .68, .18, 1.08);
+	animation: line-scale 1s 0.3s infinite cubic-bezier(.2, .68, .18, 1.08);
+}
+
+.line-scale>div:nth-child(4) {
+	-webkit-animation: line-scale 1s 0.4s infinite cubic-bezier(.2, .68, .18, 1.08);
+	animation: line-scale 1s 0.4s infinite cubic-bezier(.2, .68, .18, 1.08);
+}
+
+.line-scale>div:nth-child(5) {
+	-webkit-animation: line-scale 1s 0.5s infinite cubic-bezier(.2, .68, .18, 1.08);
+	animation: line-scale 1s 0.5s infinite cubic-bezier(.2, .68, .18, 1.08);
+}
+
+.line-scale>div {
+	background-color: #fff;
+	width: 4px;
+	height: 35px;
+	border-radius: 2px;
+	margin: 2px;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+	display: inline-block;
+}
+</style>
+</head>
+
+<body>
+<div class="loader-box" id="page_index_loading">
+	<div class="loader-con">
+		<div class="loader-inner line-scale">
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+		<div class="loader-txt loader_txt">加载中……</div>
+	</div>
+</div>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/md5.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+$(function() {
+	globalData.loadReady(); //页面加载完成执行
+	pageDataInit(); //页面数据初始化
+	domEventFn(); //dom初始化事件绑定
+	reloadDataFn(); //所有需要从服务器加载的数据请求
+});
+//页面启动时，数据初始化
+function pageDataInit() {
+	var ud = deCodeUrlFn(),
+		$box = $('#page_index_loading'),
+		$txt = $box.find('.loader_txt');
+	globalData.$txt = $txt;
+	// 红包活动
+	if(ud.gotox === 'drawred') {
+		if(ud.id) {
+			getTaskDetail(ud.id);
+		} else {
+			$txt.text('没有对应的活动ID');
+		}
+	} else {
+		$txt.text('没有任何命令');
+	}
+}
+//dom事件绑定
+function domEventFn() {}
+//所有需要从服务器加载的数据请求
+function reloadDataFn() {}
+// 获取任务活动详情
+function getTaskDetail(aid) {
+	var _url = '/ushop-api-merchant/api/sns/task/detail/get/' + aid;
+	Common.ajax(_url, 'get', {}, function(data) {
+		if(data['url']) {
+			Common.openPage(data['url']);
+		} else {
+			globalData.$txt.text('跳转地址获取失败');
+		}
+	})
+}
+//解析URL
+function deCodeUrlFn(dataStr) {
+	var str = dataStr || (document.URL + '').split('?')[1] || '';
+	str = str.split('#')[0];
+	if(str) {
+		var a = {},
+			b = str.split('&'),
+			i = 0,
+			s;
+		while(s = b[i++]) {
+			s = (s + '').split('=');
+			a[s[0]] = s[1];
+		}
+		return a;
+	}
+	return {};
+}
+</script>
+</body>
+
+</html>

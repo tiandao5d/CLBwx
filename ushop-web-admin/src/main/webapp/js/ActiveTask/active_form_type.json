@@ -1,0 +1,58 @@
+[
+	{
+		"type": "1",
+		"listP": "type=1",
+		"txt": "常规活动",
+		"fp": {
+			"takeType": "1"
+		}
+	}, {
+		"type": "2",
+		"txt": "日常活动",
+		"listP": "type=2",
+		"fp": {
+			"takeType": "1"
+		}
+	}, {
+		"type": "3",
+		"listP": "type=3",
+		"txt": "抽奖活动",
+		"fp": {
+			"conditionType": "17",
+			"takeType": "1",
+			"extraReward": "0",
+			"rewardType": "2"
+		}
+	}, {
+		"type": "5",
+		"txt": "签到活动",
+		"listP": "type=5",
+		"fp": {
+			"conditionType": "18",
+			"extraReward": "0",
+			"rewardType": "1",
+			"takeType": "1"
+		}
+	}, {
+		"type": "6",
+		"txt": "成就活动",
+		"listP": "type=6",
+		"fp": {
+			"takeType": "2"
+		}
+	}, {
+		"type": "4",
+		"txt": "渠道活动",
+		"channel": "1",
+		"listP": "channel=1",
+		"fp": {
+			"takeType": "1"
+		}
+	}, {
+		"type": "-1",
+		"txt": "所有的列表",
+		"channel": "",
+		"listP": "",
+		"fp": {}
+	}
+]

@@ -1,0 +1,381 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>我的彩票</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+/*悬浮抬头样式*/
+.xl-tab-fixed {
+	top: 0;
+}
+.xl-tab-title {
+	line-height: 3em;
+	text-align: center;
+	font-size: 1.2em;
+	font-weight: 500;
+	border-bottom: solid 1px #f6f6f6;
+}
+.xl-tab-title .xl-tab-hitem {
+	float: left;
+	width: 33.3333%;
+	color: #333;
+}
+.xl-tab-title .xl-tab-hitem.active {
+	color: #ff5534;
+}
+.xl-tab-citem {
+	display: none;
+}
+.xl-tab-citem.active {
+	display: block;
+}
+
+
+/*彩票列表排版*/
+.xlml-li {
+    position: relative;
+    padding: .5em .8em;
+    background: #fff;
+    padding-left: 5.5em;
+    margin-bottom: 1px;
+}
+.xlml-li .xlml-li-p1 {
+    position: relative;
+    line-height: 2em;
+}
+.xlml-li-img {
+    position: absolute;
+    left: .8em;
+    width: 4em;
+    height: 4em;
+    text-align: center;
+    background: url(../../image/icon/lottery_icon1.png) no-repeat;
+    background-size: 100%;
+    color: #fff;
+    line-height: 1em;
+}
+.xlml-li-s3 {
+    margin-top: .4em;
+}
+.xlml-li-s4 {
+    margin-top: .2em;
+    font-size: 2.2em;
+}
+.xlml-li-r {
+    position: absolute;
+    right: .8em;
+    top: 50%;
+    margin-top: -1em;
+}
+.xlml-li-r span {
+    display: inline-block;
+    vertical-align: middle;
+}
+.xlml-li-r .icon-forward {
+    font-size: 2em;
+    vertical-align: middle;
+    color: #888;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">我的彩票</h1>
+	</div>
+</div>
+<div class="xlele-box titleshowhide">
+	<div class="xlele-content xl-tab-fixed">
+		<div class="xl-tab-title clearfix" id="tabTitleBox">
+			<a class="xl-tab-hitem" datahref="#tabContent1" onclick="onTabTitleFn(this)">未开奖</a>
+			<a class="xl-tab-hitem" datahref="#tabContent2" onclick="onTabTitleFn(this)">未中奖</a>
+			<a class="xl-tab-hitem" datahref="#tabContent3" onclick="onTabTitleFn(this)">已中奖</a>
+		</div>
+	</div>
+</div>
+<div class="titleshowhide" style="height: 3.6em;"></div>
+<div class="xlbody-box">
+	<div class="xl-tab-content" id="tabContentBox">
+		<div class="xl-tab-citem" id="tabContent1">
+			<div class="tabBody"></div>
+			<div class="xl-refresh-prompt refreshPrompt"></div>
+		</div>
+		<div class="xl-tab-citem" id="tabContent2">
+			<div class="tabBody"></div>
+			<div class="xl-refresh-prompt refreshPrompt"></div>
+		</div>
+		<div class="xl-tab-citem" id="tabContent3">
+			<div class="tabBody"></div>
+			<div class="xl-refresh-prompt refreshPrompt"></div>
+		</div>
+	</div>
+</div>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/md5.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+//各个彩票彩种对应的ID
+globalData.lotteryGameId = [{
+		txt: '双色球',
+        val: 'ssq',
+		gameId: '2',
+		palyType: [{
+			playTypeID: '3000',
+			txt: '单式'
+		}, {
+			playTypeID: '3001',
+			txt: '复式'
+		}, {
+			playTypeID: '3002',
+			txt: '胆拖'
+		}, {
+			playTypeID: '3003',
+			txt: '红胆蓝复'
+		}]
+	},
+	{
+		txt: '快3',
+		gameId: '6',
+        val: 'k3',
+	},
+	{
+		txt: '3D',
+        val: '3d',
+		gameId: '4',
+		palyType: [{
+			playTypeID: '2010',
+			txt: '数字组三'
+		}, {
+			playTypeID: '2011',
+			txt: '数字组六'
+		}, {
+			playTypeID: '2020',
+			txt: '直选复式'
+		}, {
+			playTypeID: '2030',
+			txt: '组三复式'
+		}, {
+			playTypeID: '2031',
+			txt: '组六复式'
+		}, {
+			playTypeID: '2051',
+			txt: '直选包点'
+		}, {
+			playTypeID: '2071',
+			txt: '直选包串'
+		}, {
+			playTypeID: '2061',
+			txt: '直选包胆'
+		}, {
+			playTypeID: '2000',
+			txt: '数字直选'
+		}, {
+			playTypeID: '2040',
+			txt: '直选包号'
+		}, {
+			playTypeID: '2213',
+			txt: '直选1D'
+		}, {
+			playTypeID: '2223',
+			txt: '直选2D'
+		}, {
+			playTypeID: '2230',
+			txt: '3D通选'
+		}, {
+			playTypeID: '2240',
+			txt: '3D和数'
+		}, {
+			playTypeID: '2610',
+			txt: '猜1D'
+		}, {
+			playTypeID: '2611',
+			txt: '猜2D'
+		}, {
+			playTypeID: '2613',
+			txt: '3D包选三'
+		}, {
+			playTypeID: '2614',
+			txt: '3D包选六'
+		}, {
+			playTypeID: '2615',
+			txt: '猜三同号全包'
+		}, {
+			playTypeID: '2616',
+			txt: '拖拉机'
+		}, {
+			playTypeID: '2617',
+			txt: '猜大小'
+		}, {
+			playTypeID: '2618',
+			txt: '猜奇偶'
+		}]
+	}
+];
+
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+
+//页面启动时，数据初始化
+function pageDataInit(){
+	globalData.showItem = globalData.pageParam.showItem;
+}
+//dom事件绑定
+function domEventFn(){
+	//到底部加载
+	Common.scrollBottom(function(){
+		var datahref = $('#tabTitleBox').find('.active').attr('datahref');
+		getListDataFn(datahref);
+	});
+}
+
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	//数据初始化
+	var hitem = $('#tabTitleBox').find('.xl-tab-hitem'),
+		suffixStr = '';//后缀字符串
+	hitem.each(function(index, item){
+		suffixStr = $(item).attr('datahref').substr(1);
+		globalData['currentPage' + suffixStr] = 0;//当前页
+		globalData['pagePage' + suffixStr] = 1;//总页数
+	});
+	
+	//界面显示
+	var datahref = '#tabContent1';
+	if(globalData.showItem){
+		datahref = '#' + globalData.showItem;
+	}
+	onTabTitleFn($('[datahref="' + datahref + '"]')[0]);
+}
+
+//刷新之后执行函数
+function refreshAfterFn(){
+	if(globalData.refreshComplete >= globalData.requestNum){
+		globalData.refreshComplete = 0;//用来记录请求完成次数
+		globalData.requestNum = 0;//用来记录有多少次用户请求
+		if(globalData.isRefresh == true){
+			globalData.isRefresh = false;
+			Common.toast('刷新成功');
+		}
+	}
+}
+
+
+//tab抬头点击事件切换项目
+function onTabTitleFn(me){
+	var hitem = $('#tabTitleBox').find('.xl-tab-hitem'),
+		citem = $('#tabContentBox').find('.xl-tab-citem'),
+		$me = $(me),
+		datahref = $me.attr('datahref'),
+		suffixStr = datahref.substr(1),
+		$item = $(datahref),
+		nowTime = (new Date()).getTime(),//当前的时间
+		oldTime = $item.data('oldTime');//上一次请求的时间
+	if($me.hasClass('active')){return false;}//本就是选中状态，不能再次点击
+	hitem.removeClass('active');
+	citem.removeClass('active');
+	$me.addClass('active');
+	$item.addClass('active');
+	if(oldTime && (nowTime - oldTime < 300000)){//时间间隔超过5分钟才允许重新请求
+		return false;
+	}else{
+		globalData['currentPage' + suffixStr] = 0;//当前页
+		globalData['pagePage' + suffixStr] = 1;//总页数
+	}
+	getListDataFn(datahref);
+}
+
+//获取列表数据列表
+function getListDataFn(datahref){
+	var suffixStr = datahref.substr(1),
+		listItem = $(datahref),//列表项目
+		listContent = listItem.find('.tabBody'),//列表容器
+		refreshPrompt = listItem.find('.refreshPrompt'),//加载中提示容器
+		template = document.getElementById('orderListTemplate'),
+		currentPage = globalData['currentPage' + suffixStr],
+		pagePage = globalData['pagePage' + suffixStr],
+		typenum;//用来确定请求的地址
+	if(refreshPrompt.find('.isLoadingTrue').length > 0){//说明正在加载中……
+		return false;
+	}
+	currentPage++;
+	if(currentPage > pagePage){//说明已经是最后一页了
+		return false;
+	}
+    switch (datahref) {
+        case '#tabContent1': typenum = '10';break;//未开奖
+        case '#tabContent2': typenum = '11';break;//未中奖
+        case '#tabContent3': typenum = '12';break;//已中奖
+    }
+	refreshPrompt.html(Common.listLoadingHTML());
+	var _url = '/ushop-api-merchant/api/sns/lottery/ticket/list/' + currentPage + '/10/' + typenum;
+	Common.ajax(_url, 'get', {}, function(data){
+		listItem.data('oldTime', (new Date()).getTime());//记录此次请求的时间，用来做延时用的
+		if(data.totalCount >= 0){//表示数据请求成功
+			currentPage = data.currentPage;
+			pagePage = data.pagePage;
+			globalData['currentPage' + suffixStr] = currentPage;
+			globalData['pagePage' + suffixStr] = pagePage;
+			if(data.totalCount === 0){//表示请求到的数据为0
+				listContent.html('');
+				refreshPrompt.html('');
+				//显示空白界面
+				Common.blankPageFn(listContent, {}, '<a style="width: 60%; margin: 0 auto;" class="xl-btn xl-btn-block" href="../weixinmp/home.html?scanQRCode=yes">扫一扫</a>');
+				return false;
+			}
+			Common.blankPageFn(listContent, 'hide');//隐藏空白界面
+			if(currentPage < pagePage){
+				refreshPrompt.html('上拉加载');
+			}else{
+				refreshPrompt.html('没有更多了');
+			}
+			
+			//彩票数据解析
+			var str = '', val;
+            $.each(data.recordList, function(i, obj){
+                $.each(globalData.lotteryGameId, function(gi, go){
+                    if(go.gameId == obj.gameId){
+                        obj.gameName = go.txt;
+                        val = go.val;
+                        return false;
+                    }
+                })
+		    	str +=	
+		    			'<div class="xlml-li">'+
+		    				'<a href="lottery_detail_' + val + '.html?lotteryData=' + encodeURIComponent(JSON.stringify(obj)) + '">'+
+				            '<div class="xlml-li-img">'+
+				                '<div class="xlml-li-s3">' + Common.msToTime(obj.createTime)._m + '月</div>'+
+				                '<div class="xlml-li-s4">' + Common.msToTime(obj.createTime)._d + '</div>'+
+				            '</div>'+
+				            '<div class="xlml-li-p1">' + obj.gameName + '</div>'+
+				            '<div class="xlml-li-p1">获得 ' + (obj.reward || 0) + ' 彩豆</div>'+
+				            '<div class="xlml-li-r"><span></span><span class="icon icon-right"></span></div>'+
+				        	'</a>'+
+				        '</div>';
+            });
+
+			if(currentPage == 1){//说明是这个项目容器第一页
+				listContent.html(str);
+			}else{
+				listContent.html(listContent.html() + str);
+			}
+			
+		}else{
+			refreshPrompt.html(data.error_description || '未知错误');
+		}
+	});
+}
+
+
+</script>
+</body>
+</html>

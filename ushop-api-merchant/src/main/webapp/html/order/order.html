@@ -1,0 +1,461 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>购物车</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+.xl-li .xl-li-img {
+	width: 4em;
+	height: 4em;
+	margin-top: -2em;
+}
+.xlorder-box .xl-li > img {
+	width: 4em;
+	height: 4em;
+	margin-top: -2em;
+}
+.xlorder-box .xl-lii .xl-li-txt {
+	padding-left: 4.5em;
+}
+.xlorder-box .xl-li-txt{
+	line-height: 1.6em;
+	color: #888;
+}
+.xlorder-select {
+	position: absolute;
+	left: .8em;
+	top: 50%;
+	width: 1.6em;
+	height: 1.6em;
+	margin-top: -.8em;
+	border: solid 1px #ccc;
+}
+.xl-li.active .xlorder-select:before {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	font-family: iconfont;
+	content: "\e72e";
+	transform: translate(-50%, -50%);
+	font-size: 1.6em;
+	color: #fff;
+	line-height: 1;
+}
+
+.xl-li.active .xlorder-select {
+	background: #ff9f18;
+	border-color: #ff9f18;
+}
+.xlorder-p1 {
+	color: #333;
+	font-weight: bold;
+}
+.xlorder-check {
+	padding: 5px 0;
+}
+.xlorder-check:before {
+	content: "\e71f";
+	font-family: 'iconfont';
+    color: #999;
+    font-size: 1.6em;
+    vertical-align: middle;
+}
+.xlorder-check.active,
+.xlorder-check.active:before {
+	color: #f00;
+}
+.xlorder-p3 > span {
+	display: inline-block;
+	vertical-align: middle;
+}
+.xlorder-p4 {
+	position: absolute;
+	bottom: .3em;
+	right: 1em;
+}
+.xlorder-p4:before {
+	content: '\e725';
+	font-family: 'iconfont';
+	font-size: 2.4em;
+	line-height: 1;
+}
+
+.xl-li > a {
+	padding-left: 3em;
+}
+.xl-li .xl-li-img {
+	left: 3em;
+}
+
+.foot-total {
+	bottom: 4.8825em;
+}
+.foot-total-body {
+	line-height: 3.4em;
+	padding-right: 8em;
+	padding-left: .8em;
+	font-size: 1.2em;
+	border-top: solid #f6f6f6 1px;
+}
+.foot-total-body i {
+	color: #ff5534;
+}
+.foot-total-btn {
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 100%;
+	padding: 0 .8em;
+	border: 0;
+	background: #ff5534;
+	font-size: 1.2em;
+	color: #fff;
+	border-radius: 0;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">购物车</h1>
+	</div>
+</div>
+<div class="xlbody-box">
+	<div class="xlorder-box">
+		<ul class="xl-ul" id="order_list_box"></ul>
+	</div>
+</div>
+<div id="isNoData" class="xlnd-container hide">
+	<div class="xlnd-img"><img src="../../image/img/xingxiangtu.png"/></div>
+	<div class="xlnd-p1">暂无记录</div>
+</div>
+<div style="height: 3.7em;"></div>
+<div class="xlele-box foot-total" id="foot_total_box">
+	<div class="xlele-content">
+		<div class="foot-total-body">总计：<i id="total_box"></i></div>
+		<button class="foot-total-btn" onclick="submitCheckFn()">立即购买</button>
+	</div>
+</div>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/md5.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script src="../../script/order_data_ds.js?v=20180131"></script>
+<script>
+"use strict";
+globalData.isProgress = false;
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+//页面启动时，数据初始化
+function pageDataInit(){
+//	OrderData.resetOrder()
+}
+//dom事件绑定
+function domEventFn(){
+}
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	getOrderDataFn();//购物车数据请求
+}
+//刷新之后执行函数
+function refreshAfterFn(){
+	if(globalData.refreshComplete >= globalData.requestNum){
+		globalData.refreshComplete = 0;//用来记录请求完成次数
+		globalData.requestNum = 0;//用来记录有多少次用户请求
+		if(globalData.isRefresh == true){
+			globalData.isRefresh = false;
+			Common.toast('刷新成功');
+		}
+	}
+}
+
+//获取购物车数据
+function getOrderDataFn(){
+	OrderData.getOrderData(function(curdata){
+		if(curdata.length > 0){
+			$('#isNoData').addClass('hide');
+			$('#foot_total_box').removeClass('hide');
+		}else{
+			$('#isNoData').removeClass('hide');
+			$('#foot_total_box').addClass('hide');
+			return false;
+		}
+		var str = '', s, cid, _a;
+		$.each(curdata, function(index, obj){
+			s = '', cid = obj.checkedRule.id, _a = '';
+			$.each(obj.ruleArr, function(ri, ro){
+				if(cid == ro.id){
+					s += '<div rule-id="' + ro.id + '" class="xlorder-check check_pay active">' + ro.payTypeText + '</div>';
+				}else{
+					s += '<div rule-id="' + ro.id + '" class="xlorder-check check_pay">' + ro.payTypeText + '</div>';
+				}
+			});
+			if(obj.selectlist === 1){
+				_a = 'active';
+			}
+			str +=
+			'<li class="xl-li xl-lii ' + _a + ' product_item" product-id="' + obj.productId + '">'+
+				'<a>'+
+					'<img class="xl-li-img" src="' + obj.headImage + '">'+
+					'<div class="xl-li-txt">'+
+						'<div class="xlorder-p1 ellipsis">' + obj.productName + '</div>'+
+						'<div class="xlorder-p2">'+
+							s+
+						'</div>'+
+						'<div class="xlorder-p3">'+
+							'<span>数量：</span>'+
+							'<div class="xl-numbox" minNum="1" maxNum="' + obj.stock + '" stepNum="1">'+
+								'<button class="xl-numbox-minus">'+
+									'<img class="xl-numbox-icon1" src="../../image/icon/Jian.png"/>'+
+									'<img class="xl-numbox-icon2" src="../../image/icon/Jian01.png"/>'+
+								'</button>'+
+								'<input class="xl-numbox-input" value="' + obj.buyCount + '" type="number">'+
+								'<button class="xl-numbox-plus">'+
+									'<img class="xl-numbox-icon1" src="../../image/icon/Jia.png"/>'+
+									'<img class="xl-numbox-icon2" src="../../image/icon/Jia01.png"/>'+
+								'</button>'+
+							'</div>'+
+						'</div>'+
+						'<div class="xlorder-p4" onclick="deleteItemFn(this)"></div>'+
+					'</div>'+
+				'</a>'+
+				'<div class="xlorder-select select_list"></div>'+
+			'</li>';
+		});
+		$('#order_list_box').html(str);
+		onCheckPayFn();//绑定选择支付方式的点击事件
+		numboxFn();//绑定加减号模块
+		totalPayDataFn();//统计数据
+	},true);
+}
+
+
+//绑定支付方式选择事件
+function onCheckPayFn(){
+	$('.check_pay').off('click.checkpay')
+	.on('click.checkpay', function(){
+		var $me = $(this),
+			box = $me.parent(),
+			checks = box.find('.check_pay');
+		checks.removeClass('active');
+		$me.addClass('active');
+		updataPayType($me);
+	});
+	$('.select_list').off('click.selectlist')
+	.on('click.selectlist', function(){
+		var $me = $(this),
+			li = $me.parent();
+		if(li.hasClass('active')){
+			li.removeClass('active');
+		}else{
+			li.addClass('active');
+		}
+		updataSelectFn(li);
+	});
+}
+
+
+
+//加减框模块
+function numboxFn(){
+	var numbox, ps = '.xl-numbox';
+	$('.xl-numbox').each(function(){
+		numbox = $(this);
+		numChangeFn(numbox);
+		numbox.find('.xl-numbox-minus')
+		.off('click.numbox').on('click.numbox', function(e){
+			numChangeFn($(this).parents(ps), 'minus', e);
+		});
+		numbox.find('.xl-numbox-plus')
+		.off('click.numbox').on('click.numbox', function(e){
+			numChangeFn($(this).parents(ps), 'plus', e);
+		});
+		numbox.find('.xl-numbox-input')
+		.off('input.numbox change.numbox').on('input.numbox change.numbox', function(e){
+			numChangeFn($(this).parents(ps), 'ipt', e);
+		});
+	});
+}
+
+//加减框模块
+function numChangeFn(numbox, status, e){
+	var md = 'minus_disabled',
+		pd = 'plus_disabled';
+	var minus = numbox.find('.xl-numbox-minus'),
+		plus = numbox.find('.xl-numbox-plus'),
+		ipt = numbox.find('.xl-numbox-input'),
+		minNum = parseInt(numbox.attr('minNum')),
+		maxNum = parseInt(numbox.attr('maxNum')),
+		stepNum = parseInt(numbox.attr('stepNum')) || 1,
+		valNum = parseInt(ipt.val());
+	minNum = ((minNum === 0) || minNum) ? minNum : 1;
+	maxNum = ((maxNum === 0) || maxNum) ? maxNum : 10000;
+	if(minNum >= maxNum){
+		numbox.addClass(md);
+		numbox.addClass(pd);
+		ipt.val(maxNum);
+		return false;
+	}
+	if((e && e.type) != 'input'){
+		valNum = ((valNum === 0) || valNum) ? valNum : minNum;
+	}
+	if(status === 'minus'){
+		valNum -= stepNum;
+	}else if(status === 'plus'){
+		valNum += stepNum;
+	}
+	if((valNum < maxNum) && (valNum > minNum)){
+		numbox.removeClass(md + ' ' + pd);
+	}else if(valNum >= maxNum){
+		numbox.addClass(pd);
+		numbox.removeClass(md);
+		valNum = maxNum;
+	}else if(valNum <= minNum){
+		numbox.addClass(md);
+		numbox.removeClass(pd);
+		valNum = minNum;
+	}
+	if((e && e.type) === 'input'){
+		ipt.val(valNum || '');
+	}else{
+		ipt.val(valNum);
+		if(status){
+			iptValChangeFn(numbox, valNum);
+		}
+	}
+}
+
+//修改购买个数时的回调
+function iptValChangeFn(numbox, valNum){
+	var li = numbox.parents('.product_item'),
+		productId = li.attr('product-id');
+	OrderData.updataBuynum(productId, valNum);
+	if(li.hasClass('active')){
+		totalPayDataFn();
+	}
+}
+
+//修改产品支付方式
+function updataPayType($me){
+	var li = $me.parents('.product_item'),
+		productId = li.attr('product-id'),
+		ruleId = $me.attr('rule-id');
+	OrderData.updataRule(productId, ruleId);
+	if(li.hasClass('active')){
+		totalPayDataFn();
+	}
+}
+
+//记录选中状态
+function updataSelectFn(li){
+	var productId = li.attr('product-id'),
+		selectlist = 2;
+	if(li.hasClass('active')){
+		selectlist = 1;
+	}
+	OrderData.updataSelect(productId, selectlist);
+	totalPayDataFn();
+}
+
+//删除记录
+function deleteItemFn(me){
+	var li = $(me).parents('.product_item'),
+		productId = parseInt(li.attr('product-id')),
+		ac = li.hasClass('active');
+	OrderData.deleteData([productId]);
+	li.remove();
+	if(ac){
+		totalPayDataFn();
+	}
+	if($('#order_list_box').find('.product_item').length === 0){
+		$('#isNoData').removeClass('hide');
+		$('#foot_total_box').addClass('hide');
+	}
+}
+
+//统计数据
+function totalPayDataFn(){
+	var productId,
+		curData = OrderData.getOrderData(),
+		m = 0, i = 0, str;
+	$('.product_item.active').each(function(){
+		productId = $(this).attr('product-id');
+		$.each(curData, function(index, obj) {
+			if(obj.productId == productId){
+				m += obj.checkedRule.ruleMoney*obj.buyCount;
+				i += obj.checkedRule.ruleIntegral*obj.buyCount;
+				return false;
+			}
+		});
+	});
+	m = parseFloat(m.toFixed(2));
+	i = parseFloat(i.toFixed(2));
+	str = ((m > 0) ? ('<small>￥</small>' + m) : '');
+	if(str){
+		str += ((i > 0) ? ('<small>+</small>' + i + '<small>彩豆</small>') : '');
+	}else{
+		str = ((i > 0) ? (i + '<small>彩豆</small>') : '');
+	}
+	document.getElementById('total_box').innerHTML = (str || '00');
+}
+
+//提交下单
+function submitCheckFn(){
+	var curData = OrderData.getOrderData(),
+		_param = [], li, productId, buyCount, orderList = [],
+		activeEle = $('.product_item.active');
+	if(activeEle.length === 0){
+		Common.toast('请选择商品！');
+		return false;
+	}
+	activeEle.each(function(){
+		productId = $(this).attr('product-id');
+		$.each(curData, function(index, obj) {
+			if(obj.productId == productId){
+				orderList[orderList.length] = obj;
+				_param[_param.length] = {
+					productId: obj.productId,
+					buyCount: obj.buyCount
+				};
+				return false;
+			}
+		});
+	});
+	var _url = '/ushop-api-merchant/api/mall/cart/settlement/check';
+	Common.ajax(_url, 'post', JSON.stringify(_param), function(data) {
+		if(data.recordList){
+			var arr = [];
+			$.each(orderList, function(index, obj){
+				$.each(data.recordList, function(ii, oo){
+					if(oo.productId == obj.productId){
+						if(parseInt(oo.currentBuyCount) > 0){
+							arr[arr.length] = obj;
+						}
+						return false;
+					}
+				});
+			});
+			var orderObj = OrderData.splitOrderFn(arr);
+			orderObj.userMoney = data.balance || 0;
+			orderObj.userPoint = data.point || 0;
+			Common.storageL(Common.localPay, orderObj);
+			Common.openPage('confirm_order.html', {shopPage: 'orderShop'});
+		}else if (data.error_description) {
+			Common.toast(data.error_description);
+		} else {
+			Common.toast('结算失败！');
+		}
+	});
+}
+
+</script>
+</body>
+</html>

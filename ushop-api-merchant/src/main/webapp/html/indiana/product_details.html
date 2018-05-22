@@ -1,0 +1,764 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>商品详情</title>
+<link rel="stylesheet" type="text/css" href="../../css/owl.carousel.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+.xlbanner-box {
+	padding-top: 50%;
+}
+.xlpd-status {
+	padding: .5em .8em 0;
+	background: #fff;
+}
+.xlpd-status .xlpd-p1 {
+	position: relative;
+	padding-left: 4.5em;
+}
+.xlpd-status .xlpd-s1 {
+	position: absolute;
+	left: 0;
+	top: 50%;
+	margin-top: -.8em;
+	line-height: 1;
+	padding: .3em .5em;
+	color: #fff;
+	border-radius: 4px;
+}
+.xlpd-status .xlpd-underway .xlpd-s1 {
+	background: #48c913;
+}
+.xlpd-status .xlpd-beinthe .xlpd-s1 {
+	background: #f5a623;
+}
+.xlpd-status .xlpd-announced .xlpd-s1 {
+	background: #ff5534;
+}
+.xlpd-status .xlpd-p2 * {
+	color: #999;
+	font-size: .8em;
+}
+.xlpd-is-join {
+	color: #999;
+	text-align: center;
+	padding: 5px .8em;
+	background: #fff;
+}
+.xlpd-status .xlpd-p3 {
+	position: relative;
+	padding: .7em 1em;
+	border-radius: 10px;
+	padding-right: 8em;
+	background: #e93450;
+	font-size: .8em;
+	line-height: 1.8em;
+}
+.xlpd-status .xlpd-p3 * {
+	color: #fff;
+}
+.xlpd-status .xlpd-s2 {
+	position: absolute;
+	right: 7.5em;
+	top: .7em;
+	bottom: .7em;
+	width: 2px;
+	background: #fff;
+}
+.xlpd-status .xlpd-s3 {
+	position: absolute;
+	right: .8em;
+	top: 50%;
+	margin-top: -.8em;
+	border-radius: ;
+	padding: .3em .8em;
+	line-height: 1;
+	border: solid 2px #fff;
+	border-radius: 1.6em;
+}
+.xlpd-status .xlpd-p4 {
+	background: #fcf2ee;
+	border-radius: 10px;
+	font-size: .8em;
+}
+.xlpd-status .xlpd-head {
+	background: #e93450;
+	padding: 0 .5em;
+	border-radius: 10px 10px 0 0;
+}
+.xlpd-status .xlpd-s4 {
+	float: right;
+	padding: .3em .5em;
+	border-radius: 2em;
+	border: solid #fff 1px;
+	line-height: 1;
+	margin: .5em 0;
+	color: #fff;
+}
+.xlpd-status .xlpd-s5 {
+	float: left;
+	padding: .8em 0;
+	border: solid transparent 1px;
+	line-height: 1;
+	color: #fff;
+}
+.xlpd-status .xlpd-panel {
+	padding: .5em .7em .5em 4.4em;
+	position: relative;
+}
+.xlpd-status .xlpd-panel > img {
+	position: absolute;
+	left: .7em;
+	top: .5em;
+	width: 3em;
+	height: 3em;
+	border-radius: 50%;
+}
+.xlpd-list-box .xlli-menu-right:before {
+	color: #27d0d8;
+}
+.xlpd-join-box {
+	background: #fff;
+}
+.xlpd-join-head {
+	padding: .5em .8em;
+	text-align: center;
+}
+.xlpd-join-li {
+	position: relative;
+	padding: .5em .8em .5em 4.6em;
+}
+.xlpd-join-li > img {
+	position: absolute;
+	left: .8em;
+	top: .5em;
+	width: 3em;
+	height: 3em;
+	border-radius: 50%;
+}
+.xlpd-join-li .xlpd-join-s1 {
+	position: absolute;
+	right: .8em;
+	top: 50%;
+	line-height: 1;
+	margin-top: -.5em;
+}
+.xlpd-fotter {
+	bottom: 0;
+}
+.xlpd-fotter-placeholder {
+	position: relative;
+	opacity: 0;
+	filter: alpha(opacity=0);
+}
+
+
+.xlpd-fotter {
+	z-index: 1000;
+}
+.xlpd-join-modal {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: auto;
+	text-align: center;
+	background: #fff;
+	padding: .5em .8em;
+}
+.xlpd-join-p2 {
+	white-space: nowrap;
+	overflow-x: auto;
+	padding: .5em 0;
+}
+.xlpd-join-p2 span {
+	display: inline-block;
+	padding: .3em .5em;
+	border-radius: 4px;
+	border: solid 1px #ccc;
+	cursor: pointer;
+	line-height: 1.2;
+}
+.xlpd-join-p2 span.disabled {
+	color: #999;
+}
+.xlpd-close-modal {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	line-height: 1;
+	color: #999;
+}
+.xlpd-close-modal:before {
+	font-family: 'iconfont';
+	content: "\e6e9";
+	line-height: 1;
+	font-size: 1.4em;
+}
+.xlpd-close-modal:hover {
+	color: #333;
+}
+.xlpd-modal-btn1 {
+	border-radius: 0;
+	display: none !important;
+}
+.xlpd-modal-btn1.show {
+	display: block !important;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">商品详情</h1>
+	</div>
+</div>
+<div class="xlbody-box">
+	<div class="xlbanner-box">
+		<img class="xlbanner-pla-img" src="../../image/p200100.png">
+		<div id="bannerBox" class="owl-carousel owl-theme xlbanner-body"></div>
+	</div>
+	<div class="xlpd-status" id="productStatusBox">
+		<!--<div class="xlpd-underway">
+			<div class="xlpd-p1">
+				<div class="xlpd-s1">进行中</div>
+				<div class="ellipsis">（第30期）平板电脑</div>
+				<div class="ellipsis">这里是一个平板电报</div>
+			</div>
+        	<div class="xl-progressbar">
+        		<span style="width: 20%;"></span>
+	    	</div>
+	    	<div class="xlpd-p2 clearfix">
+	    		<div class="pull-left">总需：<span class="color-ff5534">1</span>人次</div>
+	    		<div class="pull-right">参与：<span class="color-ff5534">0</span>人次</div>
+	    	</div>
+		</div>
+		<div class="xlpd-beinthe">
+			<div class="xlpd-p1">
+				<div class="xlpd-s1">揭晓中</div>
+				<div class="ellipsis">（第30期）平板电脑</div>
+				<div class="ellipsis">这里是一个平板电报</div>
+			</div>
+        	<div class="xlpd-p3">
+        		<div class="ellipsis">期号：123</div>
+        		<div class="ellipsis">总需：456</div>
+        		<div>揭晓倒计时：
+					<div class="xl-count-down" timeNum="2017-1-19 09:10:00">
+						<span class="xl-time timeEle">00</span>
+						<span>:</span>
+						<span class="xl-time timeEle">00</span>
+						<span>:</span>
+						<span class="xl-time timeEle">00</span>
+					</div>
+        		</div>
+        		<div class="xlpd-s2"></div>
+        		<div class="xlpd-s3">计算公式</div>
+        	</div>
+		</div>
+		<div class="xlpd-announced">
+			<div class="xlpd-p1">
+				<div class="xlpd-s1">已揭晓</div>
+				<div class="ellipsis">（第30期）平板电脑</div>
+				<div class="ellipsis">这里是一个平板电报</div>
+			</div>
+        	<div class="xlpd-p4">
+        		<div class="xlpd-head clearfix">
+        			<div class="xlpd-s5">幸运号码：</div>
+        			<div class="xlpd-s4">计算公式</div>
+        		</div>
+        		<div class="xlpd-panel">
+        			<img src="../../image/icon/minePortrait.png">
+        			<div>获奖者：</div>
+        			<div class="color-999">幸运号码：</div>
+        			<div class="color-999">本期参与：<span class="color-ff5534">1</span>人次</div>
+        			<div class="color-999">揭晓时间：</div>
+        		</div>
+        	</div>
+		</div>-->
+	</div>
+	<div class="xlpd-is-join" id="userIsJoin">试试手气吧，万一中了呢？</div>
+	<div style="height: 8px;"></div>
+	<div class="xlpd-list-box">
+		<ul class="xl-ul">
+			<li class="xl-li xlli-menu-right">
+				<a id="detailsImgEle">
+					<div class="xl-li-txt">图文详情</div>
+				</a>
+			</li>
+			<li class="xl-li xlli-menu-right">
+				<a id="historyAnnEle">
+					<div class="xl-li-txt">往期揭晓</div>
+				</a>
+			</li>
+			<li class="xl-li xlli-menu-right">
+				<a id="parductShareEle">
+					<div class="xl-li-txt">晒单分享</div>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div style="height: 8px;"></div>
+	<div class="xlpd-join-box" id="listContent">
+		<div class="xlpd-join-head" id="buyStartTime">本期参与记录<span class="color-999"></span></div>
+		<ul class="xlpd-join-ul">
+			<!--<li class="xlpd-join-li">
+				<img src="../../image/icon/minePortrait.png">
+				<div>昵称</div>
+				<div class="color-999">IP:10.25.35.255</div>
+				<div class="color-999">2017-02-28 09:02:03.174</div>
+				<div class="xlpd-join-s1">参与<span class="color-ff5534">1</span>人次</div>
+			</li>-->
+		</ul>
+		<div class="xl-refresh-prompt refreshPrompt"></div>
+	</div>
+</div>
+<div class="xlele-box xlpd-fotter xlpd-fotter-placeholder footBtnEle">
+	<div class="xlele-content">
+		<div class="xl-btn xl-btn-block">立即参与</div>
+	</div>
+</div>
+<div class="xlele-box xlpd-fotter footBtnEle">
+	<div class="xlele-content">
+		<button class="xl-btn xl-btn-block xlpd-modal-btn1" id="nowJoinBtn" onclick="showJoinModel('show')">立即参与</button>
+		<a class="xl-btn xl-btn-block xlpd-modal-btn1" id="joinNewBtn">参与新一期</a>
+		<div class="xlpd-join-modal hide" id="joinModalBox">
+			<div class="xlpd-close-modal" onclick="showJoinModel('hide')"></div>
+			<div style="height: 10px;"></div>
+			<div class="xlpd-join-p1">请选择参与人次</div>
+			<div style="height: 10px;"></div>
+			<div class="xl-numbox" minNum="1" maxNum="10" stepNum="1">
+				<button class="xl-numbox-minus">-</button>
+				<input class="xl-numbox-input" value="1" type="number">
+				<button class="xl-numbox-plus">+</button>
+			</div>
+			<div class="xlpd-join-p2" id="selectJoinNum">
+				<span>10</span>
+				<span>20</span>
+				<span>50</span>
+				<span>100</span>
+				<span>200</span>
+				<span>500</span>
+				<span>1000</span>
+				<span>2000</span>
+				<span>5000</span>
+			</div>
+			<div class="xlpd-join-p3">需要<span class="color-ff5534" id="integralTotal">1</span>彩豆</div>
+			<div style="height: 10px;"></div>
+			<button class="xl-btn xl-btn-block" onclick="submitJoinFn()">确定</button>
+		</div>
+	</div>
+</div>
+<div class="xl-modal-bg hide" id="modalBGEle"></div>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/owl.carousel.min.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+
+//页面启动时，数据初始化
+function pageDataInit(){
+	globalData.productId = globalData.pageParam.productId;
+	globalData.spellbuyId = globalData.pageParam.spellbuyId;
+	globalData.fromTo = globalData.pageParam.fromTo;
+}
+//dom事件绑定
+function domEventFn(){
+	var joinModalBox = $('#joinModalBox'),
+		numbox = joinModalBox.find('.xl-numbox'),
+		numIpt = joinModalBox.find('.xl-numbox-input');
+	//到底部加载
+	Common.scrollBottom(function(){
+		pageListShowFn();//参与列表请求
+	});
+	numboxFn();
+	
+	$('#selectJoinNum').find('span').on('click', function(){
+		var $me = $(this);
+		if(!$me.hasClass('disabled')){
+			numIpt.val($me.text());
+			numboxChange('ipt');
+		}
+	});
+}
+
+
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	//页面刷新时，数据初始化
+	globalData.currentPage = 0;//当前页
+	globalData.pagePage = 1;//总页数
+	
+	//刷新数据请求函数
+	productDataInit();//产品信息请求
+}
+
+//刷新之后执行函数
+function refreshAfterFn(){
+	if(globalData.refreshComplete >= globalData.requestNum){
+		globalData.refreshComplete = 0;//用来记录请求完成次数
+		globalData.requestNum = 0;//用来记录有多少次用户请求
+		if(globalData.isRefresh == true){
+			globalData.isRefresh = false;
+			Common.toast('刷新成功');
+		}
+	}
+}
+
+//产品信息请求
+function productDataInit(){
+	var _url;
+	if(globalData.spellbuyId){
+		_url = Common.domainUrl + '/ushop-api-merchant/api/spellbuy/product/detail/getSpellBuyProductBySpellBuyId/' + globalData.spellbuyId + '.json';
+	}else if(globalData.productId){
+		_url = Common.domainUrl + '/ushop-api-merchant/api/spellbuy/product/detail/getSpellBuyProductByProductId/' + globalData.productId + '.json';
+	}else{
+		Common.toast('数据错误');
+		return false;
+	}
+	Common.ajax(_url, 'get', {}, function(data){
+		if(data.detail){
+			globalData.productId = data.detail.productId;
+			globalData.spellbuyId = data.detail.id;
+			pageDataShowFn(data);//页面数据初始化
+			bannerShowFn();//banner图显示
+			pageListShowFn();//参与列表请求
+//			joinNumFn();//获取用户的参与次数
+		}
+	});
+}
+
+//banner图显示
+function bannerShowFn(){
+	var _url = Common.domainUrl + '/ushop-api-merchant/api/spellbuy/product/detail/getProductImageById/' + globalData.productId + '.json';
+	Common.ajax(_url, 'get', {}, function(data){
+		if(data.images){
+			globalData.bannerImg = [];
+			globalData.detailsImg = [];
+			$.each(data.images, function(index, obj){
+				if(obj.imageType == 1){
+					globalData.bannerImg.push(obj);
+				}else{
+					globalData.detailsImg.push(obj);
+				}
+			});
+			if(globalData.productDetails){
+				$('#detailsImgEle').attr(
+					'href',
+					(
+						'image_details.html?detailsImg=' + encodeURIComponent(JSON.stringify(globalData.detailsImg))+
+						'&detailsParam=' + encodeURIComponent(globalData.productDetails)
+					)
+				)
+			}
+			if(globalData.bannerImg[0]){
+				var str = '',
+					img = new Image(),
+					bannerBox = $("#bannerBox");
+				img.src = Common.getImageUrl(globalData.bannerImg[0].imagePath);
+				$.each(globalData.bannerImg, function(index, obj){
+					str += '<div class="item"><img src="' + Common.getImageUrl(obj.imagePath) + '"></div>';
+				});
+				img.onload = function(){
+					bannerBox.html(str);
+					bannerBox.owlCarousel({
+						items: 1
+					});
+				}
+			}
+		}
+	})
+}
+//获取用户的参与次数
+function joinNumFn(data){
+	var userId = Common.storageL(Common.userId);
+	if(userId){
+		var _url = Common.domainUrl + '/ushop-api-merchant/api/spellbuy/product/detail/getUserSpellBuyCountBySpellBuyId/' + globalData.spellbuyId + '/' + userId;
+		Common.ajax(_url, 'get', {}, function(data){
+			if(parseInt(data.spellbuyCount) > 0){
+				$('#userIsJoin').html('您已经参与了<span class="color-ff5534">' + data.spellbuyCount + '</span>人次');
+			}
+		});
+	}
+}
+
+
+//numbox插件调用
+function numboxFn(){
+	$('.xl-numbox-minus, .xl-numbox-plus').on('click', function(){
+		var $me = $(this),
+			status = '',
+			numbox = $me.parents('.xl-numbox'),
+			minus = numbox.find('.xl-numbox-minus'),
+			plus = numbox.find('.xl-numbox-plus'),
+			ipt = numbox.find('.xl-numbox-input'),
+			minNum = parseInt(numbox.attr('minNum')) || 1,
+			maxNum = parseInt(numbox.attr('maxNum')) || 1000,
+			stepNum = parseInt(numbox.attr('stepNum')) || 1;
+		var valNum = parseInt(ipt.val());
+		if($me.attr('class').indexOf('xl-numbox-minus') >= 0){
+			status = 'minus';
+		}else if($me.attr('class').indexOf('xl-numbox-plus') >= 0){
+			status = 'plus';
+		}
+		if(!valNum){valNum = minNum;}
+		if(status === 'minus'){
+			valNum -= stepNum;
+		}else if(status === 'plus'){
+			valNum += stepNum;
+		}
+		if(valNum < minNum) {valNum = minNum}
+		if(valNum > maxNum) {valNum = maxNum}
+		ipt.val(valNum);
+		numboxChange(status, valNum);
+	});
+	$('.xl-numbox-input').on('input change', function(){
+		var $me = $(this),
+			numbox = $me.parents('.xl-numbox'),
+			minus = numbox.find('.xl-numbox-minus'),
+			plus = numbox.find('.xl-numbox-plus'),
+			ipt = numbox.find('.xl-numbox-input'),
+			minNum = parseInt(numbox.attr('minNum')) || 1,
+			maxNum = parseInt(numbox.attr('maxNum')) || 1000,
+			stepNum = parseInt(numbox.attr('stepNum')) || 1;
+		var valNum = parseInt(ipt.val());
+		if(!valNum){
+			numboxChange('ipt');
+			return false;
+		}
+		if(valNum < minNum) {valNum = minNum;}
+		if(valNum > maxNum) {valNum = maxNum;}
+		ipt.val(valNum);
+		numboxChange('ipt', valNum);
+	});
+}
+
+//numbox中数据改变后执行
+function numboxChange(status, valNum){
+	valNum = valNum || parseInt($('#joinModalBox').find('.xl-numbox-input').val()) || 1;
+	if(status === 'minus'){
+		
+	}else if(status === 'plus'){
+		
+	}else if(status === 'ipt'){
+		
+	}
+	var total = (globalData.spellbuySinglePrice*valNum*100).toFixed();
+	$('#integralTotal').html(total);
+}
+
+//提交参与人数
+function submitJoinFn(){
+	var valNum = parseInt($('#joinModalBox').find('.xl-numbox-input').val()) || 1,
+		param = {
+			productId: globalData.productId,
+			spellbuyProductId: globalData.spellbuyId,
+			buyCount: valNum,
+			unitPrice: globalData.spellbuySinglePrice
+		};
+	Common.openPage('../order/balance.html', param, 'phone_valid');
+}
+
+//页面列表，单个商品ID分页
+//单独式产品列表示例
+function pageListShowFn(){
+	globalData.currentPage++;
+	if(globalData.currentPage > globalData.pagePage){//说明已经是最后一页了
+		return false;
+	}
+	var listItem = $('#listContent'),//列表项目
+		listContent = listItem.find('ul'),//列表容器
+		refreshPrompt = listItem.find('.refreshPrompt');//加载中提示容器
+	if(refreshPrompt.find('.isLoadingTrue').length > 0){//说明正在加载中……
+		return false;
+	}
+	refreshPrompt.html(Common.listLoadingHTML());
+	var _url = Common.domainUrl + '/ushop-api-merchant/api/spellbuy/product/detail/listParticipatorBySpellBuyId/' + globalData.spellbuyId + '/' + globalData.currentPage + '/10';
+	Common.ajax(_url, 'get', {}, function(data){
+		if(data.totalCount >= 0){//表示数据请求成功
+			globalData.currentPage = data.currentPage;
+			globalData.pagePage = data.pagePage;
+			if(data.totalCount === 0){//表示请求到的数据为0
+				listContent.html('');
+				refreshPrompt.html('');
+				return false;
+			}
+			if(globalData.currentPage == globalData.pagePage){
+				refreshPrompt.html('没有更多了');
+			}else{
+				refreshPrompt.html('上拉加载');
+			}
+			
+			
+			var str = '', buyerImage = '';
+			$.each(data.recordList, function(index, obj){
+				buyerImage = obj.buyerImage ? Common.getImageUrl(obj.buyerImage) : '../../image/icon/minePortrait.png';
+				str +=  
+					'<li class="xlpd-join-li">'+
+						'<img src="' + buyerImage + '">'+
+						'<div>' + Common.phoneEncryption(obj.buyerName) + '</div>'+
+						'<div class="color-999">IP:' + obj.buyIp + '</div>'+
+						'<div class="color-999">' + obj.buyDate + '</div>'+
+						'<div class="xlpd-join-s1">参与<span class="color-ff5534">' + obj.buyPrice + '</span>人次</div>'+
+					'</li>';
+			});
+			if(globalData.currentPage == 1){//说明是这个项目容器第一页
+				listContent.html(str);
+			}else{
+				listContent.html(listContent.html() + str);
+			}
+		}else{
+			refreshPrompt.html('加载失败！');
+		}
+	});
+}
+
+//页面数据初始化
+function pageDataShowFn(data){
+	if(globalData.fromTo == 'btn'){//直接显示模态框
+		showJoinModel('show')
+	}
+	var data = data || {},
+		detail = data.detail || {},
+		pData = detail.object || {},
+		status = data.detail.spellbuyStatus || {};
+	globalData.spellbuyId = detail.id;
+	globalData.productId = detail.productId;
+	$('#historyAnnEle').attr('href', 'history_announce.html?productId=' + globalData.productId);
+	$('#parductShareEle').attr('href', '../weixinmp/share_list.html?showItem=tabContent3&productId=' + globalData.productId);
+	
+	//赋值
+	globalData.productDetails = data.detail.object.productDetails;
+	if(globalData.detailsImg){
+		$('#detailsImgEle').attr(
+			'href',
+			(
+				'image_details.html?detailsImg=' + encodeURIComponent(JSON.stringify(globalData.detailsImg))+
+				'&detailsParam=' + encodeURIComponent(globalData.productDetails)
+			)
+		)
+	}
+	
+	//numbox
+	var joinModalBox = $('#joinModalBox'),
+		numBox = joinModalBox.find('.xl-numbox');
+	globalData.spellbuyPrice = parseFloat(detail.spellbuyPrice);//总需人次
+	globalData.spellbuySinglePrice = parseFloat(detail.spellbuySinglePrice);//单价
+	globalData.spellbuyCount = parseFloat(detail.spellbuyCount);//参与人次
+	var numBoxMaxNum = parseInt(globalData.spellbuyPrice - globalData.spellbuyCount);//当前最大可参与人次
+//	if(!(numBoxMaxNum > 0)){$('.footBtnEle').addClass('hide');}//如果最大可参与人次不大于0将无法选择
+	numBox.attr('maxNum', numBoxMaxNum);
+	numboxChange();
+	$('#selectJoinNum').find('span').each(function(index, me){
+		var $me = $(me),
+			val = parseFloat($me.text());
+		if(numBoxMaxNum < val){
+			$me.addClass('disabled');
+		}
+	});
+	
+	//状态
+	var str,
+		nowJoinBtn = $('#nowJoinBtn'),
+		joinNewBtn = $('#joinNewBtn');
+	$('#buyStartTime').html('本期参与记录<span class="color-999">（' + detail.spellbuyStartDate + '开始）</span>');
+	if(status == 100){
+		joinNewBtn.removeClass('show');
+		nowJoinBtn.addClass('show');
+	}else if(status == 101 || status == 102){
+		nowJoinBtn.removeClass('show');
+		joinNewBtn.addClass('show');
+		joinNewBtn.attr('href', 'product_details.html?productId=' + detail.productId)
+	}else{
+		$('.footBtnEle').addClass('hide');
+	}
+	if(status == 100){//进行中
+		var progressbarW = 100*parseInt(detail.spellbuyCount)/parseInt(detail.spellbuyPrice);
+		str = 
+			'<div class="xlpd-underway">'+
+				'<div class="xlpd-p1">'+
+					'<div class="xlpd-s1">进行中</div>'+
+					'<div class="ellipsis">（第' + detail.productPeriod + '期）' + pData.productName + '</div>'+
+					'<div class="ellipsis">' + pData.productTitle + '</div>'+
+				'</div>'+
+	        	'<div class="xl-progressbar">'+
+	        		'<span style="width: ' + progressbarW + '%;"></span>'+
+		    	'</div>'+
+		    	'<div class="xlpd-p2 clearfix">'+
+		    		'<div class="pull-left">总需：<span class="color-ff5534">' + detail.spellbuyPrice + '</span>人次</div>'+
+		    		'<div class="pull-right">参与：<span class="color-ff5534">' + detail.spellbuyCount + '</span>人次</div>'+
+		    	'</div>'+
+			'</div>';
+	}else if(status == 101){//揭晓中
+		str = 
+			'<div class="xlpd-beinthe">'+
+				'<div class="xlpd-p1">'+
+					'<div class="xlpd-s1">揭晓中</div>'+
+					'<div class="ellipsis">（第' + detail.productPeriod + '期）' + pData.productName + '</div>'+
+					'<div class="ellipsis">' + pData.productTitle + '</div>'+
+				'</div>'+
+	        	'<div class="xlpd-p3">'+
+	        		'<div class="ellipsis">期号：' + detail.productPeriod + '</div>'+
+	        		'<div class="ellipsis">总需：' + detail.spellbuyPrice + '</div>'+
+	        		'<div>揭晓倒计时：'+
+						'<div class="xl-count-down" timeNum="' + detail.announceEndDate + '">'+
+							'<span class="xl-time timeEle">00</span>'+
+							'<span>:</span>'+
+							'<span class="xl-time timeEle">00</span>'+
+							'<span>:</span>'+
+							'<span class="xl-time timeEle">00</span>'+
+						'</div>'+
+	        		'</div>'+
+	        		'<div class="xlpd-s2"></div>'+
+	        		'<div class="xlpd-s3">计算公式</div>'+
+	        	'</div>'+
+			'</div>';
+	}else if(status == 102){//已揭晓
+		var ownerImage = detail.ownerImage ? Common.getImageUrl(detail.ownerImage) : '../../image/icon/minePortrait.png';
+		str = 
+			'<div class="xlpd-announced">'+
+				'<div class="xlpd-p1">'+
+					'<div class="xlpd-s1">已揭晓</div>'+
+					'<div class="ellipsis">（第' + detail.productPeriod + '期）' + pData.productName + '</div>'+
+					'<div class="ellipsis">' + pData.productTitle + '</div>'+
+				'</div>'+
+	        	'<div class="xlpd-p4">'+
+	        		'<div class="xlpd-head clearfix">'+
+	        			'<div class="xlpd-s5">幸运号码：' + detail.luckyNumber + '</div>'+
+	        			'<div class="xlpd-s4">计算公式</div>'+
+	        		'</div>'+
+	        		'<div class="xlpd-panel">'+
+	        			'<img src="' +  ownerImage + '">'+
+	        			'<div>获奖者：' + Common.phoneEncryption(data.detail.ownerName) + '</div>'+
+	        			'<div class="color-999">幸运号码：' + detail.luckyNumber + '</div>'+
+	        			'<div class="color-999">本期参与：<span class="color-ff5534">' + detail.ownerCount + '</span>人次</div>'+
+	        			'<div class="color-999">揭晓时间：' + detail.announcedTime + '</div>'+
+	        		'</div>'+
+	        	'</div>'+
+			'</div>';
+	}
+	$('#productStatusBox').html(str);
+}
+
+//显示立即参与modal
+function showJoinModel(type){
+	var box = $('#joinModalBox, #modalBGEle');
+	if(type === 'show'){
+		box.removeClass('hide');
+	}else if(type === 'hide'){
+		box.addClass('hide');
+	}
+}
+</script>
+</body>
+</html>

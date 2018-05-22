@@ -1,0 +1,670 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>我的地址</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+.xladd-item {
+	position: relative;
+	padding: .5em .8em;
+	background: #fff;
+	margin-top: 5px;
+}
+.xladd-item.checkedAddr:before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: .22em;
+	background: #ff5534;
+}
+.xladd-item:first-child {
+	margin-top: 0;
+}
+.xladd-p2 {
+	font-size: 1.2em;
+	line-height: 2em;
+	padding-right: 8em;
+}
+.xladd-p1 {
+	text-align: justify;
+	line-height: 1.2em;
+	color: #666;
+	border-bottom: dashed 1px #ccc;
+	padding: 0 .8em 1em .8em;
+	margin: 0 -.8em;
+}
+.xladd-p3 {
+	line-height: 2em;
+	margin-top: .5em;
+}
+.xladd-set-de {
+	display: inline-block;
+	vertical-align: top;
+}
+.xladd-set-de i {
+	margin-top: -2px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.xladd-set-de span {
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: .4em;
+}
+.xladd-set-de.active .icon {
+	color: #0f0;
+}
+.xladd-p3 .xl-btn {
+	margin-left: .4em;
+}
+.xladd-p3 .xl-btn:first-child {
+	margin-left: 0;
+}
+.xladd-addbtn-box {
+	bottom: 0;
+}
+.xladd-addbtn-box .xl-btn {
+	border-radius: 0;
+	font-size: 1.2em;
+}
+
+/*编辑地址，表单*/
+.xlform-p1 {
+	position: relative;
+	background: #fff;
+	margin-bottom: 1px;
+}
+.xlform-p1 label {
+	position: absolute;
+	left: 15px;
+	top: 0;
+	line-height: 1;
+	font-size: 14px;
+	margin-top: 15px;
+}
+.xlform-p1 input,
+.xlform-p1 textarea {
+	height: 40px;
+	padding: 13px 15px;
+	width: 100%;
+	border: 0;
+	background: none;
+	padding-left: 6em;
+	font-size: 14px;
+}
+.xlform-p1 textarea {
+	resize: none;
+	height: 5em;
+	padding: 13px 15px;
+	vertical-align: top;
+	padding-left: 6em;
+}
+.xlform-p1 label i {
+	width: .5em;
+	display: inline-block;
+}
+
+
+
+.xl-li {
+	font-size: 1.2em;
+}
+.xl-li .xl-li-icon:before {
+	content: "\e664";
+}
+.xl-li.active .xl-li-icon:before {
+	content: "\e609";
+	color: #0cba09;
+}
+.xlform-btn {
+	padding: 1em .8em;
+}
+.xlform-btn .xl-btn {
+	font-size: 1.2em;
+}
+
+.xladd-modal {
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	width: 90%;
+	max-width: 300px;
+	z-index: 1000;
+	background: #fff;
+	border-radius: 8px;
+}
+.xladd-modal ul {
+	margin: 10px 15px;
+	max-height: 300px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.xladd-modal ul li {
+    position: relative;
+	padding: 11px 0;
+}
+.xladd-modal ul li:after {
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: 0;
+    height: 1px;
+    content: '';
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+    background-color: #ccc;
+}
+.xladd-modal ul li:first-child:after {
+	height: 0;
+}
+
+.xlae-modal {
+	left: 100%;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: #eee;
+	-webkit-transition: left .3s;
+	transition: left .3s;
+}
+.xlae-modal.active {
+	left: 0;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">我的地址</h1>
+	</div>
+</div>
+<div class="xlbody-box">
+	<div class="xladd-box1" id="addressListBox">
+		<ul></ul>
+		<div class="xl-refresh-prompt refreshPrompt"></div>
+	</div>
+</div>
+<div style="height: 4.12em;"></div>
+<div class="xlele-box xladd-addbtn-box">
+	<div class="xlele-content">
+		<div class="xlnd-foot-box footBtnBox clearfix">
+			<a id="add_address_btn" class="xl-btn xl-btn-block" onclick="formSHFn('show')">新增地址</a>
+		</div>
+	</div>
+</div>
+
+<div class="xlele-box xlae-modal" id="aeform_modal">
+	<div class="xlele-content" style="background: none;">
+		<form>
+			<div class="xlform-p1">
+				<label>收<i></i>件<i></i>人</label>
+				<input type="text" name="consignee" placeholder="请输入收件人">
+			</div>
+			<i class="icon-yyy"></i>
+			<div class="xlform-p1">
+				<label>手<i></i>机<i></i>号</label>
+				<input type="number" name="phone" placeholder="请输入手机号">
+			</div>
+			<div class="xlform-p1">
+				<label>省<i></i>市<i></i>区</label>
+				<input type="text" readonly name="pcdArr" placeholder="请选择省市区">
+			</div>
+			<div class="xlform-p1">
+				<label>详细地址</label>
+				<textarea name="address" placeholder="请输入详细地址"></textarea>
+			</div>
+			<ul class="xl-ul">
+				<li class="xl-li active set_default" onclick="$(this).toggleClass('active')">
+					<a>
+						<div class="xl-li-txt">是否设为默认</div>
+						<span class="xl-li-icon icon"></span>
+					</a>
+				</li>
+			</ul>
+		</form>
+		<div class="xlform-btn">
+			<button class="xl-btn xl-btn-block" onclick="submitAddrFn()">保存提交</button>
+		</div>
+	</div>
+</div>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/md5.js"></script>
+<script src="../../script/city.min.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+//页面启动时，数据初始化
+function pageDataInit(){
+	var comeFrom =  globalData.pageParam.comeFrom || '';
+	hashChangeFn();
+}
+//dom事件绑定
+function domEventFn(){
+	//点击出现城市选择
+	$('[name="pcdArr"]').on('click', function(){
+		var htmlStr = '';
+		$.each(cityList, function(index, obj) {
+			htmlStr += '<li onclick="selectShengAfterFn(this, \'' + obj.name + '\')">' + obj.name + '</li>';
+		});
+		selectAddressFn('show', htmlStr);
+	});
+	
+	//禁止模态框滚动
+	$('.xlae-modal').on('touchmove', function(e){
+		return false;
+	});
+	//哈希变化
+	$(window).on('hashchange', hashChangeFn);
+}
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	addressRequestFn();//地址数据请求
+}
+
+//设置是否默认地址
+function setDefaultsFn(id){
+	var _url = '/ushop-api-merchant/api/user/address/update',
+		_param = getAddr(id);
+	_param.status = 1;
+	Common.ajax(_url, 'post', JSON.stringify(_param), function(data){
+		if(data.address){
+			updataAddrFn(id, data.address);
+			Common.toast('设置成功！');
+		}else{
+			Common.toast(data.error_description || '未知错误');
+		}
+	});
+}
+
+//删除地址
+function deleteAddrFn(id){
+	Common.confirm('提示', '您确认要删除这个地址吗？', function (index) {
+		if(index === 1){
+			var _url = '/ushop-api-merchant/api/user/address/delete/' + id;
+			Common.ajax(_url, 'post', {}, function(data){
+				if(data.id){
+					updataAddrFn(id);//更新本地数据
+					Common.toast('删除成功！');
+				}else{
+					Common.toast(data.error_description || '未知错误');
+				}
+			});
+		}
+	});
+}
+
+//选中地址
+function selectAddrFn(id){
+	var pf = globalData.pageParam.comeFrom,
+		sid = globalData.pageParam.spellBuyId,
+		lcTicketId = globalData.pageParam.lcTicketId,
+		gameId = globalData.pageParam.gameId;
+	var addr = getAddr(id),
+		ecaddr = encodeURIComponent(JSON.stringify(addr));
+	if(pf === 'confirm_order'){//商城确认订单界面过来选择地址
+		Common.openPage('../order/confirm_order.html?addressObj=' + ecaddr);
+	}else if (lcTicketId && gameId) { // 抽奖游戏界面过来填地址
+		Common.confirm('提示', '地址选择后无法修改，是否确定您选择的地址！', function (index) {
+			if ( index === 1 ) {
+				luckyCashFn(addr, lcTicketId, gameId);
+			}
+		});
+	}else if(sid){//拼购我的中奖界面过来选择地址
+		var _url = '/ushop-api-merchant/api/spellbuy/person/express/submit/' + sid + '/' + addr.id;
+		Common.ajax(_url, 'post', {}, function(data){
+			if(data.spellbuyId){
+				Common.openPage('../mine/my_prize_order.html?showItem=tabContent1');
+			}
+		});
+	}
+}
+
+// 抽奖券过来填写地址提交
+function luckyCashFn (addrData, lcTicketId, gameId) {
+    var _url = '/ushop-api-merchant/api/lotto/ticket/user/cash',
+        _param = {
+        id: lcTicketId,
+        phone: addrData.phone,
+        address: addrData.province + addrData.city + addrData.district + addrData.address,
+        zipCode: '',
+        consignee: addrData.consignee
+    };
+    Common.ajax(_url, 'post', JSON.stringify(_param), function (data) {
+        if(data.result === 'SUCCESS'){
+        	Common.toast('提交成功！');
+        	setTimeout(function(){
+        		Common.openPage(('../lucky_draw/lucky_mylist.html?gameId=' + gameId));
+        	}, 500);
+        }else{
+            Common.toast(data.error_description || '操作失败！');
+        }
+    });
+}
+
+//地址数据请求
+function addressRequestFn(){
+	var _url = '/ushop-api-merchant/api/user/address/list/1/10';
+	Common.ajax(_url, 'get', {}, function(data){
+		if(data.totalCount >= 0){
+			globalData.addressData = data.recordList || [];
+			renderAddrList(globalData.addressData);
+		}else{
+			Common.toast(data.error_description || '未知错误');
+		}
+	});
+}
+
+function renderAddrList(listData){
+	var pf = globalData.pageParam.comeFrom;
+	var listItem = $('#addressListBox'),//列表项目
+		listContent = listItem.find('ul'),//列表容器
+		lgn = listData.length;
+	if(lgn === 0){//表示请求到的数据为0
+		listContent.html('');
+		Common.blankPageFn(listContent, {bottom: '50px'}, '还没有地址哦，快添加吧！');//显示空白界面
+		if(pf){
+			formSHFn('show');
+		}
+		return false;
+	}
+	var str = '', status = '', _select = '',
+		pid = parseInt(globalData.pageParam.addressId) || 0;//默认选中值
+	$.each(listData, function(index, obj){
+		status = '';
+		_select = '';
+		if(obj.status === 1){
+			status = 'active';
+		}
+		if(pid === obj.id){
+			_select = 'checkedAddr';
+		}
+		str +=
+			'<li addr-item-id="' + obj.id + '" class="xladd-item ' + _select + '">'+
+				'<div class="xladd-select" onclick="selectAddrFn(' + obj.id + ')">'+
+					'<div class="xllr-box xladd-p2">'+
+						'<div class="xllr-l ellipsis">' + obj.consignee + ' </div>'+
+						'<div class="xllr-r">' + obj.phone + '</div>'+
+					'</div>'+
+					'<div class="xladd-p1">'+
+						obj.province+
+						obj.city+
+						obj.district+
+						obj.address+
+					'</div>'+
+				'</div>'+
+				'<div class="xllr-box xladd-p3">'+
+					'<div class="xllr-l ellipsis">'+
+						'<div class="xladd-set-de setDefaultEle ' + status + '" onclick="setDefaultsFn(' + obj.id + ')">'+
+							'<i class="icon icon-checkbox"></i>'+
+							'<span>设为默认地址</span>'+
+						'</div>'+
+					'</div>'+
+					'<div class="xllr-r">'+
+						'<a class="xl-btn go_add_edit" onclick="formSHFn(\'show\', getAddr(' + obj.id + '))">编辑</a>'+
+						'<button class="xl-btn" onclick="deleteAddrFn(' + obj.id + ')">删除</button>'+
+					'</div>'+
+				'</div>'+
+			'</li>';
+	});
+	if(lgn >= 10){//不能超过十个地址
+		$('#add_address_btn').hide();
+	}else{
+		$('#add_address_btn').show();
+	}
+	listContent.html(str);
+}
+
+//获取已有的地址
+function getAddr(id){
+	var a;
+	$.each(globalData.addressData, function(index, obj){
+		if(obj.id === id){
+			a = obj;
+		}
+	});
+	return a;
+}
+
+//提交编辑或添加
+function submitAddrFn(){
+	var $form = $('#aeform_modal').find('form'),
+		aid = $form.data('aid'),
+		pf = globalData.pageParam.comeFrom,
+		pcdArr = $form.find('[name="pcdArr"]').val().split(' '),
+		_url = '/ushop-api-merchant/api/user/address/create',
+		_param = {
+			zipCode: '',
+			province: pcdArr[0],
+			city: pcdArr[1],
+			district: pcdArr[2],
+			address: $form.find('[name="address"]').val(),
+			consignee: $form.find('[name="consignee"]').val(),
+			phone: $form.find('[name="phone"]').val(),
+			status: 0
+		};
+	if(!_param.consignee){
+		Common.toast('请输入收件人');
+		$('#consignee').focus();
+		return false;
+	}
+	if(!Common.regExpName.test(_param.consignee)){
+		Common.toast('人名只能是2-15位的汉字');
+		$('#consignee').focus();
+		return false;
+	}
+	
+	if(!_param.phone){
+		Common.toast('请输入手机号');
+		$('#phone').focus();
+		return false;
+	}
+	if(!Common.regExpPhone.test(_param.phone)){
+		Common.toast('请输入正确的手机号');
+		$('#phone').focus();
+		return false;
+	}
+	
+	if(!_param.province && !_param.city && !_param.district){
+		Common.toast('请选择省市区');
+		$('#pcdArr').trigger('click');
+		return false;
+	}
+	if(!_param.province || !_param.city || !_param.district) {
+		Common.toast('省市区选择有误，请重新选择');
+		$('#pcdArr').trigger('click');
+		return false;
+	}
+	
+	if(!_param.address){
+		Common.toast('请输入详细地址');
+		$('#address').focus();
+		return false;
+	}
+	if(!(/^[\s\S]{2,50}$/.test(_param.address))){
+		Common.toast('详细地址必须是2-50个字');
+		$('#address').focus();
+		return false;
+	}
+	
+	if($form.find('.set_default').hasClass('active')){
+		_param.status = 1;
+	}
+	if(aid){
+		_url = '/ushop-api-merchant/api/user/address/update';
+		_param.id = aid;
+	}
+	function ischange(aid){
+		if(!aid){return false;};
+		var a = getAddr(aid),
+			b = {};
+		$.extend(b, a, _param);
+		if(hex_md5(JSON.stringify(a)) === hex_md5(JSON.stringify(b))){
+			return true;
+		}else{
+			return false;
+		};
+	}
+	if(ischange(aid)){
+		Common.toast('您未修改任何数据');
+		return false;
+	}
+	Common.ajax(_url, 'post', JSON.stringify(_param), function(data){
+		if(data.address){
+			updataAddrFn(aid, data.address);
+			if(pf === 'confirm_order'){
+				Common.openPage('../order/confirm_order.html?addressObj=' + encodeURIComponent(JSON.stringify(data.address)));
+			}else{
+				history.go(-1);
+			}
+		}
+	});
+}
+
+
+//更新，删除，添加数据
+//id,addr都存在属于更新，只存在id属于删除，只存在addr属于添加
+function updataAddrFn(id, addr){
+	if(addr && (addr.status === 1)){
+		$.each(globalData.addressData, function(index, obj){
+			obj.status = 0;
+		});
+	}
+	if(id){
+		$.each(globalData.addressData, function(index, obj){
+			if(obj.id === id){
+				if(addr){//更新
+					globalData.addressData.splice(index, 1, addr);
+				}else{//删除
+					globalData.addressData.splice(index, 1);
+				}
+				return false;
+			}
+		});
+	}else if(addr){
+		globalData.addressData.splice(0, 0, addr);
+	}
+	renderAddrList(globalData.addressData);//重新渲染列表
+}
+
+//编辑表单显示
+function formSHFn(type, obj){
+	var m = $('#aeform_modal'),
+		$form = m.find('form');
+	if(type === 'show'){
+		if(obj){
+			$form.find('[name="consignee"]').val(obj.consignee);
+			$form.find('[name="phone"]').val(obj.phone);
+			$form.find('[name="address"]').val(obj.address);
+			$form.find('[name="pcdArr"]').val(obj.province + ' ' + obj.city + ' ' + obj.district);
+			if(obj.status === 1){
+				$form.find('.set_default').addClass('active');
+			}else{
+				$form.find('.set_default').removeClass('active');
+			}
+			$form.data('aid', obj.id);
+		}else{
+			$form[0].reset();
+		}
+		location.hash = '#addr_edit';
+	}else if(type === 'hide'){
+		location.hash = '';
+	}
+}
+
+//页面哈希变化
+function hashChangeFn(){
+	var m = $('#aeform_modal'),
+		$form = m.find('form'),
+		hh = location.hash;
+	if(hh === '#addr_edit'){
+		m.addClass('active');
+	}else{
+		m.removeClass('active');
+		$form.removeData('aid');
+	}
+}
+
+
+//选择省之后
+function selectShengAfterFn(me, sheng){
+	var htmlStr = '';
+	$.each(cityList, function(index, obj){
+		if(obj.name == sheng){
+			$.each(obj.sub, function(i, o){
+				htmlStr += '<li onclick="selectShiAfterFn(this, \'' + sheng + '\', \'' + o.name + '\')">' + o.name + '</li>';
+			});
+			return false;
+		}
+	});
+	$(me).parents('ul').html(htmlStr);
+	$(window).trigger('resize');
+}
+//选择市之后
+function selectShiAfterFn(me, sheng, shi){
+	var htmlStr = '';
+	$.each(cityList, function(index, obj){
+		if(obj.name == sheng){
+			$.each(obj.sub, function(i, o){
+				if(o.name == shi){
+					$.each(o.sub, function(ii, oo){
+						htmlStr += '<li onclick="selectQuAfterFn(this, \'' + sheng + '\', \'' + shi + '\', \'' + oo.name + '\')">' + oo.name + '</li>';
+					});
+					return false;
+				}
+			});
+			return false;
+		}
+	});
+	$(me).parents('ul').html(htmlStr);
+	$(window).trigger('resize');
+}
+//选择区之后
+function selectQuAfterFn(me, sheng, shi, qu){
+	selectAddressFn('hide');
+	$('[name="pcdArr"]').val(sheng + ' ' + shi + ' ' + qu);
+}
+
+
+//模态框，城市选择
+function selectAddressFn(type, htmlStr){
+	$('.modal-bg').remove();
+	$('.xladd-modal').remove();
+	if(type === 'show'){
+		htmlStr = htmlStr || '';
+		var bgStr    =  '<div class="modal-bg" onclick="selectAddressFn(\'hide\')"></div>',
+			htmlStr	 =	'<div class="xladd-modal">'+
+							'<ul>'+
+								htmlStr+
+							'</ul>'+
+						'</div>';
+		$(bgStr).appendTo('body');
+		$('body').append(htmlStr);
+		var mBox = $('.xladd-modal');
+		mBox.css({
+			'marginTop': (-mBox.height()/2) + 'px',
+			'marginLeft': (-mBox.width()/2) + 'px'
+		});
+		$(window).off('resize').on('resize', function(){
+			mBox.css({
+				'marginTop': (-mBox.height()/2) + 'px',
+				'marginLeft': (-mBox.width()/2) + 'px'
+			});
+		});
+	}
+}
+</script>
+</body>
+</html>

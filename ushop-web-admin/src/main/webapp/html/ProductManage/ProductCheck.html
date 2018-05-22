@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>订单管理-订单列表</title>
+
+		<meta name="description" content="Dynamic tables and grids using jqGrid plugin" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../../assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+
+		<!-- page specific plugin styles -->
+		<link rel="stylesheet" href="../../assets/css/jquery.gritter.min.css" />
+		<link rel="stylesheet" href="../../assets/css/dropzone.min.css" />
+		<link rel="stylesheet" href="../../assets/css/jquery-ui.min.css" />
+		<link rel="stylesheet" href="../../assets/css/bootstrap-datetimepicker.min.css"/>
+		<link rel="stylesheet" href="../../assets/css/ui.jqgrid.min.css" />
+		<link rel="stylesheet" href="../../assets/css/jBox.css" />
+		<!-- text fonts -->
+		<link rel="stylesheet" href="../../assets/css/fonts.googleapis.com.css" />
+
+		<!-- ace styles -->
+		<link rel="stylesheet" href="../../assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="../../assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
+		<![endif]-->
+		<link rel="stylesheet" href="../../assets/css/ace-skins.min.css" />
+		<link rel="stylesheet" href="../../assets/css/ace-rtl.min.css" />
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="../../assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+		<!-- ace settings handler -->
+		<script src="../../assets/js/ace-extra.min.js"></script>
+
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="../../assets/js/html5shiv.min.js"></script>
+		<script src="../../assets/js/respond.min.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" href="../../css/style.css" />
+	</head>
+
+	<body class="no-skin">
+		<div id="navbar" class="navbar navbar-default ace-save-state">
+			<div class="navbar-container ace-save-state" id="navbar-container">
+				<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+					<span class="sr-only">Toggle sidebar</span>
+
+					<span class="icon-bar"></span>
+
+					<span class="icon-bar"></span>
+
+					<span class="icon-bar"></span>
+				</button>
+
+				<div class="navbar-header pull-left" id="navbarHeaderLogo"></div>
+
+				<div class="navbar-buttons navbar-header pull-right" role="navigation">
+					<ul class="nav ace-nav">
+
+						<li class="light-blue dropdown-modal">
+							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+								<img class="nav-user-photo" src="../../assets/images/avatars/user.jpg" alt="Jason's Photo" />
+								<span class="user-info" id="navbarUserInfo"></span>
+
+								<i class="ace-icon fa fa-caret-down"></i>
+							</a>
+
+							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+								<li>
+									<a href="#">
+										<i class="ace-icon fa fa-cog"></i> 设置
+									</a>
+								</li>
+
+								<li>
+									<a href="profile.html">
+										<i class="ace-icon fa fa-user"></i> 头像
+									</a>
+								</li>
+
+								<li class="divider"></li>
+
+								<li>
+									<a href="#">
+										<i class="ace-icon fa fa-power-off"></i> 退出
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!-- /.navbar-container -->
+		</div>
+
+		<div class="main-container ace-save-state" id="main-container">
+			<script type="text/javascript">
+				try {
+					ace.settings.loadState('main-container')
+				} catch(e) {}
+			</script>
+
+			<div id="sidebar" class="sidebar responsive ace-save-state">
+				<script type="text/javascript">
+					try {
+						ace.settings.loadState('sidebar')
+					} catch(e) {}
+				</script>
+
+				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+						<button class="btn btn-success">
+							<i class="ace-icon fa fa-dashboard"></i>
+						</button>
+
+						<button class="btn btn-info">
+							<i class="ace-icon fa fa-briefcase"></i>
+						</button>
+
+						<button class="btn btn-warning">
+							<i class="ace-icon fa fa-users"></i>
+						</button>
+
+						<button class="btn btn-danger">
+							<i class="ace-icon fa fa-database"></i>
+						</button>
+					</div>
+
+					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+						<span class="btn btn-success"></span>
+
+						<span class="btn btn-info"></span>
+
+						<span class="btn btn-warning"></span>
+
+						<span class="btn btn-danger"></span>
+					</div>
+				</div>
+				<!-- /.sidebar-shortcuts -->
+
+				<ul class="nav nav-list" id="leftMenuBox">
+					<!-- 左侧菜单内容 -->
+				</ul>
+				<!-- /.nav-list -->
+
+				<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+					<i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+				</div>
+			</div>
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb" id="breadcrumbsUl"></ul>
+						<!-- /.breadcrumb -->
+					</div>
+
+					<div class="page-content">
+						<div class="ace-settings-container" id="ace-settings-container">
+							<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+								<i class="ace-icon fa fa-cog bigger-130"></i>
+							</div>
+
+							<div class="ace-settings-box clearfix" id="ace-settings-box">
+								<div class="pull-left width-50">
+									<div class="ace-settings-item">
+										<div class="pull-left">
+											<select id="skin-colorpicker" class="hide">
+												<option data-skin="no-skin" value="#438EB9">#438EB9</option>
+												<option data-skin="skin-1" value="#222A2D">#222A2D</option>
+												<option data-skin="skin-2" value="#C6487E">#C6487E</option>
+												<option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+											</select>
+										</div>
+										<span>&nbsp; Choose Skin</span>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-navbar" autocomplete="off" />
+										<label class="lbl" for="ace-settings-navbar"> Fixed Navbar</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-sidebar" autocomplete="off" />
+										<label class="lbl" for="ace-settings-sidebar"> Fixed Sidebar</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-breadcrumbs" autocomplete="off" />
+										<label class="lbl" for="ace-settings-breadcrumbs"> Fixed Breadcrumbs</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" autocomplete="off" />
+										<label class="lbl" for="ace-settings-rtl"> Right To Left (rtl)</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-add-container" autocomplete="off" />
+										<label class="lbl" for="ace-settings-add-container">
+											Inside
+											<b>.container</b>
+										</label>
+									</div>
+								</div>
+								<!-- /.pull-left -->
+
+								<div class="pull-left width-50">
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-hover" autocomplete="off" />
+										<label class="lbl" for="ace-settings-hover"> Submenu on Hover</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-compact" autocomplete="off" />
+										<label class="lbl" for="ace-settings-compact"> Compact Sidebar</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-highlight" autocomplete="off" />
+										<label class="lbl" for="ace-settings-highlight"> Alt. Active Item</label>
+									</div>
+								</div>
+								<!-- /.pull-left -->
+							</div>
+							<!-- /.ace-settings-box -->
+						</div>
+						<!-- /.ace-settings-container -->
+
+						<div class="page-header" id="menuPageHeader"></div>
+						<!-- /.page-header -->
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- 页面主体内容开始 -->
+								<div class="xltab-box">
+									<ul class="nav nav-tabs" role="tablist">
+										<li role="presentation">
+											<a href="#itemTab1" role="tab" data-toggle="tab">商品列表</a>
+										</li>
+										<li role="presentation">
+											<a href="#itemTab3" role="tab" data-toggle="tab">待审核</a>
+										</li>
+										<li role="presentation">
+											<a href="#itemTab2" role="tab" data-toggle="tab">审核通过</a>
+										</li>
+										<li role="presentation">
+											<a href="#itemTab4" role="tab" data-toggle="tab">审核不通过</a>
+										</li>
+									</ul>
+
+									<div class="tab-content" id="xlgridBox">
+										<div role="tabpanel" class="tab-pane tabPane" id="itemTab1"><!-- 广告栏 -->
+											<div class="form-inline xltab-nav-box">
+												<div class="form-group">
+													<label>商家名称：</label>
+													<select name="merchantName" class="merchantName"></select>
+												</div>
+												<div class="form-group">
+													<label>商品类型：</label>
+													<select class="form-control selectClassType1"></select>
+												</div>
+												<div class="form-group">
+													<label>商品名称：</label>
+													<input type="text"  name="userName" class="form-control">
+												</div>
+												<button class="btn btn-info btn-sm itemSearch">查询</button>
+												<a class="btn btn-sm btn-info" onclick="toExcel()" id="exportExcel">导出excel表格</a>
+
+											</div>
+											<table class="itemGridTable" id="itemsTable1"></table>
+											<div class="itemGridPager" id="itemsPager1"></div>
+										</div>
+									</div>
+								</div>
+								<!-- /.xltab-box -->
+
+								<!-- 页面主体内容结束 -->
+							</div>
+							<!-- /.col -->
+						</div>
+						<!-- /.row -->
+						<div class="tab-content" id="productInfo" style="display:none">
+										<div class="form-horizontal" style="position:relative">
+							      			<div class="form-group">
+							      				<label class="col-xs-3 control-label">商品名称：</label>
+							      				<div class="col-xs-6">
+													<input name="productName" class="form-control"  type="text"  style="border:0">
+							      				</div>
+							      			</div>
+							      			<div class="form-group">
+							      				<label class="col-xs-3 control-label" >商品标题：</label>
+							      				<div class="col-xs-6">
+							      					<input type="text" name="productTitle"  class="form-control"  style="border:0">
+							      				</div>
+							      			</div>
+							      			<div class="form-group">
+							      				<label class="col-xs-3 control-label">商品成本价格：</label>
+							      				<div class="col-xs-3">
+							      					<input type="text" name="productRealPrice"  class="form-control"  style="border:0">
+							      				</div>
+							      			</div>
+							      			<div class="form-group">
+							      				<label class="col-xs-3 control-label">商品销售价格：</label>
+							      				<div class="col-xs-3">
+							      					<input type="text" name="productPrice"  class="form-control"  style="border:0">
+							      				</div>
+							      			</div>
+							      			<div class="form-group">
+							      				<label class="col-xs-3 control-label" >单次价格：</label>
+							      				<div class="col-xs-3">
+							      					<input type="text" name="singlePrice"  class="form-control"  style="border:0">
+							      				</div>
+							      			</div>
+							      			<div class="form-group">
+							      				<label class="col-xs-3 control-label" >拼购份额：</label>
+							      				<div class="col-xs-3">
+							      					<input type="text" name="spellbuyCount"  class="form-control"  style="border:0">
+							      				</div>
+							      			</div>
+							      			<div class="form-group">
+							      				<label class="col-xs-3 control-label" >限购人次：</label>
+							      				<div class="col-xs-3">
+							      					<input type="text" name="productLimit"  class="form-control"  style="border:0">
+							      				</div>
+							      			</div>
+							      			<div class="form-group">
+							      				<label class="col-xs-3 control-label" >库存数：</label>
+							      				<div class="col-xs-3">
+							      					<input type="text" name="stock"  class="form-control"  style="border:0">
+							      				</div>
+							      			</div>
+							      			<div class="form-group">
+							      				<label class="col-xs-3 control-label" >商品类型：</label>
+							      				<div class="col-xs-3">
+							      					<input type="text" class="form-control selectClassType1"  style="border:0">
+
+							      				</div>
+							      			</div>
+							      			<div class="form-group">
+							      				<label class="col-xs-3 control-label" >商品品牌：</label>
+							      				<div class="col-xs-3">
+							      					<input type="text"  class="form-control selectClassType2"  style="border:0">
+
+							      				</div>
+							      			</div>
+							      			<div class="form-group">
+							      				<label class="col-xs-3 control-label" >获奖者：</label>
+							      				<div class="col-xs-6">
+							      					<input type="text" name="winner"  class="form-control" style="border:0">
+							      				</div>
+							      			</div>
+							      			<div class="form-group">
+							      				<label class="col-xs-3 control-label" >商品风格：</label>
+							      				<div class="col-xs-6">
+							      					<input type="text" name="productStyle"  class="form-control" style="border:0">
+							      				</div>
+							      			</div>
+							      			<div class="form-group">
+							    				<label class="col-xs-3 control-label">
+							    					缩略图
+							    				</label>
+							    				<div class="col-xs-6">
+							    					<div class="imgShow"></div>
+							    				</div>
+							    			</div>
+							      			<div class="form-group">
+							    				<label class="col-xs-3 control-label">
+							    					滚动图
+							    				</label>
+							    				<div class="col-xs-6">
+							    					<div class="scrollImageShow"></div>
+							    				</div>
+							    			</div>
+							    			<div class="form-group">
+							    				<label class="col-xs-3 control-label">
+							    					商品内容详情：
+							    				</label>
+							    				<div class="col-xs-6">
+							    					<div class="bigImageShow"></div>
+							    				</div>
+							    			</div>
+							    			<div class="form-group">
+							    				<label class="col-xs-3 control-label">
+							    					售后信息和商品详情
+							    				</label>
+							    				<div class="col-xs-6">
+							    					<div class="productDetails"></div>
+							    				</div>
+							    			</div>
+							      			<div class="form-group" >
+							      				<div class="col-xs-1" style="position:fixed;bottom:100px;right:5%"  >
+							      					<input type="button" value="提交"  class="form-control btn btn-primary" id="submit" style="display:none" >
+							      					<input type="button" value="返回"  class="form-control btn btn-primary" onclick="goBack()">
+							      				</div>
+							      			</div> 
+							      		</div>
+									</div>
+									
+				 		</div>
+					<!-- /.page-content -->
+				</div>
+			</div>
+			<!-- /.main-content -->
+
+			<div class="footer">
+				<div class="footer-inner">
+					<div class="footer-content">
+						<span class="bigger-120">
+							<span class="blue bolder">Ace</span> Application &copy; 2013-2014
+						</span>
+
+						&nbsp; &nbsp;
+						<span class="action-buttons">
+							<a href="#">
+								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+							</a>
+
+							<a href="#">
+								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+							</a>
+
+							<a href="#">
+								<i class="ace-icon fa fa-rss-square orange bigger-150"></i>
+							</a>
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+		</div>
+		<!-- /.main-container -->
+<!-- Modal -->
+<div class="modal fade" id="pageModal" tabindex="-1" role="dialog" aria-labelledby="pageModal" aria-hidden="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="pageModalTitle"></h4>
+      </div>
+      <div class="modal-body">
+      	<div class="pageModalItem1">
+      	</div>
+      	
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="determineClick" style="display:none">确定</button>
+      </div>
+    </div>
+  </div>
+</div>		
+
+		<!-- 图片上传的样式 -->
+		<div id="preview-template" class="hide">
+			<div class="dz-preview dz-file-preview">
+				<div class="dz-image">
+					<img data-dz-thumbnail="" />
+				</div>
+
+				<div class="dz-details">
+					<div class="dz-size">
+						<span data-dz-size=""></span>
+					</div>
+
+					<div class="dz-filename">
+						<span data-dz-name=""></span>
+					</div>
+				</div>
+
+				<div class="dz-progress">
+					<span class="dz-upload" data-dz-uploadprogress=""></span>
+				</div>
+
+				<div class="dz-error-message">
+					<span data-dz-errormessage=""></span>
+				</div>
+
+				<div class="dz-success-mark">
+					<span class="fa-stack fa-lg bigger-150">
+						<i class="fa fa-circle fa-stack-2x white"></i>
+
+						<i class="fa fa-check fa-stack-1x fa-inverse green"></i>
+					</span>
+				</div>
+
+				<div class="dz-error-mark">
+					<span class="fa-stack fa-lg bigger-150">
+						<i class="fa fa-circle fa-stack-2x white"></i>
+
+						<i class="fa fa-remove fa-stack-1x fa-inverse red"></i>
+					</span>
+				</div>
+			</div>
+		</div><!-- PAGE CONTENT ENDS -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+		<script src="../../assets/js/jquery-2.1.4.min.js"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="../../assets/js/jquery-1.11.3.min.js"></script>
+<![endif]-->
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+		</script>
+		<script src="../../assets/js/bootstrap.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+		<script src="../../assets/js/dropzone.min.js"></script>
+		<script src="../../assets/js/excelTxt/html2canvas.js"></script>
+		<script src="../../assets/js/excelTxt/jquery.base64.js"></script>
+		<script src="../../assets/js/excelTxt/tableExport.js"></script>
+		<script src="../../assets/js/jquery.gritter.min.js"></script>
+		<script src="../../assets/js/bootstrap-datetimepicker.min.js"></script>
+		<script src="../../assets/js/bootstrap-datetimepicker.zh-CN.js"></script>
+		<script src="../../assets/md5.min.js"></script>
+		<script src="../../assets/js/jquery.jqGrid.min.js"></script>
+		<script src="../../assets/js/grid.locale-cn.js"></script>	
+		<script src="../../assets/js/jBox.min.js"></script>	
+		<!-- ace scripts -->
+		<script src="../../assets/js/ace-elements.min.js"></script>
+		<script src="../../assets/js/ace.min.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/ProductManage/ProductCheck.js"></script>
+	</body>
+
+</html>

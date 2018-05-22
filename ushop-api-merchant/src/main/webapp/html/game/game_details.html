@@ -1,0 +1,413 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>游戏详情</title>
+<link rel="stylesheet" type="text/css" href="../../css/photoswipe.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+.xl-li > a {
+	padding: 11px 23px;
+}
+.xl-li .xl-li-img {
+	width: 36px;
+	height: 36px;
+	margin-top: -18px;
+	left: 23px;
+}
+.xl-lii .xl-li-txt {
+	padding-left: 42px;
+	line-height: 20px;
+	font-size: 14px;
+}
+.xldf-p1 {
+	color: #888;
+	font-size: .8em;
+}
+.xlgd-box2,
+.xlgd-box4 {
+	background: #fff;
+	padding: 0 15px;
+}
+.xlgd-box4 {
+	padding-bottom: 8px;
+}
+.xlgd-p1 {
+	line-height: 2em;
+	font-size: 14px;
+	font-weight: bold;
+}
+.xlgd-p2 {
+	text-align: justify;
+	line-height: 18px;
+	height: 60px;
+	overflow: hidden;
+	-webkit-transition: all .3s;
+	transition: all .3s;
+}
+.xlgd-p3 {
+	color: #035dbe;
+	line-height: 1;
+	font-size: 14px;
+	font-weight: bold;
+	padding-bottom: 8px;
+}
+.xlgd-box3 {
+	padding: 6px 15px;
+	background: #fff;
+}
+.xlgd-p4 {
+	overflow-x: auto;
+	white-space: nowrap;
+}
+.xlgd-p4 img {
+	width: 30%;
+	margin-left: 4px;
+}
+.xlgd-box5 {
+	padding: 12px 15px;
+}
+.xlgd-box5 .xl-btn {
+	border-radius: 10px;
+	font-size: 18px;
+	font-weight: 500;
+	background: -webkit-linear-gradient(top, #ffa415 , #ff791a); /* Safari 5.1 - 6.0 */
+	background: linear-gradient(to bottom, #ffa415 , #ff791a); /* 标准的语法 */
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">游戏详情</h1>
+	</div>
+</div>
+<div class="xlbody-box" id="content_box">
+	<div class="xlgd-box1">
+		<div class="xl-li xl-lii">
+			<a id="game_title">
+				<img class="xl-li-img" src="../../image/p200200.png">
+				<div class="xl-li-txt">
+					<div class="ellipsis">　</div>
+					<div class="ellipsis xldf-p1">　</div>
+				</div>
+			</a>
+		</div>
+	</div>
+	<div style="height: 4px;"></div>
+	<div class="xlgd-box2">
+		<div class="xlgd-p1">游戏介绍</div>
+		<div class="xlgd-p2">　</div>
+		<div class="xlgd-p3">　</div>
+	</div>
+	<div style="height: 1px;"></div>
+	<div class="xlgd-box3">
+		<div class="xlgd-p4">
+			<img src="../../image/p200200.png">
+			<img src="../../image/p200200.png">
+			<img src="../../image/p200200.png">
+		</div>
+	</div>
+	<div style="height: 2px;"></div>
+	<div class="xlgd-box4">
+		<div class="xlgd-p1">相关信息</div>
+		<div class="xlgd-p5">当前版本：</div>
+		<div class="xlgd-p5">更新时间：</div>
+		<div class="xlgd-p5">客服信息：</div>
+	</div>
+</div>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="pswp__bg"></div>
+	<div class="pswp__scroll-wrap">
+		<div class="pswp__container">
+			<div class="pswp__item"></div>
+			<div class="pswp__item"></div>
+			<div class="pswp__item"></div>
+		</div>
+		<div class="pswp__ui pswp__ui--hidden">
+			<div class="pswp__top-bar">
+				<div class="pswp__counter"></div>
+				<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+				<button class="pswp__button pswp__button--share" title="Share"></button>
+				<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+				<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+				<div class="pswp__preloader">
+					<div class="pswp__preloader__icn">
+						<div class="pswp__preloader__cut">
+							<div class="pswp__preloader__donut"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+				<div class="pswp__share-tooltip"></div>
+			</div>
+			<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+			<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+			<div class="pswp__caption">
+				<div class="pswp__caption__center"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<script id="template_box"  type="text/template">
+	<div class="xlgd-box1">
+		<div class="xl-li xl-lii">
+			<a id="game_title">
+				<img class="xl-li-img" src="{{=(it.appInfo.appIcon || '../../image/p200200.png')}}">
+				<div class="xl-li-txt">
+					<div class="ellipsis">{{=it.appInfo.appName}}</div>
+					<div class="ellipsis xldf-p1">{{=(it.appInfo.appTypeName)}}</div>
+				</div>
+			</a>
+		</div>
+	</div>
+	<div style="height: 4px;"></div>
+	<div class="xlgd-box2">
+		<div class="xlgd-p1">游戏介绍</div>
+		<div class="xlgd-p2" id="game_con_box">{{=it.appInfo.appContent}}</div>
+		<div style="height: 8px;"></div>
+		<div class="xlgd-p3 hide" onclick="showAllFn()" id="show_all_btn">全文</div>
+	</div>
+	<div style="height: 1px;"></div>
+	<div class="xlgd-box3">
+		<div class="xlgd-p4" id="max_img_box">
+			{{~it.appImageList:imgObj}}
+			<img onclick="previewPicFn(this)" src="{{=imgObj.imagePath}}">
+			{{~}}
+		</div>
+	</div>
+	<div style="height: 2px;"></div>
+	<div class="xlgd-box4">
+		<div class="xlgd-p1">相关信息</div>
+		<div class="xlgd-p5">更新时间：{{=Common.msToTime(it.appInfo.uploadTime).es}}</div>
+		<div class="xlgd-p5">客服信息：暂无</div>
+	</div>
+	<div class="xlgd-box5">
+		<a class="xl-btn xl-btn-block" onclick="openGame()">开始游戏</a>
+	</div>
+</script>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/photoswipe.min.js"></script>
+<script src="../../script/doT.min.js"></script>
+<script src="../../script/md5.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+
+
+//页面启动时，数据初始化
+function pageDataInit(){
+}
+//dom事件绑定
+function domEventFn(){
+}
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	var gameId = globalData.pageParam.gameId,
+		userId = Common.getUserId();
+	if(!gameId){Common.toast('游戏ID不存在');return false;}
+	if(!userId){Common.toast('未登录');return false;}
+	Common.ajaxAll([
+		{url: (Common.domainUrl + '/ushop-api-merchant/api/game/getById/' + gameId)},//游戏详情数据
+		{url: (Common.domainUrl + '/ushop-api-merchant/api/game/listPageByUp/1/10/3/0')},//游戏分类数据
+		{url: (Common.domainUrl + '/ushop-api-merchant/api/user/account/point/listBy/' + userId)} // 用户拥有的积分
+	], function(){
+		var data = arguments[0] || {}, // 游戏详情
+			gameTypeList = arguments[1].appTypeList || {}; // 游戏分类
+		globalData.listPoint = arguments[2].recordList || []; // 用户拥有的积分列表
+		getGameDetaisFn(data, gameTypeList);
+	});
+}
+
+//获取游戏详情
+function getGameDetaisFn(data, gameTypeList){
+	if(data.appInfo && data.appImageList){
+		var appSize = parseInt(data.appInfo.appSize);
+		appSize = appSize ? (appSize/1048576).toFixed(2) : 0;
+		data.appInfo.appSize = appSize;
+		data.appInfo.appTypeName = (function(){
+			var n = '';
+			$.each(gameTypeList, function(index, obj){
+				if(obj.id === data.appInfo.appType){
+					n = obj.typeName;
+					return false;
+				}
+			});
+			return n;
+		})();
+		globalData.appData = data;
+		
+		var template = document.getElementById('template_box'),
+			content = document.getElementById('content_box'),
+		dataListTemplate = doT.template(template.innerHTML);
+		content.innerHTML = dataListTemplate(data);
+		
+		if($('#game_con_box').height() === 60){
+			$('#show_all_btn').removeClass('hide');
+		}
+		var img = new Image(),
+			imgs;
+		img.src = data.appImageList[0].imagePath;
+		img.onload = function(){
+			imgs = $('#max_img_box').find('img');
+			imgs.attr('data-size', (img.width + '|,|' + img.height));
+			if(img.width > img.height){
+				imgs.css({
+					width: '48%'
+				});
+			}else{
+				imgs.css({
+					width: '30%'
+				});
+			}
+		};
+	}else{
+		Common.toast(data.error_description || '未知错误');
+	}
+}
+
+
+//显示所有的游戏说明
+function showAllFn(){
+	var conbox = document.getElementById('game_con_box'),
+		btn = document.getElementById('show_all_btn'),
+		docH = Math.max(conbox.scrollHeight, conbox.clientHeight),
+		h = conbox.offsetHeight;
+	if(h > 60){
+		conbox.style.height = '60px';
+		btn.innerText = '全文';
+	}else{
+		conbox.style.height = docH + 'px';
+		btn.innerText = '收起';
+	}
+}
+
+
+//授权按键点击事件绑定函数
+//me 按键的dom元素对象
+function accreditFn(){
+	var appData = globalData.appData || {},
+		appInfo = appData.appInfo || {},
+		secret = hex_md5(appInfo.appSecret + '#' + appInfo.appKey).toLocaleUpperCase(),
+		appId = appInfo.appId,
+		packageName = appInfo.packageName;
+	if( !( secret && appId && packageName ) ){
+		Common.toast('数据错误');
+		return false;
+	};
+	if ( !(packageName.indexOf('http') === 0) ){
+		Common.toast('只支持http(s)协议的H5游戏');
+		return false;
+	}
+	var _url = '/uplatform-api-merchant/api/user/oauth2/authorize';
+	Common.formatUrl(_url, function(newUrl){
+		newUrl += '&state=xxy&secret=' + secret + '&appid=' + appId + '&scope=ssx&response_type=code';
+		Common.ajax(newUrl, 'post', {}, function(data){
+			if(data.userId){
+				Common.openPage(packageName, {code: data.code})
+			}else{
+				Common.toast(data.error_description || '未知错误！');
+			}
+		});
+	});
+}
+
+// 打开游戏
+function openGame () {
+	var appData = globalData.appData || {},
+		appInfo = appData.appInfo || {},
+		istrue = false; // 判断时候此用户是否存在此种积分
+	$.each(globalData.listPoint, function ( index, obj ) {
+		if ( obj.fundType === appInfo.fundType ) {
+			istrue = true;
+			return false;
+		}
+	});
+	// 存在此款游戏需要的积分
+	if ( istrue ) {
+		accreditFn(); // 授权登录进入游戏
+	} else { // 不存在此款游戏需要的积分
+		lotteryLinkFn(function () {
+			accreditFn(); // 授权登录进入游戏
+		}); // 创建指定积分账户
+	}
+}
+
+//彩票账号授权，也就是创建账户
+function lotteryLinkFn ( callback ){
+	var appData = globalData.appData || {},
+		appInfo = appData.appInfo || {},
+		fundType = appInfo.fundType;
+	callback = callback || function () {};
+	getFundDetail(fundType, function ( ret ) {
+		var province = ret.province,
+			platform = ret.platform;
+		var _url = '/ushop-api-merchant/api/caipiao/user/login/auth/' + province + '/' + platform + '/' + fundType;
+		Common.ajax(_url, 'post', {}, function(data){
+			if(data.result == 1){//说明请求成功
+	            callback();
+			}else{
+				Common.toast('积分账户创建失败' + (data.error_description ? ('：' + data.error_description) : ''));
+			}
+		});
+	})
+}
+
+// 获取积分详情
+function getFundDetail ( fundType, callback ) {
+	callback = callback || function () {};
+	var _url = Common.domainUrl + '/ushop-api-merchant/api/user/account/type/get/' + fundType;
+	Common.ajax(_url, 'get', {}, function(data){
+		callback(data);
+	});
+}
+
+//图片预览显示
+function openPhotoSwipe(items, index){
+	if(!(items.length > 0)){return false;};
+	index = index || 0;
+	var pswpElement = document.querySelector('.pswp');
+	var options = {
+		shareEl: false,
+		index: index
+	};
+	var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+	gallery.init();
+}
+//图片预览初始化
+function previewPicFn(me){
+	var $me = $(me),
+		imgs = $me.parent().find('img');
+	var items = [], winW = $(window).width(),
+		w, h, wh, i, $img, size;
+	imgs.each(function(index, img){
+		if(img == me){i = index;};
+		$img = $(img);
+		size = ($img.attr('data-size') || '').split('|,|');
+		w = size[0] || winW;
+		h = size[1] || winW;
+		wh = w/h; 
+		w = w > winW ? winW : w;
+		h = w/wh;
+		items.push({
+			src: $img.attr('src'),
+			w: w,
+			h: h
+		});
+	});
+	openPhotoSwipe(items, i);
+}
+</script>
+</body>
+</html>

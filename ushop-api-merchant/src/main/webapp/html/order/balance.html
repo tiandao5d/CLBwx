@@ -1,0 +1,419 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>支付</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+.xlba-box1 {
+	padding: .5em .8em;
+	background: #fff;
+}
+.xlba-box4 {
+	padding: .5em .8em;
+}
+.xlba-box4:active {
+	opacity: 0.8;
+}
+.xlba-box2 {
+	padding: .5em .8em;
+	font-size: .9em;
+	color: #999;
+	background: #fff;
+}
+.xlba-box3 li.disabled > a {
+	background: #eee;
+	cursor: no-drop;
+}
+.xlba-box3 li small {
+	color: #999;
+	font-size: .9em;
+}
+.icon.icon-radio:before {
+	content: "\e72f";
+	font-weight: bold;
+}
+.active .icon.icon-radio:before {
+	color: #0cba09;
+	content: "\e71f";
+}
+.active .icon.icon-checkbox:before {
+	color: #0cba09;
+}
+.xl-li .xl-li-txt {
+	padding-right: 2em;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">支付</h1>
+	</div>
+</div>
+<div class="xlbody-box">
+	<div class="xlba-box1" id="dataBox1">
+		<div class="xlba-p1">商品数量：<span class="color-ff5534">0</span>件</div>
+		<div class="xlba-p1">总计金额：<span class="color-ff5534">0</span>余额</div>
+	</div>
+	<div style="height: 5px;"></div>
+	<div class="xlba-box2" id="dataBox2">
+		<div class="xlba-p1">用户彩豆：<span class="color-ff5534">0</span>，抵扣：<span class="color-ff5534">0</span>，剩余：<span class="color-ff5534">0</span></div>
+		<div class="xlba-p1">还需支付：<span class="color-ff5534">0</span>余额</div>
+	</div>
+	<div style="height: 5px;"></div>
+	<div class="xlba-box3">
+		<ul class="xl-ul hide" id="orderPayType">
+			<li class="xl-li" payType="yue">
+				<a>
+					<div class="xl-li-txt">余额支付<small id="userDiamond">（账户余额：0余额）</small></div>
+					<span class="xl-li-icon icon icon-radio"></span>
+				</a>
+			</li>
+			<li class="xl-li xl-lii" payType="weixin">
+				<a>
+					<img class="xl-li-img" src="../../image/icon/wxzf.png">
+					<div class="xl-li-txt">微信支付<span></span></div>
+					<span class="xl-li-icon icon icon-radio"></span>
+				</a>
+			</li>
+			<li style="height: 5px;"></li>
+		</ul>
+		<ul class="xl-ul" id="pointDeduction">
+			<li class="xl-li" deduction="jifen">
+				<a>
+					<div class="xl-li-txt">彩豆抵扣<small id="userIntegral">（账户彩豆：0）</small></div>
+					<span class="xl-li-icon icon icon-checkbox"></span>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div style="height: 15px;"></div>
+	<div class="xlba-box4">
+		<button class="xl-btn xl-btn-block" onclick="submitPayFn()">确认支付</button>
+	</div>
+</div>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/md5.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+//页面启动时，数据初始化
+function pageDataInit(){
+	globalData.productId = globalData.pageParam.productId;//商品ID
+	globalData.spellbuyId = globalData.pageParam.spellbuyProductId;//拼购ID
+	globalData.buyCount = parseFloat(globalData.pageParam.buyCount) || 0;//购买数量
+	globalData.unitPrice = parseFloat(globalData.pageParam.unitPrice);//商品单价
+	globalData.totalMoney = parseFloat((globalData.unitPrice*globalData.buyCount).toFixed(2));//总需金额
+	globalData.balance = 0;//彩豆数量，number
+	globalData.diamond = 0;//余额数量，number
+	var str = 
+		'<div class="xlba-p1">商品数量：<span class="color-ff5534">1</span>件</div>'+
+		'<div class="xlba-p1">总计金额：<span class="color-ff5534">' + ((globalData.totalMoney*100).toFixed(0)) + '</span>彩豆</div>';
+	$('#dataBox1').html(str);
+}
+//dom事件绑定
+function domEventFn(){
+	$('#orderPayType').find('.xl-li').on('click', function(){
+		var li = $(this),
+			ul = li.parent();
+		if(!li.hasClass('disabled')){
+			if(!li.hasClass('active')){
+				ul.find('li').removeClass('active');
+				li.addClass('active');
+			}
+		}
+	});
+	$('#pointDeduction').find('.xl-li').on('click', function(){
+		var li = $(this),
+			ul = li.parent();
+		if(!li.hasClass('disabled')){
+			if(li.hasClass('active')){
+				li.removeClass('active');
+			}else{
+				li.addClass('active');
+			}
+			integralDeductionInit();
+		}
+	});
+}
+
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	Common.ajaxAll([
+		{url: (Common.domainUrl + '/ushop-api-merchant/api/user/account/point/listBy/' + Common.getUserId())},
+		
+		userInfoFn
+	], function(){
+		balanceFn(arguments[0]);
+		payTypeInit();
+	})
+}
+
+//刷新之后执行函数
+function refreshAfterFn(){
+	//说明页面所有请求都已经完成
+	if(globalData.refreshComplete >= globalData.requestNum){
+		globalData.refreshComplete = 0;//用来记录请求完成次数，记录归零
+		globalData.requestNum = 0;//用来记录有多少次用户请求，记录归零
+		if(globalData.isRefresh == true){
+			globalData.isRefresh = false;
+			Common.toast('刷新成功');
+		}
+	}
+}
+
+//初始化支付方式
+function payTypeInit(){
+	var ul = $('#orderPayType');
+		ul.find('li').removeClass('active');
+	var balance = globalData.balance,//用户彩豆
+		diamond = globalData.diamond,//用户余额
+		totalMoney = globalData.totalMoney;//需要支付的余额
+	//彩豆数大于100将会默认抵扣
+	if(balance > 0){
+		$('#pointDeduction').find('[deduction="jifen"]').addClass('active');
+	}
+	if(parseFloat((diamond*100 + balance).toFixed(2))  >= parseFloat((totalMoney*100).toFixed(2))){//彩豆加余额还是不够支付所需
+		ul.find('[payType="yue"]').addClass('active');
+	}else{
+		globalData.noPay = 'yes';
+		Common.toast('余额不足！');
+		return false;
+		ul.find('[payType="weixin"]').addClass('active');
+		ul.find('[payType="yue"]').addClass('disabled');
+	}
+	integralDeductionInit();
+}
+
+//产品信息请求
+function productDataInit(callback){
+	callback = callback || function(){};
+	var _url = Common.domainUrl + '/ushop-api-merchant/api/spellbuy/product/detail/getSpellBuyProductByProductId/' + globalData.productId + '.json';
+	Common.ajax(_url, 'get', {}, function(data){
+		if(data.detail){
+			var remainder = parseInt(data.detail.spellbuyPrice) - parseInt(data.detail.spellbuyCount);
+			callback(remainder, data);
+		}
+	});
+}
+
+//抵扣彩豆初始化
+function integralDeductionInit(){
+	var balance = globalData.balance,//总彩豆
+		diamond = globalData.diamond,//总余额
+		totalMoney = globalData.totalMoney,//需要支付的总余额
+		deduction = (totalMoney*100 > balance) ? balance : parseInt(totalMoney*100);//可以抵扣的彩豆数，彩豆没有小数
+	if(!$('#pointDeduction').find('li').hasClass('active')){//不需要抵扣
+		deduction = 0;
+	}
+	var str = 
+		'<div class="xlba-p1">用户彩豆：'+
+			'<span class="color-ff5534">' + balance + '</span>，抵扣：'+
+			'<span class="color-ff5534">' + deduction + '</span>，剩余：'+
+			'<span class="color-ff5534">' + (balance - deduction) + '</span>'+
+		'</div>'+
+		'<div class="xlba-p1">还需支付：<span class="color-ff5534">' + parseFloat((totalMoney - (deduction/100)).toFixed(2)) + '</span>余额</div>';
+	$('#dataBox2').html(str);
+}
+
+//彩豆获取，显示
+function balanceFn(data){
+	if(data.recordList){
+		var balance = 0;
+		$.each(data.recordList, function(index, obj){
+			balance += parseInt(obj.balance);
+		});
+		globalData.balance = balance || 0;//彩豆数量，number
+		$('#userIntegral').html('（账户彩豆：' + globalData.balance + '）');
+	}
+}
+
+//余额数量获取，显示
+function userInfoFn(callback){
+	callback = callback || function(){};
+	Common.userInfoL(function(data){
+    	if(data.userNo){
+			globalData.diamond = parseFloat(data.diamond) || 0;//余额数量，number
+			$('#userDiamond').html('（账户余额：' + globalData.diamond + '余额）');
+    	}
+		callback(data);
+	});
+}
+//提交支付函数
+function submitPayFn(){
+	if(globalData.noPay === 'yes'){
+		Common.toast('余额不足');
+		return false;
+	}
+	globalData.isProgress = false;
+	var balance = globalData.balance,//总彩豆
+		diamond = globalData.diamond,//总余额
+		totalMoney = globalData.totalMoney,//需要支付的总余额
+		deduction = parseFloat(balance/100);//可以抵扣的余额数
+	var payType = $('#orderPayType').find('.active[payType]').attr('payType'),//支付方式 'yue'为余额支付， 'weixin'为微信支付
+		isDK = $('#pointDeduction').find('.active[deduction="jifen"]').length === 0 ? 0 : 1;//是否彩豆抵扣，1为抵扣，0为不抵扣
+	var totalMoneyI = parseFloat((totalMoney*100).toFixed(2)),
+		diamondI = parseFloat((diamond*100).toFixed(2)),
+		userTotal = parseFloat((totalMoneyI + diamondI).toFixed(2));
+	if(payType === 'yue'){//余额支付
+		if(isDK === 0){//不抵扣彩豆
+			if(!(diamondI >= totalMoneyI)){
+				Common.toast('抱歉，余额不足！');
+				return false;
+			}
+		}else{//抵扣彩豆
+			if(!(userTotal >= totalMoneyI)){
+				Common.toast('余额加彩豆仍然不足以支付！');
+				return false;
+			}
+		}
+	}else if(payType === 'weixin'){//微信支付
+		if(isDK === 1 && balance >= totalMoneyI){//彩豆足够抵扣
+			payType = 'yue';
+		}
+	}else{
+		Common.toast('请选择支付方式！');
+		return false;
+	}
+	Common.loadingShow();
+	productDataInit(function(remainder, data){
+		if(remainder < globalData.buyCount){
+			Common.toast('参与人次不足');
+			Common.loadingHide();
+		}else{
+			var _url = '/ushop-api-merchant/api/spellbuy/cart/settlement/order/' + isDK,
+				_param = [{
+					productId: globalData.productId,
+					spellbuyProductId: globalData.spellbuyId,
+					buyCount: globalData.buyCount
+				}];
+			globalData.productData = data;
+			Common.ajax(_url, 'post', JSON.stringify(_param), function(data){
+				var payOrderNo = data.payNo;//支付订单号
+				if(payOrderNo){
+					globalData.payOrderNo = payOrderNo;//支付订单，只是用来支付而且，其他的查询都用数据订单
+					globalData.dataOrderNo = data.orderNo;//数据订单
+					if(payType == 'yue'){//表示余额支付
+						balanceOfPay();
+					}else if(payType == 'weixin'){//表示微信支付
+						weixinPay();
+					}
+				}else{
+					Common.loadingHide();
+				}
+			});
+		}
+	});
+}
+
+//余额支付
+function balanceOfPay(){
+	var _url = '/ushop-api-merchant/api/payment/balancepay/' + globalData.payOrderNo;
+	Common.ajax(_url, 'post', {}, function(data){
+		if(data.orderNo){
+			//判断是否支付成功
+			globalData.payStatusNo = 0;
+			setTimeout(function(){
+				paySuccessFn(globalData.dataOrderNo);
+			}, 1000);
+		}else{
+			Common.loadingHide();
+		}
+	});
+}
+//微信支付
+function weixinPay(){
+	if (typeof WeixinJSBridge == "undefined"){
+	   if( document.addEventListener ){
+	       document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+	   }else if (document.attachEvent){
+	       document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+	       document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+	   }
+	}else{
+	   onBridgeReady();
+	}
+}
+function onBridgeReady(){
+	var _url = '/ushop-api-merchant/api/payment/weixinpay/pay/' + globalData.payOrderNo;
+	Common.ajax(_url, 'post', {}, function(data){
+		if(data.orderNo){
+			WeixinJSBridge.invoke(
+		    	'getBrandWCPayRequest', {
+		        	"appId": data.appId,//公众号名称，由商户传入
+		        	"timeStamp": data.timeStamp,//时间戳，自1970年以来的秒数
+		        	"nonceStr": data.nonceStr, //随机串
+		        	"package": data.package,
+		        	"signType": data.signType,//微信签名方式
+		        	"paySign":  data.paySign //微信签名
+		    	},
+		    	function(res){
+		    		//使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+		        	if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+		        		Common.toast('微信支付成功！');
+		        		globalData.payStatusNo = 0;
+						setTimeout(function(){
+							paySuccessFn(globalData.dataOrderNo);
+						}, 1000);
+		        	}else{
+		        		Common.toast('微信支付失败！');
+		        		Common.loadingHide();
+		        	}
+		    	}
+			); 
+		}else{
+			Common.loadingHide();
+		}
+	});
+}
+//用来判断是否支付成功
+function paySuccessFn(orderNo){
+	if(orderNo && globalData.payStatusNo < 3){
+		Common.loadingShow('支付状态查询中……');
+		var _url = '/ushop-api-merchant/api/spellbuy/cart/settlement/status/' + orderNo;
+		Common.ajax(_url, 'get', {}, function(data){
+			globalData.payStatusNo += 1;
+			if(parseInt(data.status) === 100){
+				Common.loadingHide();
+				var _param = {
+					productId: globalData.productId,
+					spellbuyId: globalData.spellbuyId,
+					buyCount: globalData.buyCount,
+					realBuyNum: '',
+					buyData: JSON.stringify(data),
+					productData: JSON.stringify(globalData.productData)
+				};
+				Common.openPage('pay_done.html', _param);
+			}else{
+				setTimeout(function(){
+					paySuccessFn(orderNo);
+				}, 3000);
+			}
+		}, false);
+	}else{
+		Common.loadingHide();
+		globalData.payStatusNo = 0;
+		var str =   '<div>支付状态请求失败！</div>'+
+					'<div>您可以选择：</div>';
+		Common.confirm('提示', str, function(index){
+			if(index == 1){
+				Common.loadingShow();
+				paySuccessFn();
+			}
+		}, ['取消', '继续刷新']);
+	}
+}
+</script>
+</body>
+</html>

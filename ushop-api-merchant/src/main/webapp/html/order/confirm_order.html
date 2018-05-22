@@ -1,0 +1,441 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>确认订单</title>
+<link rel="stylesheet" type="text/css" href="../../css/style.css?v=20180131"/>
+<style>
+/*地址样式*/
+.xlco-box1 {
+	position: relative;
+	padding: 10px 50px 3px 15px;
+	background: #fff url(../../image/icon/cadd_bg.png) left bottom repeat-x;
+	background-size: auto 3px;
+}
+.xlco-box1 .icon-right {
+	position: absolute;
+	right: 15px;
+	top: 50%;
+	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+}
+.xlco-p1 {
+	line-height: 1;
+	font-size: 1.1em;
+	padding-left: 30px;
+}
+.xlco-p2 {
+	color: #6f6f6f;
+	line-height: 1.2;
+	background: url(../../image/icon/cadd.png) left center no-repeat;
+	background-size: 24px;
+	text-align:justify;
+	padding: 10px 0 10px 30px;
+}
+.xlco-noaddr {
+	padding: 0 0 10px 35px;
+	margin: .8em 0;
+	text-align: center;
+	font-size: 1.4em;
+	color: #888;
+	font-weight: bold;
+}
+
+/*此页面的订单列表修改*/
+.xlo-ul {
+	position: relative;
+}
+.xlo-ul:before {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 10px;
+	right: 10px;
+	height: 1px;
+	background: #eee;
+}
+.xlo-ul .xlo-li {
+	background: none;
+}
+.xlo-ul .xlo-li:before {
+	height: 0;
+}
+.xlap-od-p1 {
+	border-bottom: solid 1px #ccc;
+}
+
+
+/*底部浮动按键*/
+.xlpd-fotter {
+	bottom: 0;
+}
+.xlco-foot {
+	position: relative;
+	padding: 8px 15px;
+}
+.xlco-foot .xl-btn {
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 100%;
+	border-radius: 0;
+	font-size: 1.2em;
+}
+</style>
+</head>
+<body>
+<div class="xlnav-box xlele-box">
+	<div class="xlnav-content xlele-content">
+		<img src="../../image/icon/titleBG.jpg">
+		<h1 class="xlnav-title">确认订单</h1>
+	</div>
+</div>
+<div class="xlbody-box">
+	<div class="xlco-box1" id="addr_box">
+		<a id="user_address_box" onclick="onSelectAddrFn()">
+		<!--<div class="xlco-p1 clearfix">
+			<span class="pull-left">收件人：大美女</span>
+			<span class="pull-right">13968593546</span>
+		</div>
+		<div class="xlco-p2">广东省深圳市福田区天安数码城创新科技广场二期东座505</div>
+		<span class="icon icon-right"></span> -->
+		<!--<div class="xlco-noaddr">请添加地址</div>-->
+		</a>
+	</div>
+	<div id="orderListBox"></div>
+	<!--<div class="xlap-od-item">
+		<div class="xlap-od-p1">
+			<div class="xlo-p1">
+				<span class="xlo-s1"></span>
+				<span class="xlo-s2"><a>新疆日月特产店</a>发货</span>
+			</div>
+		</div>
+		<ul class="xlo-ul">
+			<li class="xlo-li">
+				<img src="../../image/p200200.png">
+				<div class="xlo-body">
+					<div class="xlo-p1">
+						<span class="xlo-s1">Apple iPhone6s 16G 颜色</span>
+						<span class="xlo-s2 colorR">￥6868</span>
+					</div>
+					<div class="xlo-p1">
+						<span class="xlo-s1 xlo-c969696">来自非同凡响</span>
+						<span class="xlo-s2 colorR">x1</span>
+					</div>
+				</div>
+			</li>
+		</ul>
+		<div class="xlap-od-p2">
+			<div class="xlo-p1">
+				<span class="xlo-s1">商品总价：</span>
+				<span class="xlo-s2 colorR">￥666.<small>00</small></span>
+			</div>
+			<div class="xlo-p1">
+				<span class="xlo-s1">运费：</span>
+				<span class="xlo-s2 colorR">￥8.<small>00</small></span>
+			</div>
+			<div class="xlo-p1">
+				<span class="xlo-s1">运单总价：</span>
+				<span class="xlo-s2 colorR">￥666.<small>00</small></span>
+			</div>
+		</div>
+		<div class="xlap-slide"></div>
+		<div class="xlap-od-p3 clearfix">
+			<button class="xlbtn" onclick="onBtnCancelFn('{{=data.orderNo}}')">取消订单</button>
+			<button class="xlbtn" onclick="onBtnNowPayFn('{{=data.orderNo}}', '{{=data.payNo}}')">立即付款</button>
+		</div>
+		<div class="xlap-od-p3 clearfix">
+			<i class="xlap-txt">已申请退货，卖家处理中……</i>
+			<button class="xlbtn" onclick="onBtnReturnNoFn('{{=data.orderNo}}')">取消退货</button>
+		</div>
+		<div class="xlap-od-p3 clearfix">
+			<i class="xlap-txt">订单完成</i>
+		</div>
+		<div class="xlap-od-p2">
+			<div class="xlo-c969696">订单号：4582682592879889</div>
+			<div class="xlo-c969696">创建时间：2015-02-02 18:15:15</div>
+		</div>
+	</div>-->
+</div>
+<div style="height: 4.5em;"></div>
+<div class="xlele-box xlpd-fotter">
+	<div class="xlele-content">
+		<div class="xlco-foot">
+			<div id="orderTotal">合计：<i class="color-ff5534">￥00.00</i></div>
+			<div id="userIntegral">可用彩豆：00彩豆</div>
+			<button class="xl-btn" onclick="orderSubmitFn()">提交订单</button>
+		</div>
+	</div>
+</div>
+
+<script id="orderListTemplate"  type="text/template">
+	{{~ it:data}}
+		<div class="xlap-od-item" order-no="{{=data.orderNo}}">
+			{{~ data.merchantArr:mitem}}
+			<div style="height: 8px; background: #f6f6f6;"></div>
+			<div class="xlap-od-p1">
+				<div class="xlo-p1">
+					<span class="xlo-s1"></span>
+					<span class="xlo-s2">
+						<a href="../indiana/product_list.html?{{=('merchantId=' + mitem.merchantId + '&merchantName=' + mitem.merchantName)}}">{{=mitem.merchantName}}</a>发货
+					</span>
+				</div>
+			</div>
+			<ul class="xlo-ul">
+				{{~mitem.proArr:item}}
+				<li class="xlo-li">
+					{{?item.headImage}}
+					<img src="{{= Common.getImageUrl(item.headImage)}}">
+					{{??}}
+					<img src="../../../image/p200200.png">
+					{{?}}
+					<div class="xlo-body">
+						<div class="xlo-p1">
+							<span class="xlo-s1">{{=item.productName}}</span>
+							<span class="xlo-s2">{{=item.checkedRule.payTypeText}}</span>
+						</div>
+						<div class="xlo-p1">
+							<span class="xlo-s1 xlo-c969696">来自{{=mitem.merchantName}}</span>
+							<span class="xlo-s2">x{{=item.buyCount}}</span>
+						</div>
+					</div>
+				</li>
+				{{~}}
+			</ul>
+			{{?data.merchantArr.length > 1}}
+			<div class="xlap-od-p2">
+				<div class="xlo-p1">
+					<span class="xlo-s1">商品总价：</span>
+					<span class="xlo-s2">{{=mitem.totalText}}</span>
+				</div>
+				<div class="xlo-p1">
+					<span class="xlo-s1">运费：</span>
+					<span class="xlo-s2"><small>￥</small>{{=mitem.totalFreight}}</span>
+				</div>
+				<div class="xlo-p1">
+					<span class="xlo-s1">运单总价：</span>
+					<span class="xlo-s2">{{=mitem.totalTextFM}}</span>
+				</div>
+			</div>
+			{{?}}
+			{{~}}
+			<div class="xlap-od-p2">
+				<div class="xlo-p1">
+					<span class="xlo-s1">商品总价：</span>
+					<span class="xlo-s2">{{=data.totalText}}</span>
+				</div>
+				<div class="xlo-p1">
+					<span class="xlo-s1">运费：</span>
+					<span class="xlo-s2"><small>￥</small>{{=data.totalFreight}}</span>
+				</div>
+				<div class="xlo-p1">
+					<span class="xlo-s1">运单总价：</span>
+					<span class="xlo-s2">{{=data.totalTextFM}}</span>
+				</div>
+			</div>
+		</div>
+	{{~}}
+</script>
+<script src="../../script/jquery-1.12.4.min.js"></script>
+<script src="../../script/md5.js"></script>
+<script src="../../script/doT.min.js"></script>
+<script src="../../script/common.js?v=20180131"></script>
+<script src="../../script/defaultxl.js?v=20180131"></script>
+<script>
+"use strict";
+$(function() {
+	globalData.loadReady();//页面加载完成执行
+	pageDataInit();//页面数据初始化
+	domEventFn();//dom初始化事件绑定
+	reloadDataFn();//所有需要从服务器加载的数据请求
+});
+
+//页面启动时，数据初始化
+function pageDataInit(){
+	var orderObj = Common.storageL(Common.localPay);
+	globalData.orderObj = orderObj;
+	globalData.userPoint = orderObj.userPoint;//用户所拥有的积分
+	globalData.totalPoint = orderObj.totalIntegral;//此订单需要支付的总积分
+	
+	globalData.orderParam = [];//用来提交的参数数据
+	$.each(orderObj.merchantArr, function(index, obj){
+		$.each(obj.proArr, function(pi, po) {
+			globalData.orderParam.push({
+				buyPrice: po.checkedRule.id,
+				productId: po.productId,
+				buyCount: po.buyCount
+			});
+		});
+	});
+	var dataListTemplate = doT.template($('#orderListTemplate').html());
+	$('#orderListBox').html(dataListTemplate([orderObj]));
+	var str = '合计：<i class="color-ff5534">' + orderObj.totalTextFM + '</i>';
+	$('#orderTotal').html(str);
+}
+//dom事件绑定
+function domEventFn(){
+}
+
+//所有需要从服务器加载的数据请求
+function reloadDataFn(){
+	Common.ajaxAll([
+		addressRequestFn,
+		getIntegralList
+	])
+}
+
+//刷新之后执行函数
+function refreshAfterFn(){
+	if(globalData.refreshComplete >= globalData.requestNum){
+		globalData.refreshComplete = 0;//用来记录请求完成次数
+		globalData.requestNum = 0;//用来记录有多少次用户请求
+		if(globalData.isRefresh == true){
+			globalData.isRefresh = false;
+			Common.toast('刷新成功');
+		}
+	}
+}
+
+//下单请求
+function orderSubmitFn(){
+	if(!globalData.addressId){
+		Common.toast('请填写地址');
+		return false;
+	}
+	if(!(globalData.userPoint >= globalData.totalPoint)){
+		Common.toast('可用彩豆不足');
+		return false;
+	}
+	var _url = '/ushop-api-merchant/api/mall/cart/settlement/order/' + globalData.addressId;
+	Common.ajax(_url, 'post', JSON.stringify(globalData.orderParam), function(data) {
+		if(data.payNo){
+			globalData.orderObj.orderNo = data.orderNo;//订单的订单号
+			globalData.orderObj.payNo = data.payNo;//订单的支付号
+			Common.storageL(Common.localPay, globalData.orderObj);
+			Common.openPage('../order/balance_ds.html', {shopPage: globalData.pageParam.shopPage});
+		}else if(data.error_description){
+    		Common.toast(data.error_description);
+    	}else{
+    		Common.toast('下单失败，未知错误');
+    	}
+	});
+}
+
+
+//地址数据请求
+function addressRequestFn(callback){
+	callback = callback || function(){};
+	//虚拟物品
+	if(globalData.pageParam.fiction === 'yes'){
+		$('#addr_box').hide();
+		globalData.addressId = '0';
+		callback();
+		return false;
+	}
+	if(globalData.pageParam.addressObj){
+		var addressObj = JSON.parse(globalData.pageParam.addressObj);
+		addressShowFn(addressObj);
+		callback();
+		return false;
+	}
+	var _url = '/ushop-api-merchant/api/user/address/list/1/10';
+	Common.ajax(_url, 'get', {}, function(data){
+		callback();
+		if(data.totalCount == 0){//表示请求到的数据为0
+			addressShowFn();
+			return false;
+		}
+		if(data.totalCount > 0){//表示数据请求成功
+			var activeAddr = data.recordList[0];
+			$.each(data.recordList, function(index, obj){
+				if(obj.status == 1){
+					activeAddr = obj;
+					return false;
+				}
+			});
+			addressShowFn(activeAddr);
+		}else{
+			Common.toast('地址数据错误！')
+		}
+	}, false);
+}
+
+//地址选择
+function onSelectAddrFn(){
+	var _url = '';
+	if(globalData.addressId){//没有地址可以选择
+		_url = '../address/address.html?comeFrom=confirm_order&addressId=' + globalData.addressId;
+	}else{//已经有地址可以选择
+		_url = '../address/address.html?comeFrom=confirm_order';
+	}
+	if(_url){
+		Common.openPage(_url);
+	}
+}
+
+//地址呈现
+function addressShowFn(deAddr){
+	if(!(deAddr && deAddr.id)){
+		globalData.addressId = '';
+		document.getElementById('user_address_box').innerHTML = '<div class="xlco-noaddr"><span class="icon icon-plus"></span>请添加地址</div>';
+		return false;
+	}
+	globalData.addressId = deAddr.id;
+	var str =   '<div class="xlco-p1 clearfix">'+
+					'<span class="pull-left">收件人：' + deAddr.consignee + '</span>'+
+					'<span class="pull-right">' + deAddr.phone + '</span>'+
+				'</div>'+
+				'<div class="xlco-p2">' + deAddr.province + deAddr.city + deAddr.district + deAddr.address + '</div>'+
+				'<span class="icon icon-right"></span>';
+	document.getElementById('user_address_box').innerHTML = str;
+};
+
+
+
+//获取积分列表
+function getIntegralList(callback){
+	callback = callback || function(){};
+	//积分类型判断
+	var fundType = globalData.orderObj.intArr[0];
+	if((fundType === 999) || (fundType === 1001)){
+		$('#userIntegral').html('可用彩豆：' + (globalData.orderObj.userPoint || 0));
+		callback(0);
+		return false;
+	}
+    var _url = Common.domainUrl + '/ushop-api-merchant/api/user/account/point/listBy/' + Common.getUserId();
+    Common.ajax(_url, 'get', {}, function(data){
+    	var isTrue = true;
+        Common.each(data.recordList, function(index, obj){
+        	if(obj.fundType === fundType){
+        		getRealTimeInt(obj.object.platformId, fundType, callback);
+        		isTrue = false;
+        		return false;
+        	}
+        });
+        if(isTrue){
+        	$('#userIntegral').html('可用积分：0');
+        	callback(0);
+        }
+    }, false);
+}
+
+//获取实时积分
+function getRealTimeInt(platformId, fundType, callback){
+    var _url = '';
+    if(platformId == 20){//即开积分查询
+        _url = '/ushop-api-merchant/api/jikaipiao/user/profile/balance/get/' + fundType;
+    }else if(platformId == 21){//彩票积分查询
+        _url = '/ushop-api-merchant/api/caipiao/user/profile/balance/get/' + fundType;
+    }
+    if(_url){
+        Common.ajax(_url, 'get', {}, function(data){
+        	$('#userIntegral').html('可用积分：' + (data.balance || 0));
+            callback(data.balance || 0);
+        }, false);
+    }
+}
+</script>
+</body>
+</html>
