@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	</head>
+
+	<body>
+		<style>
+			@keyframes shake {
+			  from, to {
+			    transform: translate3d(0, 0, 0);
+			  }
+			
+			  20%, 60% {
+			    transform: translate3d(-10px, 0, 0);
+			  }
+			
+			  40%, 80% {
+			    transform: translate3d(10px, 0, 0);
+			  }
+			}
+			.toast-box {
+				position: fixed;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+			}
+			.toast-box span {
+				display: inline-block;
+				vertical-align: top;
+				font-size: 16px;
+				background: #000;
+				border-radius: 5px;
+				padding: 10px 20px;
+				line-height: 1;
+				color: #fff;
+				animation-duration: .3s;
+				animation-fill-mode: both;
+				animation-name: shake;
+			}
+		</style>
+		<button>ddd</button>
+		<script type="text/javascript">
+			document.querySelector('button').addEventListener('click', function() {
+				toast('txt')
+			})
+			var a = {}
+
+			function toast(txt) {
+				var box = document.querySelector('.toast-box');
+				if(box) {
+					box.parentNode.removeChild(box);
+					txt = '456';
+				} else {
+					txt = '123';
+				}
+				txt = '<span>' + txt + '</span>';
+				box = document.createElement('div');
+				box.innerHTML = txt;
+				box.className = 'toast-box';
+				document.body.appendChild(box);
+//				a.b = setTimeout(function () {
+//					if ( box && box.parentNode ) {
+//						box.parentNode.removeChild(box);
+//					}
+//				}, 3000);
+//				box.onclick = function () {
+//					box.parentNode.removeChild(box);
+//				}
+			}
+		</script>
+	</body>
+
+</html>

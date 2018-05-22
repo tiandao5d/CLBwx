@@ -6,7 +6,12 @@
 		<title>Document</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<style type="text/css">
-			#box {
+			
+			* {
+				box-sizing: border-box;
+			}
+			#box,
+			#pox {
 				position: relative;
 				background-color: rgba(255, 0, 0, .2);
 				width: 300px;
@@ -14,25 +19,27 @@
 				overflow: hidden;
 			}
 			
-			* {
-				box-sizing: border-box;
-			}
-			
-			.tibarrager-box {
+			.tibarrager-box,
+			.anibarrager-box {
 				position: absolute;
 				font-size: 14px;
 			}
 			
-			.tibarrager-txt {
-				width: 150px;
+			.tibarrager-txt,
+			.anibarrager-txt {
+				max-width: 150px;
 				border-radius: 50px;
 				line-height: 2;
 				background-color: rgba(0, 0, 0, .7);
 				color: #fff;
-				padding: 0 1em 0 2em;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				padding: 0 1.5em 0 2.5em;
 			}
 			
-			.tibarrager-img {
+			.tibarrager-img,
+			.anibarrager-img {
 				position: absolute;
 				left: -2em;
 				top: -1em;
@@ -41,11 +48,6 @@
 				line-height: 1;
 				vertical-align: top;
 				border-radius: 50%;
-			}
-			
-			.anibarrager-box {
-				position: absolute;
-				font-size: 14px;
 			}
 			@keyframes anirTol{
 				from{ left: 100%; }
@@ -60,30 +62,13 @@
 			.anibarrager-box.tomove3 {
 				animation: 7s linear both anirTol;
 			}
-			.anibarrager-txt {
-				width: 150px;
-				border-radius: 50px;
-				line-height: 2;
-				background-color: rgba(0, 0, 0, .7);
-				color: #fff;
-				padding: 0 1em 0 2em;
-			}
-			
-			.anibarrager-img {
-				position: absolute;
-				left: -2em;
-				top: -1em;
-				width: 4em;
-				height: 4em;
-				line-height: 1;
-				vertical-align: top;
-				border-radius: 50%;
-			}
 		</style>
 	</head>
 
 	<body>
-		<div id="box"></div>
+		<div id="box">时间型刷新元素位置</div>
+		<div style="height: 10px;"></div>
+		<div id="pox">动画型animation</div>
 		<script type="text/javascript">
 			function BarragerTi(ele, para) {
 				this.box = ele
@@ -179,7 +164,7 @@
 					}, 3000)
 				}
 			}
-			var img = 'antd0507/static/media/logo.5d5d9eef.svg'
+			var img = '../images/100100.jpg'
 			var b = [{
 				txt: 'werer',
 				img: img
@@ -193,10 +178,10 @@
 				txt: 'dsfsd订单',
 				img: img
 			}]
-//			var a = new BarragerTi(document.querySelector('#box'), b)
-//			a.init()
-			var a = new BarragerAni(document.querySelector('#box'), b)
-			a.init()
+			var ti = new BarragerTi(document.querySelector('#pox'), b)
+			ti.init()
+			var ani = new BarragerAni(document.querySelector('#box'), b)
+			ani.init()
 		</script>
 	</body>
 

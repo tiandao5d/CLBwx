@@ -1,0 +1,4333 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+ul {
+	list-style: none;
+}
+body, html, .mui-content {
+	font-family: "微软雅黑";
+	background: #f6f6f6;
+	/* background: #efeff4; */
+}
+img {
+	vertical-align: top;
+}
+.xl-iframe-wrapper
+{
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 44px;
+    bottom: 50px;
+    -webkit-overflow-scrolling: touch;
+}
+.xl-iframe-wrapper iframe
+{
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+.xl-color-27d0d8 {
+	color: #27d0d8 !important;
+}
+.xl-color-ff5534 {
+	color: #ff5534 !important;
+}
+.xl-color-999 {
+	color: #999 !important;
+}
+.xl-color-95f928 {
+	color: #95f928 !important;
+}
+.xl-absolute-middle {
+	position: absolute;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+.bodyScrollNot {
+	overflow: hidden !important;
+}
+.xl-head-text{
+	position: relative;
+	font-size: 14px;
+	line-height: 24px;
+	padding: 10px;
+	color: #fff;
+	z-index: 20;
+}
+.xl-fixed-bottom {
+	position: fixed !important;
+	left: 0 !important;
+	bottom: 0 !important;
+	width: 100% !important;
+}
+.xl-progressbar {
+	margin-bottom: 2px;
+    position: relative;
+    display: block;
+    overflow: hidden;
+    width: 100%;
+    height: 6px;
+    -webkit-transform-origin: center top;
+    transform-origin: center top;
+    vertical-align: middle;
+    border-radius: 3px;
+    background: #b6b6b6;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+
+.xl-progressbar span {
+	display: block;
+	width: 0;
+    height: 100%;
+    background: #f5a623;
+    border-radius: 3px;
+}
+.xlalert-magess {
+	max-height: 200px;
+	min-height: 100px;
+	overflow-y: scroll;
+	text-align: center;
+	width: 100%;
+}
+.xlalert-magess > span {
+	margin: 0 5px;
+}
+.xlir-tab-head {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 70px;
+	background: #fff;
+    display:-webkit-box;
+    display:box;
+    z-index: 20;
+}
+.xlir-tab-head > a {
+	display: block;
+	border-bottom: solid 1px #ccc;
+    -webkit-box-flex: 1;
+    box-flex: 1;
+    text-align: center;
+    line-height: 40px;
+    color: #333;
+}
+.xlir-tab-head > a.active {
+    color: #ff5534;
+	border-bottom: solid 2px #ff5534;
+}
+.mui-grid-view.mui-grid-9 {
+	border: 0;
+}
+.mui-bar-tab {
+	background: #fff;
+	border-top: solid 1px #f6f6f6;
+}
+.mui-btn-block {
+	padding: 10px 0;
+}
+.xl-half-em {
+	display: inline-block!important;
+	width: 0.5em!important;
+}
+.xl-btn-active:active
+{
+    color: #fff !important;
+    background-color: #929292 !important;
+}
+.xl-btn-opacity:active
+{
+	opacity: .8;
+}
+.xl-filter-blur15 {
+    -webkit-filter: blur(15px);
+    filter: blur(15px);
+}
+.mui-bar-nav~.mui-content {
+	padding-top: 70px !important;
+}
+.mui-table-view-cell:after,
+.mui-input-group .mui-input-row:after {
+	left: 0 !important;
+	background: #f6f6f6;
+	height: 2px;
+}
+.mui-bar-tab .mui-tab-item .mui-icon img {
+	width: 100%;
+	height: 100%;
+}
+.xl-btn-f5a623 {
+	color: #fff !important;
+	background: #f5a623 !important;
+	border: 0 !important;
+}
+.xl-text-line2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+}
+.xl-text-line3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+}
+.xl-text-line4 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+}
+.xl-text-line5 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+}
+.xl-padding-015 {
+	padding: 0 15px;
+}
+.xl-padding-1015 {
+	padding: 10px 15px;
+}
+.xl-head-notbg {
+	background: transparent !important;
+	box-shadow: none;
+}
+.xl-absolute-0000 {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+}
+.xl-color-4a90e2 {
+	color: #4a90e2 !important;
+}
+.xl-color-f5a623 {
+	color: #f5a623 !important;
+}
+.xl-h20 {
+	height: 20px;
+}
+.mui-popup {
+	border-radius: 8px !important;
+}
+.mui-popup-inner {
+	border-radius: 0;
+	padding: 0;
+}
+.mui-popup-title {
+	border-bottom: solid 1px #ccc;
+	padding: 6px 15px;
+}
+.mui-popup-title+.mui-popup-text {
+	padding: 15px;
+	margin: 0;
+	text-align: left;
+}
+.mui-popup-button {
+	border-radius: 0 !important;
+	color: #fff;
+	background: #b7b7b7;
+}
+.mui-popup-button:last-child {
+	background: #ff5534;
+	font-weight: normal;
+}
+.mui-table-view:before,
+.mui-table-view:after,
+.mui-input-group:after,
+.mui-input-group:before {
+	height: 0;
+}
+.mui-table-view-cell.disabled>a:not(.mui-btn).mui-active,
+.mui-table-view-cell.disabled.mui-active {
+	background: #fff;
+}
+.mui-poppicker-btn-ok {
+	border-color: #ff5534;
+	background: #ff5534;
+}
+.mui-table-view-cell>a:not(.mui-btn).mui-active {
+	background: #fff;
+}
+.isAndroidShow {
+	display: none !important;
+}
+.xlmodal-box,
+.xlmodal-bg {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+}
+.xlmodal-bg {
+	background: rgba(0,0,0,.6);
+}
+.xlmodal-box {
+	z-index: 888;
+	font-size: 14px;
+	opacity: 1;
+	color: #363636;
+}
+.xlmodal-content {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	width: 90%;
+	height: auto;
+	max-height: 80%;
+	overflow-y: auto;
+	background: #fff;
+	padding: 8px;
+	border-radius: 5px;
+	max-width: 320px;
+}
+.xlmodal-head {
+	font-size: 16px;
+	text-align: center;
+	border-bottom: solid 1px #666;
+	padding-bottom: 8px;
+}
+.xlicon-close {
+	position: absolute;
+	right: 4px;
+	top: 4px;
+	width: 20px;
+	height: 20px;
+}
+.xlicon-close:before,
+.xlicon-close:after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	margin-top: -1px;
+	width: 100%;
+	height: 3px;
+	border-radius: 3px;
+	background: #666;
+}
+.xlicon-close.disabled:before,
+.xlicon-close.disabled:after{
+	background: #ccc !important;
+}
+.xlicon-close:before {
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+.xlicon-close:after {
+	-webkit-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+}
+.xlmodal-body {
+	padding: 10px 0;
+	min-height: 80px;
+}
+.xlmodal-foot {
+	margin: 0 -8px -8px;
+}
+.xlmodal-foot:before,
+.xlmodal-foot:after{
+	content: '';
+	display: table;
+	clear: both;
+}
+.xlmodal-foot button {
+	float: left;
+	width: 50%;
+	border: 0;
+	color: #fff;
+	border-radius: 0;
+	font-size: 14px;
+	padding: 10px 0 6px 0
+}
+.xlmodal-btn-cancel {
+	background: #9b9b9b;
+}
+.xlmodal-btn-confirm {
+	background: #ff542d;
+}
+
+.mui-popup-backdrop,
+.mui-popup.mui-popup-in,
+.mui-popup.mui-popup-out {
+    -webkit-transition-duration: 1ms;
+    transition-duration: 1ms;
+}
+/* 加载中样式开始 */
+.xlloading-box {
+	position: fixed;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	z-index: 99999999;
+}
+.xlloading-content {
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+.xlloading-txt {
+	padding-top: 3px;
+}
+.xlloading-body span {
+	width: 24px;
+	height: 24px;
+	margin-left: 8px;
+	display: inline-block;
+	background-color: #ff5534;
+	border-radius: 100%;
+}
+@-webkit-keyframes xlloadingKey {
+	0%,
+	80%,
+	100% {
+		transform: scale(0);
+		-webkit-transform: scale(0)
+	}
+	40% {
+		transform: scale(1);
+		-webkit-transform: scale(1)
+	}
+}
+
+@keyframes xlloadingKey {
+	0%,
+	80%,
+	100% {
+		transform: scale(0);
+		-webkit-transform: scale(0)
+	}
+	40% {
+		transform: scale(1);
+		-webkit-transform: scale(1)
+	}
+}
+.xlloading-body span {
+	-webkit-animation: xlloadingKey 1.4s infinite ease-in-out;
+	animation: xlloadingKey 1.4s infinite ease-in-out;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+}
+.xlloading-body span:first-child {
+	margin-left: 0;
+	-webkit-animation-delay: -.32s;
+	animation-delay: -.32s;
+}
+.xlloading-body span.xlloading-center {
+	-webkit-animation-delay: -.16s;
+	animation-delay: -.16s;
+}
+/* 加载中样式结束 */
+/*新建个人图标样式开始*/
+.mui-icon.xl-icon {
+	background-size:100% 100% ;
+}
+.xl-icon > img {
+	width: 100%;
+	height: 100%;
+}
+.xl-icon-phone {
+	background-image: url(../images/123.gif);
+}
+.mui-active .xl-icon-phone {
+	background-image: url(../images/234.png);
+}
+.xlg-foot-p1 {
+	color: #888;
+	text-align: center;
+	font-size: 14px;
+	padding: 5px;
+}
+/*新建个人图标样式结束*/
+.xl-head-gradient {
+	height:70px !important;
+	padding-top:22px !important;
+	background: url(../image/common/titleBG.jpg);
+	background-size: 100% 100%;
+	box-shadow: none;
+}
+.xl-head-gradient.mui-bar-nav.mui-bar > .mui-icon {
+	font-weight: bold;
+	color: #fff;
+	padding: 10px 18px !important;
+	font-size: 30px;
+}
+
+.xl-head-gradient.mui-bar-nav.mui-bar .mui-icon.mui-pull-right .mui-badge {
+	top: 1px;
+	right: 8px;
+	width: 18px;
+	height: 18px;
+	line-height: 19px;
+	font-size: 13px;
+	text-align: center;
+	padding: 0;
+}
+.xl-head-gradient .mui-title {
+	color: #fff;
+	font-size: 24px !important;
+	font-weight: bold;
+}
+@media (max-width: 350px) {
+	.xl-head-gradient .mui-title {
+		font-size: 20px !important;
+	}
+}
+.xl-head-pullr {
+	line-height: 44px;
+	font-size: 14px;
+	color: #fff;
+}
+.xlimg-table-view .mui-media-object.mui-pull-left {
+	position: absolute;
+	left: 15px;
+	top: 50%;
+	max-width: none;
+	width: 42px;
+	height: 42px;
+	margin: 0;
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+.xlimg-table-view .mui-media-body {
+	padding-left: 50px;
+}
+.xl-return-top {
+	position: fixed;
+	bottom: 60px;
+	right: 20px;
+	z-index: 20;
+	padding: 10px;
+}
+.xl-return-top img {
+	vertical-align: top;
+}
+
+.xl-headnav-right {
+	line-height: 44px;
+	padding: 0 10px;
+	color: #fff;
+}
+.xl-headnav-right:active {
+	color: #fff;
+	opacity: .8;
+}
+/*首页样式开始*/
+.xlhf-slider .mui-slider-indicator {
+	text-align: right;
+	padding-right: 10px;
+	bottom: 2px;
+}
+.xli-slider {
+	position: relative;
+	height: 32px;
+	overflow: hidden;
+}
+.xli-slider ul {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+}
+.xli-slider ul li {
+	line-height: 32px;
+	font-size: 14px;
+	overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.xl-sudoku {
+	margin-top: 2px;
+	background: #fff;
+}
+.xl-sudoku .mui-media-body {
+	font-size: 13px !important;
+	margin-top: 4px !important;
+}
+.xl-sudoku .mui-grid-view.mui-grid-9 {
+	background-color: #fff;
+	border: none;
+}
+.xl-sudoku .mui-grid-view.mui-grid-9 .mui-table-view-cell {
+	padding: 0;
+	border: none;
+	background: #fff;
+}
+.xl-sudoku .mui-grid-view.mui-grid-9 .mui-table-view-cell .mui-icon {
+	position: relative;
+}
+.xl-sudoku .mui-grid-view.mui-grid-9 .mui-table-view-cell.mui-active .mui-icon:after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, .2);
+}
+.xl-sudoku .xl-icon {
+	width: 40px;
+	height: 40px;
+	font-size: 30px;
+}
+.xli-slider-hroup {
+	position: relative;
+}
+.xl-slider-head.mui-slider-indicator.mui-segmented-control {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	background: #f6f6f6;
+	border-top: solid 5px #f6f6f6;
+	border-bottom: solid 4px #fff;
+	box-shadow: 1px 0 0 1px #f0f0f0;
+	z-index: 10;
+}
+#id_tab_slideryy {
+	position: fixed;
+}
+.xl-slider-head .mui-control-item {
+	background: url(../image/home/biaoqian.png) no-repeat !important;
+	background-size: 100% 100% !important;
+}
+.xl-slider-head .mui-control-item.mui-active {
+	background: url(../image/home/biaoqian01.png) no-repeat !important;
+	background-size: 100% 100% !important;
+}
+.xl-slider-head.xl-head-fixed {
+	position: fixed !important;
+}
+.xl-slider-tab .mui-media-body,
+.xl-index-goodlist .mui-media-body {
+	height: auto !important;
+	text-align: left;
+	font-size: 12px !important;
+	overflow:visible !important;
+}
+.xl-slider-tab .imain-listOperation,
+.xl-index-goodlist .imain-listOperation {
+	position: relative;
+	padding-right: 60px;
+	font-size: 10px;
+	padding-top: 8px;
+	background: #f9f9f9;
+	margin-left: -10px;
+	margin-right: -10px;
+	padding-right: 70px;
+	padding-left: 10px;
+	padding-bottom: 5px;
+}
+.xl-slider-tab .imain-listOperation p,
+.xl-index-goodlist .imain-listOperation p {
+	font-size: 10px !important;
+}
+.xl-slider-tab .xl-imgBtn,
+.xl-index-goodlist .xl-imgBtn {
+	position: absolute;
+	right: 10px;
+	top: 8px;
+	text-align: center;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	background: transparent;
+}
+.xl-slider-tab .xl-imgBtn img,
+.xl-index-goodlist .xl-imgBtn img {
+	width: 32px !important;
+	vertical-align: top;
+	margin-left: -2px !important;
+}
+.xl-slider-tab .mui-media-object {
+	width: 55% !important;
+	max-width: 180px !important;
+}
+.xl-slider-tab .mui-table-view.mui-grid-view {
+	padding: 0;
+	background: #f6f6f6;
+}
+.xl-slider-tab .mui-table-view.mui-grid-view .mui-table-view-cell {
+	padding: 10px 15px;
+	margin: 0;
+	border: solid 1px #f6f6f6;
+	border-bottom: 0;
+	background: #fff;
+	margin: -1px 0 0 -1px
+}
+.xl-slider-tab .mui-table-view:after {
+	height: 0;
+}
+.xl-slider-tab .mui-table-view.mui-grid-view .mui-table-view-cell>a {
+	margin: -10px -15px;
+	padding: 10px 15px;
+}
+.xl-slider-tab .mui-progressbar {
+	margin: 5px 0;
+	height: 6px;
+	border-radius: 3px;
+}
+.xl-slider-tab .mui-progressbar span {
+	border-radius: 3px;
+}
+.mui-progressbar-ff5534 span {
+	background-color: #ff5534;
+}
+.xlim-box1 {
+	position: relative;
+	padding: 0 30px 0 15px;
+	background: #fff;
+}
+.xlim-box1 .xl-news-iconl {
+	position: absolute;
+	left: 11px;
+	top: 50%;
+	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	width: 24px;
+	height: 24px;
+	z-index: 2;
+}
+.xlim-box1 .xl-news-iconr {
+	position: absolute;
+	right: 1px;
+	top: 50%;
+	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	width: 26px;
+	height: 20px;
+	margin-top: 2px;
+	z-index: 2;
+	color: #aaa;
+	font-size: 17px;
+}
+.xl-news-list .mui-table-view-cell {
+	padding: 8px 0 5px;
+}
+.xl-news-list .mui-table-view-cell>a:not(.mui-btn) {
+	margin: -9px 0 -6px;
+}
+.xli-bar-tab .mui-tab-item {
+	color: #b7b7b7;
+}
+.xli-bar-tab .mui-tab-item.mui-active {
+	color: #ff5534;
+}
+.xli-bar-tab .mui-tab-item .mui-icon {
+	width: 30px;
+	height: 30px;
+}
+.xli-bar-tab .mui-tab-item .mui-tab-label {
+	line-height: 1;
+}
+.mui-icon .mui-badge {
+	padding: 0;
+	text-align: center;
+	width: 16px;
+	height: 16px;
+	line-height: 16px;
+	padding-top: 2px;
+}
+.xli-bar-tab .xl-center-btn {
+	position: relative;
+	overflow: visible;
+    display: table-cell;
+    width: 1%;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.xli-bar-tab .xl-center-btn img {
+	position: absolute;
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%);
+	bottom: 17px;
+	width: 45px;
+	height: 45px;
+}
+.xli-bar-tab .xl-center-btn .mui-icon {
+	width: 30px;
+	height: 30px;
+}
+.xli-bar-tab .xl-center-btn .mui-icon~.mui-tab-label {
+    font-size: 11px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1;
+    color: #b7b7b7;
+}
+.xli-bar-tab .xl-bg-home .mui-icon {
+	background: url(../image/nvtabbar/home.png) no-repeat;
+	background-size: 100% 100%;
+}
+.xli-bar-tab .xl-bg-home.mui-active .mui-icon {
+	background: url(../image/nvtabbar/home01.png) no-repeat;
+	background-size: 100% 100%;
+}
+.xli-bar-tab .xl-bg-inventory .mui-icon {
+	background: url(../image/nvtabbar/order.png) no-repeat;
+	background-size: 100% 100%;
+}
+.xli-bar-tab .xl-bg-inventory.mui-active .mui-icon {
+	background: url(../image/nvtabbar/order01.png) no-repeat;
+	background-size: 100% 100%;
+}
+.xli-bar-tab .xl-bg-game .mui-icon {
+	background: url(../image/nvtabbar/game.png) no-repeat;
+	background-size: 100% 100%;
+}
+.xli-bar-tab .xl-bg-game.mui-active .mui-icon {
+	background: url(../image/nvtabbar/game01.png) no-repeat;
+	background-size: 100% 100%;
+}
+.xli-bar-tab .xl-bg-lottery .mui-icon {
+	background: url(../image/nvtabbar/lottery.png) no-repeat;
+	background-size: 100% 100%;
+}
+.xli-bar-tab .xl-bg-lottery.mui-active .mui-icon {
+	background: url(../image/nvtabbar/lottery01.png) no-repeat;
+	background-size: 100% 100%;
+}
+.xli-bar-tab .xl-bg-my .mui-icon {
+	background: url(../image/nvtabbar/mine.png) no-repeat;
+	background-size: 100% 100%;
+}
+.xli-bar-tab .xl-bg-my.mui-active .mui-icon {
+	background: url(../image/nvtabbar/mine01.png) no-repeat;
+	background-size: 100% 100%;
+}
+
+.xl-product-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	font-size: 12px;
+}
+.xl-product-list .xl-product-cell {
+	padding: 10px 5px;
+	border: solid 1px #f6f6f6;
+	background: #fff;
+	margin: -1px 0 0 0;
+	border-left: 0;
+}
+.xl-product-list .xl-product-pic img {
+	display: block;
+	width: 100%;
+}
+.xl-product-list .xl-product-pic {
+	position: relative;
+	width: 50%;
+	margin: 0 auto;
+}
+.xl-product-list .xl-data-img {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.xl-product-purchase {
+	position: relative;
+	padding: 5px 70px 5px 5px;
+	background: #f6f6f6;
+	border-radius: 6px;
+}
+.xl-product-purchase .xl-product-btn {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 70px;
+	padding-top: 2px;
+	text-align: center;
+	color: #ff5534;
+}
+.xl-product-purchase .xl-product-btn.disabled {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+	opacity: .2 !important;
+}
+.xl-product-purchase .xl-product-btn:active {
+	opacity: .7;
+	transition: .1s;
+}
+.xl-product-purchase .xl-product-btn span {
+	display: block;
+	line-height: 1;
+}
+.xl-product-purchase .xl-product-btn img {
+	width: 38px;
+	vertical-align: top;
+	display: block;
+	margin: 0 auto;
+}
+.xl-product-list .xl-product-progressbar {
+	position: relative;
+	height: 6px;
+	margin: 5px 0;
+	border-radius: 6px;
+	background: #d8d8d8;
+}
+.xl-product-list .xl-product-progressbar span {
+	position: absolute;
+	left: 0;
+	top: 0;
+	border-radius: 6px;
+	width: 0;
+	height: 100%;
+	transition: width .5s;
+	background: #f5a623;
+}
+.xl-product-list .xl-product-p1 {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #333;
+	line-height: 1.4;
+    padding: 8px 0 5px 5px;
+}
+.xl-product-list .xl-product-p2 {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+	line-height: 1.4;
+    color: #888;
+}
+/*首页样式结束*/
+
+/*侧滑菜单样式开始*/
+.xl-off-canvas-left {
+	width: 80% !important;
+	background: linear-gradient(to bottom, rgba(250, 190, 60, 0.9) , rgba(240, 125, 80, 0.9)) !important;
+}
+.xl-offCanvas-wrap {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	top: 0;
+	bottom: 0;
+	color: #fff;
+	text-align: center;
+}
+.xlcm-box-wrap {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	overflow: hidden;
+}
+.xlcm_body {
+	position: absolute;
+	left: 0;
+	right: 80px;
+	top: 0;
+	bottom: 0;
+	padding: 15px;
+	z-index: 1000;
+	background: linear-gradient(to bottom, rgba(250, 190, 60, 0.9) , rgba(240, 125, 80, 0.9)) !important;
+}
+.xlcm_body .mui-table-view-cell {
+	background: transparent !important;
+}
+.xlcm_body .mui-table-view-cell.mui-active {
+	opacity: .8;
+}
+.xlcm_body * {
+	color: #fff !important;
+}
+.xl-offCanvas-wrap.xl-show {
+	left: 0;
+}
+.xl-offCanvas-wrap.xl-show .xlcm_body {
+	left: 0;
+}
+
+.xl-offCanvas-wrap h4 {
+	margin-bottom: 15px;
+	font-weight: normal;
+}
+.xl-input-group {
+	position: relative;
+	padding-right: 60px;
+}
+.xl-input-group input {
+	background: transparent;
+	border: solid 1px #fff;
+	padding: 6px 10px;
+	height: 31px;
+	text-align: center;
+	color: #fff;
+	font-size: 14px;
+}
+.xl-input-group input::-webkit-input-placeholder {
+	color: #fff;
+	font-family: "微软雅黑";
+}
+.xl-input-group .mui-btn {
+	position: absolute;
+	right: 0;
+	top: 0;
+	border: none;
+	color: #f5a623;
+}
+
+.xli-9grid .mui-grid-view.mui-grid-9 {
+	background: transparent;
+	border: none;
+}
+.xli-9grid .mui-table-view-cell {
+	border: none !important;
+}
+.xli-9grid .mui-media-body {
+	color: #fff !important;
+}
+.xli-9grid .mui-icon {
+	width: 60px;
+	height: 60px;
+}
+.xli-9grid .mui-icon img {
+	width: 100%;
+	height: 100%;
+	vertical-align: top;
+}
+.xli-popover {
+	position: absolute !important;
+	left: 0;
+	height: 100%;
+}
+.xli-search-options {
+	position: absolute;
+	top: 105px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding-bottom: 100px;
+}
+.xlso-title {
+	position: relative;
+	border-top: solid 1px #fff;
+	height: 20px;
+	margin-bottom: 10px;
+}
+.xlso-title span {
+	position: absolute;
+	left: 15px;
+	top: 0;
+	color: #fff;
+	font-size: 13px;
+	line-height: 20px;
+}
+.xlso-title img {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100px;
+}
+.xlso-btn-group {
+	margin-bottom: 10px;
+	text-align: center;
+}
+.xlso-btn-group button {
+	border: solid 1px #fff !important;
+	color: #fff !important;
+	font-size: 12px;
+	padding: 3px 6px;
+	margin-left: 4px;
+}
+.xlso-btn-group button:first-child {
+	margin-left: 0;
+}
+.xlso-list .mui-table-view {
+	background: transparent !important;
+}
+.xlso-list .mui-table-view-cell {
+	color: #fff;
+	border-radius: 0 !important;
+	background: transparent !important;
+	padding: 10px 15px 4px
+}
+.xlso-title2 {
+	margin: 0 -15px;
+	border-bottom: solid 1px #726554;
+	padding: 0 5px;
+	text-align: left;
+	font-size: 12px;
+}
+.xlso-list .mui-table-view-cell:after,
+.xlso-list .mui-table-view-cell:last-child:after {
+	background: #fff !important;
+	height: 1px !important;
+	-webkit-transform: scaleY(1) !important;
+	transform: scaleY(1) !important;
+	width: 100% !important;
+}
+.xlso-list .mui-table-view:before,
+.xlso-list .mui-table-view:after {
+	height: 0px !important;
+}
+.xlso-list-delete {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	width: 30px;
+	font-size: 14px;
+	color: #fff;
+}
+.xlso-list-delete img {
+	width: 100%;
+	vertical-align: top;
+}
+
+.xlcm-second {
+	background: linear-gradient(to bottom, #766755 , #4a4948) !important;
+}
+.xl-offCanvas-wrap .xlcm-second h4 {
+	margin-bottom: 0;
+}
+.xlcm-second .mui-grid-view.mui-grid-9 .mui-table-view-cell {
+	padding: 0;
+}
+.xlcm-second .mui-table-view.mui-grid-view .mui-table-view-cell .mui-media-body {
+	font-size: 12px;
+	margin-top: 6px;
+}
+.xlcm-second .xli-9grid .mui-icon {
+	width: 40px;
+	height: 40px;
+}
+.xlcm-second input[type=search] {
+	border: solid 1px #fff;
+	border-radius: 100px;
+	margin: 0;
+	font-size: 14px;
+	padding: 3px 5px 2px;
+	height: auto;
+	background: #b57c1e;
+}
+.xlcm-second input[type=search]::-webkit-input-placeholder {
+	color: #fff;
+}
+.xlcm-second .xli-search-options {
+	position: static;
+	margin: 0 -15px;
+	padding: 0;
+}
+.xlcm-second .mui-placeholder .mui-icon,
+.xlcm-second .mui-search:before {
+	font-size: 26px;
+}
+.xlcm-second .mui-placeholder .mui-icon {
+	margin-top: 4px;
+}
+.xlcm-second .xlso-title {
+	border: none;
+	position: relative;
+	height: 28px;
+	margin: 0 -15px;
+}
+.xlcm-second .xlso-title span {
+	background: #f5a623;
+	border-radius: 0 100px 100px 0;
+	left: 0;
+	padding: 4px 12px 3px 8px;
+}
+.xlcm-second .xlso-title:before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+	height: 1px;
+	background: #f5a623;
+}
+.xlcm-second .xlso-title-bg2 span,
+.xlcm-second .xlso-title-bg2:before {
+	background: #d77e00;
+}
+.xlcm-second .xlso-list-delete {
+	position:relative;
+	right: auto;
+	left: 50%;
+	bottom: auto;
+	margin-top: 15px;
+	margin-left: -15px;
+}
+.xlcm-second .xlso-list {
+	position:absolute;
+	top: 306px;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	overflow-y: auto;
+	padding-bottom: 15px;
+}
+.xls-search-box {
+	position: relative;
+	margin: 10px -15px;
+	padding: 10px 15px;
+	padding-right: 65px;
+	background: #f5a623;
+}
+.xls-search-box input {
+	text-align: center !important;
+	font-family: '微软雅黑';
+}
+.xls-search-box .mui-icon {
+	position: absolute;
+	right: 15px;
+	top: 5px;
+	font-size: 36px;
+	font-weight: bold;
+}
+.xlcm-second .xlso-list .mui-table-view-cell:after,
+.xlcm-second .xlso-list .mui-table-view-cell:last-child:after {
+	background: #726554 !important;
+}
+/*侧滑菜单样式结束*/
+
+/*彩民圈子样式开始*/
+.xl-puntersCircle.mui-row.mui-fullscreen>[class*="mui-col-"] {
+	height: 100%;
+}
+.xl-puntersCircle .mui-col-xs-3,
+.xl-puntersCircle .mui-control-content {
+	overflow-y: auto;
+	height: 100%;
+}
+.xl-puntersCircle .mui-segmented-control .mui-control-item {
+	line-height: 50px;
+	width: 100%;
+}
+.xl-puntersCircle .mui-segmented-control.mui-segmented-control-vertical .mui-control-item.mui-active {
+	background-color: #ff5534;
+	color: #fff;
+}
+.mui-slider-indicator.mui-segmented-control {
+	background: #fff;
+}
+.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+	color: #ff5534;
+	border: 0;
+}
+.mui-segmented-control.mui-segmented-control-inverted~.mui-slider-progress-bar {
+	background: #ff5534;
+	margin-top: -2px;
+}
+.xl-puntersCircle .mui-slider {
+	height: 100%;
+}
+.xl-puntersCircle.mui-fullscreen .mui-segmented-control~.mui-slider-group {
+	top: 50px !important;
+}
+.xl-table-view {
+    position: relative;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+    background-color: #fff;
+}
+.xl-table-cell {
+	position: relative;
+    overflow: hidden;
+    padding: 11px 15px;
+    border-bottom: solid 1px #ccc;
+}
+.xl-puntersCircle .xl-table-cell {
+    padding: 10px 5px;
+    border-bottom: solid 3px #eee;
+}
+.xlpc-p1 {
+	line-height: 30px;
+	position: relative;
+	padding: 0 90px 0 35px;
+}
+.xlpc-p1 .xlpc-user {
+	font-weight: bold;
+}
+.xlpc-p1 > img {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 30px !important;
+	height: 30px !important;
+	vertical-align: top;
+	float: left;
+	border-radius: 50%;
+}
+.xlpc-p1 > span {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+.xlpc-p2 {
+	line-height: 1.4;
+	padding: 10px 0;
+	margin-bottom: 10px;
+}
+.xlpc-p3 {
+	position: absolute;
+	right: 0;
+	bottom: 5px;
+	line-height: 20px;
+}
+.xlpc-p3 a {
+	color: #333;
+	margin-left: 5px;
+}
+.xlpc-p3 a .mui-icon {
+	color: #ff5534;
+	font-size: 20px;
+}
+.xlpc-p3 .mui-icon img {
+	vertical-align: text-bottom !important;
+	width: 18px !important;
+	height: 18px !important;
+}
+.xlpc-p3 a:first-child {
+	margin-left: 0;
+}
+
+/*彩民圈子样式结束*/
+
+/*清单样式开始*/
+.xlcl-container {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 49px;
+}
+.mui-bar-nav~.xlcl-container {
+	top: 44px;
+}
+.xl-tableList {
+	font-size: 12px;
+	background: #f6f6f6;
+	margin-bottom: 50px;
+}
+.xl-tableList .mui-table-view-cell {
+	background:#fff;
+}
+.xl-tableList .mui-table-view-cell .mui-table > a {
+	display: block;
+	width: 100%;
+}
+.xl-tableList.mui-table-view .mui-media-object {
+	width: 50px !important;
+	margin-top: 14px !important;
+	max-width: 50px !important;
+	height: 50px !important;
+}
+.product-demand{
+	color: #9f9f9f;
+	margin-top: 10px;
+}
+.product-demand-num{
+	color: #9f9f9f;
+}
+.product-explain {
+	color: #333;
+}
+.mui-btn-custom {
+	background: #ff5534 !important;
+	padding: 0 20px !important;
+	font-size: 18px;
+}
+.product-demand-num span {
+	display: inline-block;
+	vertical-align: middle;
+}
+.product-demand-num i {
+	font-style: normal;
+	border: solid #ff5534 1px;
+	line-height: 1;
+	padding: 4px 10px;
+	border-radius: 3px;
+	color: #ff5534;
+	vertical-align: middle;
+}
+.product-demand-num i.active {
+	background: #fd8754;
+	border: solid #fd8754 1px;
+	color: #fff;
+}
+.product-demand-num .mui-numbox {
+	height: 26px;
+	padding: 0 30px;
+	margin: 0 5px;
+	width: 50%;
+	max-width: 140px;
+}
+.product-demand-num .mui-numbox [class*=btn-numbox] {
+	width: 30px;
+	color: #ff5534;
+}
+.product-demand-num .mui-numbox [class*=btn-numbox][disabled] .xlgl-minus-span,
+.product-demand-num .mui-numbox [class*=btn-numbox].disabled .xlgl-minus-span {
+	background: url(../image/order/Jian.png) center center no-repeat;
+	background-size: 15px 15px;
+}
+.product-demand-num .mui-numbox [class*=btn-numbox][disabled] .xlgl-plus-span,
+.product-demand-num .mui-numbox [class*=btn-numbox].disabled .xlgl-plus-span {
+	background: url(../image/order/Jia.png) center center no-repeat;
+	background-size: 15px 15px;
+}
+.product-demand-num .mui-numbox [class*=btn-numbox] .xlgl-minus-span {
+	display: block;
+	width: 100%;
+	height: 100%;
+	margin-top: -1px;
+	background: url(../image/order/Jian01.png) center center no-repeat;
+	background-size: 15px 15px;
+}
+.product-demand-num .mui-numbox [class*=btn-numbox] .xlgl-plus-span {
+	display: block;
+	width: 100%;
+	height: 100%;
+	background: url(../image/order/Jia01.png) center center no-repeat;
+	background-size: 15px 15px;
+}
+.product-demand-num .mui-numbox .mui-input-numbox {
+	color: #000;
+}
+.xl-footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	background: #fff;
+	padding: 5px;
+	z-index: 10;
+	border-top: solid 1px #ccc;
+}
+.xl-footer .xl-footerEx {
+	float: left;
+	line-height: 1.4;
+	padding-right: 120px;
+}
+.xl-footer .xl-btn-ff5534 {
+	background: #ff5534;
+	float: right;
+	color: #fff;
+	border: none;
+	padding: 6px 30px;
+	font-size: 20px;
+	right: 5px;
+}
+/*清单样式结束*/
+
+
+/*结算开始*/
+.xl-set-group {
+	padding: 15px;
+	background: #fff;
+	margin-bottom: 8px;
+}
+form .xl-input-group {
+	padding-right: 0;
+}
+.xl-set-group .xl-set-p1,
+.xl-input-group {
+	padding-bottom: 8px;
+}
+.xl-set-group .xl-set-p1:last-child,
+.xl-input-group:last-child {
+	padding-bottom: 0;
+}
+.xl-input-group .mui-table-view-cell:after {
+	left: 0;
+}
+.xl-input-group .mui-table-view-cell {
+	padding: 5px 15px;
+}
+.xl-media-body {
+	line-height: 40px;
+}
+.xl-media-body span {
+	font-size: 12px;
+}
+.xl-media-body img {
+	position: absolute;
+	left: 15px;
+	top: 11px;
+	width: 32px;
+	height: 32px;
+	vertical-align: top;
+}
+.xl-media-body input[type=radio] {
+	top: 6px !important;
+	right: 35px !important;
+}
+.xl-media-body .xl-media-text {
+	margin-left: 40px;
+	padding-left: 5px;
+	padding-top: 2px;
+}
+.xl-media-body .mui-checkbox input[type=checkbox]:checked:before, .mui-radio input[type=radio]:checked:before {
+	color: #08b906;
+}
+.xl-btn-group {
+	padding: 0 30px;
+	margin-top: 10px;
+}
+.xl-btn-ff5534 {
+	background: #ff5534 !important;
+	color: #fff !important;
+	border: none !important;
+}
+.xl-btn-ff5534:enabled:active {
+	opacity: 0.8;
+}
+.xl-btn-fd8754 {
+	background: #fd8754 !important;
+	color: #fff !important;
+	border: none !important;
+}
+.xl-btn-fd8754:enabled:active {
+	opacity: 0.8;
+}
+
+/*结算结束*/
+
+
+/*彩票样式开始*/
+.xllt-cell-body {
+	position: relative;
+	padding-left: 40px;
+	line-height: 30px;
+}
+.xllt-cell-body img {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 30px;
+	height: 30px;
+}
+.mui-bar-nav~.xllt-container {
+	padding-top: 44px;
+}
+.xllt-container .mui-navigate-right:after,
+.xllt-container .mui-push-right:after {
+	font-size: 26px;
+}
+.xl-h01 {
+	height: 1px;
+}
+.xl-h02 {
+	height: 2px;
+}
+.xl-h04 {
+	height: 4px;
+}
+.xl-h05 {
+	height: 5px;
+}
+.xl-h06 {
+	height: 6px;
+}
+.xl-h08 {
+	height: 8px;
+}
+.xl-h10 {
+	height: 10px;
+}
+/*彩票样式结束*/
+
+/*登录界面样式开始*/
+.xlLogin-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	min-height: 100%;
+	padding-top: 70px;
+	background: url(../image/login/dengluBG.png) no-repeat;
+	background-size: 100% 240px;
+}
+.xlLogin-container .mui-bar-nav.mui-bar .mui-icon {
+	margin: 0;
+}
+.xlLogin-container .xl-head-gradient {
+	background: none !important;
+	box-shadow: none !important;
+}
+.xlli-portrait {
+	text-align: center;
+	margin-bottom: 20px;
+}
+.xlli-portrait img {
+	width: 80px;
+	height: 80px;
+}
+.mui-popup-text .xlli-form {
+	padding: 0;
+	margin: 0;
+}
+.xlli-form {
+	padding: 0 30px;
+	margin-bottom: 20px;
+}
+.xlli-form .mui-table-view {
+	border-radius: 10px;
+	border: 0 !important;
+	box-shadow: 0 0 4px 2px rgba(0, 0, 0, .1);
+}
+.xlli-form .mui-table-view:after,
+.xlli-form .mui-table-view:before {
+	height: 0 !important;
+}
+.xlli-form .mui-table-view-cell:after {
+	right: 10px;
+	left: 10px;
+}
+.xlli-form .mui-table-view-cell {
+	padding: 5px 8px;
+	background: none !important;
+}
+.xlli-form .mui-input-row label {
+	position: absolute;
+	left: 0;
+	top: 0;
+	line-height: 1;
+	width: 50px;
+	height: 40px;
+	padding: 0;
+}
+.xlli-form .mui-input-row label img {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	width: 20px;
+	vertical-align: top;
+}
+.xlli-form .mui-input-row label~input {
+	padding-left: 50px;
+	width: 100%;
+}
+.xlri-checkbox {
+	padding-left: 15px;
+}
+.xlri-checkbox .mui-checkbox {
+	display: inline-block;
+	padding-left: 43px;
+}
+.xlri-checkbox .mui-checkbox label {
+	display: inline-block;
+	width: auto;
+	padding-right: 0 !important;
+	padding-left: 0 !important;
+}
+.xlLogin-container .xl-btn-group .mui-btn {
+	padding: 10px;
+	margin-bottom: 10px;
+}
+.xl-third-party {
+	position: relative;
+	padding-top: 22px;
+}
+.xl-third-party.noFixed {
+	position: relative;
+	margin-top: 40px;
+}
+.xl-third-party .xltp-title {
+	position: absolute;
+	left: 50%;
+	top: 0;
+	transform: translateX(-50%);
+	-webkit-transform: translateX(-50%);
+	padding: 0 10px;
+}
+.xl-third-party .xltp-title:before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	width: 80px;
+	right: 100%;
+	height: 1px;
+	background: #888;
+}
+.xl-third-party .xltp-title:after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 100%;
+	width: 80px;
+	height: 1px;
+	background: #888;
+}
+.xltp-btn-icon {
+	padding: 0 15px;
+}
+.xltp-btn-icon  .mui-grid-view.mui-grid-9 {
+	background: none;
+	border: 0;
+}
+.xltp-btn-icon  .mui-grid-view.mui-grid-9 .mui-table-view-cell {
+	border: 0;
+	padding: 0 15px;
+}
+.xltp-btn-icon .mui-grid-view.mui-grid-9 .mui-table-view-cell img {
+	width: 40px;
+	height: 40px;
+}
+/*登录界面样式结束*/
+
+/*商品详情样式开始*/
+.xl-btn-img > img {
+	width: 24px;
+	height: 24px;
+	vertical-align: top;
+}
+.xl-btn-img .mui-badge {
+	top: 0;
+	left: auto;
+	right: 0;
+	border: 0;
+}
+.xldd-box {
+	position: relative;
+	margin-top: 1px;
+	background: #fff;
+	padding: 10px 15px 4px;
+	font-size: 14px;
+}
+.xldd-box.xldd-box1 {
+	display: none;
+}
+.xldd-box1 .xl-panel {
+	border-radius: 6px;
+	background: #fcf2ee;
+}
+.xldd-box1 .mui-table-view {
+	background: transparent;
+}
+.xldd-box1 .mui-table-view-cell {
+	background: url(../images/huojiangzheBQ.png) 100% 6px no-repeat;
+	background-size: 70px 70px;
+}
+.xldd-box1 .xl-panel-head {
+	padding: 6px;
+	background: #f33553;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	color: #fff;
+	line-height: 26px;
+}
+.xldd-box1 .xl-panel1 {
+	position: relative;
+	background: #e93450;
+	padding: 10px 15px;
+	border-radius: 10px;
+	padding-right: 100px;
+}
+.xldd-box1 .xlgd-p1 {
+	color: #fff;
+	line-height: 26px;
+}
+.xldd-box1 .xlgd-p1 span {
+	float: left;
+}
+.xldd-box1 .xlgd-p1 > span:last-child {
+	font-size: 20px;
+}
+.xldd-box1 .xlgd-btn1 {
+	right: 10px;
+	color: #fff;
+	border: solid 2px #fff;
+	padding: 3px 10px;
+	line-height: 1;
+	font-size: 14px;
+	border-radius: 20px;
+}
+.xldd-box1 .xlgd-line1 {
+	position: absolute;
+	right: 100px;
+	width: 2px;
+	background: #fff;
+	top: 10px;
+	bottom: 10px;
+}
+.xl-panel-head .mui-btn-outlined {
+	border: solid 1px #fff;
+	color: #fff;
+	border-radius: 15px;
+	padding: 3px 10px;
+	font-size: 13px;
+}
+.xldd-bd1 {
+	position: relative;
+}
+.xldd-bd1 > img {
+	position: absolute;
+	right: 0;
+	top: -10px;
+	width: 40px;
+}
+.xldd-bd1 > span {
+	position: absolute;
+	left: 0;
+	top: 0;
+	padding: 2px 4px;
+	color: #fff;
+	background: #48c913;
+	vertical-align: top;
+	font-size: 12px;
+	border-radius: 3px;
+}
+.xldd-bd1 .xldd-bp1 {
+	padding-right: 50px;
+	padding-left: 50px;
+}
+.xldd-bd3 {
+	color: #999;
+	font-size: 12px;
+}
+p {
+	margin-bottom: 5px;
+}
+.xl-media-body .mui-icon-forward {
+	position: absolute;
+	right: 20px;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.xldd-footer .xldd-fd1 {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	padding: 10px 0;
+	z-index: 10;
+	background: #fff;
+	border-top: solid 1px #f0f0f0;
+}
+.xldd-footer .mui-col-xs-6 {
+	padding: 0 10px;
+}
+.xldd-footer .mui-btn-block {
+	margin-bottom: 0;
+	font-size: 15px;
+	padding: 12px 0;
+}
+.xldd-box2 {
+	margin-top: 0;
+	font-size: 15px;
+}
+.xldd-box3 {
+	font-size: 12px;
+}
+.xldd-box3 .mui-table-view .mui-media-object {
+	border-radius: 50%;
+	width: 42px;
+	height: 42px;
+}
+.xldd-box3 .mui-media-body {
+	padding-right: 80px;
+}
+.xl-list-right {
+	position: absolute;
+	right: 10px;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+}
+.xldd-container {
+	background: #f6f6f6;
+}
+.mui-slider-indicator {
+	bottom: 2px;
+	padding-right: 15px;
+	text-align: right;
+}
+.mui-slider-indicator .mui-indicator {
+	margin: 1px 4px;
+	background: none;
+    -webkit-box-shadow: 0 0 0 2px rgba(240,240,240,1);
+    box-shadow: 0 0 0 2px rgba(240,240,240,1);
+}
+.mui-slider-indicator .mui-active.mui-indicator {
+	background: rgba(240,240,240,1);
+}
+.xldd-container .xl-input-group {
+	padding-right: 0;
+	padding-bottom: 2px;
+}
+.xldd-container .xl-input-group .mui-table-view:before,
+.xldd-container .xl-input-group .mui-table-view:after {
+	height:0;
+}
+.xlgd-modal {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: #fff;
+	z-index: 999;
+	text-align: center;
+	padding: 15px;
+}
+.xlgd-close-modal {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	font-size: 12px;
+}
+.xlgd-close-modal .mui-icon {
+	font-size: 30px;
+}
+.xlgd-mp1 {
+	font-size: 14px;
+}
+.xlgd-mp2 {
+	padding-top: 12px;
+}
+.xlgd-mp2 .mui-numbox,
+.xlgd-mp2 .mui-numbox-after {
+	height: 30px;
+	width: 150px;
+}
+.xlgd-mp3 {
+	padding: 12px 2px 6px;
+	white-space: nowrap;
+	overflow-x: auto;
+}
+.xlgd-mp3 .mui-scroll {
+	height: auto !important;
+}
+.xlgd-mp5 {
+	padding-top: 12px;
+}
+.xlgd-mp5 .mui-btn {
+	padding: 6px 0;
+	background: #ff5534;
+	color: #fff;
+	border: none;
+}
+/*商品详情样式结束*/
+
+
+
+/*注册样式开始*/
+.xlli-verify {
+	padding-right: 110px !important;
+}
+.xlli-verify > span {
+	position: absolute;
+	top: 50%;
+	right: 10px;
+	color: #4a90e2;
+	padding: 3px 6px;
+	-webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.xlli-checkbox {
+	font-size: 12px;
+}
+.xlli-checkbox input[type=checkbox]:before {
+	font-size: 24px;
+}
+.xlli-checkbox input[type=checkbox]:checked:before {
+	color: #ff5534;
+	font-size: 24px;
+}
+.xlli-checkbox.mui-left label {
+	padding-left: 50px;
+}
+/*注册样式结束*/
+
+/*我的奖品样式开始*/
+.mui-bar-nav~.xlmp-container {
+	position: absolute;
+	top: 44px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+.xlmp-container .mui-table-view .mui-media-body {
+	padding-right: 70px;
+}
+.xlmp-cell-time {
+	position: absolute;
+	right: 0;
+	top: 50%;
+	font-size: 12px;
+	width: 75px;
+	text-align: center;
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+.xlmp-cell-time img {
+	width: 40px;
+	vertical-align: top;
+}
+
+/*我的奖品样式结束*/
+
+
+/*个人信息样式开始*/
+.mui-navigate-right:after,
+.mui-push-right:after {
+	font-size: 18px;
+}
+.xlpi-list-r {
+	right: 40px;
+	color: #888;
+}
+.xlpi-list-r img {
+	vertical-align: middle;
+}
+.xlpi-portrait img {
+	border-radius: 50%;
+	width: 36px;
+	height: 36px;
+	border: solid 2px #fdce53;
+}
+.mui-bar-nav~.xlpi-container {
+	padding-top: 44px;
+}
+.xlpi-container .mui-table-view-cell {
+	line-height: 36px;
+}
+.xlpi-list-r.xl-not-right,
+.xlpi-radio-group {
+	right: 15px;
+}
+.xlpi-radio-group .mui-radio.mui-left label {
+	padding: 11px 5px 11px 30px;
+}
+.xlpi-radio-group input[type=radio] {
+	left: 0 !important;
+}
+.mui-dtpicker-header button:last-child {
+	background: #ff5534;
+	border-color: #ff5534;
+}
+/*个人信息样式结束*/
+
+
+/*设置样式开始*/
+.xlsut-btn {
+	padding: 30px 15px 0;
+}
+.xlsut-btn .mui-btn.disabled {
+	background: #9a9a9a !important;
+	color: #eee !important;
+}
+/*设置样式结束*/
+
+/*系统通知样式开始*/
+.xlsm-list-img {
+	padding-left: 60px !important;
+}
+.xlsm-list-img img {
+	left: 15px;
+	width: 36px;
+	height: 36px;
+}
+/*系统通知样式结束*/
+
+
+
+/*我的信息样式开始*/
+.xlmi-fixed {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 10;
+	border-bottom: solid 1px #f6f6f6;
+}
+.xlmi-box1 {
+	position: relative;
+	text-align: center;
+	overflow: hidden;
+}
+.xlmi-box1 .xlmi-bg-img {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+}
+.xlmi-box1 .xlmi-bg-imgr {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 70px;
+	height: 100%;
+}
+.xlmi-box1 .xlmi-box1-body {
+	position: relative;
+	z-index: 2;
+}
+.xlmi-b1p1 {
+	padding: 25px 15px 3px;
+}
+.xlmi-b1p1 img {
+	vertical-align: top;
+	width: 70px;
+	height: 70px;
+	border-radius: 50%;
+	border: solid 2px #fdce53;
+}
+.xlmi-lv {
+	background: #ff5534;
+	padding: 0 10px;
+	color: #fff;
+	border-radius: 5px;
+}
+.xlmi-b1p3 {
+	color: #fff;
+	margin: 0 76px;
+	line-height: 16px;
+	font-size: 14px;
+}
+.xlmi-b1p3 span {
+	font-size: 12px;
+	display: block;
+}
+.xlmi-b1p4 {
+	margin: 2px 0 10px 0;
+}
+.xlmi-b1p4 img {
+	width: 40px;
+	vertical-align: top;
+}
+.xlmi-b1p4 div {
+	position: relative;
+	top: 5px;
+}
+.xlmi-b1p4 span {
+	display: inline-block;
+	padding: 2px 8px;
+	border: solid 2px #fdcd51;
+	background: #8b572a;
+	border-radius: 100px;
+}
+.xlmi-b1p4 div img {
+	height: 36px;
+}
+.xlmi-b1p4 span img {
+	width: 55px;
+	margin-top: 4px;
+}
+.xlmi-box1 .xlmi-btn {
+	position: absolute;
+	right: 0;
+	width: 52px;
+	height: 52px;
+	padding: 10px;
+}
+.xlmi-box1 .xlmi-btn img {
+	width: 100%;
+	height: 100%;
+}
+.xlmi-box1 .xlmi-btn-set {
+	top: 45px;
+}
+.xlmi-box1 .xlmi-btn-message {
+	bottom: 45px;
+}
+.xlmi-box1 .xlmi-btn-message.xlmi-active:before {
+	content: '';
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background: red;
+	border-radius: 50%;
+	width: 10px;
+	height: 10px;
+}
+.xlmi-box2 {
+	position: relative;
+	background: #fff;
+	padding: 10px 15px;
+	color: #ff5534;
+	line-height: 26px;
+}
+.xlmi-box2 .xlmi-b2s1,
+.xlmi-box2 .xlmi-b2s2 {
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	padding: 0 15px 0 5px;
+}
+.xlmi-box2 .xlmi-b2s2 {
+	right: 90px;
+	padding: 0 5px;
+}
+.xlmi-box2 .xlmi-b2s2 > img {
+	width: 12px;
+	margin-left: 5px;
+	margin-top: -3px;
+}
+.xlmi-box2 > img {
+	left: 15px;
+	width: 26px;
+	height: 26px;
+}
+.xlmi-box2 .xlmi-b2p1 {
+	position: relative;
+	margin-right: 73px;
+	padding: 0 65px 0 35px;
+	border-right: solid 1px #ff5534;
+	z-index: 5;
+}
+.xlmi-box2 .xlmi-b2p1 img {
+	width: 10px;
+	margin-top: 8px;
+	margin-right: 5px;
+}
+.xlmi-box3 .mui-table-view-cell {
+	background: #fff !important;
+	border: 0 !important;
+	padding: 0 15px !important;
+}
+.xlmi-box3 .mui-media-body {
+	margin: 0 !important;
+}
+.xlmi-box3 .mui-icon {
+	width: 40px;
+	height: 40px;
+	margin-bottom: 5px;
+}
+.xlmi-box3 .mui-icon img {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+}
+.xlmi-box4 .xlsm-list-img {
+	padding-left: 50px !important;
+	line-height: 26px !important;
+}
+.xlmi-box4 .xlsm-list-img img {
+	width: 26px;
+	height: 26px;
+	border-radius: 50%;
+}
+/*我的信息样式结束*/
+
+/*我的彩票样式开始*/
+.mui-bar-nav~.xlml-container {
+	padding-top: 44px;
+}
+.xlml-container .mui-slider {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+}
+.xlml-container .mui-slider .mui-slider-group {
+	position: absolute;
+	left: 0;
+	top: 38px;
+	bottom: 0;
+	right: 0;
+}
+.xlml-p1 {
+	margin-bottom: 6px;
+	line-height: 40px;
+}
+.xlml-p1 img {
+	width: 40px !important;
+	height: 40px !important;
+	border-radius: 50%;
+}
+/*我的彩票样式结束*/
+
+/*号码走势样式开始*/
+.xlnm-container {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	font-size: 14px;
+}
+.xlnm-btn-down {
+	position: relative !important;
+	font-size: 14px !important;
+	border: solid 1px #fff;
+	border-radius: 6px;
+	line-height: 1;
+	top: -3px;
+	display: inline-block;
+	padding: 8px 20px 4px 0 !important;
+	width: 100px;
+	text-align: center;
+	font-weight: bold;
+}
+.xlnm-btn-down:before {
+	font-size: 24px;
+	position: absolute;
+	right: 6px;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+.xlnm-box1 {
+	position: relative;
+	height: 100%;
+	height: 100%;
+	background: #fff;
+}
+.xlnm-box1 .mui-segmented-control {
+	border-radius: 0;
+	border: 0;
+}
+.xlnm-box1 .mui-segmented-control .mui-control-item {
+	border: 0;
+	color: #444;
+}
+.xlnm-box1 .mui-segmented-control .mui-control-item.mui-active {
+	color: #ff5534;
+	border-bottom: solid 2px #ff5534;
+	background: none;
+}
+.xl-tab-group {
+	position: absolute;
+	left: 0;
+	top: 40px;
+	bottom: 0;
+	right: 0;
+}
+.xl-tab-group .mui-control-content {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+.xl-tab-group .xlnm-table-box {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	overflow: auto;
+}
+.xlnm-table-tbox {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	height: 34px;
+	overflow-x: auto;
+	overflow-y: hidden;
+	overflow: hidden;
+	z-index: 10;
+	background: #fff;
+}
+.xlnm-table-lbox {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 50px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	overflow: hidden;
+	z-index: 10;
+	background: #fff;
+}
+.xlnm-table-cross {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 50px;
+	height: 34px;
+	z-index: 10;
+	background: #fff7e9;
+}
+::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+}
+.xlnm-row {
+	float: left;
+	width: auto;
+	white-space: nowrap;
+	min-width: 100%;
+}
+.xlnm-row:nth-child(2n+1) {
+	background: #fff7e9;
+}
+.xlnm-cell {
+	display: inline-block;
+	width: 26px;
+	height: 100%;
+	text-align: center;
+	line-height: 26px;
+	margin: 4px;
+	color: #555;
+	position: relative;
+}
+.xlnm-cell.xlnm-bg-ff5534 {
+	background: #ff5534;
+	border-radius: 50%;
+	color: #fff;
+}
+.xlnm-cell:before {
+	content: '';
+	position: absolute;
+	width: 1px;
+	background: #ccc;
+	left: -6px;
+	top: -4px;
+	bottom: -4px;
+}
+.xlnm-cell:first-child {
+	width: 40px;
+}
+.xlnm-head-lh {
+	background: #ffe8c2;
+}
+.xlnm-head-lh .mui-col-xs-3 {
+	height: 42px;
+	text-align: center;
+	line-height: 42px;
+	border-left: solid 1px #aaa;
+}
+.xlnm-head-lh .xlnm-lh-order {
+	padding-right: 21px;
+}
+.xlnm-head-lh .xlnm-lh-span {
+	position: absolute;
+	right: 3px;
+	width: 18px;
+	height: 10px;
+}
+.xlnm-head-lh .xlnm-lh-span1 {
+	top: 8px;
+	background: url(../image/lottery/background_s.png) no-repeat;
+	background-size: 100% 100%;
+}
+.xlnm-head-lh .xlnm-lh-span2 {
+	bottom: 8px;
+	background: url(../image/lottery/background_x.png) no-repeat;
+	background-size: 100% 100%;
+}
+.xlnm-head-lh .xlnm-lh-span1.mui-active {
+	background: url(../image/lottery/checkmark_s.png) no-repeat;
+	background-size: 100% 100%;
+}
+.xlnm-head-lh .xlnm-lh-span2.mui-active {
+	background: url(../image/lottery/checkmark_x.png) no-repeat;
+	background-size: 100% 100%;
+}
+.xlnm-table-lh {
+	position: absolute;
+	top: 42px;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	overflow-y: scroll;
+}
+.xlnm-table-lh::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+}
+.xlnm-row-lh .mui-col-xs-3 {
+	border-left: solid 1px #aaa;
+}
+.xlnm-head-lh .mui-col-xs-3:first-child,
+.xlnm-row-lh .mui-col-xs-3:first-child {
+	border-width: 0;
+}
+.xlnm-row-lh:nth-child(2n){
+	background: #fff7e9;
+}
+.xlnm-row-lh .mui-col-xs-3 span {
+	height: 30px;
+	width: 30px;
+	display: block;
+	margin: 5px auto;
+	text-align: center;
+	line-height: 30px;
+}
+.xlnm-cell-bg .mui-col-xs-3:first-child span {
+	border-radius: 50%;
+	color: #fff;
+	background: #ff5534;
+}
+.xlnm-width-cell .mui-col-xs-3 span {
+	width: auto;
+}
+.xlnm-table-trend {
+	background: #fff;
+	min-width: 100%;
+}
+.xlnm-table-trend tr:nth-child(2n+1) {
+	background: #fff7e9;
+}
+.xlnm-table-trend td {
+	text-align: center;
+	vertical-align: middle;
+	border-right: solid 1px #ccc;
+}
+.xlnm-table-trend td span {
+	display: inline-block;
+	vertical-align: top;
+	width: 26px;
+	height: 26px;
+	text-align: center;
+	line-height: 26px;
+	margin: 3px;
+	border-radius: 50%;
+}
+.xlnm-table-trend td:first-child {
+	border-right: 0;
+}
+.xlnm-table-trend td:first-child span {
+	width: 70px;
+}
+.xlnm-tbox,
+.xlnm-lbox,
+.xlnm-cbox {
+	position: fixed;
+	left: 0;
+	top: 110px;
+	overflow: hidden;
+}
+.xlnm-tbox {
+	right: 0;
+	border-bottom: solid 1px #ccc;
+}
+.xlnm-lbox {
+	bottom: 0;
+}
+.xlnm-cbox {
+	z-index: 10;
+	background: #fff7e9;
+	border-bottom: solid 1px #ccc;
+}
+.xlnm-lbox,
+.xlnm-cbox {
+	border-right: solid 1px #ccc;
+}
+.xlnm-table-trend td {
+	border: 0;
+	border-right: solid 1px #ccc;
+}
+.xlnm-table-trend td:first-child {
+	border: 0;
+}
+.xlnm-table-trend td:last-child {
+	border: 0;
+}
+.xlnm-table-trend td span.codeNotShow {
+	color: #888;
+}
+.xlnm-table-trend td span.codeShow {
+	background: #ff5534;
+	color: #fff;
+}
+.xlnm-table-trend td span.codeBlueShow {
+	background: #4a90e2;
+	color: #fff;
+}
+/*号码走势样式结束*/
+
+/*晒单分享样式开始*/
+.xlbs-form {
+	background: #fff;
+}
+.xlbs-textarea {
+	padding: 15px;
+	border-top: solid 1px #999;
+}
+.xlbs-textarea textarea {
+	border: solid 1px #999;
+	background: #f6f6f6;
+	margin-top: 5px;
+	height: 120px;
+}
+.xlbs-btn {
+	padding: 15px;
+}
+.xl-file {
+	text-align: center;
+}
+.xl-file > span {
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	margin-left: 10px;
+}
+.xl-file > span:first-child {
+	margin-left: 0;
+}
+.xl-file > span > img {
+	vertical-align: top;
+	width: 100%;
+	height: 100%;
+}
+.xlbs-upload-on {
+	position: relative;
+}
+.xlbs-delete-img {
+	position:absolute;
+	right: -10px;
+	top: -10px;
+	width: 30px !important;
+	height: 30px !important;
+	display: none;
+}
+.uploadImgOn .xlbs-delete-img {
+	display: block;
+}
+/*晒单分享样式结束*/
+
+
+/*游戏页面样式开始*/
+.xlg-boxc1 li {
+	position: relative;
+	padding: 10px;
+	font-size: 12px;
+	background: #fff;
+	border-bottom: solid 1px #f6f6f6;
+	min-height: 71px;
+}
+.xlg-boxc1 li:nth-child(2n){
+	border-left: solid 1px #f6f6f6;
+}
+.xlg-imgc1 img {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	vertical-align: top;
+}
+.xlg-textc1 {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	line-height: 25px;
+	padding: 10px 10px 0 70px;
+}
+.xlg-textc1 .xlg-pc1 {
+	font-size: 16px;
+}
+.xlg-textc1 .xlg-color-c1 {
+	color: #ff5534;
+}
+.xlg-textc1 .xlg-color-c2 {
+	color: #bd10e0;
+}
+/*游戏页面样式结束*/
+
+/*修改密码样式开始*/
+.xlcp-container .xlli-form {
+	padding: 15px 0;
+}
+.xlcp-container .xlli-form .mui-table-view {
+	border-radius: 0;
+}
+/*修改密码样式结束*/
+
+/*往期分享样式开始*/
+.xlis-panel {
+	font-size: 12px;
+	background: #fcf2ee;
+	margin-top: 8px;
+}
+.xlis-panel:first-child {
+	margin-top: 0;
+}
+.xlis-panel .xlis-header {
+	padding: 6px 15px;
+	background: #f33553;
+	color: #fff;
+}
+.xlis-panel .mui-table-view {
+	background: none;
+}
+/*往期分享样式结束*/
+
+
+/*晒单详情样式开始*/
+.xlsd-container {
+	background: #fff;
+}
+.xlsd-box1 {
+	line-height: 30px;
+	padding: 10px 15px;
+	border-bottom: solid 1px #ccc;
+}
+.xlsd-box1 img {
+	width: 30px;
+	height: 30px;
+	float: left;
+	margin-right: 8px;
+	border-radius: 50%;
+}
+.xlsd-box1 > span {
+	font-size: 12px;
+	color: #999;
+}
+.xlsd-box2 {
+	padding: 10px 15px;
+	margin-bottom: 150px;
+}
+.xlsd-box2 .xlsd-p1 {
+	font-weight: bold;
+	margin-bottom: 10px;
+	font-size: 14px;
+}
+.xlsd-box2 .xlsd-p2 {
+	font-size: 12px;
+	text-align: justify;
+}
+.xlsd-box2 .xlsd-p3 img {
+	width: 100%;
+}
+.xlsd-box3 {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 10px 15px;
+	background: #ccc;
+}
+/*晒单详情样式结束*/
+
+/*我的地址样式开始*/
+.xlma-box1 .mui-slider-right .mui-btn {
+	padding: 0 15px !important;
+}
+.xlma-address-body {
+	position: relative;
+}
+.xlma-box1 .mui-table-view-cell {
+	padding: 10px;
+}
+.xlma-address-body .xladdr-default-span {
+	font-weight: bold !important;
+	display: none;
+	float: left;
+}
+.xlma-box1 .mui-table-view-cell.active .xlma-address-body {
+	border-left: solid 6px #ff5534;
+	padding-left: 8px;
+}
+.xlma-box1 .mui-table-view-cell.default .xladdr-default-span {
+	display: block;
+}
+.xlma-address-body .xlma-p2 {
+	padding-right: 50px;
+	padding-top: 6px;
+	font-size: 14px;
+	color: #666;
+	word-break: break-all;
+	text-align: justify;
+}
+.xlma-address-body .xlma-radio {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	width: 26px;
+	height: 26px;
+	background: url(../image/common/check_frame.png) no-repeat;
+	background-size: 100% 100%;
+}
+.xlma-address-body .xlma-radio.xlma-radio-checked {
+	background: url(../image/common/check_frame01.png) no-repeat;
+	background-size: 100% 100%;
+}
+/*我的地址样式结束*/
+
+/*地址编辑样式开始*/
+.xlaf-container .xlaf-shq {
+	height: auto;
+}
+.xlaf-box1 {
+	margin-top: 4px;
+}
+/*地址编辑样式结束*/
+
+/*我的圈子样式开始*/
+.xlmc-container {
+	margin-top: -44px;
+}
+.xlmc-container .xlmi-box1 {
+	padding-top: 30px;
+}
+.xlmc-container .xlmc-p1 {
+	color: #fff;
+	padding-bottom: 15px;
+}
+.xlmc-container .xlmc-p1 span {
+	float: left;
+	width: 50%;
+	padding-left: 8px;
+	text-align: left;
+}
+.xlmc-container .xlmc-p1 span.xlmc-span1 {
+	position: relative;
+	text-align: right;
+	padding-left: 0;
+	padding-right: 8px;
+}
+.xlmc-container .xlmc-p1 span.xlmc-span1:before {
+	content: '';
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 2px;
+	background: #fff;
+}
+.xlmc-box1,
+.xlmc-box1 .mui-slider,
+.xlmc-box1 .mui-slider-group {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+.xlmc-box1 {
+	top: 166px;
+}
+.xlmc-box1 .mui-slider-group {
+	top: 38px;
+}
+.xl-slider-circle .mui-control-item.mui-active {
+	color: #ff5534 !important;
+}
+.xltc-focuson {
+	position: absolute;
+	bottom: 10px;
+	right: 15px;
+	color: #fff;
+	background: linear-gradient(to right, #f39447, #fabb38);
+	padding: 3px 12px;
+	font-size: 14px;
+	border-radius: 100px;
+}
+/*我的圈子样式结束*/
+
+/*选择彩票样式开始*/
+.xlsl-box1 .mui-grid-view.mui-grid-9 {
+	background: #f6f6f6;
+}
+.xlsl-box1 .mui-grid-view.mui-grid-9 .mui-media {
+	background: #fff;
+}
+.xlsl-box1 .mui-table-view-cell .mui-icon {
+	width: 50px;
+	height: 50px;
+}
+.xlsl-box1 .mui-table-view-cell .mui-icon img {
+	width: 100%;
+	height: 100%;
+	vertical-align: top;
+}
+/*选择彩票样式结束*/
+
+/*账号绑定样式开始*/
+.xlab-box1 {
+	padding: 20px;
+	text-align: center;
+	background: #fff;
+}
+.xlab-box1 > img {
+	width: 60px;
+	height: 60px;
+}
+.xlab-box2 {
+	padding: 0 15px;
+	background: #fff;
+	padding-bottom: 20px;
+}
+.xlab-box2 p {
+	color: #333;
+	font-size: 14px;
+	margin: 0;
+}
+.xlab-box3 {
+	font-size: 14px;
+	padding: 0 15px;
+	padding-top: 20px;
+}
+.xlab-box3 .mui-btn {
+	margin: 8px 0 0 0;
+	padding: 8px 0;
+}
+.xlab-rightbox img {
+	width: 90px;
+	height: 90px;
+}
+.xlab-rightbox p {
+	font-size: 20px;
+	color: #f5a623;
+}
+.xlab-form .mui-input-group .mui-input-row {
+	height: 50px;
+	position: relative;
+}
+.xlab-form .mui-input-group .mui-input-row:after {
+	left: 0;
+}
+.xlab-form .mui-input-row label {
+	position: absolute;
+	left: 20px;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	width: auto;
+	padding: 0;
+	align-items: center;
+}
+.xlab-form .mui-input-row label img {
+	width: 16px;
+	vertical-align: top;
+}
+.xlab-form .mui-input-row label~input {
+	height: 100%;
+	padding: 17px 15px 14px;
+	padding-left: 45px;
+	width: 100%;
+}
+.xlab-box4 {
+	margin-top: 15px;
+	font-size: 14px;
+}
+.xl-checkbox.mui-checkbox.mui-left label {
+	padding-left: 45px;
+}
+.xl-checkbox.mui-checkbox input[type=checkbox] {
+	width: 18px;
+	height: 18px;
+	margin-top: 3px;
+}
+.xl-checkbox.mui-checkbox input[type=checkbox]:before {
+	content: '';
+	display: block;
+	width: 100%;
+	height: 100%;
+	background: url(../image/login/Xuanzekuang.png) no-repeat;
+	background-size: 100% 100%;
+	content: '';
+}
+.xl-checkbox.mui-checkbox input[type=checkbox]:checked:before {
+	background: url(../image/login/Xuanzekuang01.png) no-repeat;
+	background-size: 100% 100%;
+	content: '';
+}
+.xlab-box4~.xlab-box3 {
+	padding-top: 0;
+}
+/*账号绑定样式结束*/
+
+/*账号关联样式开始*/
+.xlaa-box1 {
+	line-height: 40px;
+}
+.xlaa-box1 .xlaa-span1 {
+	background: #50e3c2;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	text-align: center;
+	color: #fff;
+	font-size: 12px;
+}
+.xlaa-box1 .xlaa-span2 {
+	font-size: 14px;
+}
+/*账号关联样式结束*/
+
+/*积分明细样式开始*/
+.xlis-box1 .mui-table-view-cell {
+	color: #666;
+	font-size: 14px;
+}
+.xlgr-box1 .xlgr-p2 {
+	font-size: 12px;
+	color: #888;
+	padding-top: 2px;
+}
+/*积分明细样式结束*/
+
+
+/*常见问题样式开始*/
+.xlcp-box1 {
+	padding: 0 15px;
+}
+.xlcp-box1 .mui-table-view {
+	background: transparent;
+}
+.xlcp-box1 .mui-table-view-cell {
+	border-radius: 10px;
+	background: #fff;
+	margin-bottom: 12px;
+	font-size: 12px;
+	padding: 6px 12px;
+	color: #888;
+}
+.xlcp-box1 .mui-table-view-cell>a:not(.mui-btn) {
+	margin: -6px -12px;
+	padding-right: 36px;
+}
+.xlcp-box1 .mui-table-view-cell:after,
+.xlcp-box1 .mui-table-view:before,
+.xlcp-box1 .mui-table-view:after {
+	height: 0;
+}
+.xlcp-btn-more {
+	float: right;
+	background: #50e3c2;
+	color: #fff;
+	border: 0;
+	padding: 4px 20px;
+	border-radius: 100px;
+}
+.xlcp-box2 {
+	padding: 0 15px;
+}
+.xlcp-grid9 .mui-media .mui-icon img  {
+	width: 60px;
+	height: 60px;
+	vertical-align: top;
+}
+.xlcp-grid9 .mui-table-view-cell {
+	border: 0 !important;
+}
+.xlcp-box2 .xlcp-grid9 {
+	margin: 0 -15px;
+}
+.xlcp-box2 .mui-grid-view.mui-grid-9 {
+	background: #fff;
+}
+.xlcp-p1 {
+	padding: 10px 0;
+	color: #ff5534;
+	text-align: center;
+}
+.xlcp-box3 {
+	padding: 0 15px;
+}
+.xlcp-box3 .xlcp-panel1 {
+	margin: 0 -15px;
+	padding: 10px 15px;
+	border-top: solid 1px #f6f6f6;
+}
+.xlcp-panel1 {
+	background: #fff;
+	font-size: 14px;
+}
+.xlcp-p2 {
+	color: #888;
+	margin-bottom: 12px;
+}
+.xlcp-p3 .mui-btn {
+	color: #fff;
+	background: #50e3c2;
+	border: 0;
+	width: 135px;
+	padding: 8px 0;
+	text-align: left;
+	padding-left: 32px;
+}
+.xlcp-p3 .mui-btn:last-child {
+	background: #4a90e2;
+}
+.xlcp-p3 .mui-btn .mui-icon {
+	left: 5px;
+	width: 24px;
+}
+.xlcp-p3 .mui-btn .mui-icon > img {
+	width: 100%;
+	vertical-align: top;
+}
+.xlcp-box4 {
+	position: relative;
+	background: #fff;
+	padding: 10px;
+}
+.xlcp-box4 .xlcp-img {
+	left: 10px;
+}
+.xlcp-box4 .xlcp-img img {
+	width: 26px;
+	vertical-align: top;
+}
+.xlcp-box4 .xlcp-input {
+	padding-left: 76px;
+	padding-right: 63px;
+}
+.xlcp-box4 .xlcp-input input {
+	margin: 0;
+	height: 30px;
+	padding: 7px 5px;
+	text-align: center;
+	font-family: "微软雅黑";
+	font-size: 14px;
+}
+.xlcp-box4 .xlcp-txt {
+	left: 45px;
+	color: #666;
+}
+.xlcp-box4 .xlcp-button {
+	right: 10px;
+}
+.xlcp-box4 .xlcp-button .mui-btn {
+	border: 0;
+	background: #ff5534;
+	color: #fff;
+}
+
+
+.xlcp-box-a1 {
+	padding: 0 15px;
+}
+.xlcp-box-a1 .xlcp-collapse-box {
+	position: relative;
+    border-radius: 10px;
+    background: #fff;
+    margin-bottom: 12px;
+    font-size: 12px;
+    color: #888;
+    text-align: center;
+    padding: 0 3px;
+    height: 38px;
+    overflow: hidden;
+    border: 0;
+    display: block;
+}
+.xlcp-box-a1 .xlcp-collapse-toggle {
+	position: absolute;
+	right: 3px;
+	top: 8px;
+	font-weight: bold;
+	color: #aaa;
+	font-size: 22px;
+}
+.xlcp-box-a1 .xlcp-collapse-p {
+    padding-right: 28px;
+	border-bottom: solid 1px #dfad72;
+}
+.xlcp-box-a1 .xlcp-collapse-p:last-child {
+	border-bottom: 0;
+}
+.xlcp-box-a1 .xlcp-collapse-p a {
+	position: relative;
+	width: 25%;
+	float: left;
+	line-height: 26px;
+	border-right: solid 1px #dfad72;
+	margin: 6px 0;
+	color: #666;
+	background: none;
+	border-left: 0;
+}
+.xlcp-box-a1 .xlcp-collapse-p a.mui-active {
+	color: #ff5534;
+	background: none;
+}
+.xlcp-box-a1 .xlcp-box1 {
+	margin: 0 -15px;
+}
+/*常见问题样式结束*/
+
+/*帖子详情样式开始*/
+.xlpd-box1 {
+	position: relative;
+	font-size: 12px;
+}
+.xlpd-box1 .xlpc-p1 {
+	padding-right: 150px;
+}
+.xlpd-box1 .xlpc-p1 > span {
+	right: 65px;
+}
+.xlpd-box1 .xlpd-btn {
+	position: absolute;
+	right: 10px;
+	top: 12px;
+	z-index: 2;
+	background: #ff5534;
+	padding: 4px 10px;
+	color: #fff;
+	border: 0;
+}
+.xlpd-box2 {
+	padding: 0 15px;
+}
+.xlpd-box2 .xlpd-p1 {
+	padding: 10px 0;
+}
+.xlpd-comment-items {
+	position: relative;
+	margin-bottom: 15px;
+}
+.xlpd-comment-items:before {
+	content: '';
+	position: absolute;
+	left: 30px;
+	top: 0;
+	bottom: 0;
+	width: 1px;
+	background: #aaa;
+}
+.xlpd-comment-item {
+	position: relative;
+	padding-left: 67px;
+	margin-top: 6px;
+}
+.xlpd-comment-item:first-child {
+	margin-top: 0;
+}
+.xlpd-comment-item > img {
+	position: absolute;
+	left: 10px;
+	top: 0;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+}
+.xlpd-body {
+	position: relative;
+	border-radius: 8px;
+	background: #fff;
+	padding: 6px 15px;
+	font-size: 12px;
+	line-height: 1.4;
+	min-height: 80px;
+}
+.xlpd-body:before {
+	content: '';
+	position: absolute;
+	top: 10px;
+	left: -6px;
+	width: 20px;
+	height: 20px;
+	background: #fff;
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+	
+}
+.xlpd-text {
+	padding-top: 4px;
+	text-align: justify;
+}
+/*帖子详情样式结束*/
+
+/*特征码输入样式开始*/
+.xlsi-box1 {
+	position: relative;
+	margin: 30px 0;
+	padding: 40px 0;
+	background: #fff;
+}
+.xlsi-box1 .xlsi-label {
+	left: 15px;
+}
+.xlsi-box1 .xlsi-input {
+	padding-right: 80px;
+	padding-left: 80px;
+}
+.xlsi-box1 .xlsi-input input {
+	height: 30px;
+	font-size: 14px;
+	padding: 7px 5px;
+	text-align: center;
+	margin: 0;
+}
+.xlsi-box1 .xlsi-btn {
+	right: 15px;
+}
+.xlsi-box1 .xlsi-btn img {
+	height: 30px;
+	vertical-align: top;
+}
+.xlsi-box2 {
+	padding: 0 15px 30px;
+	text-align: center;
+}
+.xlsi-box2 img {
+	width: 100%;
+	vertical-align: top;
+}
+/*特征码输入样式结束*/
+
+/*彩票详情样式开始*/
+.xlld-box1 {
+	position: relative;
+	font-size: 13px;
+	padding: 10px 10px 10px 60px;
+	line-height: 1.4;
+	background: #fff;
+}
+.xlld-box1 > img {
+	left: 10px;
+	vertical-align: top;
+	width: 40px;
+	height: 40px;
+}
+.xlld-box2 {
+	background: #fff;
+	padding-bottom: 8px;
+}
+.xlld-box2 .xlld-item {
+	text-align: center;
+	background: #ffe7dd;
+	line-height: 1.6;
+}
+.xlld-box3 {
+	margin-top: 8px;
+	padding: 0 15px 8px;
+	font-size: 13px;
+	background: #fff;
+}
+.xlld-box3 .xlld-item1 {
+	padding: 6px 0;
+	border-bottom: solid 1px #999;
+}
+.xlld-box3 .xlld-p2 {
+	line-height: 24px;
+	padding-top: 6px;
+}
+.xlld-box3 .xlld-p2 span {
+	display: inline-block;
+	font-size: 14px;
+	width: 28px;
+	height: 28px;
+	border: solid 2px #f00;
+	border-radius: 50%;
+	text-align: center;
+	color: #f00;
+}
+.xlld-box3 .xlld-p2 span:last-child {
+	margin-left: 5px;
+}
+.xlld-box4 {
+	background: #fff;
+	text-align: center;
+	font-size: 14px;
+	padding-bottom: 50px;
+}
+.xlld-box4 .xlld-p3 {
+	color: #fff;
+	padding: 6px 0;
+	background: #fd8754;
+}
+.xlld-box4 .xlld-p4 {
+	color: #f00;
+	line-height: 1.5;
+	font-weight: bold;
+}
+.xlld-box4 .xlld-p5 {
+	color: #f00;
+	line-height: 1.5;
+}
+.xlld-foot {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background: #fff;
+	height: 45px;
+	border-top: solid 1px #ccc;
+}
+.xlld-foot > .mui-btn {
+	position: absolute;
+	width: 45%;
+	top: 7px;
+	left: 10px;
+	z-index: 3;
+}
+.xlld-foot > .mui-btn.xlld-btn-popover {
+	right: 10px;
+	left: auto;
+}
+.xlld-foot .xlld-popover {
+	position: absolute;
+	overflow: hidden;
+	bottom: 7px;
+	right: 10px;
+	width: 45%;
+	height: 0;
+	transition: all .3s;
+	background: linear-gradient(to bottom, #f0f0f0, #ccc);
+}
+.xlld-foot .xlld-popover.mui-active {
+	height: 112px;
+}
+.xlld-foot .xlld-btn-text {
+	display: block;
+	text-align: left;
+	padding-left: 23px;
+}
+.xlld-foot span {
+	display: flex;
+	align-items: center;
+}
+.xlld-foot span img {
+	vertical-align: top;
+}
+.xlld-foot .xlld-btn-img1 {
+	left: 10px;
+}
+.xlld-foot .xlld-btn-img2 {
+	right: 10px;
+}
+.xlld-foot .xlld-btn-img3 {
+	right: 30px;
+}
+.xlld-foot .xlld-btn-img3 img {
+	-webkit-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+.xlld-popover > .mui-btn {
+	color: #fff;
+	padding: 6px 12px;
+	border: 0;
+	box-shadow: 0 2px 0 0 #666;
+	font-size: 14px;
+}
+.xlld-popover .xlld-popover-btn1 {
+	background: #50e3c2;
+}
+.xlld-popover .xlld-popover-btn2 {
+	background: #b8e986;
+}
+/*彩票详情样式结束*/
+
+/*开奖公告样式开始*/
+.xl-ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	background: #fff;
+}
+.xl-ul .xl-li {
+	position: relative;
+	border-top: solid 1px #eee;
+	padding: 10px 15px;
+	font-size: 14px;
+}
+.xl-ul .xl-li:first-child {
+	border-top: 0;
+}
+.xl-ul .xl-li.xl-arrows-r:after {
+	font-family: Muiicons;
+	font-weight: bold;
+	content: '\e583';
+	position: absolute;
+	right: 15px;
+	top: 50%;
+	font-size: 24px;
+	color: #aaa;
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+.xl-ul .xl-li > img {
+	position: absolute;
+	left: 15px;
+	top: 50px;
+	width: 40px;
+	height: 40px;
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+.xl-ul .xl-li .xl-li-body {
+	width: 100%;
+	display: block;
+	padding-left: 50px;
+	min-height: 40px;
+}
+.xl-ul .xl-li.xl-arrows-r .xl-li-body {
+	padding-right: 25px;
+}
+.xlln-box1 .xl-ul .xl-li {
+	border-width: 2px;
+}
+.xlln-box1 .xlln-p1 {
+	position: relative;
+	font-size: 12px;
+	padding-right: 100px;
+	padding-bottom: 8px;
+	margin-left: -50px;
+}
+.xlln-span1 {
+	position: absolute;
+	right: 0;
+	top: 0;
+	font-weight: normal;
+	color: #999;
+}
+.xlln-box1 .xlln-p2 span {
+	width: 26px;
+	height: 26px;
+	display: inline-block;
+	border-radius: 50%;
+	line-height: 22px;
+	border: solid 2px #f00;
+	color: #f00;
+	text-align: center;
+	margin: 0 2px;
+}
+.xlln-box1 .xlln-p2 span.xlln-last-span {
+	border-color: #4a90e2;
+	color: #4a90e2;
+}
+/*开奖公告样式结束*/
+
+/*活动详情样式开始*/
+.xlad-img-box {
+	position: relative;
+}
+.xlad-img-box .xlad-span1 {
+	position: absolute;
+	bottom: 2%;
+	left: 0;
+	right: 0;
+	text-align: center;
+	font-size: 16px;
+	color: #ff5534;
+	font-weight: bold;
+}
+.xlad-img-box .xlad-btn-experience1 {
+	position: absolute;
+	top: 62.053%;
+	bottom: 22.434%;
+	left: 30.649%;
+	right: 30.649%;
+}
+.xlad-img-box .xlad-btn-experience2 {
+	position: absolute;
+	top: 34.529%;
+	bottom: 37.22%;
+	left: 30.833%;
+	right: 30.833%;
+}
+.xlad-img-box img {
+	width: 100%;
+	vertical-align: top;
+}
+.xlad-text-box {
+	padding: 15px 1.389% 0;
+	text-align: justify;
+	background: url(../images/activity_img02.png) repeat-y;
+	background-size: 100%;
+}
+.xlad-text-box .xlad-p1 {
+	position: relative;
+	font-size: 14px;
+	color: #7e4e23;
+	line-height: 20px;
+	padding-left: 93px;
+	padding-right: 15px;
+	margin-top: 8px;
+}
+.xlad-text-box .xlad-p1:first-child {
+	margin-top: 0;
+}
+.xlad-text-box .xlad-p1 span {
+	position: absolute;
+	left: 10px;
+	top: 0;
+	font-size: 16px;
+	color: #ff5534;
+}
+/*活动详情样式结束*/
+
+/*支付完成样式开始*/
+.xlpce-box1 {
+	text-align: center;
+	background: #fff;
+	padding: 10px 15px;
+	font-size: 14px;
+}
+.xlpce-box1 .xlpce-btn-group {
+	padding-top: 8px;
+}
+.xlpce-box1 .xlpce-btn-group .mui-btn {
+	margin-left: 30px;
+	font-size: 14px;
+	width: 110px;
+}
+.xlpce-box1 .xlpce-btn-group .mui-btn:first-child {
+	margin-left: 0;
+}
+.xlpce-p2 {
+	padding: 6px;
+	font-size: 12px;
+	color: #888;
+}
+.xlpce-box2 {
+	font-size: 14px;
+}
+.xlpce-box2 .xlpce-p3 {
+	color: #888;
+}
+/*支付完成样式结束*/
+
+/*奖品揭晓列表样式开始*/
+.xlpl-container .mui-slider {
+	height: 100% !important;
+}
+.xlpl-container .mui-slider .mui-slider-group {
+	position: absolute;
+	top: 38px;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+.xlpl-container .mui-table-view {
+	background: #f6f6f6 !important;
+	margin: 0;
+	padding: 0;
+}
+.xlpl-container .mui-table-view .mui-table-view-cell {
+	background: #fff !important;
+	padding: 10px;
+	margin: 0;
+	border: solid 1px #f6f6f6;
+}
+.xlpl-container .mui-table-view-cell .mui-media-object {
+	width: 55% !important;
+	max-width: 180px !important;
+}
+.xlpl-imglist .mui-media-body {
+	height: auto !important;
+	text-align: left;
+	line-height: 1.4 !important;
+	font-size: 14px !important;
+}
+.xlpl-imglist .xlpl-txt1 {
+	font-size: 12px;
+	color: #888;
+}
+.xl-countdown-box > span {
+	float: left;
+	font-size: 12px;
+	line-height: 20px;
+}
+.xl-countdown-box .xlcb-span1 {
+	position: relative;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: #ff4681;
+	margin-right: 3px;
+	top: 2px;
+}
+.xl-countdown-box .xlcb-span1:before {
+	content: '';
+	position: absolute;
+	left: 50%;
+	top: 20%;
+	width: 1px;
+	height: 30%;
+	background: #fff;
+}
+.xl-countdown-box .xlcb-span1:after {
+	content: '';
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 45%;
+	height: 1px;
+	background: #fff;
+}
+.xl-countdown-box .xlcb-span2 {
+	color: #ff4681;
+	margin-right: 3px;
+}
+.xl-countdown-box .xlcb-span3 {
+	color: #ff4681;
+}
+.xl-countdown-box .xlcb-time {
+	position: relative;
+	width: 20px;
+	height: 20px;
+	background: #ff4681;
+	color: #fff;
+	font-size: 16px;
+	border-radius: 4px;
+	text-align: center;
+}
+/*奖品揭晓列表样式结束*/
+
+/*晒单分享样式开始*/
+.xlps-ul {
+	position: relative;
+	background: #fff;
+}
+.xlps-li {
+	position: relative;
+	padding: 10px 15px;
+	border-bottom: solid 1px #ccc;
+}
+.xlps-body {
+	font-size: 14px;
+}
+.xlps-body .xlps-span1 {
+	float: left;
+	width: 35px;
+	height: 35px;
+	vertical-align: top;
+	border-radius: 50%;
+}
+.xlps-body .xlps-span2 {
+	float: left;
+	line-height: 35px;
+	margin-left: 5px;
+	width: 130px;
+	font-weight: bold;
+}
+.xlps-body .xlps-span3 {
+	float: right;
+	color: #888;
+	line-height: 35px;
+	font-size: 12px;
+}
+.xlps-body .xlps-div1 {
+	background: #f6f6f6;
+	padding: 3px 8px;
+	margin: 5px 0;
+}
+.xlps-body .xlps-p1 {
+	margin-bottom: 3px;
+}
+.xlps-body .xlps-p2 {
+	line-height: 1.4;
+	color: #888;
+	font-size: 12px;
+}
+.xlps-body .xlps-div2 img {
+	vertical-align: top;
+	width: 60px;
+	height: 60px;
+	margin-left: 15px;
+}
+.xlps-body .xlps-div2 img:first-child {
+	margin-left: 0;
+}
+.xlps-body .xlps-p3 {
+	position: relative;
+	margin-top: 6px;
+	margin-bottom: 8px;
+	padding-left: 70px;
+}
+.xlps-body .xlps-p3 .xlps-p3-span1 {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.xlps-body .xlps-p3 .xlps-p3-span2 {
+	color: #ff5534;
+}
+.xlps-body .xlps-p4 a {
+	float: right;
+	line-height: 20px;
+	font-size: 12px;
+	margin-left: 20px;
+}
+.xlps-body .xlps-p4 a span {
+	font-size: 18px;
+}
+.xlps-body .xlps-p4 .xlps-a2 {
+	color: #444;
+} 
+.xlps-body .xlps-p4 .xlps-a2 img {
+	vertical-align: top;
+	width: 18px;
+	margin-top: 2px;
+	margin-right: 5px;
+}
+/*晒单分享样式结束*/
+
+/*空白内容样式开始*/
+.xlnd-container {
+	text-align: center;
+}
+.xlnd-middle {
+	left: 0;
+	right: 0;
+}
+.xlnd-container.xlnd-hide {
+	display: none;
+}
+.xlnd-container .xlnd-img img {
+	width: 40%;
+	vertical-align: top;
+}
+.xlnd-container .xlnd-p1 {
+	color: #888;
+	padding: 0 0 15px;
+}
+.xlnd-container .xlnd-btn {
+	padding: 0 70px;
+}
+.xlnd-container .xlnd-btn .mui-btn {
+	padding: 10px 0;
+}
+/*空白内容样式结束*/
+
+/*修改信息样式开始*/
+.xlam-btn-ok {
+	color: #fff;
+	line-height: 44px;
+	padding: 0 10px;
+}
+.xlam-btn-ok:active {
+	color: #fff;
+}
+.mui-input-row .mui-input-password~.mui-icon-eye.mui-active {
+	color: #ff5534;
+}
+
+/*修改信息样式结束*/
+
+/*产品介绍样式开始*/
+.xlpin-box1 {
+	padding: 15px;
+	background: #fff;
+}
+.xlpd-detial-box .xlpin-box1 {
+	display: none;
+}
+.xlpin-box1 h5 {
+	color: #555;
+	font-weight: bold;
+}
+.xlpin-box1 p {
+	text-indent: 2em;
+	text-align: justify;
+}
+/*产品介绍样式结束*/
+
+
+/*注册协议样式开始*/
+.xlra-box1 {
+	padding: 15px;
+	background: #fff;
+}
+.xlra-box1 > h5 {
+	font-weight: bold;
+	color: #666;
+	font-size: 16px;
+	padding-top: 5px;
+}
+.xlra-box1 > p {
+	text-align: justify;
+	font-size: 14px;
+}
+/*注册协议样式结束*/
+
+
+
+
+
+/*系统公告样式开始*/
+.xlnr-box1 {
+	padding: 15px 12px;
+}
+.xlnr-box1 .mui-table-view {
+	background: transparent;
+}
+.xlnr-box1 .mui-table-view-cell {
+	border: solid 1px #ccc;
+	border-radius: 5px;
+	background: #fff;
+	margin-top: 15px;
+}
+.xlnr-box1 .mui-table-view-cell:first-child {
+	margin-top: 0;
+}
+.xlnr-box1 .mui-table-view-cell:after {
+	height: 0;
+}
+.xlnr-box1 .xlnr-table-body {
+	position: relative;
+	color: #888;
+	font-size: 13px;
+}
+.xlnr-box1 .xlnr-title {
+	font-size: 16px;
+	font-weight: bold;
+	padding-right: 80px;
+	color: #333;
+	padding-bottom: 6px;
+}
+.xlnr-box1 .xlnr-time {
+	position: absolute;
+	right: 0;
+	top: 0;
+	font-size: 12px;
+}
+.xlnr-box1 .xlnr-content {
+	padding-bottom: 3px;
+	text-indent: 2em;
+}
+.xlnr-box1 .xlnr-more {
+	text-align: right;
+}
+.xlnrd-box1 {
+	padding: 15px;
+	background: #fff;
+}
+.xlnrd-box1 > h5 {
+	font-size: 16px;
+	text-align: center;
+	color: #333;
+	font-weight: bold;
+}
+.xlnrd-box1 > h6 {
+	font-size: 14px;
+	color: #333;
+	font-weight: bold;
+	padding-top: 10px;
+}
+.xlnrd-box1 > .xlnrd-time ~ h6 {
+	padding-top: 0;
+}
+.xlnrd-box1 > p {
+	font-size: 13px;
+	color: #888;
+	text-indent: 2em;
+	text-align: justify;
+}
+.xlnrd-box1 > .xlnrd-time {
+	font-size: 12px;
+	color: #888;
+	text-align: center;
+}
+/*系统公告样式结束*/
+
+/*充值样式开始*/
+
+.xlrae-box1 {
+	background: #fff;
+	padding: 10px 15px;
+	color: #333;
+	font-size: 14px;
+}
+.xlrae-box2 {
+	font-size: 14px;
+	padding: 0 15px;
+}
+.xlrae-box3 {
+	padding: 0 5px;
+}
+.xlrae-box3 span {
+	float: left;
+	padding: 6px 10px;
+	width: 33.33333%;
+}
+.xlrae-box3 .xlrae-item-sum{
+	display: block;
+	width: 100%;
+	padding: 6px 0;
+	font-style: normal;
+	background: #fff;
+	font-size: 16px;
+	text-align: center;
+	color: #333;
+}
+.xlrae-box3 .xlrae-item-sum.active {
+	color: #fff;
+	background: #ff5534;
+}
+.xl-input-right0.xl-input-group {
+	padding-right: 0;
+}
+.xlrae-box5 {
+	padding: 15px;
+}
+/*充值样式结束*/
+
+
+/*我的VIP样式开始*/
+.xlmv-box1 {
+	background: #fff;
+	border-bottom: solid 1px #ddd;
+	margin: 6px 0;
+	font-size: 14px;
+}
+.xlmv-box1 .mui-media-body {
+	padding: 0 90px 0 80px;
+	white-space: nowrap;
+}
+.xlmv-box1 .mui-media-object.mui-pull-left {
+	width: 80px;
+	height: 80px;
+	left: 8px;
+	border-radius: 50%;
+}
+.xlmv-box1 .xlmv-btn1 {
+	right: 15px;
+	padding: 6px;
+	border-radius: 4px;
+	background: linear-gradient(to bottom, #fbd249 , #f5a623);
+	color: #fff;
+	line-height: 1;
+	border: 0;
+}
+.xlmv-box1 .xlmv-p1 span {
+	font-size: 12px;
+}
+.xlmv-box1 .xlmv-p2 img {
+	width: 30px;
+	vertical-align: middle;
+}
+.xlmv-box1 .xlmv-p2 img:last-child {
+	width: 50px;
+}
+.xlmv-box1 .xlmv-p4 {
+	color: #555;
+	font-size: 12px;
+}
+@media (max-width: 320px) {
+	.xlmv-box1 .xlmv-btn1 {
+		font-size: 10px;
+	}
+	.xlmv-box1 .mui-media-body {
+		padding: 0 80px;
+	}
+	.xlmv-box1 .xlmv-p4 {
+		color: #555;
+		font-size: 10px;
+	}
+}
+.xlmv-box1 .xl-progressbar {
+	margin: 0;
+	height: 15px;
+    padding: 1px;
+    border: solid 1px #f5a623;
+    background: none;
+    max-width: 160px;
+}
+.xlmv-box2 {
+	background: #fff;
+	margin: 0 6px;
+	padding: 3px;
+	font-size: 14px;
+}
+.xlmv-title1 {
+	text-align: center;
+}
+.xlmv-title1 img {
+	width: 40%;
+}
+.xlmv-box3 {
+	border: solid 1px #f5a623;
+	text-align: center;
+}
+.xlmv-table {
+	position: relative;
+}
+.xlmv-table .xlmv-td {
+	position: relative;
+	display: inline-block;
+}
+.xlmv-table .xlmv-left {
+	box-sizing: content-box;
+	width: 42px;
+	padding: 0 5px;
+	border-right: solid 1px #ff7020;
+}
+.xlmv-table .xlmv-left .xlmv-td {
+	font-size: 16px;
+	font-weight: bold;
+	color: #ff7129;
+	padding: 6px 5px;
+	border-bottom: solid 3px #ff542d;
+}
+.xlmv-table .xlmv-right {
+	position: absolute;
+	left: 53px;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+.xlmv-table .xlmv-right .xlmv-td {
+	height: 100%;
+	width: 24%;
+	vertical-align: top;
+	padding: 0 5px;
+	box-sizing: content-box;
+	line-height: 1.1;
+}
+.xlmv-table .xlmv-right .xlmv-td:before {
+	content: '';
+	position: absolute;
+	left: -5px;
+	top: -1px;
+	right: 0;
+	height: 1px;
+	background: #f5a623;
+}
+.xlmv-scroll-box {
+	width: 100%;
+	height: 100%;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+.xlmv-scroll-box .xlmv-scroll {
+	white-space: nowrap;
+}
+.xlmv-table .xlmv-scroll:first-child .xlmv-td:before {
+	height: 0;
+}
+.xlmv-scroll-box .xlmv-scroll-height1 {
+	height: 36px;
+}
+.xlmv-scroll-box .xlmv-scroll-height2 {
+	height: 57px;
+}
+.xlmv-scroll-box .xlmv-scroll-height3 {
+	height: 78px;
+}
+.xlmv-scroll-box .xlmv-scroll1 img{
+	width: 50px;
+}
+.xlmv-scroll-box .xlmv-scroll3 img {
+	width: 60px;
+}
+.xlmv-table .xlmv-right .xlmv-td-body {
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+}
+.xlmv-table .xlmv-right .xlmv-td-body img {
+	max-height: 90%;
+	max-width: 100%;
+}
+.xlmv-box3 .xlmv-title1 {
+	border-top: solid 1px #f5a623;
+	padding: 5px 0;
+}
+.xlmv-box4 {
+	text-align: left;
+	padding: 10px 3px;
+	background: #f6f6f6;
+}
+.xlmv-box4 .xlmv-p3 {
+	text-align: justify;
+	padding-bottom: 20px;
+	color: #888;
+}
+.xlmv-popover{
+	height: auto;
+	width: 90%;
+	left: 50% !important;
+	top: 50% !important;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	border-radius: 0;
+}
+.xlmv-popover-body {
+	padding: 10px 15px;
+	font-size: 14px;
+}
+.xlmv-popover .mui-popover-arrow {
+	width: 0;
+}
+.xlmvp-title {
+	text-align: center;
+}
+.xlmvp-body {
+	border-top: solid 1px #f5a623;
+	border-bottom: solid 1px #f5a623;
+	padding: 5px 0;
+	margin: 5px 0;
+	color: #888;
+}
+.xlmvp-p1 img {
+	width: 50px;
+	vertical-align: middle;
+}
+.xlmvp-p2 {
+	position: relative;
+	padding: 10px 60px 10px 0;
+}
+.xlmvp-p2 img {
+	width: 40px;
+	margin-left: 140px;
+}
+.xlmvp-p2 span {
+	left: 0;
+}
+.xlmvp-p2 .mui-btn {
+	right: 0;
+	background: linear-gradient(to bottom, #fbd249, #f5a725);
+	border: 0;
+	color: #fff;
+	border-radius: 6px;
+}
+.xlmvp-p2 .mui-btn:disabled {
+	background: linear-gradient(to bottom, #d9d9d9, #939393);
+}
+.xlmvp-foot {
+	color: #ff5534;
+	font-size: 12px;
+	line-height: 1.4;
+}
+
+/*我的VIP样式结束*/
+/*积分说明样式开始*/
+
+.xlih-box1 {
+	background: #fff;
+	padding: 10px 15px;
+}
+.xlih-box1 .xlih-title1 {
+	font-size: 18px;
+	color: #f5a623;
+	font-weight: bold;
+	padding: 5px 0;
+}
+.xlih-box1 .xlih-p1 {
+	color: #888;
+	font-size: 14px;
+	line-height: 1.4;
+	text-align: justify;
+}
+.xlih-box1 .xlih-line-h3 {
+	background: #f5a623;
+	height: 3px;
+}
+
+/*积分说明样式结束*/
+
+
+/*手动输入样式开始*/
+.xlhe-box1 {
+	font-size: 16px;
+}
+.xlhe-box1 .mui-input-row label,
+.xlhe-box1 .mui-input-row input {
+	font-family: "微软雅黑";
+	font-size: 16px;
+}
+.xlhe-box1 .xlhe-p2 {
+	right: 40px;
+	color: #888;
+}
+.xlhe-box1 .mui-table-view-cell:after,
+.xlhe-box1 .mui-input-group .mui-input-row:after {
+	height: 2px;
+	background: #f6f6f6;
+	-webkit-transform: scaleY(1);
+	transform: scaleY(1);
+}
+.xlhe-box2 {
+	padding: 30px 10px;
+}
+/*手动输入样式结束*/
+
+
+/* 二维码页面样式开始 */
+
+.xlmtc-box1 {
+	padding: 10px;
+	border-radius: 30px;
+	background: #fff;
+	margin: 30px 10px;
+	box-shadow: 0 0 5px #ccc;
+	font-size: 16px;
+}
+.xlmtc-box1 .mui-table-view {
+	background: transparent;
+}
+.xlmtc-box1 .mui-table-view-cell {
+	padding: 0;
+}
+.xlmtc-box1 .xlmtc-city {
+	font-size: 14px;
+	color: #555;
+}
+.xlmtc-box1 .mui-media-object.mui-pull-left {
+	width: 60px;
+	height: 60px;
+	left: 0;
+	border-radius: 50%;
+}
+.xlmtc-box1 .mui-media-body {
+	padding: 15px 0 15px 70px;
+}
+.xlmtc-box1 .xlmtc-twoimg {
+	position: relative;
+}
+.xlmtc-box1 .xlmtc-imgc {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+/* 二维码页面样式结束 */
+
+
+/* 占位图片样式开始 */
+.xlBanner-placeholderBox {
+	position: relative;
+}
+.xlBanner-content {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 5;
+}
+.xl-placeholderImg-box {
+	position: relative;
+}
+.xl-placeholderImg-bg {
+	width: 100%;
+}
+.xl-placeholderImg-load {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 50px;
+	height: 50px;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+/* 占位图片样式结束 */
+
+
+
