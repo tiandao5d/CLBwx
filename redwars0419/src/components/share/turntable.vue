@@ -173,7 +173,7 @@ export default {
                   // 获取奖品信息
                   let carr = []
                   _this.$xljs.each(chance, ( index, obj ) => {
-                    carr[carr.length] = `<div class="prize-box"><i style="font-size: ${cwidth * 0.03}px">${obj.txt}</i><img style="width: ${cwidth * 0.125}'px;height: ${cwidth * 0.125}px" src="${tte016}"></div>`
+                    carr[carr.length] = `<div class="prize-box"><i style="font-size: ${cwidth * 0.03}px">${obj.txt}</i></div>`
                   })
                   callback && callback(carr)
                 },

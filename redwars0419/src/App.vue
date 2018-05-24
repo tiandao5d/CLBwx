@@ -123,7 +123,7 @@ export default {
           rv = JSON.parse(obj.rewardValue)
           if ( rv.index <= 3 ) {
             txt = `${obj.userName.length > 5 ? (obj.userName.substr(0, 3) + '...') : obj.userName} 获得 ${parseInt(rv.awardValue)}元`
-            arr[arr.length] = {msg: txt}
+            arr[arr.length] = {msg: txt, img: obj.userImage}
           }
         })
       } catch ( err ) {

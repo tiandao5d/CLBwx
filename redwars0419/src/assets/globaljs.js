@@ -20,9 +20,9 @@ function getDm () {
   if(isTest()){
     // domainUrl = 'http://10.35.0.115'
     // domainUrl = 'http://10.35.0.134'
-    // domainUrl = 'http://10.13.0.57'
+    domainUrl = 'http://10.13.0.57'
     // domainUrl = 'http://clbtest.lotplay.cn'
-    domainUrl = 'http://10.13.0.170'
+    // domainUrl = 'http://10.13.0.170'
     // domainUrl = 'http://pay.lotplay.cn'
     // domainUrl = 'http://clb.lotplay.cn'
   }
