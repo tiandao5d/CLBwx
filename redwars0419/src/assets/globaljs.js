@@ -69,7 +69,7 @@ globaljs.install = function (Vue, options) {
         return 'wx7eaf9a2e612db7b4'
       // 内网测试公众号
       } else if(that.domainUrl === 'http://clbtest.lotplay.cn') {
-        return 'wxdbb5b2437bd5ed69'
+        return 'wxdbf0e9e22aa336a6'
       }
     },
     extend (...ags) {

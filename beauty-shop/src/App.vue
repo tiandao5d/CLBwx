@@ -213,7 +213,6 @@ export default {
     // 获取分享的数据，并执行分享监听
     getShareData () {
       let that = this;
-      `weixinmp/bs/index.html#totalTable?id=${that.$xljs.actSession().id}&userid=${that.$xljs.getUserId()}`
       let slink = `${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/index.html?wxbtnGoto=weixinmp_xlw_bs_xlw_index_xlj_totalTable_xlhw_id_xld_${that.$xljs.actSession().id}_xll_userid_xld_${that.$xljs.getUserId()}`,
           ilink = `${that.$xljs.domainUrl}/ushop-api-merchant/image/icon/logoicon.png`,
           title = '最美投注站活动正在投票中，赶紧参与吧~',
@@ -225,11 +224,14 @@ export default {
       let that = this,
           purl = `${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/bs/index.html`;
       window.wx.ready(callback);
-      var _url = that.$xljs.domainUrl + '/ushop-api-merchant/api/weixin/client/ticket/get?' +
+      that.txt = '每天要喝8杯水哦~';
+      let _url = that.$xljs.domainUrl + '/ushop-api-merchant/api/weixin/client/ticket/get?' +
         'type=jsapi&url=' + purl;
       that.$xljs.ajax(_url, 'get', {}, function(data) {
         if (data.sign) {
           that.configFn(data.timestamp, data.noncestr, data.sign);
+        } else {
+          that.txt = '微信授权错误';
         }
       });
     },
