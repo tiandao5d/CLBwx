@@ -15,7 +15,7 @@
       </div>
     </div>
     <!-- 提前加载图片 -->
-    <div class="imgloading-box" ref="iload">
+    <div class="imgloading-box" id="img_loading_box">
       <img :src="tte011" @load="imgloading">
       <img :src="doneimg[1]" @load="imgloading">
       <img :src="doneimg[2]" @load="imgloading">
@@ -74,22 +74,30 @@ export default {
     }
   },
   mounted () {
-    let actData = this.$xljs.storageL(this.$xljs.sessionAct, null, true), // 活动数据
-        rule = actData.rule ? (actData.rule + '') : '',
-        obj = null
-    rule = rule.split(',')[1] || ''
-    rule.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')
-    rule = base64.decode(rule)
-    obj = JSON.parse(rule)
-    this.dataarr = obj.library // 题库
-    this.itemall = obj.number // 总共需要回答多少道题目
-    this.accuracy = obj.accuracy // 答对多少题算通过
-    this.answerReset() // 重置抽奖
+    if ( this.$xljs.startAnswer === 1 ) {
+      this.$xljs.startAnswer = 2 // 记录流程
+      this.init()
+    } else {
+      this.$router.push('/')
+    }
   },
   methods: {
+    init () {
+      let actData = this.$xljs.storageL(this.$xljs.sessionAct, null, true), // 活动数据
+          rule = actData.rule ? (actData.rule + '') : '',
+          obj = null
+      rule = rule.split(',')[1] || ''
+      rule.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')
+      rule = base64.decode(rule)
+      obj = JSON.parse(rule)
+      this.dataarr = obj.library // 题库
+      this.itemall = obj.number // 总共需要回答多少道题目
+      this.accuracy = obj.accuracy // 答对多少题算通过
+      this.answerReset() // 重置抽奖
+    },
     // 图片加载加载
     imgloading () {
-      let box = this.$refs.iload,
+      let box = document.getElementById('img_loading_box'),
           imgs = box.querySelectorAll('img'),
           num = box.num || 1
       if ( num >= imgs.length ) {
@@ -128,7 +136,6 @@ export default {
       this.itemshow = 0 // 内容显示哪一个
       this.rightIds = [] // 正确的角标
       this.wrongIds = [] // 错误的角标
-      this.itemall = 4 // 总共需要回答多少题
       this.isdone = 0 // 答题完成后是对是错，1为错，2为对
       this.disablebtn = false // 可以答题
       this.cunitem = this.getQtion() // 首次显示的题目
@@ -164,7 +171,9 @@ export default {
       if ( this.rightIds.length >= this.accuracy ) { // 答题成功
         this.isdone = 1
         setTimeout(() => {
-          this.$router.push('/turntable')
+          if ( this.$xljs.startAnswer === 2 ) {
+            this.$router.push('/turntable')
+          }
         }, 2000)
       } else { // 答题失败
         this.isdone = 2

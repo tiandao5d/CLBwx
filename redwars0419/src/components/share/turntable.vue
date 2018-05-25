@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="start-btn" ref="startbtn"></div>
-      <div class="turn-txt1"><span>{{pnum}}</span></div>
+      <div class="turn-txt1 hide"><span>{{pnum}}</span></div>
       <div class="mpshow-btn" @click="showMyprize"></div>
       <div class="turn-btxt"><div class="turn-bp">当前还有<span>{{rewardPool}}</span>元奖品待领取</div></div>
       <!-- 中奖弹窗 -->
@@ -17,7 +17,7 @@
       <xl-myprize ref="myprize" />
     </div>
     <!-- 提前加载图片 -->
-    <div class="imgloading-box" ref="iload">
+    <div class="imgloading-box" id="img_loading_box">
       <img :src="tte015" @load="imgloading">
     </div>
     <xl-load :isshow="loading"/>
@@ -52,12 +52,17 @@ export default {
     }
   },
   mounted () {
-    this.init()
+    if ( this.$xljs.startAnswer === 2 ) {
+      this.$xljs.startAnswer = 3 // 记录流程
+      this.init()
+    } else {
+      this.$router.push('/')
+    }
   },
   methods: {
     // 图片加载加载
     imgloading () {
-      let box = this.$refs.iload,
+      let box = document.getElementById('img_loading_box'),
           imgs = box.querySelectorAll('img'),
           num = box.num || 1
       if ( num >= imgs.length ) {
@@ -179,7 +184,7 @@ export default {
                 },
                 // 点击按键立马执行
                 getPrize: function(callback) {
-                  if ( !_this.$xljs.startAnswer ) {
+                  if ( !(_this.$xljs.startAnswer === 3) ) {
                     _this.$vux.toast.text('请按流程走')
                     return false
                   }
@@ -237,7 +242,6 @@ export default {
     },
     // 关闭中奖弹窗
     winpClose () {
-      this.$xljs.startAnswer = false
       this.$router.push('/')
       this.$refs.xlprize.hide() // 中奖弹窗关闭
     }

@@ -17,7 +17,7 @@
           <img :src="stars < 3 ? tte006 : tte007">
         </div>
         <div class="a0000"></div>
-        <div class="tbox-txt1">今日已完成答题次数：<span>{{pnum}}</span>次</div>
+        <div class="tbox-txt1 hide">今日已完成答题次数：<span>{{pnum}}</span>次</div>
         <div class="tbox-btn1" @click="startAnswer"></div>
         <div class="tbox-btn2" @click="explainShow"></div>
         <div class="tbox-txt2">
@@ -27,7 +27,7 @@
     </div>
     <xl-explain ref="explain" />
     <!-- 提前加载图片 -->
-    <div class="imgloading-box" ref="iload">
+    <div class="imgloading-box" id="img_loading_box">
       <img :src="tte001" @load="imgloading">
       <img :src="tte003" @load="imgloading">
     </div>
@@ -73,7 +73,7 @@ export default {
   methods: {
     // 图片加载加载
     imgloading () {
-      let box = this.$refs.iload,
+      let box = document.getElementById('img_loading_box'),
           imgs = box.querySelectorAll('img'),
           num = box.num || 1
       if ( num >= imgs.length ) {
@@ -147,7 +147,7 @@ export default {
     // 开始答题点击
     startAnswer () {
       if ( this.count > 0 ) {
-        this.$xljs.startAnswer = true
+        this.$xljs.startAnswer = 1 // 记录流程
         this.$router.push('/answer')
       } else {
         this.$vux.toast.text('分享可增加答题次数')

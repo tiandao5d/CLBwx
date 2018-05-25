@@ -39,6 +39,12 @@
         <mu-raised-button label="投 票" @click="voteSubmit" class="raised-button" />
         <mu-raised-button label="分 享" @click="shareClick" class="raised-button right" />
       </div>
+      <mu-dialog :open="codeObj.show" title="验证码" @close="codeHideFn">
+        <mu-text-field class="foot-tf" v-model="codeObj.val" type="text" @focus="codeObj.err = ''" :errorText="codeObj.err" hintText="请输入下图验证码"/>
+        <img :src="codeObj.img" width="100" @click="getCodeSer">
+        <mu-flat-button slot="actions" @click="codeHideFn" primary label="取消"/>
+        <mu-flat-button slot="actions" primary @click="codeHideFn('confrim')" label="确定"/>
+      </mu-dialog>
       <mu-dialog :open="voteDialog" title="投票成功" @close="voteClose">
         <p>感谢您投的宝贵一票{{voteGap}}！您可以：</p>
         <p>1.每天参与投票，每天最多可以投{{voteLimit}}票</p>
@@ -61,6 +67,12 @@ export default {
       bannerImg: pageBg3,
       p31: p31,
       item: {},
+      codeObj: {
+        show: false,
+        val: '',
+        err: '',
+        img: p31
+      },
       voteDialog: false,
       isme: false,
       voteGap: '', // 中奖机会字符串，投票后的提示相关
@@ -142,10 +154,44 @@ export default {
         return 0;
       }
     },
+    // 验证码弹窗消失回调
+    codeHideFn ( type ) {
+      let that = this;
+      that.codeObj.show = false;
+      that.codeObj.img = p31;
+      if ( arguments[0] === 'confrim' ) {
+        that.voteSubmit ( that.codeObj.item, that.codeObj.val ); // 重新调用投票
+      }
+    },
+    // 获取验证码图片
+    getCodeSer () {
+        let that = this,
+            _url = `${that.$xljs.domainUrl}/ushop-api-merchant/api/sns/image/verify/code/get`;
+        that.$xljs.ajax(_url, 'get', {}, function(data){
+          if ( !data.code ) {
+            that.$xljs.toast( '验证码获取失败，请稍后重试！' );
+          }
+          that.codeObj.img = data.code || p31;
+        }, false);
+    },
     // 投票点击事件
-    voteSubmit () {
+    voteSubmit ( item, code ) {
       let that = this,
-          _url = `/ushop-api-merchant/api/sns/vote/voter/submit/${that.$xljs.actSession().id}/${that.item.id}`;
+          gap = 0,
+          _url = '';
+      if ( !code ) {
+        // 需要有验证码
+        if ( that.$xljs.actSession().securityCode === 100 ) {
+          that.codeObj.show = true; // 验证码弹窗显示
+          that.codeObj.item = item;
+          that.codeObj.val = '';
+          that.getCodeSer();
+          return false;
+        } else {
+          code = '0';
+        }
+      }
+      _url = `/ushop-api-merchant/api/sns/vote/voter/submit/${that.$xljs.actSession().id}/${that.item.id}/${code}`;
       that.$xljs.ajax(_url, 'post', {}, (data) => {
         if ( data.result === 'SUCCESS' ) {
           that.item.score += 1;
@@ -160,7 +206,7 @@ export default {
           that.$xljs.toast((data.error_description || '投票失败，未知错误'));
         }
       })
-    },
+    }
   },
   components: {
     ShareDailog
