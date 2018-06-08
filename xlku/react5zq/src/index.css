@@ -1,0 +1,74 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+img {
+  vertical-align: top;
+}
+.page-box {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.linling {
+  width: 100%;
+  display: block;
+  opacity: .2;
+}
+.grid-body {
+  position: absolute;
+  left: 0;
+  top: 10%;
+  width: 100%;
+}
+.grid-box {
+  padding: 0;
+  margin: 0 auto;
+}
+.grid-box:before,
+.grid-box:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.grid-btn {
+  float: left;
+  width: 30px;
+  height: 30px;
+  border: solid 1px #9c27b0;
+  margin: -1px 0 0 -1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+@keyframes highlighted {
+    from {background: transparent;}
+    to {background: rgba(0,0,0,.3);}
+}
+.grid-btn.winele {
+  animation-name: highlighted;
+  animation-duration: .5s;
+  animation-iteration-count: 3;
+}
+.player-ele {
+  text-align: center;
+  padding: 10px 15px;
+}
+.reset-btn {
+  padding: 6px 12px;
+}
+.chess-img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
