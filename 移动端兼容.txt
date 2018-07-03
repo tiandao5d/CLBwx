@@ -1,0 +1,34 @@
+不让 Android 手机识别邮箱 <meta content="email=no" name="format-detection" />
+禁止 iOS 识别长串数字为电话 <meta content="telephone=no" name="format-detection" />
+禁止 iOS 弹出各种操作窗口  -webkit-touch-callout:none
+
+上下拉动滚动条时卡顿、慢
+body{ -webkit-overflow-scrolling:touch; overflow-scrolling:touch;}
+
+iphone及ipad下输入框默认内阴影 element{ -webkit-appearance:none;;}
+
+消除 transition 闪屏
+-webkit-transform-style: preserve-3d;     /*设置内嵌的元素在 3D 空间如何呈现：保留 3D*/
+-webkit-backface-visibility: hidden;      /*(设置进行转换的元素的背面在面对用户时是否可见：隐藏)*/
+
+iOS 系统中文输入法输入英文时，字母之间可能会出现一个六分之一空格
+可以通过正则去掉      this.value = this.value.replace(/\u2006/g, '');
+
+禁止ios和android用户选中文字  -webkit-user-select:none
+
+在ios和andriod中,audio元素和video元素在无法自动播放
+$('html').one('touchstart',function(){
+    audio.play()
+})
+
+ios下取消input在输入的时候英文首字母的默认大写
+<input autocapitalize="off" autocorrect="off" />
+
+android下取消输入语音按钮   input::-webkit-input-speech-button {display: none}
+
+Input 的placeholder会出现文本位置偏上的情况 line-height：normal
+
+ 在移动端修改难看的点击的高亮效果，iOS和安卓下都有效：* {-webkit-tap-highlight-color:rgba(0,0,0,0);}
+ios和android下触摸元素时出现半透明灰色遮罩 element{ -webkit-tap-highlight-color:rgba(255,255,255,0);}
+
+   某些Android手机圆角失效 background-clip:padding-box;
