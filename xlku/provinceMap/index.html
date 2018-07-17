@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>省份地图</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<style type="text/css">
+			body {
+				margin: 0;
+			}
+			
+			img {
+				border: 0;
+				vertical-align: top;
+			}
+			
+			.box {
+				position: relative;
+				width: 716px;
+				height: 595px;
+				margin: 30px auto;
+			}
+			
+			.box>img {
+				width: 100%;
+				height: 100%;
+			}
+			.item-box {
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+			}
+			.province-item {
+				position: absolute;
+			}
+			
+			.province-item img {
+				display: none;
+			}
+			.province-item:hover {
+				z-index: 8;
+			}
+			.province-item:hover img {
+				display: block;
+			}
+			.province-item a {
+				position: absolute;
+				font-size: 12px;
+				z-index: 10;
+				white-space: nowrap;
+			}
+			.province-select {
+				display: block;
+				margin: 30px auto;
+				width: 300px;
+				height: 50px;
+				font-size: 16px;
+				padding: 13px 15px;
+				line-height: 1;
+				box-sizing: border-box;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="box">
+			<img src="./images/map.jpg">
+			<div class="item-box">
+				<div class="province-item" style="top:314px; left:523px; width:75px; height:90px;">
+					<img src="./images/anhui.png">
+					<a style="top: 41px; left: 22px;">安徽省</a>
+				</div>
+
+				<div class="province-item" style="top:9px; left:296px; width:318px; height:272px;">
+					<img src="./images/neimeng.png">
+					<a style="top: 202px; left: 128px;">内蒙古自治区</a>
+				</div>
+
+				<div class="province-item" style="top: 1px; left: 550px; width: 165px; height: 151px;">
+					<img src="./images/heilongjiang.png">
+					<a style="top: 80px; left: 74px;">黑龙江省</a>
+				</div>
+
+				<div class="province-item" style="top:73px; left:0px; width:292px; height:223px;">
+					<img src="./images/xinjiang.png">
+					<a style="top: 138px; left: 124px;">新疆维吾尔自治区</a>
+				</div>
+
+				<div class="province-item" style="top:275px; left:31px; width:281px; height:175px;">
+					<img src="./images/xizang.png">
+					<a style="top: 86px; left: 114px;">西藏自治区</a>
+				</div>
+
+				<div class="province-item" style="top:240px; left:182px; width:185px; height:135px;">
+					<img src="./images/qinghai.png">
+					<a style="top: 60px; left: 72px;">青海省</a>
+				</div>
+
+				<div class="province-item" style="top:187px; left:236px; width:207px; height:177px;">
+					<img src="./images/gansu.png">
+					<a style="top: 123px; left: 128px;">甘肃省</a>
+				</div>
+
+				<div class="province-item" style="top:245px; left:379px; width:49px; height:75px;">
+					<img src="./images/ningxia.png">
+					<a style="top: 27px; left: 11px;">宁夏回族自治区</a>
+				</div>
+
+				<div class="province-item" style="top:354px; left:610px; width:23px; height:22px;">
+					<img src="./images/shanghai.png">
+					<a style="top: -2px; left: 5px;">上海市</a>
+				</div>
+
+				<div class="province-item" style="top: 161px; left: 557px; width: 91px; height: 87px;">
+					<img src="./images/liaoning.png">
+					<a style="top: 19px; left: 43px;">辽宁省</a>
+				</div>
+
+				<div class="province-item" style="top:470px; left:464px; width:111px; height:88px;">
+					<img src="./images/guangdong.png">
+					<a style="top: 20px; left: 36px;">广东省</a>
+				</div>
+
+				<div class="province-item" style="top:454px; left:382px; width:118px; height:92px;">
+					<img src="./images/guangxi.png">
+					<a style="top: 34px; left: 50px;">广西壮族自治区</a>
+				</div>
+
+				<div class="province-item" style="top:288px; left:461px; width:118px; height:92px;">
+					<img src="./images/henan.png">
+					<a style="top: 32px; left: 29px;">河南省</a>
+				</div>
+
+				<div class="province-item" style="top:242px; left:396px; width:79px; height:134px;">
+					<img src="./images/shanxi.png">
+					<a style="top: 79px; left: 34px;">陕西省</a>
+				</div>
+
+				<div class="province-item" style="top:219px; left:458px; width:56px; height:112px;">
+					<img src="./images/shanxi2.png">
+					<a style="top: 52px; left: 12px;">山西省</a>
+				</div>
+
+				<div class="province-item" style="top:184px; left:497px; width:85px; height:118px;">
+					<img src="./images/hebei.png">
+					<a style="top: 63px; left: 11px;">河北省</a>
+				</div>
+
+				<div class="province-item" style="top:113px; left:575px; width:125px; height:88px;">
+					<img src="./images/jilin.png">
+					<a style="top: 37px; left: 67px;">吉林省</a>
+				</div>
+
+				<div class="province-item" style="top:210px; left:512px; width:50px; height:38px;">
+					<img src="./images/beijing.png">
+					<a style="top: 5px; left: 3px;">北京市</a>
+				</div>
+
+				<div class="province-item" style="top:224px; left:535px; width:26px; height:34px;">
+					<img src="./images/tianjin.png">
+					<a style="top: 5px; left: 0px;">天津市</a>
+				</div>
+
+				<div class="province-item" style="top:256px; left:521px; width:103px; height:68px;">
+					<img src="./images/shandong.png">
+					<a style="top: 25px; left: 19px;">山东省</a>
+				</div>
+
+				<div class="province-item" style="top:305px; left:539px; width:93px; height:72px;">
+					<img src="./images/jiangsu.png">
+					<a style="top: 16px; left: 31px;">江苏省</a>
+				</div>
+
+				<div class="province-item" style="top:556px; left:442px; width:89px; height:88px;">
+					<img src="./images/hainan.png">
+					<a style="top: 9px; left: 8px;">海南省</a>
+				</div>
+
+				<div class="province-item" style="top:345px; left:438px; width:115px; height:75px;">
+					<img src="./images/hubei.png">
+					<a style="top: 20px; left: 42px;">湖北省</a>
+				</div>
+
+				<div class="province-item" style="top:412px; left:280px; width:132px; height:138px;">
+					<img src="./images/yunnan.png">
+					<a style="top: 73px; left: 40px;">云南省</a>
+				</div>
+
+				<div class="province-item" style="top:328px; left:284px; width:161px; height:143px;">
+					<img src="./images/sichuan.png">
+					<a style="top: 57px; left: 61px;">四川省</a>
+				</div>
+
+				<div class="province-item" style="top:409px; left:367px; width:93px; height:81px;">
+					<img src="./images/guizhou.png">
+					<a style="top: 36px; left: 38px;">贵州省</a>
+				</div>
+
+				<div class="province-item" style="top:456px; left:613px; width:32px; height:65px;">
+					<img src="./images/taiwan.png">
+					<a style="top: 19px; left: 7px;">台湾省</a>
+				</div>
+
+				<div class="province-item" style="top:415px; left:548px; width:70px; height:84px;">
+					<img src="./images/fujian.png">
+					<a style="top: 30px; left: 17px;">福建省</a>
+				</div>
+
+				<div class="province-item" style="top:394px; left:445px; width:83px; height:96px;">
+					<img src="./images/hunan.png">
+					<a style="top: 31px; left: 30px;">湖南省</a>
+				</div>
+
+				<div class="province-item" style="top:367px; left:574px; width:62px; height:70px;">
+					<img src="./images/zhejiang.png">
+					<a style="top: 28px; left: 14px;">浙江省</a>
+				</div>
+
+				<div class="province-item" style="top:390px; left:513px; width:76px; height:98px;">
+					<img src="./images/jiangxi.png">
+					<a style="top: 35px; left: 12px;">江西省</a>
+				</div>
+
+				<div class="province-item" style="top:363px; left:397px; width:70px; height:80px;">
+					<img src="./images/chongqing.png">
+					<a style="top: 27px; left: 23px;">重庆市</a>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var a = document.querySelectorAll('.province-item a');
+			var sel = document.createElement('select');
+			var b = [];
+			sel.className = 'province-select';
+			document.body.appendChild(sel);
+			a = Array.prototype.slice.call(a);
+			a.forEach(function (me, index) {
+				me.setAttribute('data-index', index);
+				b[b.length] = '<option value="' + index + '">' + me.innerText + '</option>';
+				me.addEventListener('click', function () {
+					sel.querySelector('[value="' + index + '"]').selected = true;
+				})
+			});
+			sel.innerHTML = b.join('');
+		</script>
+	</body>
+
+</html>

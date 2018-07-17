@@ -34,6 +34,8 @@ export default {
     }
   },
   mounted () {
+    this.loading = false;
+    return false;
     // 页面数据初始化
     // 已经登录
     if ( this.$xljs.getUserId() ) {

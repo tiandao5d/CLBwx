@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>渐变色</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<style type="text/css">
+			body {
+				margin: 0;
+			}
+			.item {
+				line-height: 50px;
+				border-top: 1px solid rgba(255, 255, 255, 0.07);
+				border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+				color: #fff;
+				box-sizing: border-box;
+				padding: 0 15px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="div"></div>
+		<script type="text/javascript">
+			var str = '';
+			var a = 'FF83FA';
+			var b = 'FF00FF';
+			var num = 12;
+
+			function formatc(a, b, num) {
+				if(typeof a === 'string') {
+					a = toArr(a);
+					b = toArr(b);
+				}
+				var arr = [],
+					lgn = a.length;
+
+				function toArr(str) {
+					return [
+						parseInt(str.substr(0, 2), 16),
+						parseInt(str.substr(2, 2), 16),
+						parseInt(str.substr(4, 2), 16)
+					];
+				}
+
+				function getCarr(index) {
+					var n = a[index];
+					var m = b[index];
+					var dis = n - m;
+					var single = dis / (num - 1);
+					for(var i = 0; i < num; i++) {
+						if(!arr[i]) {
+							arr[i] = [];
+						}
+						arr[i][index] = parseInt(i * single + m);
+					}
+				}
+				for(var i = 0; i < lgn; i++) {
+					getCarr(i);
+				}
+				arr[0] = b;
+				arr[num - 1] = a;
+				return arr;
+			}
+			var cs = formatc(a, b, num);
+			console.log(cs)
+			for(var i = 0; i < num; i++) {
+				str += `<div class="item" style="background: rgb(${cs[i].join(',')})">${i + 1}</div>`
+			}
+			document.getElementById('div').innerHTML = str;
+		</script>
+	</body>
+</html>

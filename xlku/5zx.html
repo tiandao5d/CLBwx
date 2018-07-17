@@ -3,34 +3,98 @@
 
 	<head>
 		<meta charset="UTF-8" />
-		<title>Document</title>
+		<title>五子棋</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
 		<style>
-			body {
-				margin: 0;
-			}
-			
-			#canbox {
+			#c1 {
 				display: block;
 				margin: 60px auto;
-				width: 100%;
-				display: block;
 				box-shadow: 1px 1px 5px #000000;
+				background: #228B22;
+			}
+			.toast-box {
+				position: fixed;
+				left: 50%;
+				top: 100px;
+				transform: translateX(-50%);
+				background: rgba(0,0,0,0.7);
+				max-width: 200px;
+				z-index: 1000;
+				color: #fff;
+				font-size: 20px;
+				padding: 10px 20px;
+				line-height: 1;
+				border-radius: 50px;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				max-width: 200px;
+			}
+			.toast-box.show {
+				display: block;
+			}
+			.toast-box.hide {
+				display: none;
+			}
+			.toast-box.ani {
+				animation: toastani 300ms both;
+			}
+			.toast-box.anire {
+				animation: toastani 300ms both reverse;
+			}
+			@keyframes toastani{
+				from{
+					transform: translateX(0) scale(0) rotate(720deg);
+				}
+				to{
+					transform: translateX(-50%) scale(1) rotate(0);
+				}
 			}
 		</style>
 	</head>
 
 	<body>
-		<div id="canbox">
-			<canvas id="c1" width="450px" height="450px"></canvas>
-		</div>
+		<canvas id="c1" width="450px" height="450px"></canvas>
+		<div class="toast-box hide" id="toastbox">内容</div>
 		<script type="text/javascript">
+			var toast = new Toastgz().show;
+			function Toastgz () {
+				if ( !this.aniend ) {
+					Toastgz.prototype.aniend = function () {
+						if ( box.classList.contains('ani') ) {
+							box.classList.remove('ani');
+						} else if ( box.classList.contains('anire') ) {
+							box.classList.add('hide');
+							box.classList.remove('anire');
+						}
+					}
+					Toastgz.prototype.box = document.querySelector('#toastbox');
+					this.box.addEventListener('animationend', this.aniend);
+				} else {
+					throw new Error('Toast重复创建！');
+					return false;
+				}
+				var box = this.box;
+				this.intout = 0;
+				this.show = function (txt) {
+					box.innerText = txt;
+					if ( box.classList.contains('hide') ) {
+						box.classList.remove('hide');
+						box.classList.add('ani');
+						this.intout = setTimeout(function () {
+							box.classList.add('anire');
+						}, 3000);
+					} else {
+						clearTimeout(this.intout);
+						this.intout = setTimeout(function () {
+							box.classList.add('anire');
+						}, 3000);
+					}
+				}
+			}
 			window.onload = function() {
-				var oC = document.getElementById('c1'),
-					w = document.getElementById('canbox').offsetWidth;
-					console.log(w)
-				oC.width = w
-				oC.height = w
+				var oC = document.getElementById('c1');
 				var oGc = oC.getContext('2d');
 
 				var over = false;
@@ -109,7 +173,6 @@
 					}
 				}
 
-				//Ӯ��ͳ������
 				var myWin = [];
 				var computerWin = [];
 
@@ -169,7 +232,7 @@
 							myWin[k]++;
 							computerWin[k] = 6;
 							if(myWin[k] == 5) {
-								window.alert("恭喜你，获得了胜利！");
+								toast('恭喜你，获得了胜利！');
 								over = true;
 							}
 						}
@@ -200,7 +263,7 @@
 
 					for(var i = 0; i < 15; i++) {
 						for(var j = 0; j < 15; j++) {
-							if(chessBoard[i][j] == 0) { //δ���ӵ�����λ��
+							if(chessBoard[i][j] == 0) {
 								for(var k = 0; k < count; k++) {
 									if(wins[i][j][k]) {
 										if(myWin[k] == 1) {
@@ -258,7 +321,7 @@
 							computerWin[k]++;
 							myWin[k] = 6;
 							if(computerWin[k] == 5) {
-								window.alert('YOU LOST!');
+								toast('你输了!');
 								over = true;
 							}
 						}
