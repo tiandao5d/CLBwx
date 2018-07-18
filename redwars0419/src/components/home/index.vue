@@ -18,12 +18,11 @@ export default {
   mounted () {
     let actData = this.$xljs.storageL(this.$xljs.sessionAct, null, true) || {},
         ttype = actData.template + ''
-    this.showstr = 1
-    // if ( ttype === '1' ) { // 红包雨
-    //   this.showstr = 1
-    // } else if ( ttype === '2' ) { // 抽奖转盘
-    //   this.showstr = 2
-    // }
+    if ( ttype === '1' ) { // 红包雨
+      this.showstr = 1
+    } else if ( ttype === '2' ) { // 抽奖转盘
+      this.showstr = 2
+    }
   },
   components: {
     XlRedrain,

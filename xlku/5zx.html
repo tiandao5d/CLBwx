@@ -96,6 +96,9 @@
 			window.onload = function() {
 				var oC = document.getElementById('c1');
 				var oGc = oC.getContext('2d');
+				var w = oC.parentNode.offsetWidth;
+				oC.width = w;
+				oC.height = w;
 
 				var over = false;
 
@@ -119,7 +122,6 @@
 
 				//赢法数组
 				var wins = [];
-
 				for(var i = 0; i < 15; i++) {
 					wins[i] = [];
 					for(var j = 0; j < 15; j++) {
@@ -181,6 +183,7 @@
 					computerWin[i] = 0;
 				}
 
+console.log(wins)
 				function oneStep(i, j, me) {
 					oGc.beginPath();
 					oGc.arc(15 + i * 30, 15 + j * 30, 13, 0, 2 * Math.PI);

@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<style type="text/css">
+			body {
+				margin: 0;
+			}
+			
+			.box {
+				padding: 60px 15px;
+				margin: 0 auto;
+				width: 100%;
+				box-sizing: border-box;
+			}
+			
+			.box canvas {
+				display: block;
+				box-shadow: 1px 1px 5px #000000;
+				background: #228B22;
+				width: 100%;
+			}
+			
+			.toast-box {
+				position: fixed;
+				left: 50%;
+				top: 100px;
+				transform: translateX(-50%);
+				z-index: 1000;
+			}
+			.toast-msg {
+				background: rgba(0, 0, 0, 0.7);
+				max-width: 200px;
+				color: #fff;
+				font-size: 20px;
+				padding: 10px 20px;
+				line-height: 1;
+				border-radius: 50px;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				max-width: 200px;
+			}
+			
+			.toast-box.hide {
+				display: none;
+			}
+			
+			.toast-msg.ani {
+				animation: toastani 300ms both;
+			}
+			
+			.toast-msg.anire {
+				animation: toastani 300ms both reverse;
+			}
+			.toast-msg.shake {
+				animation: toastshake 1s both;
+			}
+			
+			@keyframes toastani {
+				from {
+					transform: scale(0) rotate(720deg);
+				}
+				to {
+					transform: scale(1) rotate(0);
+				}
+			}
+			
+			@keyframes toastshake {
+				0% {
+					transform: scale3d(1, 1, 1);
+				}
+				30% {
+					transform: scale3d(1.25, 0.75, 1);
+				}
+				40% {
+					transform: scale3d(0.75, 1.25, 1);
+				}
+				50% {
+					transform: scale3d(1.15, 0.85, 1);
+				}
+				65% {
+					transform: scale3d(0.95, 1.05, 1);
+				}
+				75% {
+					transform: scale3d(1.05, 0.95, 1);
+				}
+				100% {
+					transform: scale3d(1, 1, 1);
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<canvas id="canvas"></canvas>
+		</div>
+		<div class="toast-box hide" id="toastbox"><div class="toast-msg">这里已经有了</div></div>
+		<div dd="http://10.13.0.57/ushop-web-admin/sns/banner/list?userid=70&timestamp=1531820412730&sign=6F213D3DFB77FA9F6A7E7D061F7449EA&rowNum=10&multiboxonly=true&_search=false&nd=1531820369362&rows=10&page=1&sidx=&sord=asc"></div>
+		<script type="text/javascript">
+			var toast = new Toastgz().show;
+
+			function Toastgz() {
+				if(this.box) {
+					throw new Error('Toast重复创建！');
+					return false;
+				}
+				Toastgz.prototype.box = document.querySelector('#toastbox');
+				var box = this.box;
+				var msg = box.querySelector('.toast-msg');
+				
+				this.intout = 0;
+				this.aniend = function() {
+					if ( msg.classList.contains('ani') ) {
+						msg.classList.remove('ani');
+					} else if(msg.classList.contains('anire')) {
+						box.classList.add('hide');
+						msg.classList.remove('shake');
+						msg.classList.remove('anire');
+					} else if ( msg.classList.contains('shake') ) {
+						msg.classList.remove('shake');
+					}
+				}
+				this.show = function(txt) {
+					msg.innerText = txt;
+					if ( box.classList.contains('hide') ) {
+						box.classList.remove('hide');
+						msg.classList.add('ani');
+						this.intout = setTimeout(function() {
+							msg.classList.add('anire');
+						}, 3000);
+					} else {
+						clearTimeout(this.intout);
+						msg.classList.add('shake');
+						this.intout = setTimeout(function() {
+							msg.classList.add('anire');
+						}, 3000);
+					}
+				}
+				msg.addEventListener('animationend', this.aniend);
+			}
+			window.onload = function() {
+				Wzqfn()
+			}
+
+			function Wzqfn() {
+				var canvas = document.getElementById('canvas');
+				var ctx = canvas.getContext('2d');
+				var pad = 15; // 边界最小宽度
+				var width = canvas.offsetWidth; // 容器宽高
+				var tdw = 26; // 格子宽度
+
+				var num = parseInt((width - (2 * pad)) / tdw); // 格子数量
+				var numl = num + 1; // 线条的数量
+				var arcw = parseInt(tdw / 2); // 棋子大小
+				
+				var wins = []; // 所有的胜利数组
+				var aiwins = []; // ai的落子数组
+				var mewins = []; // 用户的落子数组
+				
+				var ai = false; // 用户先落子
+				
+				arcw = arcw > 10 ? 10 : arcw;
+				pad = (width - tdw * num) / 2;
+				canvas.width = width;
+				canvas.height = width;
+
+				ctx.clearRect(0, 0, width, width);
+
+				ctx.strokeStyle = "#bfbfbf"; // 格子线条颜色
+				ctx.lineWidth = 1; // 格子线条宽度
+				
+				var i = 0, j = 0, maxn = 0, maxr = 0;
+				//绘制棋盘
+				for ( i = 0; i < numl; i++ ) {
+					ctx.moveTo(pad + i * tdw, pad);
+					ctx.lineTo(pad + i * tdw, tdw * num + pad);
+					ctx.stroke();
+					ctx.moveTo(pad, pad + i * tdw);
+					ctx.lineTo(tdw * num + pad, pad + i * tdw);
+					ctx.stroke();
+				}
+				
+				// 水平垂直胜利数组
+				maxn = numl - 4;
+				for ( i = 0; i < numl; i++ ) {
+					// 垂直水平
+					if ( i < maxn ) {
+						for ( j = 0; j < numl; j++ ) {
+							wins[wins.length] = [joinxy(j + 0, i), joinxy(j + 1, i), joinxy(j + 2, i), joinxy(j + 3, i), joinxy(j + 4, i)];
+							wins[wins.length] = [joinxy(i, j + 0), joinxy(i, j + 1), joinxy(i, j + 2), joinxy(i, j + 3), joinxy(i, j + 4)];
+						}
+					}
+					if ( i >= 4 ) {
+						maxr = i - 4 + 1;
+						for ( j = 0; j < maxr; j++ ) {
+							wins[wins.length] = [joinxy(0 + j, i - j - 0), joinxy(1 + j, i - j - 1), joinxy(2 + j, i - j - 2), joinxy(3 + j, i - j - 3), joinxy(4 + j, i - j - 4)];
+							wins[wins.length] = [joinxy(i - j - 0, num - j - 0), joinxy(i - j - 1, num - j - 1), joinxy(i - j - 2, num - j - 2), joinxy(i - j - 3, num - j - 3), joinxy(i - j - 4, num - j - 4)];
+						}
+					}
+					if ( i < maxn && i > 0 ) {
+						maxr = num - i - 4 + 1;
+						for ( j = 0; j < maxr; j++ ) {
+							wins[wins.length] = [joinxy(i + j + 0, num - j - 0), joinxy(i + j + 1, num - j - 1), joinxy(i + j + 2, num - j - 2), joinxy(i + j + 3, num - j - 3), joinxy(i + j + 4, num - j - 4)];
+							wins[wins.length] = [joinxy(i + j + 0, 0 + j), joinxy(i + j + 1, 1 + j), joinxy(i + j + 2, 2 + j), joinxy(i + j + 3, 3 + j), joinxy(i + j + 4, 4 + j)];
+						}
+					}
+				}
+				
+				function joinxy ( x, y ) {
+					return x + '_' + y;
+				}
+				
+				// 落子，x、y为坐标，ai为判断是否AI落子
+				function moveChess(x, y) {
+					var xy = joinxy(x, y);
+					if ( mewins.indexOf(xy) >= 0 || aiwins.indexOf(xy) >= 0 ) { // 此处已经落子
+						toast('这里已经有棋子了！');
+						return false;
+					}
+					var x0 = pad + tdw * x;
+					var y0 = pad + tdw * y;
+					var grd;
+					ctx.beginPath();
+					ctx.arc(x0, y0, arcw, 0, 2 * Math.PI);
+					if ( ai ) { // 是否AI落子
+						aiwins[aiwins.length] = xy; // 记录AI落子数组
+						// 黑子渐变
+						grd = ctx.createRadialGradient(x0 + 5, y0 - 5, arcw / 100, x0, y0, arcw)
+						grd.addColorStop(0, '#ccc');
+						grd.addColorStop(1, '#000');
+					} else {
+						mewins[mewins.length] = xy; // 记录用户落子数组
+						// 百子渐变
+						grd = ctx.createRadialGradient(x0 + 5, y0 - 5, arcw / 100, x0, y0, arcw)
+						grd.addColorStop(0, '#fff');
+						grd.addColorStop(1, '#aaa');
+					}
+					ctx.fillStyle = grd;
+					ctx.fill();
+					if ( isWin(x, y) ) {
+						console.log(ai)
+						return false;
+					}
+					ai = !ai;
+				}
+				
+				function isWin ( x, y ) {
+					var lgn = wins.length;
+					var xy = joinxy(x, y);
+					var istrue = true;
+					var cwins = mewins;
+					if ( ai ) {
+						cwins = aiwins;
+					}
+					for ( i = 0; i < lgn; i++ ) {
+						if ( wins[i].indexOf(xy) >= 0 ) { // 表示有当前落子的坐标
+							istrue = true;
+							for ( j = 0; j < 5; j++ ) { // 当前胜利数组中的每一个坐标是否都存在于当前用户的落子坐标集合中
+								if ( cwins.indexOf(wins[i][j]) < 0 ) {
+									istrue = false;
+									break;
+								}
+							}
+							if ( istrue ) {
+								return wins[i];
+							}
+						}
+					}
+					return false;
+				}
+				canvas.onclick = function(e) {
+					var x = e.offsetX;
+					var y = e.offsetY;
+					if ( x + arcw < pad || y + arcw < pad ) {
+						return false;
+					}
+					var xa = ((x - pad) / tdw).toFixed(1).split('.');
+					var ya = ((y - pad) / tdw).toFixed(1).split('.');
+
+					x = Math.abs(parseInt(xa[0]));
+					y = Math.abs(parseInt(ya[0]));
+					x = parseInt(xa[1]) > 5 ? (x + 1) : x;
+					y = parseInt(ya[1]) > 5 ? (y + 1) : y;
+					moveChess(x, y);
+				}
+			}
+		</script>
+	</body>
+
+</html>

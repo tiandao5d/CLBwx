@@ -155,10 +155,10 @@ export default {
     },
     // 用户执行抽奖
     userDraw () {
-      // if ( !this.numNum ) {
-      //   this.showDialog( '需要更多好友点亮祝福才能继续领取祝福红包，快去邀请好友来点亮吧！' )
-      //   return false
-      // }
+      if ( !this.numNum ) {
+        this.showDialog( '需要更多好友点亮祝福才能继续领取祝福红包，快去邀请好友来点亮吧！' )
+        return false
+      }
       this.$refs.xlanimate.show() // 显示开奖动画
     },
     // 获取任务可参与的次数

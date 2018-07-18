@@ -159,10 +159,7 @@ export default {
       this.att = 0 // 重置抽奖结果计时
       this.sequencePlay(box, this.iarr, 2) // 序列图财神
       this.redRain( awi033, box ) // 下红包雨
-      // this.getUserDraw() // 用户抽奖开始，数据请求
-      setTimeout(() => {
-        this.handResult()
-      }, 5000)
+      this.getUserDraw() // 用户抽奖开始，数据请求
     },
     hide () {
       this.isshow = false
