@@ -1,0 +1,47 @@
+@charset "UTF-8";
+body { font-family:"微软雅黑"; position:relative; background:#fff;}
+html,body {position: relative; height: 100%;}
+ul,li{ list-style:none; margin:0; padding:0;}
+a:hover,a:active,a:link,a:visited{ text-decoration:none;}
+.mr10{ margin-right:10px;}
+.mt3{ margin-top:3px;}
+.container{ padding:0;}
+.sel_t{ padding:15px 10px; overflow:hidden; background:#f0f0f0;}
+.sel_t h1{ font-size:18px; font-weight:bold; margin:0 0 15px 0;}
+.sel_t label{ font-size:16px;}
+.sel_t label span{ border-radius:50%; width:28px; height:28px; line-height:28px; margin:0 1px; text-align:center; display:inline-block; background:#f4483e; color:#fff;}
+.sel_t .col-xs-4,.sel_t .col-xs-2{ padding:0; float:left;}
+.sel_t .blues span{ background:#318ff1;}
+.check{ background:#f0f0f0; padding-bottom:15px;}
+.check .btn{ background:#ffa600; display:block; width:80%; margin:0 auto; color:#fff; font-size:18px; border:none;}
+.sel_t .form-control{ display:inline; width:20%; height:28px; padding:0}
+.sel_con{ padding:10px;}
+.redBall{ border:1px solid #f4483e;}
+.blueBall{ border:1px solid #318ff1;}
+.out hr{ transform:rotate(20deg); border-top:1px solid #333;}
+.sel_con h2{ font-size:18px; padding:10px 0; margin:0}
+.sel_con h2 span{ color:#f54740;}
+.sel_con .vm{ vertical-align:middle;/*  white-space:nowrap; */}
+.sel_con .table{ border:1px solid #333333 !important;}
+.sel_con .table-striped>tbody>tr:nth-of-type(odd){background:#e6e6e6;}
+.sel_con tr td:nth-of-type(1){ font-weight:bold;}
+.sel_con .table-bordered>tbody>tr>td, .sel_con .table-bordered>tbody>tr>th, .sel_con .table-bordered>tfoot>tr>td, .sel_con .table-bordered>tfoot>tr>th, .sel_con .table-bordered>thead>tr>td, .sel_con .table-bordered>thead>tr>th{ border:none;}
+@media (min-width:415px){
+	.sel_t .form-control{ width:70px;}
+	.sel_t .col-xs-4, .sel_t .col-xs-2{ text-align:right;}
+}
+@media (min-width:376px) and (max-width:414px){
+	.sel_t .form-control{ width:70px;}
+	.sel_t .col-xs-4{ width:30%;}
+}
+@media (min-width:321px) and (max-width:375px){
+	.sel_t .form-control{ width:55px;}
+	.sel_t .col-xs-4{ width:32%;}
+}
+@media (max-width:320px){
+	.sel_con h2{ font-size:16px;}
+	.sel_t label{ font-size:13px;}
+	.sel_t label span{ width:20px; height:20px; line-height:19px;}
+	.sel_t .col-xs-4{ width:28%;}
+	.sel_con td{ font-size:12px;}
+}

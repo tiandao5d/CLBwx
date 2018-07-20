@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+		<title>模拟开奖</title>
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="font-awesome/4.5.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/tools.css">
+		<style>
+			.top_lottery {
+				width: 100%;
+				height: 600px;
+				background: url("./images/simulation_shsq.jpg");
+				background-size: 100% 600px;
+				margin: 0 auto;
+			}
+		</style>
+	</head>
+
+	<body>
+		<audio preload="auto" id="mybackgroundAudio">
+			<source src="http://ah.uplottery.cn/assets/audio/yao.mp3" type="audio/mpeg" />
+		</audio>
+		<div class="container mnkj">
+			<div class="top_lottery">
+				<ul class="top_color_name">
+					<li class="active">双色球</li>
+					<li>福彩3D</li>
+					<li>七乐彩</li>
+				</ul>
+				<div id="emulator" class="emulator">
+					<img src="./images/kj_shsq.png">
+					<div class="billboard"></div>
+				</div>
+				<div class=""></div>
+				<div class="action">
+					<a href="javascript:emulatorSSQ.start();" class="button"><img src="./images/kshyj.png" alt=""></a>
+				</div>
+				<div class="clear"></div>
+				<ul id="session"></ul>
+			</div>
+			<div class="lottery_record">
+				<div class="record_img text-center">
+					<img src="./images/lottery_record.png" alt="">
+				</div>
+				<p>温馨提示：每天24:00清空记录哦！</p>
+				<div class="record_cont mn_shsq">
+					<p class="record_cont_top">双色球</p>
+					<ul class="record_cont_cont">
+
+					</ul>
+				</div>
+				<div class="record_cont mn_fc3d">
+					<p class="record_cont_top">福彩3D</p>
+					<ul class="record_cont_cont">
+
+					</ul>
+				</div>
+				<div class="record_cont mn_7lc">
+					<p class="record_cont_top">七乐彩</p>
+					<ul class="record_cont_cont">
+
+					</ul>
+				</div>
+			</div>
+			<div id="modal"></div>
+		</div>
+
+		<script type="text/javascript" language="javascript" src="js/jquery.min2.js"></script>
+		<script type="text/javascript" language="javascript" src="js/jquery.cookie.js"></script>
+		<script type="text/javascript" language="javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" language="javascript" src="js/respond.min.js"></script>
+		<script type="text/javascript" language="javascript" src="js/alertify.min.js"></script>
+		<script type="text/javascript" language="javascript" src="js/jquery.transit.js"></script>
+		<script>
+			$(function() {
+				var last_time = $.cookie('em_last_time');
+				var now_time = 2018 - 07 - 17;
+				if(last_time == '' || last_time == undefined || last_time == null || last_time != now_time) {
+					$.cookie('mn_7lc_ball', '');
+					$.cookie('mn_fc3d_ball', '');
+					$.cookie('mn_shsq_ball', '');
+					var validity1 = validity(23, 59, 59);
+					$.cookie('em_last_time', now_time, {
+						expires: validity1
+					});
+				}
+				if(window.sessionStorage.initName) {
+					var initName = window.sessionStorage.getItem('initName');
+					whichName(initName);
+				} else {
+					emulatorSSQ.init();
+				}
+				$('.record_cont_cont').html('');
+				var mn_balls;
+
+				function getCookie(cookieName, colorName) {
+					if($.cookie(cookieName)) {
+						var o = $.cookie(cookieName);
+						mn_balls = JSON.parse(o);
+						for(var i = 0; i < mn_balls.length; i++) {
+							var $node = $('<li><span class="record_time">' + mn_balls[i].time + '</span></li>');
+							for(var j = 0; j < mn_balls[i].balls.length; j++) {
+								if(j == 7 || (j == 6 && colorName === 'mn_shsq')) {
+									$node.append($('<span class="blue">' + mn_balls[i].balls[j] + '</span>'));
+								} else {
+									$node.append($('<span class="red">' + mn_balls[i].balls[j] + '</span>'));
+								}
+							}
+							$node.prependTo($('.record_cont.' + colorName + ' .record_cont_cont'));
+						}
+					}
+				}
+				getCookie('mn_7lc_ball', 'mn_7lc');
+				getCookie('mn_fc3d_ball', 'mn_fc3d');
+				getCookie('mn_shsq_ball', 'mn_shsq');
+			});
+			$('.action .button').bind('click', function() {
+				$('.billboard').html('');
+				$('#modal').show().css('background', 'none');
+			});
+
+			function whichName(obj) {
+				switch(obj) {
+					case '双色球':
+						$('#emulator img').attr('src', './images/kj_shsq.png').css({
+							'width': '180px',
+							'position': 'relative',
+							'left': '70px'
+						});
+						$('.action a').attr('href', 'javascript:emulatorSSQ.start()');
+						$('#emulator').children('.group,.ballBox').remove();
+						$('.top_color_name li:eq(0)').addClass('active').siblings().removeClass('active');
+						window.sessionStorage.setItem('initName', '双色球');
+						emulatorSSQ.init();
+						break;
+					case '福彩3D':
+						$('#emulator img').attr('src', './images/kj_3D.png').css({
+							'width': '240px',
+							'position': 'relative',
+							'left': '45px'
+						});
+						$('.action a').attr('href', 'javascript:emulator3D.start()');
+						$('#emulator').children('.group,.ballBox').remove();
+						$('.top_color_name li:eq(1)').addClass('active').siblings().removeClass('active');
+						window.sessionStorage.setItem('initName', '福彩3D');
+						emulator3D.init();
+						break;
+					case '七乐彩':
+						$('#emulator img').attr('src', './images/kj_7lc.png').css({
+							'width': '240px',
+							'position': 'relative',
+							'left': '45px'
+						});
+						$('.action a').attr('href', 'javascript:emulator7lecai.start()');
+						$('#emulator').children('.group,.ballBox').remove();
+						$('.top_color_name li:eq(2)').addClass('active').siblings().removeClass('active');
+						window.sessionStorage.setItem('initName', '七乐彩');
+						emulator7lecai.init();
+						break;
+				}
+			}
+			$('.top_color_name li').bind('click', function() {
+				$('.billboard').html('');
+				$('.chosed').remove();
+				var __ = $(this);
+				$(this).addClass('active').siblings().removeClass('active');
+				whichName(__.html());
+			});
+			var pushTimer, progress = null;
+			var queueIndex = 0,
+				queueTimer, timer, _color = 'red';
+			var mybackgroundAudio = document.getElementById('mybackgroundAudio');
+			//开奖记录有效期
+			function validity(h, m, s) {
+				//获取当前时间时间戳
+				var nowunix = Math.round(new Date().getTime());
+				var date = new Date();
+				date.setHours(h);
+				date.setMinutes(m);
+				date.setSeconds(s);
+				//获取指定时间时间戳
+				var secunix = Math.round(date.getTime());
+				shengunix = secunix - nowunix;
+				shengunix = parseFloat(shengunix) / 1000;
+				var date1 = new Date();
+				date1.setTime(date1.getTime() + (shengunix * 1000));
+				return date1;
+			}
+
+			var mn_fc3d_ball = [];
+			if($.cookie('mn_fc3d_ball')) {
+				var o = $.cookie('mn_fc3d_ball');
+				mn_fc3d_ball = JSON.parse(o);
+			}
+			var emulator3D = {
+				config: {
+					area: [{
+						x: 38,
+						y: 61
+					}, {
+						x: 110,
+						y: 61
+					}, {
+						x: 186,
+						y: 61
+					}],
+					start_point: {
+						x: 20,
+						y: 95
+					},
+					stock: {
+						x: 0,
+						y: 100,
+						width: 50,
+						height: 40
+					},
+					push_point: [{
+						x: 33,
+						y: -53
+					}, {
+						x: 28,
+						y: -53
+					}, {
+						x: 26,
+						y: -53
+					}]
+					// audio: WEB_URL + 'assets/audio/BallBouncing.mp3'
+				},
+				//初始化
+				init: function() {
+					document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+						WeixinJSBridge.call('hideOptionMenu');
+					});
+					var cfg = this.config;
+					$.each(cfg.area, function(i, d) {
+						$e = $('<div class="ballBox"><div class="xBox"></div></div>').appendTo($('#emulator')).css({
+							left: d.x,
+							top: d.y
+						});
+						var arr = [];
+						for(var i = 0; i < 10; i++) arr.push('<figure class="ball"><p>' + i + '</p></figure>');
+						$o = $('<div style="position:absolute"><section class="stage">' + arr.join('') + '</section></div>').appendTo($e.find('.xBox')).css({
+							left: cfg.start_point.x,
+							top: cfg.start_point.y
+						});
+						$o.find('.ball').css({
+							width: 12,
+							height: 12
+						});
+					});
+				},
+				//开始摇奖
+				start: function() {
+					// $('<audio id="Audio3d"><source src="'+this.config.audio+'"></audio>').appendTo('body');
+					// Audio3d.play();
+					$('.action').hide();
+					mybackgroundAudio.play();
+					var __ = this;
+					if(progress != null && progress) return;
+					if(progress == null) progress = true;
+					if($('.chosed').length > 1) {
+						this.restart();
+					} else {
+						$('.xBox .ball').each(function() {
+							$(this).transition({
+								x: 3,
+								y: 80
+							});
+						});
+						this.bounce();
+					}
+				},
+				//随机滚动
+				bounce: function() {
+					var __ = this;
+					var cfg = this.config;
+					timer = window.setInterval(function() {
+						$('.xBox .ball').each(function(i) {
+							var x = Math.ceil((Math.random() * (cfg.stock.x + cfg.stock.width)) + cfg.stock.x);
+							var y = Math.ceil((Math.random() * (cfg.stock.height + cfg.stock.height)) + cfg.stock.y);
+							if(!$(this).hasClass('chosed')) {
+								var $e = $(this).css('position', 'absolute');
+								$e.transition({
+									x: x,
+									y: y
+								}, 50);
+							}
+						});
+
+					}, 20);
+					popTimer = window.setInterval(function() {
+						__.pushBall();
+					}, 1000);
+					setTimeout(function() {
+						//$('#Audio3d').remove();
+						mybackgroundAudio.pause();
+						mybackgroundAudio.currentTime = 0;
+						window.clearInterval(timer);
+						window.clearInterval(popTimer);
+						for(var i = 0; i < $('.xBox .chosed').length; i++) {
+							$('.billboard').append('<span class="ball red">' + $('.xBox .chosed:eq(' + i + ') p').html() + '</span>');
+						}
+						$('.xBox figure').not('.chosed').remove();
+						progress = false;
+						$('.action').show();
+						$('#modal').hide();
+						__.addIntoResult();
+					}, 8000);
+				},
+				//抽取随机球
+				pushBall: function() {
+					var total = $('.chosed').length;
+					if(total < 3) {
+						$e = $('.xBox').eq(total).find('.ball').eq(Math.ceil((Math.random() * 9) + 0)).addClass('chosed');
+						$e.transition({
+							x: this.config.push_point[total].x,
+							y: this.config.push_point[total].y
+						});
+					} else {
+						$('.button img').attr('src', './images/again.png');
+					}
+				},
+				//重启摇奖
+				restart: function() {
+					$('.xBox').remove();
+					$('.result').html('').hide();
+					var __ = this;
+					__.init();
+					setTimeout(function() {
+						__.start();
+					}, 1500);
+				},
+				addIntoResult: function() {
+					var now = new Date();
+					var ball_fc3d = [];
+					var h = now.getHours(),
+						m = now.getMinutes();
+					var now_time = (h < 10 ? '0' + h : h) + ':' + (m < 10 ? '0' + m : m);
+					var $node_fc3d = $('<li><span class="record_time">' + now_time + '</span></li>');
+					for(var i = 0; i < 3; i++) {
+						$node_fc3d.append($('<span class="red">' + $('.billboard .ball:eq(' + i + ')').html() + '</span>'));
+						ball_fc3d.push($('.billboard .ball:eq(' + i + ')').html());
+					}
+					var ball_fc3d_cont = {
+						time: now_time,
+						balls: ball_fc3d
+					};
+					mn_fc3d_ball.push(ball_fc3d_cont);
+					var str = JSON.stringify(mn_fc3d_ball);
+					var validity1 = validity(23, 59, 59);
+					$.cookie('mn_fc3d_ball', str, {
+						expires: validity1
+					});
+					$node_fc3d.prependTo($('.record_cont.mn_fc3d .record_cont_cont'));
+				}
+			};
+
+			var mn_7lc_ball = [];
+			if($.cookie('mn_7lc_ball')) {
+				var o = $.cookie('mn_7lc_ball');
+				mn_7lc_ball = JSON.parse(o);
+			}
+			var emulator7lecai = {
+				config: {
+					ball: [
+						['01', '02', '03', '04', '05'],
+						['06', '07', '08', '09', 10],
+						[11, 12, 13, 14, 15],
+						[16, 17, 18, 19, 20],
+						[21, 22, 23, 24, 25],
+						[26, 27, 28, 29, 30]
+					],
+					ball_geo: [{
+						x: 122,
+						y: 175
+					}, {
+						x: 138,
+						y: 175
+					}, {
+						x: 156,
+						y: 175
+					}, {
+						x: 170,
+						y: 175
+					}, {
+						x: 188,
+						y: 175
+					}, {
+						x: 204,
+						y: 175
+					}],
+					bounce_area: {
+						x: -20,
+						y: -75,
+						width: 40,
+						height: 65
+					}
+				},
+				init: function() {
+					document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+						WeixinJSBridge.call('hideOptionMenu');
+					});
+					var __ = this;
+					$.each(__.config.ball, function(i, d) {
+						var arr = [];
+						for(var k = 0; k < d.length; k++) arr.push('<figure class="ball red"><p>' + d[k] + '</p></figure>');
+						$('<div style="position:absolute" class="group"><section class="stage">' + arr.join('') + '</section></div>').appendTo($('#emulator')).css({
+							left: __.config.ball_geo[i].x,
+							top: __.config.ball_geo[i].y
+						});
+						$('.group').find('.ball').css({
+							width: 12,
+							height: 12
+						});
+					});
+				},
+				start: function() {
+					if($('.chosed').length > 0) {
+						$('.chosed').remove();
+						emulator7lecai.init();
+					}
+					$('.billboard').html('');
+					$('.action').hide();
+					mybackgroundAudio.play();
+					$('.group').transition({
+						y: 70
+					});
+					setTimeout(function() {
+						emulator7lecai.bounce();
+					}, 200);
+				},
+				bounce: function() {
+					var __ = this;
+					timer = window.setInterval(function() {
+						$('.group .ball').each(function() {
+							var x = Math.ceil((Math.random() * __.config.bounce_area.width) + __.config.bounce_area.x);
+							var y = Math.ceil((Math.random() * __.config.bounce_area.height) + __.config.bounce_area.y);
+							$(this).css({
+								left: x,
+								top: y
+							});
+						});
+					}, 100);
+					queueTimer = window.setInterval(function() {
+						__.pushBall();
+					}, 2000);
+				},
+				pushBall: function() {
+					var __ = this;
+					var total = $('.chosed').length;
+					if(total < 8) {
+						var time = 110;
+						$e = $('.group .ball').eq(Math.ceil(Math.random() * 29)).addClass('chosed').appendTo($('#emulator'))
+							.css({
+								'position': 'absolute',
+								'transform': 'translate(0,0)',
+								left: '152px',
+								top: '215px',
+								width: 16,
+								height: 16
+							})
+							.transition({
+								y: -98
+							})
+							.transition({
+								x: 35
+							}, time, 'in')
+							.transition({
+								x: 98,
+								y: -46
+							}, time, 'in')
+							.transition({
+								x: 110,
+								y: 5
+							}, time, 'in')
+							.transition({
+								x: 96,
+								y: 60
+							}, time, 'in')
+							.transition({
+								x: 60,
+								y: 96
+							}, time, 'in')
+							.transition({
+								x: 30,
+								y: 115
+							}, time, 'in')
+							.transition({
+								x: -95 + (total * 17),
+								y: 140 - (total * 3.7)
+							});
+						if(total == 7) {
+							if($e.text()) $('.billboard').append('<span class="ball blue">' + $e.text() + '</span>');
+						} else {
+							if($e.text()) $('.billboard').append('<span class="ball red">' + $e.text() + '</span>');
+						}
+					} else {
+						mybackgroundAudio.pause();
+						mybackgroundAudio.currentTime = 0;
+						$('.group').remove();
+						window.clearInterval(timer);
+						window.clearInterval(queueTimer);
+						$('.action').show();
+						$('.button img').attr('src', './images/again.png');
+						$('#modal').hide();
+						var now = new Date();
+						var ball_7lc = [];
+						var h = now.getHours(),
+							m = now.getMinutes();
+						var now_time = (h < 10 ? '0' + h : h) + ':' + (m < 10 ? '0' + m : m);
+						var $node = $('<li><span class="record_time">' + now_time + '</span></li>');
+						for(var i = 0; i < 8; i++) {
+							if(i == 7) {
+								$node.append($('<span class="blue">' + $('.billboard .ball:eq(' + i + ')').html() + '</span>'));
+							} else {
+								$node.append($('<span class="red">' + $('.billboard .ball:eq(' + i + ')').html() + '</span>'));
+							}
+							ball_7lc.push($('.billboard .ball:eq(' + i + ')').html());
+						}
+						var ball_7lc_cont = {
+							time: now_time,
+							balls: ball_7lc
+						};
+						mn_7lc_ball.push(ball_7lc_cont);
+						var str = JSON.stringify(mn_7lc_ball);
+						var validity1 = validity(23, 59, 59);
+						$.cookie('mn_7lc_ball', str, {
+							expires: validity1
+						});
+						$node.prependTo($('.record_cont.mn_7lc .record_cont_cont'));
+					}
+				}
+			};
+			//
+			// // 双色球背景音控制
+			backgroundAudioflag = true; // 标记是否为篮球选号
+
+			var mn_shsq_ball = [];
+			if($.cookie('mn_shsq_ball')) {
+				var o = $.cookie('mn_shsq_ball');
+				mn_shsq_ball = JSON.parse(o);
+			}
+			var emulatorSSQ = {
+				config: {
+					red: [
+						['01', '02', '03', '04'],
+						['05', '06', '07', '08'],
+						['09', 10, 11, 12],
+						[13, 14, 15],
+						[16, 17, 18],
+						[19, 20, 21],
+						[22, 23, 24],
+						[25, 26, 27],
+						[28, 29, 30],
+						[31, 32, 33]
+					],
+					blue: [
+						['01', '02'],
+						['03', '04'],
+						['05', '06'],
+						['07', '08'],
+						['09', 10],
+						[11, 12],
+						[13],
+						[14],
+						[15],
+						[16]
+					],
+					red_geo: [{
+						x: 82,
+						y: 112
+					}, {
+						x: 98,
+						y: 112
+					}, {
+						x: 114,
+						y: 112
+					}, {
+						x: 130,
+						y: 127
+					}, {
+						x: 146,
+						y: 127
+					}, {
+						x: 162,
+						y: 127
+					}, {
+						x: 178,
+						y: 127
+					}, {
+						x: 194,
+						y: 127
+					}, {
+						x: 210,
+						y: 127
+					}, {
+						x: 226,
+						y: 127
+					}],
+					blue_geo: [{
+						x: 82,
+						y: 140
+					}, {
+						x: 98,
+						y: 140
+					}, {
+						x: 114,
+						y: 140
+					}, {
+						x: 130,
+						y: 140
+					}, {
+						x: 146,
+						y: 140
+					}, {
+						x: 162,
+						y: 140
+					}, {
+						x: 178,
+						y: 150
+					}, {
+						x: 194,
+						y: 150
+					}, {
+						x: 210,
+						y: 150
+					}, {
+						x: 226,
+						y: 150
+					}],
+					bounce_area: {
+						x: -40,
+						y: -70,
+						width: 75,
+						height: 70
+					},
+					first_point: [{
+						x: 88,
+						y: 90
+					}, {
+						x: 70,
+						y: 90
+					}, {
+						x: 50,
+						y: 90
+					}, {
+						x: 30,
+						y: 75
+					}, {
+						x: 10,
+						y: 75
+					}, {
+						x: -10,
+						y: 75
+					}, {
+						x: -30,
+						y: 75
+					}, {
+						x: -50,
+						y: 75
+					}, {
+						x: -70,
+						y: 75
+					}, {
+						x: -88,
+						y: 75
+					}]
+				},
+				init: function() {
+					document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+						WeixinJSBridge.call('hideOptionMenu');
+					});
+					this.prepare('red');
+				},
+				prepare: function(color) {
+					var __ = this;
+					_color = color;
+					var data = color == 'red' ? __.config.red : __.config.blue;
+					var geo = color == 'red' ? __.config.red_geo : __.config.blue_geo;
+					$.each(data, function(i, d) {
+						var arr = [];
+						for(var k = 0; k < d.length; k++) arr.push('<figure class="ball ' + color + '"><p>' + d[k] + '</p></figure>');
+						$('<div style="position:absolute;" class="group"><section class="stage">' + arr.join('') + '</section></div>').appendTo($('#emulator')).css({
+							left: geo[i].x,
+							top: geo[i].y
+						}).find('.ball').css({
+							width: 15,
+							height: 15
+						});
+					});
+				},
+				start: function() {
+					$('.action').hide();
+					mybackgroundAudio.play();
+					var __ = this;
+					if($('.group').length < 1) {
+						$('.ball').remove();
+						$('.billboard').html('');
+						this.init();
+					}
+					queueTimer = window.setInterval(function() {
+						if(queueIndex >= (_color == 'red' ? 33 : 16)) {
+							window.clearInterval(queueTimer);
+							setTimeout(function() {
+								__.bounce();
+							}, 200);
+							return;
+						}
+						var $e = $('.group .ball').eq(queueIndex);
+						var i = $e.parents('.group').index() - (_color == 'red' ? 2 : 8); //alert(i)
+						$e.css('position', 'absolute').transition({
+							y: 40 - 15 * $e.index()
+						}).transition({
+							x: emulatorSSQ.config.first_point[i].x,
+							y: emulatorSSQ.config.first_point[i].y
+						}, 30).transition({
+							y: 180
+						});
+						queueIndex++;
+					}, 30);
+				},
+				bounce: function() {
+					//mybackgroundAudio.play();// 开始播放背景音
+					// $(".playbtn").click();
+					var __ = this;
+					timer = window.setInterval(function() {
+						$('.group .ball').each(function() {
+							var x = Math.ceil((Math.random() * __.config.bounce_area.width) + __.config.bounce_area.x);
+							var y = Math.ceil((Math.random() * __.config.bounce_area.height) + __.config.bounce_area.y);
+							$(this).css({
+								left: x,
+								top: y
+							});
+						});
+					}, 100);
+					queueTimer = window.setInterval(function() {
+						__.pushBall();
+					}, 2000);
+				},
+				pushBall: function() {
+					var __ = this;
+					var total = $('.chosed').length;
+					if(total == 6 && backgroundAudioflag) { // 变为篮球里暂停背景音
+						backgroundAudioflag = false;
+						mybackgroundAudio.pause();
+						mybackgroundAudio.currentTime = 0;
+					}
+
+					if(total < (_color == 'red' ? 6 : 7)) {
+						if(_color == 'red')
+							_t = 32;
+						else
+							_t = 15;
+						$e = $('.group .ball').eq(Math.ceil((Math.random() * _t))).addClass('chosed').appendTo($('#emulator'))
+							.css({
+								'transform': 'translate(0,0)',
+								left: '153px',
+								top: '303px'
+							})
+							.transition({
+								x: 36,
+								y: 55
+							})
+							.transition({
+								x: -62 + (total * 18)
+							});
+						if(_color == 'blue') {
+							setTimeout(function() {
+								$('.action').show();
+								$('.button img').attr('src', './images/again.png');
+								$('#modal').hide();
+								__.addIntoResult();
+							}, 100);
+							if($e.text() != '') $('.billboard').append('<span class="ball blue">' + $e.text() + '</span>');
+						} else {
+							if($e.text() != '') $('.billboard').append('<span class="ball red">' + $e.text() + '</span>');
+						}
+
+					} else {
+						$('.group').remove();
+						window.clearInterval(timer);
+						window.clearInterval(queueTimer);
+						queueIndex = 0;
+						if(_color == 'red') {
+							this.prepare('blue');
+							setTimeout(function() {
+								emulatorSSQ.start();
+							}, 1500);
+						}
+					}
+					// console.log($('.billboard .ball').html());
+				},
+				addIntoResult: function() {
+					setTimeout(function() { // 单注选号结束，停止背景音
+						mybackgroundAudio.pause();
+						backgroundAudioflag = true;
+						mybackgroundAudio.current = 0;
+					}, 1000);
+					var now = new Date();
+					var ball_shsq = [];
+					var h = now.getHours(),
+						m = now.getMinutes();
+					var now_time = (h < 10 ? '0' + h : h) + ':' + (m < 10 ? '0' + m : m);
+					var $node = $('<li><span class="record_time">' + now_time + '</span></li>');
+					for(var i = 0; i < 7; i++) {
+						if(i == 6) {
+							$node.append($('<span class="blue">' + $('.billboard .ball:eq(' + i + ')').html() + '</span>'));
+						} else {
+							$node.append($('<span class="red">' + $('.billboard .ball:eq(' + i + ')').html() + '</span>'));
+						}
+						ball_shsq.push($('.billboard .ball:eq(' + i + ')').html());
+					}
+					var ball_shsq_cont = {
+						time: now_time,
+						balls: ball_shsq
+					};
+					mn_shsq_ball.push(ball_shsq_cont);
+					var str = JSON.stringify(mn_shsq_ball);
+					var validity1 = validity(23, 59, 59);
+					$.cookie('mn_shsq_ball', str, {
+						expires: validity1
+					});
+					$node.prependTo($('.record_cont.mn_shsq .record_cont_cont'));
+				}
+			};
+		</script>
+	</body>
+
+</html>

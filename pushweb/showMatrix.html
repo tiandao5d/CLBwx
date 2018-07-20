@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+		<title>矩阵过滤</title>
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="font-awesome/4.5.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/matrix.css">
+		<style>
+			.top {
+				padding: 0 15px;
+				line-height: 60px;
+				border-bottom: 1px solid #e0e0e0;
+			}
+			
+			.top>p {
+				font-size: 16px;
+			}
+			
+			.top .btn {
+				font-size: 16px;
+			}
+			
+			#suiji_one {
+				margin-right: 15px;
+			}
+			
+			.top .how_much {
+				color: #F14645;
+				margin-left: 20px;
+			}
+			
+			.cont ul {
+				width: 300px;
+				margin: 10px auto;
+				padding: 0;
+				font-size: 16px;
+				text-align: center;
+			}
+			
+			.cont ul .blue {
+				margin-left: 20px;
+			}
+			
+			.cont ul li {
+				line-height: 35px;
+				position: relative;
+			}
+			
+			.cont ul li:after {
+				content: "";
+				display: inline-block;
+				width: 1px;
+				height: 15px;
+				background: #cccccc;
+				position: absolute;
+				top: 9px;
+				right: 56px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="top">
+				<p>
+					<button class="btn btn-default" id="suiji_one">+随机1注</button>
+					<button class="btn btn-default" id="suiji_five">+随机5注</button>
+					<span class="how_much pull-right">8元</span> <span class="jizhu pull-right">4注</span>
+				</p>
+			</div>
+			<div class="cont">
+				<ul>
+					<li><span class="red">06</span><span class="red">07</span><span class="red">08</span><span class="red">11</span><span class="red">13</span><span class="red">26</span><span class="blue">05</span></li>
+					<li><span class="red">01</span><span class="red">06</span><span class="red">08</span><span class="red">13</span><span class="red">23</span><span class="red">26</span><span class="blue">05</span></li>
+					<li><span class="red">01</span><span class="red">06</span><span class="red">07</span><span class="red">11</span><span class="red">13</span><span class="red">23</span><span class="blue">05</span></li>
+					<li><span class="red">01</span><span class="red">06</span><span class="red">07</span><span class="red">08</span><span class="red">23</span><span class="red">26</span><span class="blue">05</span></li>
+				</ul>
+			</div>
+		</div>
+
+		<script src="js/jquery.min2.js"></script>
+		<script src="js/jquery.cookie.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/respond.min.js"></script>
+		<script src="js/alertify.min.js"></script>
+		<script src="js/matrix.js"></script>
+		<script>
+			matrixFilterDetail.init();
+		</script>
+	</body>
+
+</html>
