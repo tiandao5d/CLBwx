@@ -9,7 +9,6 @@
 		<title>工具宝箱</title>
 		<link rel="stylesheet" href="css/bootstrap.min.css">
 		<link rel="stylesheet" href="font-awesome/4.5.0/css/font-awesome.min.css">
-		<link rel="stylesheet" href="css/swiper.min.css">
 		<link rel="stylesheet" href="css/tools.css">
 		<style>
 			.remen:after {
@@ -41,39 +40,10 @@
 	<body>
 		<div class="container">
 			<div class="head">
-				<div class="swiper-container">
-					<div class="swiper-wrapper">
-						<div class="item active">
-							<a href="http://ah.uplottery.cn/killnumber/ssq"><img src="http://ah.uplott.com/assets\images\xhtools\default_banner.jpg" alt=""></a>
-						</div>
-						<div class="swiper-pagination"></div>
-					</div>
+				<div style="text-align: center;">
+					<img style="max-width: 100%;" src="http://ah.uplott.com/assets\images\xhtools\default_banner.jpg" alt="">
 				</div>
 
-				<div class="now_lottery">
-					<div class="lottery_cont">
-						<a>
-							<p><span class="color_name">双色球</span><span class="nper">2018081</span></p>
-							<p>
-								<span class="ball red_all_ball">01</span><span class="ball red_all_ball">02</span><span class="ball red_all_ball">12</span><span class="ball red_all_ball">16</span><span class="ball red_all_ball">20</span><span class="ball red_all_ball">26</span> <span class="ball blue_all_ball">03</span></p>
-						</a>
-					</div>
-					<div class="lottery_cont">
-						<a>
-							<p><span class="color_name">七乐彩</span><span class="nper">2018082</span></p>
-							<p>
-								<span class="ball red_all_ball">04</span><span class="ball red_all_ball">10</span><span class="ball red_all_ball">12</span><span class="ball red_all_ball">14</span><span class="ball red_all_ball">27</span><span class="ball red_all_ball">28</span><span class="ball red_all_ball">30</span> <span class="ball blue_all_ball">02</span></p>
-						</a>
-					</div>
-					<div class="lottery_cont">
-						<a>
-							<p><span class="color_name">福彩3D</span><span class="nper">2018190</span></p>
-							<p>
-								<span class="ball red_all_ball">5</span><span class="ball red_all_ball">5</span><span class="ball red_all_ball">6</span> </p>
-						</a>
-					</div>
-				</div>
-				<div class="null"></div>
 				<div class="cont">
 					<div class="row">
 						<div class="col-xs-4">
@@ -95,17 +65,6 @@
 							</a>
 						</div>
 						<div class="col-xs-4">
-							<a href="ssqShdd.html">
-								<dl class="remen"><dt>
-                                <img src="./images/59117b8e8f793.jpg" alt=""></dt>
-									<dd>杀号定胆</dd>
-									<dd>专家坐镇</dd>
-								</dl>
-							</a>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-4">
 							<a href="lucky_snum.html">
 								<dl class="recommend"><dt>
                                 <img src="./images/59118202c4a72.jpg" alt=""></dt>
@@ -114,15 +73,8 @@
 								</dl>
 							</a>
 						</div>
-						<div class="col-xs-4">
-							<a href="bonusCount.html">
-								<dl class="recommend"><dt>
-                                <img src="./images/5928e6b1ee07b.png" alt=""></dt>
-									<dd>奖金计算器</dd>
-									<dd>智能计算</dd>
-								</dl>
-							</a>
-						</div>
+					</div>
+					<div class="row">
 						<div class="col-xs-4">
 							<a href="standard3d.html">
 								<dl class="新品"><dt>
@@ -133,51 +85,12 @@
 							</a>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-xs-4">
-							<a>
-								<dl class="新品"><dt>
-                                <img src="./images/591a8c96d3e51.jpg" alt=""></dt>
-									<dd>走势图</dd>
-									<dd>选号必备</dd>
-								</dl>
-							</a>
-						</div>
-						<div class="col-xs-4">
-							<a>
-								<dl class="remen"><dt>
-                                <img src="./images/591a624eeb887.png" alt=""></dt>
-									<dd>矩阵过滤</dd>
-									<dd>科学过滤</dd>
-								</dl>
-							</a>
-						</div>
-					</div>
 				</div>
 			</div>
 
 			<script src="js/jquery.min.js"></script>
 			<script src="js/bootstrap.min.js"></script>
-			<script src="js/respond.min.js"></script>
-			<script src="js/alertify.min.js"></script>
 			<script>
-				$(function() {
-					$("#myCarousel").carousel('cycle');
-					setInterval(function() {
-						$('.now_lottery').find($('.lottery_cont:first')).appendTo($('.now_lottery'));
-					}, 5000);
-				});
-
-				function tj(url) {
-					$.post("http://ah.uplott.com/wx_tool/tj", {
-							url: url,
-							csrf_ah_name: "97f69b3ac3fff4714b4415b4683beeda",
-						},
-						function(data, status) {
-
-						}
-					)
-				}
 			</script>
 	</body>
 
