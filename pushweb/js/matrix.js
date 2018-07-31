@@ -70,7 +70,7 @@ var matrixFilter = {
         }
 
         var count;
-        $('#jx_blue_ball').bind('click', function () {
+        $('#jx_blue_ball').on('click', function () {
             $('.blue_cont .blue_ball').removeClass('active');
             var num = parseInt($('.blueBall').val());
             var arr = shsq_blue_ball.random_numbers(num, false, true);
@@ -111,7 +111,7 @@ var matrixFilter = {
             $('#lock_blue_ball').val(str);
             getResult();
         });
-        $('#jx_red_ball').bind('click', function () {
+        $('#jx_red_ball').on('click', function () {
             $('.red_cont .red_ball').removeClass('active');
             var num = parseInt($('.redBall').val());
             var arr = shsq_red_ball.random_numbers(num, false, true);
@@ -128,7 +128,7 @@ var matrixFilter = {
 
             getResult();
         });
-        $('.red_ball,.blue_ball').bind('click', function () {
+        $('.red_ball,.blue_ball').on('click', function () {
             if ($('.red_ball.active').length == 20) {
                 if ($(this).hasClass('active')) {
                     $(this).toggleClass('active');
@@ -168,19 +168,19 @@ var matrixFilter = {
             $('#lock_red_length').val(red_len);
             $('#lock_blue_length').val(blue_len);
         });
-        $('#empty_red_ball').bind('click', function () {
+        $('#empty_red_ball').on('click', function () {
             $('.red_ball').removeClass('active');
             $('#lock_red_ball').val('');
             $('#lock_red_length').val('0');
             getResult();
         });
-        $('#empty_blue_ball').bind('click', function () {
+        $('#empty_blue_ball').on('click', function () {
             $('.blue_ball').removeClass('active');
             $('#lock_blue_ball').val('');
             $('#lock_blue_length').val('0');
             getResult();
         });
-        $('#empty_all').bind('click', function () {
+        $('#empty_all').on('click', function () {
             $(this).css({'background': '#ccc', 'border-color': '#e0e0e0'});
             var __ = $(this);
             setTimeout(function () {
@@ -193,7 +193,7 @@ var matrixFilter = {
             $('#lock_blue_length').val('0');
             getResult();
         });
-        $('input[type=radio]').bind('click', function () {
+        $('input[type=radio]').on('click', function () {
             $(this).addClass('rotateBall').parent().siblings().children().removeClass('rotateBall');
         });
         // 计算注数及金额
@@ -244,7 +244,7 @@ var matrixFilterDetail = {
             $('.how_much').html(price + '元');
         }
 
-        $('#suiji_one').bind('click', function () {
+        $('#suiji_one').on('click', function () {
             $(this).css({'background': '#ccc', 'border-color': '#e0e0e0'});
             var __ = $(this);
             setTimeout(function () {
@@ -253,7 +253,7 @@ var matrixFilterDetail = {
             jiXuan(1);
             result();
         });
-        $('#suiji_five').bind('click', function () {
+        $('#suiji_five').on('click', function () {
             $(this).css({'background': '#ccc', 'border-color': '#e0e0e0'});
             var __ = $(this);
             setTimeout(function () {
@@ -268,7 +268,7 @@ var matrixFilterDetail = {
 var zhxStandard = {
     init: function () {
         var count = 0, is_last = false;
-        $('.head .col-xs-6:eq(0)').bind('click', function () {
+        $('.head .col-xs-6:eq(0)').on('click', function () {
             $(this).addClass('active').siblings().removeClass('active');
             $('.biaozhun').show().siblings('.hezhi').hide();
             $('.jizhu').html('0注');
@@ -276,7 +276,7 @@ var zhxStandard = {
             count = 0;
             window.sessionStorage.setItem('count', count);
         });
-        $('.head .col-xs-6:eq(1)').bind('click', function () {
+        $('.head .col-xs-6:eq(1)').on('click', function () {
             $(this).addClass('active').siblings().removeClass('active');
             $('.hezhi').show().siblings('.biaozhun').hide();
             $('.jizhu').html('0注');
@@ -284,11 +284,11 @@ var zhxStandard = {
             count = 1;
             window.sessionStorage.setItem('count', count);
         });
-        $('.empty').bind('click', function () {
+        $('.empty').on('click', function () {
             $(this).parent().siblings('.digits_cont').find('.red_ball').removeClass('active');
             zhxResult();
         });
-        $('#empty_all').bind('click', function () {
+        $('#empty_all').on('click', function () {
             $(this).css({'background': '#ccc', 'border-color': '#e0e0e0'});
             var __ = $(this);
             setTimeout(function () {
@@ -297,37 +297,37 @@ var zhxStandard = {
             $('.red_ball').removeClass('active');
             zhxResult();
         });
-        $('.biaozhun .red_ball').bind('click', function () {
+        $('.biaozhun .red_ball').on('click', function () {
             $(this).toggleClass('active');
             zhxResult();
         });
-        $('.hezhi .red_ball').bind('click', function () {
+        $('.hezhi .red_ball').on('click', function () {
             is_last = false;
             $(this).toggleClass('active');
             heZhi();
         });
-        $('.quan').bind('click', function () {
+        $('.quan').on('click', function () {
             $(this).parent().siblings().find('.red_ball').addClass('active');
             zhxResult();
         });
-        $('.da').bind('click', function () {
+        $('.da').on('click', function () {
             $(this).parent().siblings().find('.red_ball').removeClass('active');
             for (var i = 5; i < 10; i++) $(this).parent().siblings().find('.red_ball:eq(' + i + ')').addClass('active');
             zhxResult();
         });
-        $('.xiao').bind('click', function () {
+        $('.xiao').on('click', function () {
             $(this).parent().siblings().find('.red_ball').removeClass('active');
             for (var i = 0; i < 5; i++) $(this).parent().siblings().find('.red_ball:eq(' + i + ')').addClass('active');
             zhxResult();
         });
-        $('.ji').bind('click', function () {
+        $('.ji').on('click', function () {
             $(this).parent().siblings().find('.red_ball').removeClass('active');
             for (var i = 1; i < 10; i++) {
                 if (i % 2 != 0) $(this).parent().siblings().find('.red_ball:eq(' + i + ')').addClass('active');
             }
             zhxResult();
         });
-        $('.ou').bind('click', function () {
+        $('.ou').on('click', function () {
             $(this).parent().siblings().find('.red_ball').removeClass('active');
             for (var i = 0; i < 10; i++) {
                 if (i % 2 == 0) $(this).parent().siblings().find('.red_ball:eq(' + i + ')').addClass('active');
@@ -400,9 +400,9 @@ var zhxStandard = {
         }
 
         // 查看结果
-        $('#matrix_filter').bind('click', function () {
+        $('#matrix_filter').on('click', function () {
             is_last = true;
-            count == 0 ? endResult() : heZhi();
+            window.sessionStorage.count == 0 ? endResult() : heZhi();
         });
         $(function () {
             if (window.sessionStorage.count) {
@@ -440,7 +440,7 @@ var zhxStandardDetail = {
         }
 
         // 机选1注
-        $('#suiji_one').bind('click', function () {
+        $('#suiji_one').on('click', function () {
             $(this).css({'background': '#ccc', 'border-color': '#e0e0e0'});
             var __ = $(this);
             setTimeout(function () {
@@ -451,7 +451,7 @@ var zhxStandardDetail = {
             addLine();
         });
         // 机选5注
-        $('#suiji_five').bind('click', function () {
+        $('#suiji_five').on('click', function () {
             $(this).css({'background': '#ccc', 'border-color': '#e0e0e0'});
             var __ = $(this);
             setTimeout(function () {
