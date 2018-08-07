@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<style type="text/css">
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+			
+			::-webkit-scrollbar {
+				width: 0;
+				height: 0;
+			}
+			
+			input:focus,
+			button:focus,
+			textarea:focus {
+				outline: none;
+			}
+			
+			input {
+				display: block;
+				margin: 0 auto 10px;
+				height: 40px;
+				line-height: 1;
+				padding: 12px;
+				font-size: 16px;
+				width: 100%;
+				background: #eee;
+				border: 0;
+			}
+			button {
+				display: block;
+				width: 100%;
+				border: 0;
+				background: #0062CC;
+				margin: 0 auto 10px;
+				height: 50px;
+				font-size: 20px;
+				color: #fff;
+			}
+			button:hover {
+				opacity: .8;
+			}
+			.li {
+				line-height: 60px;
+				padding: 0 15px;
+				border-top: 1px solid rgba(255, 255, 255, 0.07);
+    			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    			color: #fff;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="box">
+			<input type="text" class="startc" placeholder="开始颜色值如：#f00或#ff0000" />
+			<input type="text" class="endc" placeholder="结束颜色值如：#0f0或#00ff00" />
+			<input type="number" class="linum" placeholder="列表的数量，最少10最多100" />
+			<button class="submitbtn">输出渐变色列表</button>
+			<div class="ul"></div>
+		</div>
+		<script type="text/javascript">
+			document.querySelector('.submitbtn').addEventListener('click', function () {
+				showList(document.querySelector('.box'));
+			});
+			function showList ( box ) {
+				var sc = box.querySelector('.startc').value || '#f00';
+				var ec = box.querySelector('.endc').value || '#0f0';
+				var num = parseInt(box.querySelector('.linum').value);
+				num = (num >= 10 && num <= 100) ? num : 10;
+				var arr = gradientColor(sc, ec, num);
+				arr = arr.map(function (item) {
+					return '<div class="li" style="background: ' + item + ';">' + item + '</div>'
+				});
+				box.querySelector('.ul').innerHTML = arr.join('');
+			}
+			function gradientColor(startColor, endColor, step) {
+				startRGB = colorRgb(startColor); //转换为rgb数组模式
+				startR = startRGB[0];
+				startG = startRGB[1];
+				startB = startRGB[2];
+				endRGB = colorRgb(endColor);
+				endR = endRGB[0];
+				endG = endRGB[1];
+				endB = endRGB[2];
+				//总差值
+				sR = (endR - startR) / step;
+				sG = (endG - startG) / step;
+				sB = (endB - startB) / step;
+				var colorArr = [];
+				for(var i = 0; i < step; i++) {
+					//计算每一步的hex值 
+					var hex = colorHex('rgb(' + parseInt((sR * i + startR)) + ',' + parseInt((sG * i + startG)) + ',' + parseInt((sB * i + startB)) + ')');
+					colorArr.push(hex);
+				}
+				return colorArr;
+			}
+			// 将hex表示方式转换为rgb表示方式(这里返回rgb数组模式)
+			function colorRgb(sColor) {
+				if(sColor instanceof Array) {
+					return sColor;
+				}
+				console.log(sColor)
+				var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
+				var sColor = sColor.toLowerCase();
+				if(sColor && reg.test(sColor)) {
+					if(sColor.length === 4) {
+						var sColorNew = "#";
+						for(var i = 1; i < 4; i += 1) {
+							sColorNew += sColor.slice(i, i + 1).concat(sColor.slice(i, i + 1));
+						}
+						sColor = sColorNew;
+					}
+					//处理六位的颜色值
+					var sColorChange = [];
+					for(var i = 1; i < 7; i += 2) {
+						sColorChange.push(parseInt("0x" + sColor.slice(i, i + 2)));
+					}
+					return sColorChange;
+				} else {
+					return sColor;
+				}
+			};
+			// 将rgb表示方式转换为hex表示方式
+			function colorHex(rgb) {
+				var _this = rgb;
+				var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
+				if(/^(rgb|RGB)/.test(_this)) {
+					var aColor = _this.replace(/(?:(|)|rgb|RGB)*/g, "").split(",");
+					var strHex = "#";
+					for(var i = 0; i < aColor.length; i++) {
+						var hex = Number(aColor[i]).toString(16);
+						hex = hex < 10 ? 0 + '' + hex : hex; // 保证每个rgb的值为2位
+						if(hex === "0") {
+							hex += hex;
+						}
+						strHex += hex;
+					}
+					if(strHex.length !== 7) {
+						strHex = _this;
+					}
+					return strHex;
+				} else if(reg.test(_this)) {
+					var aNum = _this.replace(/#/, "").split("");
+					if(aNum.length === 6) {
+						return _this;
+					} else if(aNum.length === 3) {
+						var numHex = "#";
+						for(var i = 0; i < aNum.length; i += 1) {
+							numHex += (aNum[i] + aNum[i]);
+						}
+						return numHex;
+					}
+				} else {
+					return _this;
+				}
+			}
+		</script>
+	</body>
+
+</html>

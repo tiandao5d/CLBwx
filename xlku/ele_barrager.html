@@ -16,12 +16,14 @@
 				background-color: rgba(255, 0, 0, .2);
 				width: 300px;
 				height: 300px;
+				margin: 0 auto;
 				overflow: hidden;
 			}
 			
 			.tibarrager-box,
 			.anibarrager-box {
 				position: absolute;
+				left: 120%;
 				font-size: 14px;
 			}
 			
@@ -50,8 +52,8 @@
 				border-radius: 50%;
 			}
 			@keyframes anirTol{
-				from{ left: 100%; }
-				to{ left: -200px; }
+				from{ transform: translateX(0); }
+				to{ transform: translateX(-500px); }
 			}
 			.anibarrager-box.tomove1 {
 				animation: 5s linear both anirTol;
@@ -113,7 +115,7 @@
 					for(i = 0; i < lgn; i++) {
 						if(!this.msgs[i]) {
 							el = this.getDiv(obj)
-							el.$l = this.width //显示的位置
+							el.$l = this.width + 100 //显示的位置
 							el.$s = parseInt(Math.random() * (3 - 1) + 1) // 速度
 							el.$c = this.colorArr[Math.floor(Math.random() * this.colorArr.length)] // 颜色
 							el.style.left = (el.$l + 'px')
@@ -178,9 +180,9 @@
 				txt: 'dsfsd订单',
 				img: img
 			}]
-			var ti = new BarragerTi(document.querySelector('#pox'), b)
+			var ti = new BarragerTi(document.querySelector('#box'), b)
 			ti.init()
-			var ani = new BarragerAni(document.querySelector('#box'), b)
+			var ani = new BarragerAni(document.querySelector('#pox'), b)
 			ani.init()
 		</script>
 	</body>

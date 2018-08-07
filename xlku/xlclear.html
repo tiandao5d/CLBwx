@@ -95,7 +95,6 @@
 			function ggg(){
 				var gradient = new gradientColor([23,128,247], [255,0,0], 20);
 				var str = '';
-				console.log(gradient)
 				$.each(gradient, function(index, txt) {
 					str += '<div class="item" style="transform: translate3d(0,' + (index*60) + 'px,0);background: ' + txt + '">' + txt + '</div>';
 				});
