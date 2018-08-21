@@ -38,6 +38,7 @@ export default {
     // 已经登录
     if ( this.$xljs.getUserId() ) {
       // 微信授权
+      this.du = this.$xljs.deCodeUrl(); // 提前记录参数
       if ( this.$xljs.isWeixin() ) {
         this.wxAuthoriseFn( () => {
           this.init()
@@ -57,7 +58,7 @@ export default {
   },
   methods: {
     init () {
-      var du = this.$xljs.deCodeUrl(), // 浏览器url记录的参数数据
+      var du = this.du, // 浏览器url记录的参数数据
           ds = this.$xljs.storageL(this.$xljs.sessionAct, null, true) || {}, // 本地储存的活动数据
           aid = du.id || ds.id
       if ( du.id ) { // 说明是首次进入此活动
@@ -213,7 +214,7 @@ export default {
     // 微信授权
     wxAuthoriseFn( callback = function () {}) {
       let that = this,
-          purl = `${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/drawred/index.html`
+          purl = location.href.split('#')[0]//`${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/drawred/index.html`
       window.wx.ready(callback);
       var _url = `${that.$xljs.domainUrl}/ushop-api-merchant/api/weixin/client/ticket/get?type=jsapi&url=${purl}`
       that.$xljs.ajax(_url, 'get', {}, function(data) {

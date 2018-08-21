@@ -31,6 +31,7 @@ export default {
     // 页面数据初始化
     if ( that.$xljs.getUserId() ) {
       // 微信授权
+      this.urlData = that.$xljs.deCodeUrlFn(); //提前记录url数据
       if ( that.$xljs.isWeixin() ) {
         that.wxAuthoriseFn( () => {
           that.pageInit();
@@ -55,7 +56,7 @@ export default {
     pageInit() {
       let that = this,
           sesData = that.$xljs.actSession(),
-          urlData = that.$xljs.deCodeUrlFn(),
+          urlData = this.urlData,
           bsid = urlData.id || sesData.id || '';
       if ( !bsid ) {
         that.txt = '活动ID不存在！';
@@ -222,7 +223,7 @@ export default {
     // 微信授权
     wxAuthoriseFn( callback = function () {}) {
       let that = this,
-          purl = `${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/bs/index.html`;
+          purl = window.location.href.split('#')[0];//`${that.$xljs.domainUrl}/ushop-api-merchant/html/weixinmp/bs/index.html`;
       window.wx.ready(callback);
       that.txt = '每天要喝8杯水哦~';
       let _url = that.$xljs.domainUrl + '/ushop-api-merchant/api/weixin/client/ticket/get?' +

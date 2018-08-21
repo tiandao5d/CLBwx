@@ -3,6 +3,7 @@
  * 作者：xulin
  * 日期：2017-04-17
  **/
+
 //ajax方法封装，可独立使用，不依赖任何库，和上面也没有关系
 function xlkuajax(_param, callback){
 	callback = _param.callback || callback || function(){};
@@ -576,3 +577,26 @@ function touchXL($me){
     });
     return cbObj;
 }
+/*
+浏览器渲染流程
+先将HTML解析为树形数据结构，将CSS解析为树形数据结构，结合DOM树和CSS树渲染到浏览器中
+
+性能问题
+1.文档简洁有效，css，js文件放置位置
+2.优化你的CSS，不要使用@import，会阻止浏览器并行下载
+3.减少外部HTTP请求，不必要的图片，js，css等文件，将文件压缩，减少重绘重排
+4.使用CDN和缓存
+
+安全问题
+1. XSS，浏览器错误的讲用户输入数据当成JS代码执行了
+对用户数据进行编码输出，告诉浏览器这是普通字符串
+2.如果可以不要使用iframe
+如果要用，要对iframe进行sendbox限制比如能否执行提交表单，能否执行JS代码，能否弹窗等
+3.点击劫持，被第三方将我们的网页放在frame中设为透明后引起用户错误点击
+设置告诉浏览器不要把档期的HTTP响应在frame中显示出来
+
+跨域
+jsonp,
+window.name,
+window.postMessage（获取frame的win使用此方法可以在frame中onmessage事件event参数获取数据）
+*/

@@ -69,14 +69,15 @@ globaljs.install = function (Vue, options) {
     },
     // 获取为写APPid
     getAppId () {
-      let that = this;
-      // 外网正式公众号
-      if (that.domainUrl === 'http://clb.lotplay.cn') {
-        return 'wx7eaf9a2e612db7b4';
-      // 内网测试公众号
-      } else if(that.domainUrl === 'http://clbtest.lotplay.cn') {
-        return 'wxdbf0e9e22aa336a6';
-      }
+      return 'wx7eaf9a2e612db7b4';
+      // let that = this;
+      // // 外网正式公众号
+      // if (that.domainUrl === 'http://clb.lotplay.cn') {
+      //   return 'wx7eaf9a2e612db7b4';
+      // // 内网测试公众号
+      // } else if(that.domainUrl === 'http://clbtest.lotplay.cn') {
+      //   return 'wxdbf0e9e22aa336a6';
+      // }
     },
     extend (...ags) {
       Object.assign(...ags);
