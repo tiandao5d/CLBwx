@@ -1,6 +1,6 @@
 <template>
-  <div class="page-item" :class="{wh0000: (appwh > 0.6 && appwh < 0.7)}">
-    <div class="page-con">
+  <div class="page-item">
+    <div class="page-con" :class="{wh0000: (appwh > 0.6 && appwh < 0.7)}">
       <img :src="awi008" class="page-bg">
       <div class="a0000"></div>
       <div class="barrager-box">
@@ -239,7 +239,7 @@ export default {
   margin: 0 auto;
   background: #000;
 }
-.page-item.wh0000 {
+.wh0000 {
   height: 100%;
 }
 .rw-btn01,

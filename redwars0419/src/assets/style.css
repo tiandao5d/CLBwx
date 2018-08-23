@@ -20,6 +20,9 @@ img {
 }
 
 /*常用*/
+html {
+  font-size: 15px;
+}
 .hide,
 .hidden {
   display: none !important;
