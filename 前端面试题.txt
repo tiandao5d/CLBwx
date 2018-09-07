@@ -1,5 +1,5 @@
 
-html,css部分
+html,css部分改了个东西
 1、请列举你知道的清除浮动的方法
 	（1）父级定义height。
 	（2）结尾处加空div标签clear:both。
