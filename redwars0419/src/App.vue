@@ -36,9 +36,9 @@ export default {
   mounted () {
     // 页面数据初始化
     // 已经登录
+    this.du = this.$xljs.deCodeUrl(); // 提前记录参数
     if ( this.$xljs.getUserId() ) {
       // 微信授权
-      this.du = this.$xljs.deCodeUrl(); // 提前记录参数
       if ( this.$xljs.isWeixin() ) {
         this.wxAuthoriseFn( () => {
           this.init()
@@ -52,6 +52,7 @@ export default {
       if ( this.$xljs.isWeixin() && !this.$xljs.isTest() ) {
         this.$xljs.openPage('../index.html?loginOverdue=yes')
       } else {
+      	this.loading = false // 解除遮屏
         this.init()
       }
     }
