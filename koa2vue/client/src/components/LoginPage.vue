@@ -42,7 +42,7 @@ export default {
           this.$jsk.storageL(this.$jsk.userId, data.result.id)
           this.$jsk.storageL(this.$jsk.userName, data.result.userName)
           this.$jsk.storageL(this.$jsk.token, data.result.token)
-          this.$jsk.storageL(this.$jsk.userData, data.result)
+          this.$jsk.userDataL(data.result)
           this.jskback()
         } else {
           this.$jsk.toast('登录失败，未知错误', 4)

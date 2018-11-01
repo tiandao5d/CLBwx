@@ -5,6 +5,7 @@ import FriendList from '../components/FriendList'
 import MsgPage from '../components/MsgPage'
 import SearchPage from '../components/SearchPage'
 import RegisterPage from '../components/RegisterPage'
+import VideoMsg from '../components/VideoMsg'
 export default (Vue) => {
   Vue.use(VueRouter)
   let router = new VueRouter({
@@ -13,7 +14,8 @@ export default (Vue) => {
       {path: '/login', component: LoginPage, name: 'LoginPage'},
       {path: '/msg/:heid', component: MsgPage, name: 'MsgPage'},
       {path: '/search', component: SearchPage, name: 'SearchPage'},
-      {path: '/register', component: RegisterPage, name: 'RegisterPage'}
+      {path: '/register', component: RegisterPage, name: 'RegisterPage'},
+      {path: '/vmsg/:sender/:receiver', component: VideoMsg, name: 'VideoMsg'}
     ]
   })
   Vue.mixin({

@@ -7,12 +7,16 @@
 </template>
 
 <script>
+import appinit from './assets/appinit'
 export default {
   name: 'app',
   computed: {
     appani () {
       return this.$store.state.appani
     }
+  },
+  created () {
+    appinit.call(this)
   }
 }
 </script>

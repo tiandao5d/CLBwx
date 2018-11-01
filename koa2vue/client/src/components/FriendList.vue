@@ -1,6 +1,6 @@
 <template>
   <div class="page-item">
-    <div class="pitem-head">朋友列表
+    <div class="pitem-head">朋友列表{{userName}}
       <span class="pitem-head-r" @click="showSearchFn">搜索</span>
     </div>
     <div style="height: 5px;background:#ccc;"></div>
@@ -25,13 +25,16 @@ export default {
       dimg,
       searchstr: '',
       searchshow: true,
-      flist: []
+      flist: [],
+      userName: ''
     }
   },
   created () {
     if ( !this.$jsk.storageL(this.$jsk.userId) ) {
       this.jskgo('/login')
+      return false
     }
+    this.userName = this.$jsk.userDataL().userName || '***'
     this.getUserFlist()
   },
   methods: {

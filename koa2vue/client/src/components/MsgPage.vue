@@ -14,13 +14,10 @@
       </div>
     </div>
     <div class="mp-foot">
-      <!-- <input type="text" class="mp-fmsgipt" v-model="gobj.message" @keyup.enter="sendmsg">
-      <button type="button" class="mp-fmsgb" @click="sendmsg">发送</button> -->
-      <!-- <el-form ref="form" @submit.prevent="sendmsg"> -->
-        <el-input placeholder="请输入内容" @keyup.enter.native="sendmsg" v-model="gobj.message">
-          <el-button slot="append" @click="sendmsg">发送</el-button>
-        </el-input>
-      <!-- </el-form> -->
+      <el-input placeholder="请输入内容" @keyup.enter.native="sendmsg" v-model="gobj.message">
+        <el-button slot="append" @click="sendmsg">发送</el-button>
+        <el-button slot="prepend" @click="videomsg">视频聊天</el-button>
+      </el-input>
     </div>
   </div>
 </template>
@@ -55,6 +52,10 @@ export default {
     this.getMsg()
   },
   methods: {
+    // 发送视频聊天
+    videomsg () {
+      this.jskgo(`/vmsg/${this.gobj.sender}/${this.gobj.receiver}`)
+    },
     // 获取消息记录
     getMsg () {
       this.$jsk.ajax ({

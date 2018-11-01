@@ -42,6 +42,7 @@ class Jsk {
     this.userFlist = 'ls_global_user_flist' // 好友列表
     this.userFids = [] // 存储所有好友的id
     this.domainUrl = getDm()
+    this.vcmStr = 'vcall_rtcmsg' // 视频通话的全局websocket事件名
 	}
 
   addf ( uobj ) {
@@ -79,6 +80,15 @@ class Jsk {
 	getType ( data ) {
 		return Object.prototype.toString.call(data).slice(8, -1).toLowerCase()
 	}
+
+  userDataL () {
+    let obj = arguments[0]
+    if ( typeof obj === 'object' ) {
+      this.storageL(this.userData, obj)
+      return obj
+    }
+    return this.storageL(this.userData) || {}
+  }
 
   // 合并对象
   extend (...ags) {
@@ -320,20 +330,30 @@ class Jsk {
       this.loading('hide')
     }
     // 多请求和单请求分开
+    let issigna = true
     if ( atype === 'array' ) {
       susobj = axobj.map((o) => {
         return o.data || {}
       })
+      if ( susobj.some((o) => {return (o.code === 10007)}) ) { // 无效的签字
+        issigna = false
+      }
     } else {
       susobj = axobj.data || {}
+      if ( susobj.code === 10007 ) { // 无效的签字
+        issigna = false
+      }
     }
-    fn(susobj) // 外部调用可以使用回调函数
-    return susobj // 外部调用可以使用异步函数
+    if ( issigna ) {
+      fn(susobj) // 外部调用可以使用回调函数
+      return susobj // 外部调用可以使用异步函数
+    }
+    location.hash = '#/login'
   }
 }
-
+const jsk = new Jsk()
 const chat = io(`${getDm()}/chat`)
 export default ( Vue ) => {
   Vue.prototype.$chat = chat
-  Vue.prototype.$jsk = new Jsk()
+  Vue.prototype.$jsk = jsk
 }
