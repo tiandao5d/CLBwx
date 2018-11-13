@@ -60,10 +60,6 @@ export default {
   methods: {
     // 挂断或接通
     switchconnect ( type ) {
-      let stream = this.vdmsg.mystream
-      console.log(stream.getTracks()[1])
-      stream.getTracks()[1].stop()
-      return false
       if ( type === 0 ) { // 挂断
         this.vdmsg.useranswer(0)
         this.jskback()

@@ -5,6 +5,7 @@ import FriendList from '../components/FriendList'
 import MsgPage from '../components/MsgPage'
 import SearchPage from '../components/SearchPage'
 import RegisterPage from '../components/RegisterPage'
+// import VideoMsg from '../components/SimplerMsg'
 import VideoMsg from '../components/VideoMsg'
 export default (Vue) => {
   Vue.use(VueRouter)
