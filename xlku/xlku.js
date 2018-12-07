@@ -10,41 +10,46 @@
  // sep 千分位分隔符 ','
  // dot 小数点字符 '.'
  function nf ( num, dec, sep, cho, dot ) {
-	 num = parseFloat(num);
-	 if ( !num ) {
-		 return '';
-	 }
-	 var pre = 7; // 计算精度，小数点后七位
+   num = parseFloat(num);
+   if ( !num ) {
+     return '';
+   }
+   var pre = 7; // 计算精度，小数点后七位
 
-	 dec = dec <= pre && dec >= 0 ? parseInt(dec) : pre; //保留小数位数 默认2
-	 cho = cho || 'u'; // 舍入方法'u,d,r'上、下、四舍五入 默认'u'
-	 dot = dot || '.'; // 小数点字符 默认'.'
+   dec = dec <= pre && dec >= 0 ? parseInt(dec) : pre; //保留小数位数 默认pre
+   cho = cho || 'u'; // 舍入方法'u,d,r'上、下、四舍五入 默认'u'
+   dot = dot || '.'; // 小数点字符 默认'.'
 
-	 var arr = (num + '').split('.');
-	 var re = /(\d+)(\d{3})/;
-	 var a0 = arr[0];
-	 var a1 = arr[1].substr(0, 7);
-	 var a2 = parseInt(arr[1].substr(dec,1));
+   var arr = (num + '').split('.');
+   var re = /(\d+)(\d{3})/;
+   var a0 = arr[0];
+   var a1 = (arr[1] && arr[1].substr(0, dec)) || '0';
+   var a2 = parseInt((arr[1] && arr[1].substr(dec,1))) || 0;
+   var a3 = dec - a1.length;
 
-	 if ( !!sep && a0 > 999 ) {
-		 while ( re.test(a0) ) {
-			 a0 = a0.replace(re, ('$1' + sep + '$2'))
-		 }
-	 }
-	 a1 = a1.substr(0, dec);
-	 if ( !(cho === 'd' || (cho === 'r' && a2 < 5) || a2 === 0) ) {
-		 a1 = (parseInt(a1) + 1) + '';
-	 }
-	 if ( !(typeof sep === 'string') ) {
-		 return parseFloat(a0 + dot + a1);
-	 }
-	 return a0 + dot + a1;
+   if ( !!sep && parseInt(a0) > 999 ) {
+     while ( re.test(a0) ) {
+       a0 = a0.replace(re, ('$1' + sep + '$2'))
+     }
+   }
+   if ( a3 > 0 ) {
+     a1 += new Array(a3).join('0'); // 补充足够多的0
+   }
+   a1 = a1.substr(0, dec);
+   if ( !(cho === 'd' || (cho === 'r' && a2 < 5) || a2 === 0) ) {
+     a1 = (parseInt(a1) + 1) + '';
+   }
+   if ( typeof sep !== 'string' ) {
+     return parseFloat(a0 + dot + a1);
+   }
+   return a0 + dot + a1;
  }
 
  //生成随机字符串
  function randomString(len) {
  　　len = len || 32;
  	//默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1
+		// var $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
  　　var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
  　　var maxPos = $chars.length;
  　　var pwd = '';
