@@ -27,22 +27,28 @@
    var a2 = parseInt((arr[1] && arr[1].substr(dec,1))) || 0;
    var a3 = dec - a1.length;
 
+   if ( a3 > 0 ) {
+     a1 += new Array(a3).join('0'); // 补充足够多的0
+   }
+   if ( dec > 0 ) {
+     a1 = a1.substr(0, dec);
+   }
+   if ( !(cho === 'd' || (cho === 'r' && a2 < 5) || a2 === 0) ) {
+     if ( dec > 0 ) {
+       a1 = (parseInt(a1) + 1) + '';
+     } else {
+       a0 = (parseInt(a0) + 1) + '';
+     }
+   }
    if ( !!sep && parseInt(a0) > 999 ) {
      while ( re.test(a0) ) {
        a0 = a0.replace(re, ('$1' + sep + '$2'))
      }
    }
-   if ( a3 > 0 ) {
-     a1 += new Array(a3).join('0'); // 补充足够多的0
-   }
-   a1 = a1.substr(0, dec);
-   if ( !(cho === 'd' || (cho === 'r' && a2 < 5) || a2 === 0) ) {
-     a1 = (parseInt(a1) + 1) + '';
-   }
    if ( typeof sep !== 'string' ) {
-     return parseFloat(a0 + dot + a1);
+     return (dec > 0 ? parseFloat(a0 + dot + a1) : parseInt(a0));
    }
-   return a0 + dot + a1;
+   return (dec > 0 ? (a0 + dot + a1) : a0);
  }
 
  //生成随机字符串
