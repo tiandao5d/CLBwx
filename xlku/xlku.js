@@ -4,6 +4,64 @@
  * 日期：2017-04-17
  **/
 
+
+ // num要处理的数字，dec保留小数位数 2
+ // cho舍入方法'u,d,r'上、下、四舍五入 'u'
+ // sep 千分位分隔符 ','
+ // dot 小数点字符 '.'
+ function nf ( num, dec, sep, cho, dot ) {
+	 num = parseFloat(num);
+	 if ( !num ) {
+		 return '';
+	 }
+	 var pre = 7; // 计算精度，小数点后七位
+
+	 dec = dec <= pre && dec >= 0 ? parseInt(dec) : pre; //保留小数位数 默认2
+	 cho = cho || 'u'; // 舍入方法'u,d,r'上、下、四舍五入 默认'u'
+	 dot = dot || '.'; // 小数点字符 默认'.'
+
+	 var arr = (num + '').split('.');
+	 var re = /(\d+)(\d{3})/;
+	 var a0 = arr[0];
+	 var a1 = arr[1].substr(0, 7);
+	 var a2 = parseInt(arr[1].substr(dec,1));
+
+	 if ( !!sep && a0 > 999 ) {
+		 while ( re.test(a0) ) {
+			 a0 = a0.replace(re, ('$1' + sep + '$2'))
+		 }
+	 }
+	 a1 = a1.substr(0, dec);
+	 if ( !(cho === 'd' || (cho === 'r' && a2 < 5) || a2 === 0) ) {
+		 a1 = (parseInt(a1) + 1) + '';
+	 }
+	 if ( !(typeof sep === 'string') ) {
+		 return parseFloat(a0 + dot + a1);
+	 }
+	 return a0 + dot + a1;
+ }
+
+ //生成随机字符串
+ function randomString(len) {
+ 　　len = len || 32;
+ 	//默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1
+ 　　var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+ 　　var maxPos = $chars.length;
+ 　　var pwd = '';
+ 　　for (i = 0; i < len; i++) {
+ 　　　　pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+ 　　}
+ 　　return pwd;
+ }
+
+ //字母汉字排序
+ var a = ['武汉', 'deed', 'eee', 'box', '北京', '上海', '天津'];
+ a = a.sort(
+     function compareFunction(param1, param2) {
+         return param1.localeCompare(param2);
+     }
+ );
+
 //ajax方法封装，可独立使用，不依赖任何库，和上面也没有关系
 function xlkuajax(_param, callback){
 	callback = _param.callback || callback || function(){};
@@ -156,13 +214,13 @@ function convertImgToBase64(url, newWidth, newHeight, maxSize, callback) {
 function convertBase64UrlToBlob(base64Url){
 	//去掉url的头，并转换为byte
     var bytes = window.atob(base64Url.indexOf(',') > 0 ? base64Url.split(',')[1] : base64Url);
-    //处理异常,将ascii码小于0的转换为大于0  
-    var ab = new ArrayBuffer(bytes.length);  
-    var ia = new Uint8Array(ab);  
-    for (var i = 0; i < bytes.length; i++) {  
-        ia[i] = bytes.charCodeAt(i);  
+    //处理异常,将ascii码小于0的转换为大于0
+    var ab = new ArrayBuffer(bytes.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < bytes.length; i++) {
+        ia[i] = bytes.charCodeAt(i);
     }
-    return new Blob( [ab] , {type : 'image/jpeg'});  
+    return new Blob( [ab] , {type : 'image/jpeg'});
 }
 //获取base64文件大小，返回值为字节(b)
 function imgSizeFn(base64Url){
@@ -193,7 +251,7 @@ function copyClipboardFn(val){
 
 //	正式版appid: wx7eaf9a2e612db7b4
 //	正式版ApppSecret: 034d997cb96424674d0ef37633e7f07e
-//	
+//
 //	测试版appid: wxdbb5b2437bd5ed69
 //	测试版ApppSecret: 95ea4492af55397f57c33c4ea3b7fe8c
 //$('<button class="xl-btn xl-btn-block" onclick="testBtnFn()">测试按键</button>').prependTo('body');
@@ -240,26 +298,6 @@ function testBtnFn(){
 	});
 }
 
-//生成随机字符串
-function randomString(len) {
-　　len = len || 32;
-	//默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1
-　　var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
-　　var maxPos = $chars.length;
-　　var pwd = '';
-　　for (i = 0; i < len; i++) {
-　　　　pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
-　　}
-　　return pwd;
-}
-
-//字母汉字排序
-var a = ['武汉', 'deed', 'eee', 'box', '北京', '上海', '天津'];
-a = a.sort(
-    function compareFunction(param1, param2) {
-        return param1.localeCompare(param2);
-    }
-);
 
 //创建元素
 //createFn('<div>123</div>')
