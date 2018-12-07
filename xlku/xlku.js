@@ -4,6 +4,107 @@
  * 日期：2017-04-17
  **/
 
+ // 判断元素属性
+ // gettype([]) // array
+ function gettype ( arg0 ) {
+   var str = Object.prototype.toString.call(arg0).slice(8, -1).toLocaleLowerCase();
+   if ( str === 'number' && arg0 !== 0 && !arg0 ) {
+     return 'nan'
+   }
+   return str;
+ }
+ // 去掉首尾空格
+ function trim ( str ) {
+   return (str + '').replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+ }
+
+ // 判断是否是空对象
+ function isEmptyObject ( obj ) {
+   if ( !(obj instanceof Object) ) {
+     return false
+   }
+   for ( let v in obj ) {
+     return false
+   }
+   return true
+ }
+
+
+ function storageL (key, val){
+   if(typeof(Storage) !== 'undefined'){
+     if((val === undefined) || (val === null)){//不存储undefined和null
+       if(arguments[2] === true){
+         val = sessionStorage[key];
+       }else{
+         val = localStorage[key];
+       }
+       if(val && val.indexOf('obj-') === 0){
+         val = val.slice(4);
+         return JSON.parse(val);
+       }else{
+         return val;
+       }
+     }else{
+       var a = val;
+       if(val instanceof Object){
+         val = 'obj-' + JSON.stringify(val);
+       }else{
+         val = val + '';
+       }
+       if(arguments[2] === true){
+         sessionStorage[key] = val;
+       }else{
+         localStorage[key] = val;
+       }
+       return a;
+     }
+   }
+ }
+ function rmStorageL (key){
+   if(typeof(Storage) !== 'undefined' && key){
+     if(arguments[1] === true){
+       sessionStorage.removeItem(key);
+     }else{
+       localStorage.removeItem(key);
+     }
+   }
+ }
+ function rmStorageLAll (){
+   if(typeof(Storage) !== 'undefined'){
+     if(arguments[0] === true){
+       sessionStorage.clear();
+     }else{
+       localStorage.clear();
+     }
+   }
+ }
+ // 时间格式化
+ function msToTime (ms){
+   if(!ms){return ''};
+   var _date = (ms instanceof Date) ? ms : new Date(ms);
+   var _y = _date.getFullYear(),
+     _m = _date.getMonth() + 1,
+     _d = _date.getDate(),
+     _h = _date.getHours(),
+     _i = _date.getMinutes(),
+     _s = _date.getSeconds();
+   var a = {
+     _y: (_y < 10) ? ('0' + _y) : (_y + ''),
+     _m: (_m < 10) ? ('0' + _m) : (_m + ''),
+     _d: (_d < 10) ? ('0' + _d) : (_d + ''),
+     _h: (_h < 10) ? ('0' + _h) : (_h + ''),
+     _i: (_i < 10) ? ('0' + _i) : (_i + ''),
+     _s: (_s < 10) ? ('0' + _s) : (_s + '')
+   }
+   a.em = (a._y + '-' + a._m);
+   a.ed = (a.em + '-' + a._d);
+   a.eh = (a.ed + ' ' + a._h);
+   a.ei = (a.eh + ':' + a._i);
+   a.es = (a.ei + ':' + a._s);
+   a.ms = _date.getTime();
+   a['date'] = _date;
+   return a;
+ }
 
  // num要处理的数字，dec保留小数位数 2
  // cho舍入方法'u,d,r'上、下、四舍五入 'u'
