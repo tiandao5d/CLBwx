@@ -1,0 +1,1 @@
+document.referrer // 返回上级页面的地址，就是从哪来的这个页面，referrer：推荐人，上线等意思
