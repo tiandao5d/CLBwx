@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html xmlns:esun>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <!--<meta http-equiv="x-ua-compatible" content="ie=8" />-->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="/images/ico/k3.ico" />
+  <link type="text/css" rel="stylesheet" media="screen" href="/css/ui.datepicker.css" />
+  <script type="text/javascript" src="/scripts/chart/jquery.min.js"></script>
+  <script type="text/javascript" src="/scripts/chart/linedraw.js"></script>
+  <script type="text/javascript" src="/scripts/chart/lottery.js"></script>
+  <script type="text/javascript" src="/scripts/chart/jquery.floattableheader.js"></script>
+  <script type="text/javascript" src="/scripts/chart/jq.date.js"></script>
+  <script type="text/javascript" src="/scripts/chart/chartsline.js"></script>
+  <style type="text/css">
+    esun\:* { BEHAVIOR: url(#default#VML); }
+  </style>
+  <meta name="Keywords" content="湖北快3_走势图表_和值遗漏 基本走势,湖北快3 基本走势图,湖北快3 基本走势号码走势 " />
+  <meta name="Description" content="湖北快3_走势图表_和值遗漏 基本走势走势" />
+  <title>和值遗漏</title>
+  <link href="/css/chart/chart.css" rel="stylesheet"/>
+
+  <link type="text/css" rel="stylesheet" href="/css/notify_message.css" />
+  <script type="text/javascript" src="/scripts/chart/chart_hbk3.js"></script>
+
+  <script type="text/javascript">
+    var catalog = "sum";
+    var lottery = "hbk3";
+    var radioItem = "";
+    jQuery(document).ready(function () {
+      initK3Zst("hbk3", "om-sum", "0");
+    });
+  </script>
+
+</head>
+<body>
+  <div id="loading">
+    <div class="loadPic">
+      <img src="http://zst.kuaicaile.com/images/busy.gif" alt="Loading..." />
+    </div>
+    <div id="loading-background" class="mask"></div>
+  </div>
+  <script type="text/javascript">
+    function resizemask() {
+      var clientHeigth = document.documentElement.clientHeight;
+      var scrollHeight = document.documentElement.scrollHeight;
+      var mask = document.getElementById('loading-background');
+      mask.style.height = ((clientHeigth > scrollHeight) ? clientHeigth : scrollHeight) + "px";
+    }
+    window.onresize = function () {
+      resizemask();
+    }
+    document.ready = function () {
+      resizemask();
+    }
+    resizemask();
+  </script>
+
+  <div class="top"><a name="gotop">&nbsp;</a> </div>
+  <!--top end-->
+  <div class="layout clearfix zst_main">
+    <div class="zst_header clearfix">
+      <div class="zst_cz clearfix">
+        <div class="relative">
+          <h2 class="zst_title">走势图表</h2>
+          <div class="old_in" title="旧版入口">
+            <!--<a href="#" target="_blank">旧版入口</a>-->
+          </div>
+        </div>
+        <ul id="zst_title_ul">
+          <li class="cz_k">快频彩</li>
+          <li><a href="/a1.html" id="head_hbk3">湖北快3</a></li>
+          <!--<li class="cz_f">福彩</li>
+          <li><a href="#" id="head_ssq" >双色球</a></li>
+          <li class="cz_t">体彩</li>
+          <li><a href="#" id="head_dlt" > 大乐透</a></li>-->
+        </ul>
+      </div>
+      <div class="zst_cz_nav">
+        <div class="zst_cz_b_top clearfix">
+          <!--快三-->
+          <table class="zst_cz_b_top_tab" id="top_tab_2">
+            <tr>
+              <td style="padding: 8px 30px 6px 0;"><strong>走势：</strong><a href="/a1.html" class="child_trend-base">基本走势</a>
+                | <a href="/a2.html" class="child_trend-sum">和值走势</a>
+                | <a href="/a3.html" class="child_trend-shape">形态走势</a>
+                | <a href="/a4.html" class="child_trend-comb">组合走势</a>
+                | <a href="/a6.html" class="child_trend-a6">012余数</a>
+              </td>
+              <td style="padding: 8px 30px 6px 0;"></td>
+              <td><strong>遗漏：</strong> <a href="/a5.html" class="child_om-sum">和值遗漏</a></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="new_head">
+      <!--<a title="新手指引" href="/help/chart/index.html" target="_blank">新手指引</a>-->
+    </div>
+
+
+
+    <div class="zst_content">
+<div class="zst_explain">本走势图数据系服务器自动读取，可能存在延时或无法读取故障，<b style="color:red;">不作为开奖依据</b>。敬请留意。</div>
+      <div class="zst_edit clearfix">
+
+  <div class="floatR">数据截止于 <strong>181214008</strong> 期 </div>
+
+      </div>
+      <div class="relative" id="chartsBox">
+
+
+<!-- hbk3 chart -->
+<table class="table_box odd_even" id="om_table">
+  <thead id="om_table_head">
+    <tr class="tabbg">
+      <th rowspan="2" class="sortable normal" onclick="onsort()">号码<em class="ud_icon" title="排序"></em></th>
+      <th rowspan="2" class="sortable normal" onclick="onsort()">实出次数<em class="ud_icon" title="排序"></em></th>
+      <th rowspan="2" class="sortable normal" onclick="onsort()">理论次数<em class="ud_icon" title="排序"></em></th>
+      <th colspan="6" class="sortable normal">近三次遗漏</th>
+      <th colspan="3" class="sortable normal">近三周期出现次数</th>
+    </tr>
+    <tr class="tabbg">
+      <th class="wid_75 sortable normal" onclick="onsort()">前3次<em class="ud_icon" title="排序"></em></th>
+      <th class="wid_75 sortable normal" onclick="onsort()">前2次<em class="ud_icon" title="排序"></em></th>
+      <th class="wid_75 sortable normal" onclick="onsort()">前1次<em class="ud_icon" title="排序"></em></th>
+      <th class="wid_75 sortable normal" onclick="onsort()">当前<em class="ud_icon" title="排序"></em></th>
+      <th class="wid_75 sortable normal" onclick="onsort()">平均<em class="ud_icon" title="排序"></em></th>
+      <th class="wid_75 sortable normal" onclick="onsort()">最大<em class="ud_icon" title="排序"></em></th>
+      <th class="wid_75 sortable normal" onclick="onsort()">前3周期<em class="ud_icon" title="排序"></em></th>
+      <th class="wid_75 sortable normal" onclick="onsort()">前2周期<em class="ud_icon" title="排序"></em></th>
+      <th class="wid_75 sortable normal" onclick="onsort()">前1周期<em class="ud_icon" title="排序"></em></th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr ) onmouseover="mouseover(this)" onmouseout="mouseout(this)" onclick="clickMe(this)">
+      <td>
+        <div class="num">
+          3
+        </div>
+      </td>
+      <td>787</td>
+      <td>793</td>
+      <td>60</td>
+      <td>193</td>
+      <td>16</td>
+      <td>135</td>
+      <td>210</td>
+      <td>1463</td>
+      <td>0</td>
+      <td>3</td>
+      <td>2</td>
+    </tr>
+    <tr class="tr_odd") onmouseover="mouseover(this)" onmouseout="mouseout(this)" onclick="clickMe(this)">
+      <td>
+        <div class="num">
+          4
+        </div>
+      </td>
+      <td>2476</td>
+      <td>2388</td>
+      <td>62</td>
+      <td>31</td>
+      <td>14</td>
+      <td>2</td>
+      <td>67</td>
+      <td>709</td>
+      <td>10</td>
+      <td>8</td>
+      <td>4</td>
+    </tr>
+    <tr ) onmouseover="mouseover(this)" onmouseout="mouseout(this)" onclick="clickMe(this)">
+      <td>
+        <div class="num">
+          5
+        </div>
+      </td>
+      <td>4741</td>
+      <td>4775</td>
+      <td>57</td>
+      <td>40</td>
+      <td>5</td>
+      <td>20</td>
+      <td>35</td>
+      <td>328</td>
+      <td>11</td>
+      <td>12</td>
+      <td>7</td>
+    </tr>
+    <tr class="tr_odd") onmouseover="mouseover(this)" onmouseout="mouseout(this)" onclick="clickMe(this)">
+      <td>
+        <div class="num">
+          6
+        </div>
+      </td>
+      <td>8046</td>
+      <td>7964</td>
+      <td>32</td>
+      <td>9</td>
+      <td>7</td>
+      <td>19</td>
+      <td>20</td>
+      <td>167</td>
+      <td>22</td>
+      <td>14</td>
+      <td>7</td>
+    </tr>
+    <tr ) onmouseover="mouseover(this)" onmouseout="mouseout(this)" onclick="clickMe(this)">
+      <td>
+        <div class="num">
+          7
+        </div>
+      </td>
+      <td>11786</td>
+      <td>11945</td>
+      <td>26</td>
+      <td>33</td>
+      <td>3</td>
+      <td>3</td>
+      <td>13</td>
+      <td>131</td>
+      <td>32</td>
+      <td>39</td>
+      <td>9</td>
+    </tr>
+    <tr class="tr_odd") onmouseover="mouseover(this)" onmouseout="mouseout(this)" onclick="clickMe(this)">
+      <td>
+        <div class="num">
+          8
+        </div>
+      </td>
+      <td>16703</td>
+      <td>16717</td>
+      <td>2</td>
+      <td>8</td>
+      <td>22</td>
+      <td>15</td>
+      <td>9</td>
+      <td>101</td>
+      <td>52</td>
+      <td>55</td>
+      <td>14</td>
+    </tr>
+    <tr ) onmouseover="mouseover(this)" onmouseout="mouseout(this)" onclick="clickMe(this)">
+      <td>
+        <div class="num">
+          9
+        </div>
+      </td>
+      <td>19922</td>
+      <td>19909</td>
+      <td>18</td>
+      <td>8</td>
+      <td>7</td>
+      <td>6</td>
+      <td>8</td>
+      <td>80</td>
+      <td>65</td>
+      <td>57</td>
+      <td>16</td>
+    </tr>
+    <tr class="tr_odd") onmouseover="mouseover(this)" onmouseout="mouseout(this)" onclick="clickMe(this)">
+      <td>
+        <div class="num">
+          10
+        </div>
+      </td>
+      <td>21448</td>
+      <td>21503</td>
+      <td>0</td>
+      <td>7</td>
+      <td>11</td>
+      <td>1</td>
+      <td>7</td>
+      <td>69</td>
+      <td>70</td>
+      <td>65</td>
+      <td>31</td>
+    </tr>
+    <tr ) onmouseover="mouseover(this)" onmouseout="mouseout(this)" onclick="clickMe(this)">
+      <td>
+        <div class="num">
+          11
+        </div>
+      </td>
+      <td>21611</td>
+      <td>21503</td>
+      <td>4</td>
+      <td>3</td>
+      <td>18</td>
+      <td>11</td>
+      <td>7</td>
+      <td>90</td>
+      <td>79</td>
+      <td>79</td>
+      <td>28</td>
+    </tr>
+    <tr class="tr_odd") onmouseover="mouseover(this)" onmouseout="mouseout(this)" onclick="clickMe(this)">
+      <td>
+        <div class="num">
+          12
+        </div>
+      </td>
+      <td>19876</td>
+      <td>19909</td>
+      <td>14</td>
+      <td>14</td>
+      <td>4</td>
+      <td>5</td>
+      <td>8</td>
+      <td>80</td>
+      <td>72</td>
+      <td>49</td>
+      <td>22</td>
+    </tr>
+    <tr ) onmouseover="mouseover(this)" onmouseout="mouseout(this)" onclick="clickMe(this)">
+      <td>
+        <div class="num">
+          13
+        </div>
+      </td>
+      <td>16594</td>
+      <td>16717</td>
+      <td>32</td>
+      <td>7</td>
+      <td>3</td>
+      <td>0</td>
+      <td>9</td>
+      <td>95</td>
+      <td>48</td>
+      <td>59</td>
+      <td>11</td>
+    </tr>
+    <tr class="tr_odd") onmouseover="mouseover(this)" onmouseout="mouseout(this)" onclick="clickMe(this)">
+      <td>
+        <div class="num">
+          14
+        </div>
+      </td>
+      <td>11982</td>
+      <td>11945</td>
+      <td>2</td>
+      <td>23</td>
+      <td>7</td>
+      <td>16</td>
+      <td>13</td>
+      <td>152</td>
+      <td>41</td>
+      <td>42</td>
+      <td>10</td>
+    </tr>
+    <tr ) onmouseover="mouseover(this)" onmouseout="mouseout(this)" onclick="clickMe(this)">
+      <td>
+        <div class="num">
+          15
+        </div>
+      </td>
+      <td>7987</td>
+      <td>7964</td>
+      <td>0</td>
+      <td>12</td>
+      <td>8</td>
+      <td>9</td>
+      <td>20</td>
+      <td>217</td>
+      <td>24</td>
+      <td>37</td>
+      <td>7</td>
+    </tr>
+    <tr class="tr_odd") onmouseover="mouseover(this)" onmouseout="mouseout(this)" onclick="clickMe(this)">
+      <td>
+        <div class="num">
+          16
+        </div>
+      </td>
+      <td>4896</td>
+      <td>4775</td>
+      <td>10</td>
+      <td>89</td>
+      <td>79</td>
+      <td>8</td>
+      <td>34</td>
+      <td>273</td>
+      <td>12</td>
+      <td>18</td>
+      <td>2</td>
+    </tr>
+    <tr ) onmouseover="mouseover(this)" onmouseout="mouseout(this)" onclick="clickMe(this)">
+      <td>
+        <div class="num">
+          17
+        </div>
+      </td>
+      <td>2350</td>
+      <td>2388</td>
+      <td>168</td>
+      <td>14</td>
+      <td>15</td>
+      <td>126</td>
+      <td>71</td>
+      <td>703</td>
+      <td>3</td>
+      <td>5</td>
+      <td>3</td>
+    </tr>
+    <tr class="tr_odd") onmouseover="mouseover(this)" onmouseout="mouseout(this)" onclick="clickMe(this)">
+      <td>
+        <div class="num">
+          18
+        </div>
+      </td>
+      <td>783</td>
+      <td>793</td>
+      <td>141</td>
+      <td>85</td>
+      <td>206</td>
+      <td>180</td>
+      <td>208</td>
+      <td>1819</td>
+      <td>5</td>
+      <td>4</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+
+      </div>
+      <div class="zst_explain">
+
+<h4>参数说明：</h4>
+<div class="explain_text">
+  <ul>
+    <li>
+      <strong>[近三次遗漏]</strong>该组号码统计期内近三次的遗漏值<br />
+      <strong>当前：</strong>该组号码在本期的遗漏值<br />
+      <strong>前1次：</strong>该组号码往前第一次出现时的遗漏值<br />
+      <strong>前2次：</strong>该组号码往前第两次出现时的遗漏值<br />
+      <strong>前3次：</strong>该组号码往前第三次出现时的遗漏值<br />
+      <strong>最大：</strong>该组号码在历史上的最大遗漏值<br />
+      <strong>平均：</strong>统计期内，近三次遗漏与当前遗漏相加的平均值
+    </li>
+    <li>
+      <strong>[近三周期出现次数]</strong>本组号码在近三个周期内，各周期的出现次数，用以判断冷热情况<br />
+      <strong>前1周期：</strong>从本期算起，该组号码往前第一个周期内的出现次数<br />
+      <strong>前2周期：</strong>从本期算起，该组号码往前第二个周期内的出现次数<br />
+      <strong>前3周期：</strong>从本期算起，该组号码往前第三个周期内的出现次数<br />
+    </li>
+    <!--<li>
+      <strong>[投资价值]</strong>
+      【本期遗漏÷循环周期】投资价值是用本期遗漏除以循环周期得到的,相对于欲出几率而言，投资价值更趋理想化，平均遗漏是一个统计值，而循环周期是一个理论值。
+    </li>
+    <li>
+      <strong>[回补几率]</strong>
+      【(上期遗漏-本期遗漏)÷循环周期】因为虽然某些组合会出现一个比较大的冷态，但是在冷态之后一般不会接着再出一个大冷态，而是在一个周期内便再次出现甚至多次出现，因此回补几率越大的组合，从统计规律来看近期越容易出。
+    </li>-->
+  </ul>
+</div>
+
+      </div>
+    </div>
+  </div>
+  <div class="layout">
+    <!--<div class="footer">
+    <div class="foot_menu"> <a href="#" target="_blank">关于我们</a> | <a href="#" target="_blank">用户登录</a> | <a href="#" target="_blank">免费注册</a> | <a href="#" target="_blank">客户服务</a> | <a href="#" target="_blank">联系我们</a> | <a href="#" target="_blank">用户反馈</a> </div>
+    <p>© 2012 科技 版权所有&nbsp;&nbsp;|&nbsp;&nbsp;<a href="http://www.miibeian.gov.cn" target="_blank">鄂ICP备00000000号</a>&nbsp;&nbsp;|&nbsp;&nbsp;客服：<a href="mailto:">kf@qq.com</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a class="online-s" href="javascript:void(0)" onclick="">客报热线：400-6699-252</a></p>
+    <p class="gray">提醒：购买彩票有风险，在线投注需谨慎，不向未满18周岁的青少年出售彩票！</p>
+    <p> <a href="#" target="_blank"><img src="http://img.kuaicaile.com/images/pic_gd.gif" alt="广东网警" width="120" height="49" border="0" /></a> <a href="#" target="_blank"><img src="http://img.kuaicaile.com/images/pic_ba.gif" alt="备案中心" width="120" height="49" border="0" /></a> <a href="#" target="_blank"><img src="http://img.kuaicaile.com/images/pic_jb.gif" alt="不良举报" width="120" height="49" border="0" /></a><a name="gobottom">&nbsp;</a></p>
+    </div>-->
+  </div>
+  <a name="gobottom">&nbsp;</a>
+  <div class="go" id="rightGo"><a title="返回顶部" class="top" href="#gotop"></a><a title="如果您有意见，请反馈给我们！" class="feedback" href="/a1.html" target="_blank" onclick=""></a><a title="返回底部" class="bottom" href="#gobottom"></a></div>
+  <script type="text/javascript">
+    /*异步加载JS*/
+    $(document).ready(function () {
+      var script2 = document.createElement("script");
+      script2.setAttribute("src", "/stat.js");
+      document.getElementsByTagName("head")[0].appendChild(script2);
+      script2.onload = function () {
+      };
+      script2.onreadystatechange = function () {
+        var rs = this.readyState;
+        if ("loaded" === rs || "complete" === rs) {
+          script2.onreadystatechange = null;
+        }
+      };
+    });
+  </script>
+
+  <script type="text/javascript" src="/scripts/chart/jquery.min.js"></script>
+  <script type="text/javascript" src="/scripts/om/om.js"></script>
+  <script type="text/javascript" src="/scripts/jquery.tablesorter.min.js"></script>
+  <script type="text/javascript" src="/scripts/chart/jquery.floattableheader.js"></script>
+  <script type="text/javascript" src="/scripts/om/om_jsk3_buy.js"></script>
+
+  <script type="text/javascript" src="/scripts/chart/jquery.countdown.pack.js"></script>
+  <script type="text/javascript" src="/scripts/chart/jquery.countdown-zh-CN.js"></script>
+  <script type="text/javascript" src="/scripts/chart/notify_message.js"></script>
+  <span id="timer"></span>
+
+</body>
+</html>

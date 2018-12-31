@@ -1,0 +1,8 @@
+http://zst.hbfcw.gov.cn/chart/hbk3/index?tdsourcetag=s_pcqq_aiomsg
+a1.html 基本走势
+a2.html 和值走势
+a3.html 形态走势
+a4.html 组合走势
+a5.html 和值遗漏
+a6.html 012路走势
+numtab.html 号码列表Excel

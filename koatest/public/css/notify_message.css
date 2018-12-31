@@ -1,0 +1,5 @@
+.notify_message{width:100%; height:60px; line-height:60px; z-index:999999; position:fixed; _position:absolute; top:0; border:1px dashed #FC0;}
+.notify_message p{color:#000; position:absolute; z-index:999999; width:100%; font-size:14px;text-align:center;}
+.notify_message a{font-size:14px; margin-left:5px; color:#03F}
+.notify_message a:hover{color:red}
+.notify_message_bg{opacity: .6; filter: alpha(opacity=60);-moz-opacity: .6;-khtml-opacity: .6; background:#FF0; width:100%; height:60px; position:absolute; z-index:99998; left:0; top:0;}
