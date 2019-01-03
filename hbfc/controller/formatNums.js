@@ -5,6 +5,7 @@ const objNums = require('./getNums.js');
 var nums = null;
 module.exports = (() => {
   var o = {};
+  o.getAddObj = getAddObj;
   o.getFnums = async () => {
     if ( !nums ) {
       nums = await objNums.getNums();
@@ -16,7 +17,7 @@ module.exports = (() => {
     let nums = await o.getFnums();
     return formatNums(nums);
   };
-  o.fnToArray = toArray; // 将o.formatNums值转为数组
+  o.fnToArray = fnToArray; // 将o.formatNums值转为数组
   // 获取和值遗漏
   o.fAhzYl = async () => {
     let fnums = await o.formatNums();
@@ -26,6 +27,10 @@ module.exports = (() => {
   return o;
 })();
 
+// 客户端添加数据整理，期号，号码，上一期
+function getAddObj(arr, prev_o) {
+  return formatNums(arr, prev_o);
+}
 // 获取和值遗漏
 // ass 实际出现次数
 // als 理论出现次数
@@ -72,11 +77,12 @@ function getAhzYl ( arg0 ) {
 }
 
 // 将和值统计转为数组形式
-function ahzToArray (a) {
+function ahzToArray (arg0) {
+  var a = {...arg0};
   var ks = ['a3y'];
   var ar1 = [];
   var arr;
-  each({...a}, function ( i, o ) {
+  each(a, function ( i, o ) {
     each(ks, function (ki, kv) {
       arr = [];
       each(o[kv], function (k, v) {
@@ -156,11 +162,10 @@ function getAhzGl () {
 // akd 跨度
 // axt 号码形态
 // azh 组合走势
-function formatNums ( arg0 ) {
+function formatNums ( arg0, prev_o ) {
   var a = [...arg0];
   var l = a.length;
   var i = 0;
-  var prev_o = null;
   for ( i = 0; i < l; i++ ) {
     a[i]['ahf'] = getAhf(a[i]['n'], prev_o); // 开奖号码分布
     a[i]['axt'] = getAxt(a[i]['n'], prev_o); // 号码形态
@@ -171,10 +176,11 @@ function formatNums ( arg0 ) {
   return a;
 }
 
-function toArray (a) {
+function fnToArray (arg0) {
+  var a = [...arg0];
   var ks = ['ahf', 'axt', 'azh', 'ajs', 'aos', 'ads', 'axs', 'ahz', 'awh', 'a3y', 'akd', 'an0', 'an1', 'an2'];
   var arr;
-  each([...a], function ( i, o ) {
+  each(a, function ( i, o ) {
     each(ks, function (ki, kv) {
       arr = [];
       each(o[kv], function (k, v) {

@@ -14,22 +14,26 @@
   <script>
     'use strict';
     $.ajax({
-      url: '/getAhzyl',
+      url: '/gets',
       success: function (data) {
         console.log(data)
       }
     })
-    $.ajax({
-      url: '/geto',
-      success: function (data) {
-        console.log(data)
-      }
-    })
+    // $.ajax({
+    //   url: '/add',
+    //   type: 'post',
+    //   data: {q: 1857810, n: ['5',2,5]},
+    //   // data: {bodystr: JSON.stringify([{q: 1857810, n: [1,5,5]}, {q: 1857810, n: [1,5,5]}])},
+    //   success: function (data) {
+    //     console.log(data)
+    //   }
+    // })
 var a = {"3":["111"],"4":["112"],"5":["122","113"],"6":["222","114","123"],"7":["133","115","223","124"],"8":["116","233","224","125","134"],"9":["333","144","225","126","135","234"],"10":["244","226","334","136","145","235"],"11":["155","344","335","245","236","146"],"12":["444","255","336","345","246","156"],"13":["166","355","445","346","256"],"14":["266","455","446","356"],"15":["555","366","456"],"16":["466","556"],"17":["566"],"18":["666"]}
 var b = {}
 $.each(a, function (k, o) {
   b[('a' + k)] = o
 })
+console.log(Object.prototype.toString.call(new Error()).slice(8, -1).toLocaleLowerCase())
 console.log(JSON.stringify(b))
   </script>
 </body>
