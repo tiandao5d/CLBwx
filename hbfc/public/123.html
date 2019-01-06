@@ -1,41 +1,406 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <title>123</title>
-  <script src="/scripts/chart/jquery.min.js" charset="utf-8"></script>
-  <script src="/scripts/doT.min.js" charset="utf-8"></script>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8" />
+	<title>登录-后台</title>
+
+	<meta name="description" content="User login page" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+	<!-- bootstrap样式 -->
+	<link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+	<!-- fontawesome字体样式 -->
+	<link rel="stylesheet" href="/assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+	<!-- jbox样式 -->
+	<link rel="stylesheet" href="../../assets/css/jBox.css" />
+	<!-- ace样式 -->
+	<link rel="stylesheet" href="/assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+	<!--[if lte IE 9]>
+			<link rel="stylesheet" href="/assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
+		<![endif]-->
+	<link rel="stylesheet" href="/assets/css/ace-skins.min.css" />
+	<link rel="stylesheet" href="/assets/css/ace-rtl.min.css" />
+	<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="/assets/css/ace-ie.min.css" />
+		<![endif]-->
+	<!-- inline styles related to this page -->
+	<!-- ace settings handler -->
+	<script src="/assets/js/ace-extra.min.js"></script>
+
+	<!-- bootstrap兼容样式 -->
+	<!--[if lte IE 8]>
+		<script src="/assets/js/html5shiv.min.js"></script>
+		<script src="/assets/js/respond.min.js"></script>
+		<![endif]-->
+	<style>
+		.page-body {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
+		.index-body {
+			background: #fff;
+			width: 100%;
+		}
+		.ibox-body {
+			width: 100%;
+			max-width: 600px;
+			margin: 50px auto;
+		}
+		</style>
 </head>
 
 <body>
+	<div class="login-layout page-body hide login-body" id="login_body">
+		<div class="main-container">
+			<div class="main-content">
+				<div class="row">
+					<div class="col-xs-10 col-xs-offset-1">
+						<div class="login-container">
+							<div class="center">
+								<h1>
+									<i class="ace-icon fa fa-leaf green"></i>
+									<span class="red">后台管理</span>
+									<span class="white" id="id-text2"></span>
+								</h1>
+								<h4 class="blue" id="id-company-text">&copy; 彩乐游科技有限公司</h4>
+							</div>
 
+							<div class="space-6"></div>
 
-  <script>
-    'use strict';
-    $.ajax({
-      url: '/gets',
-      success: function (data) {
-        console.log(data)
-      }
-    })
-    // $.ajax({
-    //   url: '/add',
-    //   type: 'post',
-    //   data: {q: 1857810, n: ['5',2,5]},
-    //   // data: {bodystr: JSON.stringify([{q: 1857810, n: [1,5,5]}, {q: 1857810, n: [1,5,5]}])},
-    //   success: function (data) {
-    //     console.log(data)
-    //   }
-    // })
-var a = {"3":["111"],"4":["112"],"5":["122","113"],"6":["222","114","123"],"7":["133","115","223","124"],"8":["116","233","224","125","134"],"9":["333","144","225","126","135","234"],"10":["244","226","334","136","145","235"],"11":["155","344","335","245","236","146"],"12":["444","255","336","345","246","156"],"13":["166","355","445","346","256"],"14":["266","455","446","356"],"15":["555","366","456"],"16":["466","556"],"17":["566"],"18":["666"]}
-var b = {}
-$.each(a, function (k, o) {
-  b[('a' + k)] = o
-})
-console.log(Object.prototype.toString.call(new Error()).slice(8, -1).toLocaleLowerCase())
-console.log(JSON.stringify(b))
-  </script>
+							<div class="position-relative">
+								<div id="login-box" class="login-box visible widget-box no-border">
+									<div class="widget-body">
+										<div class="widget-main">
+											<h4 class="header blue lighter bigger">
+												<i class="ace-icon fa fa-coffee green"></i>
+												请输入您的信息
+											</h4>
+
+											<div class="space-6"></div>
+
+											<form id="form_login">
+												<fieldset>
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" class="form-control" name="username" placeholder="用户名" />
+															<i class="ace-icon fa fa-user"></i>
+														</span>
+													</label>
+
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" class="form-control" name="password" placeholder="登录密码" />
+															<i class="ace-icon fa fa-lock"></i>
+														</span>
+													</label>
+
+													<div class="space"></div>
+
+													<div class="clearfix">
+														<label class="inline" style="line-height: 35px; margin: 0;">
+															<input type="checkbox" class="ace remember_ipt">
+															<span class="lbl"> 记住我</span>
+														</label>
+
+														<button type="button" onclick="submitLogin()" class="width-35 pull-right btn btn-sm btn-primary">
+															<i class="ace-icon fa fa-key"></i>
+															<span class="bigger-110">登录</span>
+														</button>
+													</div>
+
+													<div class="space-4"></div>
+												</fieldset>
+											</form>
+										</div>
+										<!-- /.widget-main -->
+									</div>
+									<!-- /.widget-body -->
+								</div>
+								<!-- /.login-box -->
+							</div>
+							<!-- /.position-relative -->
+
+							<div class="navbar-fixed-top align-right">
+								<br /> &nbsp;
+								<a id="btn-login-dark" href="#">暗色</a>
+								&nbsp;
+								<span class="blue">/</span> &nbsp;
+								<a id="btn-login-blur" href="#">模糊</a>
+								&nbsp;
+								<span class="blue">/</span> &nbsp;
+								<a id="btn-login-light" href="#">灯光</a>
+								&nbsp; &nbsp; &nbsp;
+							</div>
+						</div>
+					</div>
+					<!-- /.col -->
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.main-content -->
+		</div>
+		<!-- /.main-container -->
+	</div>
+
+	<div class="index-body page-body" id="index_body">
+		<div class="ibox-body">
+			<div class="tabbable">
+				<ul class="nav nav-tabs" id="myTab">
+					<li class="active"><a data-toggle="tab" href="#handleradd">手动添加</a></li>
+					<li><a data-toggle="tab" href="#fileadd">文件添加</a></li>
+				</ul>
+
+				<div class="tab-content">
+					<div id="handleradd" class="tab-pane fade in active">
+						<div class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="col-xs-3 control-label no-padding-right" for="issue"> 请输入期号： </label>
+
+								<div class="col-xs-9">
+									<input type="text" name="issue" class="form-control" placeholder="请输入期号">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-xs-3 control-label no-padding-right" for="nums"> 请输入号码： </label>
+
+								<div class="col-xs-9">
+									<input type="text" name="nums" class="form-control" placeholder="对应期数的中奖号码，以逗号','分隔">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-xs-offset-3 col-xs-9">
+									<div class="row">
+										<div class="col-xs-6"><button class="btn btn-success btn-block" id="add_nums" type="button">添加</button></div>
+										<div class="col-xs-6"><button class="btn btn-info btn-block" type="button" id="handler_submit">提交</button></div>
+									</div>
+								</div>
+							</div>
+							<div id="numsbox"></div>
+						</div>
+					</div>
+
+					<div id="fileadd" class="tab-pane fade">
+						<div class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="col-xs-3 control-label no-padding-right" for="file"> 请选择文件 </label>
+								<div class="col-xs-9">
+									<input type="file" class="form-control" name="file" id="fileace1">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-xs-offset-3 col-xs-9">
+									<button class="btn btn-info btn-block" type="button" id="file_submit">提交</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- basic scripts -->
+
+	<!--[if !IE]> -->
+	<script src="/assets/js/jquery-2.1.4.min.js"></script>
+
+	<!-- <![endif]-->
+
+	<!--[if IE]>
+		<script src="/assets/js/jquery-1.11.3.min.js"></script>
+		<![endif]-->
+	<script type="text/javascript">
+		if ('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+	</script>
+	<!-- bootstrap主文件 -->
+	<script src="/assets/js/bootstrap.min.js"></script>
+	<!-- jbox提示框 -->
+	<script src="../../assets/js/jBox.min.js"></script>
+	<!-- md5加密 -->
+	<script src="/assets/md5.min.js"></script>
+	<!-- ace主文件 -->
+	<script src="/assets/js/ace-elements.min.js"></script>
+	<script src="/assets/js/ace.min.js"></script>
+	<!-- inline scripts related to this page -->
+	<script type="text/javascript">
+		"use strict";
+		var globalData = {};
+		$(function() {
+			$('#fileace1').ace_file_input({
+				btn_choose: '点击或拖入',
+				btn_change: null,
+				no_file: '请选择图片文件',
+				btn_change: '修改',
+				droppable: true,
+				thumbnail: 'small',
+				//文件展现之前的操作
+				before_change: fileChange
+			});
+			$('#add_nums').on('click', addNumsFn);
+			$('#handler_submit').on('click', handlerSubmit);
+			$('#file_submit').on('click', fileSubmit);
+		});
+
+		// 手动添加号码
+		function addNumsFn () {
+			globalData.nums = globalData.nums || [];
+			var $box = $(this).parents('.form-horizontal');
+			var $issue = $box.find('[name="issue"]');
+			var $nums = $box.find('[name="nums"]');
+			var issue = $issue.val();
+			var nums = $nums.val();
+			nums = formatNums(nums);
+			if ( issue && nums ) {
+				globalData.nums.push({
+					q: issue,
+					n: nums
+				});
+				$issue.val('');
+				$nums.val('');
+				renderNums(globalData.nums);
+			} else {
+				toast('无效，空的提交！', 'red');
+			}
+		}
+		// 手动提交
+		function handlerSubmit	 () {
+			$.ajax({
+				url: '/add',
+				type: 'post',
+				data: {bodystr: JSON.stringify(globalData.nums)},
+				success: function (data) {
+					if ( data.result === 'success' ) {
+						renderNums();
+						toast('添加成功', 'green');
+					} else {
+						toast('添加失败', 'red');
+					}
+				},
+				error: function () {
+					toast('添加失败', 'red');
+				}
+			});
+		}
+		// 文件提交
+		function fileSubmit () {
+			var $box = $(this).parents('.form-horizontal');
+			var file = $box.find('[name="file"]')[0].files[0];
+			if ( !file ) {return false}
+			var fd = new FormData();
+			fd.append('file', file);
+			$.ajax({
+				url: '/addfile',
+				type: 'post',
+				data: fd,
+				contentType: false,
+				processData: false,
+				success: function (data) {
+					if ( data.result === 'success' ) {
+						$('#fileace1').data('ace_file_input').reset_input();
+						toast('添加成功', 'green');
+					} else {
+						toast('添加失败', 'red');
+					}
+				},
+				error: function () {
+					toast('添加失败', 'red');
+				}
+			});
+		}
+		// 号码渲染
+		function renderNums(nums) {
+			if ( !(nums && nums.length > 0) ) {
+				$('#numsbox').html('');
+				return false;
+			}
+			nums = JSON.parse(JSON.stringify(nums)).reverse();
+			var str = '';
+			$.each(nums, function (i, o) {
+				str +=
+				'<div class="alert alert-block alert-success">'+
+					'<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>'+
+					'<div>期号：<strong>' + o.q + '</strong> ， 号码：<strong>' + o.n.join(',') + '</strong></div>'+
+				'</div>';
+			})
+			str =
+			'<div class="form-group">'+
+				'<div class="col-xs-offset-3 col-xs-9">'+
+					str+
+				'</div>'+
+			'</div>';
+			$('#numsbox').html(str);
+		}
+		// 格式化号码
+		function formatNums (nums) {
+			var a = [];
+			nums = nums.split(',');
+			$.each(nums, function (i, n) {
+				n = parseInt(n);
+				if ( n > 0 && n < 6 ) {
+					a.push(n);
+				}
+			});
+			if ( a.length === 3 ) {
+				return a;
+			}
+			toast('号码无效', 'red');
+			return false;
+		}
+
+		// 文件添加，文件改变
+		function fileChange(files) {
+			var file = files[0];
+			if (file && file.type === 'application/json') {
+				return true;
+			}
+			return false;
+		}
+
+		// 提示工具
+		function toast ( txt, color ) {
+			new jBox('Notice', {
+		    content: (txt || '没有内容'),
+		    color: (color || 'black'),
+		    autoClose: 2000
+		  });
+		}
+
+		// 登录后页面触发
+		function bodyChange(id) {
+			$('.page-body').addClass('hide');
+			$(('#' + id)).removeClass('hide');
+		}
+
+		function bgChange() {
+			$('#btn-login-dark').on('click', function(e) {
+				$('body').attr('class', 'login-layout');
+				$('#id-text2').attr('class', 'white');
+				$('#id-company-text').attr('class', 'blue');
+
+				e.preventDefault();
+			});
+			$('#btn-login-light').on('click', function(e) {
+				$('body').attr('class', 'login-layout light-login');
+				$('#id-text2').attr('class', 'grey');
+				$('#id-company-text').attr('class', 'blue');
+
+				e.preventDefault();
+			});
+			$('#btn-login-blur').on('click', function(e) {
+				$('body').attr('class', 'login-layout blur-login');
+				$('#id-text2').attr('class', 'white');
+				$('#id-company-text').attr('class', 'light-blue');
+
+				e.preventDefault();
+			});
+		}
+	</script>
 </body>
 
 </html>

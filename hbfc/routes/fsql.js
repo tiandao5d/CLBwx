@@ -1,15 +1,19 @@
 /**
 作用：福彩3d数据库数据
 **/
+const fs = require('fs');
+const koaBody = require('koa-body');
 const objFnums = require('../controller/formatNums.js');
 const sql = require('../controller/sql/sql.js');
 const {each, gettype} = require('../controller/jxl.js');
 const {rnfn} = require('../controller/errorobj.js');
 module.exports =  (router) => {
-  router.post('/add', fc3dAddNums); // 添加福彩3d数据
+  router.post('/add', addFc3d); // 添加福彩3d数据
+  router.post('/addfile', koaBody({multipart: true}), addFc3dFile); // 添加福彩3d数据，通过文件方式添加
   router.get('/gets', getSqlData); // 获取数据库数据
 }
 
+ // 获取数据库数据
 async function getSqlData ( ctx ) {
   var num = parseInt(ctx.query.num);
   num = num > 0 ? num : 50;
@@ -19,14 +23,47 @@ async function getSqlData ( ctx ) {
   ctx.body = fnums;
 }
 
+// 添加fc3d数据，通过文件方式添加
+async function addFc3dFile ( ctx ) {
+  let file = ctx.request.files.file;
+  let arr = formatFile(file);
+  let ans;
+  if ( typeof arr === 'number' ) {
+    ans = arr;
+  } else {
+    ans = await fc3dAddNums(arr);
+  }
+  ctx.body = rnfn(ans);
+}
+
+// 文件解析
+function formatFile ( file ) {
+  if ( file && file.type === 'application/json' ) {
+    var data = fs.readFileSync(file.path, 'utf8');
+    fs.unlinkSync(file.path); // 删除自动储存的文件，以免造成冗余
+    try{
+      data = JSON.parse(data);
+    } catch (err) {
+      return 10000;
+    }
+    return data;
+  } else {
+    return 10000;
+  }
+}
+
 // 添加fc3d数据
+async function addFc3d ( ctx ) {
+  let arr = getFc3dAddBody(ctx);
+  let ans = await fc3dAddNums(arr);
+  ctx.body = rnfn(ans);
+}
+
 // 传参方式：{bodystr: JSON.stringify([{q: '182569956', n: [2,2,5]}])}
 // 或者：{q: '1585855', n: '2,2,5')}
-async function fc3dAddNums ( ctx ) {
-  let arr = getFc3dAddBody(ctx);
+async function fc3dAddNums ( arr ) {
   if ( !validFc3dNums(arr) ) {
-    ctx.body = rnfn(10002);
-    return false;
+    return 10002;
   }
   // 获取最后一次添加的数据
   let sqlArr = await sql.getSqlLast(1);
@@ -35,7 +72,7 @@ async function fc3dAddNums ( ctx ) {
   addNums = ktof(addNums); // 转为json字符串储存
   let pall = addNums.map(o => sql.insertObj(o));
   let robj = await Promise.all(pall);
-  ctx.body = robj ? rnfn(80000) : rnfn(10000);
+  return (robj ? 80000 : 10000);
 }
 
 // 客服端转到服务端字符串储存
