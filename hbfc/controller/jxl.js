@@ -1,5 +1,6 @@
 // 全局调用的函数库
 
+const request = require('request');
 module.exports = (() => {
   var o = {};
   // 判断元素属性
@@ -9,11 +10,27 @@ module.exports = (() => {
   o.extend = extend;
   // 遍历
   o.each = each;
+  o.reqp = requestFn;
   // 随机值，包含最大和最小值
   // 参数为最小和最大数
   o.randommm = randommm;
   return o;
 })();
+
+function requestFn(uri, method) {
+  return new Promise((resolve, reject) => {
+    request({
+      method,
+      uri
+    },(err, res, body) => {
+      if ( err ) {
+        reject(err);
+      } else {
+        resolve(body);
+      }
+    })
+  });
+}
 
 // 随机值，包含最大和最小值
 // 参数为最小和最大数

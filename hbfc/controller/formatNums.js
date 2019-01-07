@@ -6,6 +6,7 @@ var nums = null;
 module.exports = (() => {
   var o = {};
   o.getAddObj = getAddObj;
+  o.getAhzYl = getAhzYl;
   o.getFnums = async () => {
     if ( !nums ) {
       nums = await objNums.getNums();

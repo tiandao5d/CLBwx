@@ -1,17 +1,15 @@
 /**
 作用：用于数据库操作
 **/
+'use strict';
 const mysql = require('mysql2');
+const config = require('../../config');
 const {each, extend} = require('../jxl.js');
-const ct = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '123456',
-  database: 'test'
-})
+const ct = mysql.createConnection(config.sql);
 
 module.exports = (() => {
   var o = {};
+  o.getRow = getRow;
   o.insertObj = insertObj;
   o.getIssue = getIssue;
   o.getSqlTop = getSqlTop;
@@ -75,6 +73,12 @@ async function getIssue ( issue ) {
   let sqlstr = `SELECT * FROM hbfc3d WHERE q='${str}'`;
   let arr = await rnPromise(sqlstr);
   return arr[0];
+}
+
+// 获取所有数据
+function getRow () {
+  let sqlstr = `SELECT * FROM hbfc3d`;
+  return rnPromise(sqlstr);
 }
 
 // 获取前面多少条

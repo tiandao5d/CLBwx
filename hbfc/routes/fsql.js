@@ -1,22 +1,38 @@
 /**
 作用：福彩3d数据库数据
 **/
+'use strict';
 const fs = require('fs');
 const koaBody = require('koa-body');
 const objFnums = require('../controller/formatNums.js');
 const sql = require('../controller/sql/sql.js');
 const {each, gettype} = require('../controller/jxl.js');
 const {rnfn} = require('../controller/errorobj.js');
+const {getSqlNewNums} = require('../controller/getNums.js');
 module.exports =  (router) => {
   router.post('/add', addFc3d); // 添加福彩3d数据
   router.post('/addfile', koaBody({multipart: true}), addFc3dFile); // 添加福彩3d数据，通过文件方式添加
-  router.get('/gets', getSqlData); // 获取数据库数据
+  router.get('/get', getSqlData); // 获取数据库数据
+  router.get('/gethzyl', getAhzyl); // 和值遗漏统计
+}
+
+// 统计和值遗漏
+async function getAhzyl ( ctx ) {
+  let fnums = await sql.getRow();
+  fnums = ftok(fnums);
+  var fAhzYl = objFnums.getAhzYl(fnums);
+  fAhzYl = objFnums.ahzToArray(fAhzYl); // 将和值遗漏统计转为数组
+  ctx.body = fAhzYl;
 }
 
  // 获取数据库数据
 async function getSqlData ( ctx ) {
   var num = parseInt(ctx.query.num);
   num = num > 0 ? num : 50;
+  let newarr = await getSqlNewNums();
+  if ( newarr.length > 0 ) {
+    await fc3dAddNums(newarr); // 存储新数据到数据库
+  }
   let fnums = await sql.getSqlLast(`0,${num}`);
   fnums = ftok(fnums);
   fnums = objFnums.fnToArray(fnums);
