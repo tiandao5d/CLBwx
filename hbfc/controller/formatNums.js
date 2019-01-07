@@ -36,6 +36,7 @@ function getAddObj(arr, prev_o) {
 // ass 实际出现次数
 // als 理论出现次数
 // a3y 近3次遗漏
+// a3q 近3周期遗漏
 function getAhzYl ( arg0 ) {
   var a = [...arg0].reverse();
   var ahzgl = getAhzGl(); // 出现概率
@@ -44,14 +45,17 @@ function getAhzYl ( arg0 ) {
   var hnum = 0; // 记录和值
   var s = '';
   var po = null; // 记录对象
+  var l = a.length;
+  var zq = 78; // 一周期的期数
   each((18 - 3 + 1), (i) => {
     s = 'a' + (i + 3);
     b[s] = {
       h: (i + 3),
       lastqo: a[0],
-      als: ahzgl[s]*a.length,
+      als: ahzgl[s]*l,
       ass: 0,
-      a3y: {a0: 0, a1: 0, a2: 0, a3: (a[0]['ahz'][s][1] === 0 ? a[0]['ahz'][s][0] : 0), a4: 0, a5: 0} // a0前三，a1前二，a2前1，a3当前，a4平均，a5最大
+      a3y: {a0: 0, a1: 0, a2: 0, a3: (a[0]['ahz'][s][1] === 0 ? a[0]['ahz'][s][0] : 0), a4: 0, a5: 0}, // a0前三，a1前二，a2前1，a3当前，a4平均，a5最大
+      a3q: {a0: 0, a1: 0, a2: 0} // a0前三周期，a1前二周期，a2前一周期
     };
     c[s] = {n: 0, max: b[s]['a3y']['a3']}; // 记录出现次数最大值
   })
@@ -69,6 +73,9 @@ function getAhzYl ( arg0 ) {
     if ( c[s]['n'] <= 3 ) {
       getA3yYl(a, i, o, c[s]['n'], b[s]['a3y']); // 前三次数据
     }
+    if ( i < zq*3 ) { // 统计三周期
+      getA3qYl(l, zq, c, i, b);
+    }
   })
   each(c, (k, o) => { // 获取前三的平均值和最大遗漏
     b[k]['a3y']['a5'] = o.max;
@@ -77,10 +84,41 @@ function getAhzYl ( arg0 ) {
   return b;
 }
 
+
+// 三周期统计
+function getA3qYl (l, zq, c, i, b) {
+  // 一周期78期
+  i += 1;
+  if ( i === zq ) {
+    fn1 (['a2']);
+  } else if ( i === zq*2 ) {
+    fn1 (['a1']);
+  } else if ( i === zq*3 ) {
+    fn1 (['a0']);
+  }
+  // 统计数少于三周期
+  if ( i === l ) {
+    if ( l < zq ) {
+      fn1 (['a2', 'a1', 'a0']);
+    } else if ( l < zq*2 ) {
+      fn1 (['a1', 'a0']);
+    } else if ( l < zq*3 ) {
+      fn1 (['a0']);
+    }
+  }
+  function fn1 (_arr) {
+    each(c, (k, o) => {
+      each(_arr, (i, _a) => {
+        b[k]['a3q'][_a] = o.n;
+      });
+    })
+  }
+}
+
 // 将和值统计转为数组形式
 function ahzToArray (arg0) {
   var a = {...arg0};
-  var ks = ['a3y'];
+  var ks = ['a3y', 'a3q'];
   var ar1 = [];
   var arr;
   each(a, function ( i, o ) {
@@ -95,6 +133,7 @@ function ahzToArray (arg0) {
   })
   return ar1;
 }
+
 
 // 前三次遗漏值统计
 // {a0: 0, a1: 0, a2: 0, a3: 0, a4: 0, a5: 0}// 前三，前二，前1，当前，平均，最大

@@ -328,7 +328,7 @@
 
       <!--跨度-->
       {{~obj.akd:akd:i}}
-      <td class="{{=(akd[1] === 1 ? 'ball02' : 'text_g')}} {{=(i === obj.akd.length - 1 ? 'line_r' : '')}}">{{=akd[0]}}</td>
+      <td class="{{=(akd[1] === 1 ? 'ball03' : akd[1] === 2 ? 'ball_yel' : akd[1] === 3 ? 'ball02' : 'text_g')}} {{=(i === obj.akd.length - 1 ? 'line_r' : '')}}">{{=akd[0]}}</td>
       {{~}}
 
       <!--和值-->

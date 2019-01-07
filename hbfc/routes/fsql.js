@@ -12,6 +12,12 @@ const {getSqlNewNums} = require('../controller/getNums.js');
 module.exports =  (router) => {
   // router.post('/add', addFc3d); // 添加福彩3d数据
   // router.post('/addfile', koaBody({multipart: true}), addFc3dFile); // 添加福彩3d数据，通过文件方式添加
+  router.use(async (ctx, next) => {
+    if (ctx.path.indexOf('get') > 0) {
+      await addNewNums(); // 将新的数据添加进入数据库
+    }
+    await next();
+  });
   router.get('/get', getSqlData); // 获取数据库数据
   router.get('/gethzyl', getAhzyl); // 和值遗漏统计
 }
@@ -29,15 +35,19 @@ async function getAhzyl ( ctx ) {
 async function getSqlData ( ctx ) {
   var num = parseInt(ctx.query.num);
   num = num > 0 ? num : 50;
-  let newarr = await getSqlNewNums();
-  console.log(newarr)
-  if ( newarr.length > 0 ) {
-    await fc3dAddNums(newarr); // 存储新数据到数据库
-  }
   let fnums = await sql.getSqlLast(`0,${num}`);
   fnums = ftok(fnums);
   fnums = objFnums.fnToArray(fnums);
   ctx.body = fnums;
+}
+
+// 将新的数据添加进入数据库
+async function addNewNums () {
+  let newarr = await getSqlNewNums();
+  if ( newarr.length > 0 ) {
+    await fc3dAddNums(newarr); // 存储新数据到数据库
+  }
+  return true;
 }
 
 // 添加fc3d数据，通过文件方式添加

@@ -24,7 +24,7 @@ function getNums () {
   return new Promise(function(resolve, reject) {
     var a = [];
     var f = 181213030;
-    each(5, function ( i ) {
+    each(50, function ( i ) {
       a.push({
         q: f++,
         n: [randommm(1,6), randommm(1,6), randommm(1,6)]
