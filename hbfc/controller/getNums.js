@@ -3,7 +3,7 @@
 'use strict'
 const sql = require('./sql/sql.js');
 const {each, randommm} = require('./jxl.js');
-var tt = +new Date();
+var tt = 0;
 module.exports = (() => {
   var o = {};
   // 获取号码
@@ -23,8 +23,8 @@ module.exports = (() => {
 function getNums () {
   return new Promise(function(resolve, reject) {
     var a = [];
-    var f = 181213047;
-    each(10, function ( i ) {
+    var f = 181213030;
+    each(5, function ( i ) {
       a.push({
         q: f++,
         n: [randommm(1,6), randommm(1,6), randommm(1,6)]
@@ -37,10 +37,11 @@ function getNums () {
 // 获取新的数据
 async function getSqlNewNums () {
   let ctt = +new Date();
-  if ( ctt - tt > (10*60*1000) ) { // 超过十分钟才会请求
+  if ( !(ctt - tt > (10*60*1000)) ) { // 超过十分钟才会请求
+    tt = ctt;
     return [];
   }
-  let nums = await getNums();
+  let nums = await getNums(); // [{q: 181213037, n: [1,2,3]}]
   let slarr = await sql.getSqlLast('1'); // 获取数据库最后一条数据
   let sobj = slarr[0];
   let newarr;
@@ -48,9 +49,11 @@ async function getSqlNewNums () {
   if ( sobj ) { // 数据库中最后一条数据是否存在
     newarr = [];
     lq = parseInt(sobj.q);
-    each(nums, (i, o) => {
+    each(nums.reverse(), (i, o) => {
       if ( parseInt(o.q) > lq ) {
         newarr.unshift(o);
+      } else {
+        return false;
       }
     })
     return newarr;

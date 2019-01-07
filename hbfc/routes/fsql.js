@@ -10,8 +10,8 @@ const {each, gettype} = require('../controller/jxl.js');
 const {rnfn} = require('../controller/errorobj.js');
 const {getSqlNewNums} = require('../controller/getNums.js');
 module.exports =  (router) => {
-  router.post('/add', addFc3d); // 添加福彩3d数据
-  router.post('/addfile', koaBody({multipart: true}), addFc3dFile); // 添加福彩3d数据，通过文件方式添加
+  // router.post('/add', addFc3d); // 添加福彩3d数据
+  // router.post('/addfile', koaBody({multipart: true}), addFc3dFile); // 添加福彩3d数据，通过文件方式添加
   router.get('/get', getSqlData); // 获取数据库数据
   router.get('/gethzyl', getAhzyl); // 和值遗漏统计
 }
@@ -30,6 +30,7 @@ async function getSqlData ( ctx ) {
   var num = parseInt(ctx.query.num);
   num = num > 0 ? num : 50;
   let newarr = await getSqlNewNums();
+  console.log(newarr)
   if ( newarr.length > 0 ) {
     await fc3dAddNums(newarr); // 存储新数据到数据库
   }
@@ -86,9 +87,10 @@ async function fc3dAddNums ( arr ) {
   let prev_o = ftok(sqlArr)[0]; // 存储为字符串数据，转为对象
   let addNums = objFnums.getAddObj(arr, prev_o);
   addNums = ktof(addNums); // 转为json字符串储存
-  let pall = addNums.map(o => sql.insertObj(o));
-  let robj = await Promise.all(pall);
-  return (robj ? 80000 : 10000);
+  for ( let i = 0, l = addNums.length; i < l; i++ ) {
+    await sql.insertObj(addNums[i]);
+  }
+  return 80000;
 }
 
 // 客服端转到服务端字符串储存
