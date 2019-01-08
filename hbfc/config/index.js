@@ -6,5 +6,5 @@ module.exports = {
     password: '123456',
     database: 'test'
   },
-  usesql: true // 用于判断是否使用数据库方式
+  usesql: false // 用于判断是否使用数据库方式
 }

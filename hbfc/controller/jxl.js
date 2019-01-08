@@ -26,6 +26,11 @@ function requestFn(uri, method) {
       if ( err ) {
         reject(err);
       } else {
+        if ( typeof body === 'string' ) {
+          try{
+            body = JSON.parse(body);
+          }catch(err){}
+        }
         resolve(body);
       }
     })

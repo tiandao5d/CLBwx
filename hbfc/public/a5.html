@@ -6,6 +6,7 @@
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="/images/ico/k3.ico" />
   <link type="text/css" rel="stylesheet" media="screen" href="/css/ui.datepicker.css" />
+  <link type="text/css" rel="stylesheet" href="/css/style.css" />
   <script type="text/javascript" src="/scripts/chart/jquery.min.js"></script>
   <script type="text/javascript" src="/scripts/chart/linedraw.js"></script>
   <script type="text/javascript" src="/scripts/chart/lottery.js"></script>
@@ -13,6 +14,7 @@
   <script type="text/javascript" src="/scripts/chart/jq.date.js"></script>
   <script type="text/javascript" src="/scripts/chart/chartsline.js"></script>
   <script type="text/javascript" src="/scripts/doT.min.js"></script>
+  <script type="text/javascript" src="/scripts/jsx.js"></script>
   <style type="text/css">
     esun\:* { BEHAVIOR: url(#default#VML); }
   </style>
@@ -199,20 +201,10 @@
       $(function () {
         ajaxRender();
       });
-      // 获取数据
-      function getFnums (fn) {
-        $.ajax({
-          url: ('/gethzyl'),
-          type: 'get',
-          success: function (data) {
-            fn(data);
-          }
-        });
-      }
       function ajaxRender () {
-        getFnums(function (fnums) {
+        jsx.ajax('/gethzyl', 'get', {}, function (fnums){
           render(fnums);
-        });
+        })
       }
       // 渲染界面
       function render (fnums) {

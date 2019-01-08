@@ -12,6 +12,9 @@ module.exports =  (router) => {
   //   };
   //   await ctx.render('welcome', {title: ctx.state});
   // })
+  router.get('/', async function (ctx, next) {
+    ctx.response.redirect('/a1.html'); 
+  })
   if ( config.usesql ) {
     fsql(router); // 数据库模式的福彩3d
   } else {

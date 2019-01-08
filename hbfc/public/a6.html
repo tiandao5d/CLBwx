@@ -7,6 +7,7 @@
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="/images/ico/k3.ico" />
   <link type="text/css" rel="stylesheet" media="screen" href="/css/ui.datepicker.css" />
+  <link type="text/css" rel="stylesheet" href="/css/style.css" />
   <script type="text/javascript" src="/scripts/chart/jquery.min.js"></script>
   <script type="text/javascript" src="/scripts/chart/linedraw.js"></script>
   <script type="text/javascript" src="/scripts/chart/lottery.js"></script>
@@ -14,6 +15,7 @@
   <script type="text/javascript" src="/scripts/chart/jq.date.js"></script>
   <script type="text/javascript" src="/scripts/chart/chartsline.js"></script>
   <script type="text/javascript" src="/scripts/doT.min.js"></script>
+  <script type="text/javascript" src="/scripts/jsx.js"></script>
   <style type="text/css">
     esun\:* {
       BEHAVIOR: url(#default#VML);
@@ -100,7 +102,7 @@
           <label for="has_line">折线</label>
         </div>
         <div class="floatR">
-          时间选择： <span class="pageSet dateSet"><a onclick="ajaxRender(78)">今天</a> <a onclick="ajaxRender(78)">昨天</a></span>
+          时间选择： <span class="pageSet dateSet"><a onclick="ajaxRender(0, 'today')">今天</a> <a onclick="ajaxRender(0, 'yesterday')">昨天</a></span>
           <select onchange="ajaxRender($(this).val())" id="byday" class="input_slt ">
             <option value="" selected="selected">请选择</option>
             <option value="50">近50期</option>
@@ -112,48 +114,45 @@
           &nbsp;&nbsp;<a href="/numtab.html">历史号码下载</a>&nbsp;&nbsp;<a href="/numtab.html">Excel格式号码下载</a>
         </div>
 
-            <script type="text/javascript">
-              $(function () {
-                ajaxRender();
-              });
-              // 获取数据
-              function getFnums (num, fn) {
-                $.ajax({
-                  url: ('/get?num=' + num),
-                  type: 'get',
-                  success: function (data) {
-                    fn(data);
-                  }
-                });
-              }
-              function ajaxRender (num) {
-                getFnums((num || 50), function (fnums) {
-                  render(fnums);
-                });
-              }
-              // 渲染界面
-              function render (fnums) {
-                var fnumsText = doT.template($("#tbodyTmp").text());
-                $('#chartsBox').find('canvas').remove();
-                $("#chartsTbody").html(fnumsText(fnums));
-                nolines();
-              }
-              //分短线
-              function nolines() {
-                var only_dx = function(td) {
-                  return !!(td.className.indexOf("text") == -1 && td.innerHTML != "&nbsp;" && td.innerHTML != "")
-                };
-                oZXZ.bind("chartsTbody", "has_line").indent(8)
-                  .newCheck(only_dx).color("#619DD9").add(20, 1, 16, 1)
-                  .draw(true);
-                /* 遗漏柱状图*/
-                yl_Histogram.bind({
-                  table: 'chartsTbody',
-                  checkBox: 'yl_zhu',
-                  left: 4
-                });
-              }
-            </script>
+        <script type="text/javascript">
+          $(function() {
+            ajaxRender();
+          });
+          // 获取数据
+          function ajaxRender(num, day) {
+            var p = {};
+            if (day) {
+              p.day = day;
+            } else {
+              p.num = num || 50;
+            }
+            jsx.ajax(('/get'), 'get', p, function(fnums) {
+              render(fnums);
+            })
+          }
+          // 渲染界面
+          function render(fnums) {
+            var fnumsText = doT.template($("#tbodyTmp").text());
+            $('#chartsBox').find('canvas').remove();
+            $("#chartsTbody").html(fnumsText(fnums));
+            nolines();
+          }
+          //分短线
+          function nolines() {
+            var only_dx = function(td) {
+              return !!(td.className.indexOf("text") == -1 && td.innerHTML != "&nbsp;" && td.innerHTML != "")
+            };
+            oZXZ.bind("chartsTbody", "has_line").indent(8)
+              .newCheck(only_dx).color("#619DD9").add(20, 1, 16, 1)
+              .draw(true);
+            /* 遗漏柱状图*/
+            yl_Histogram.bind({
+              table: 'chartsTbody',
+              checkBox: 'yl_zhu',
+              left: 4
+            });
+          }
+        </script>
       </div>
       <div class="relative" id="chartsBox">
 
@@ -242,7 +241,7 @@
 
         <h4>参数说明：</h4>
         <style>
-    .explain_text table {
+          .explain_text table {
         border-collapse: collapse;
         border-spacing: 0;
         width: 80%;

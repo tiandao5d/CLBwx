@@ -202,7 +202,7 @@
       // 获取数据
       function getFnums (fn) {
         $.ajax({
-          url: ('/getAhzyl'),
+          url: ('/gethzyl'),
           type: 'get',
           success: function (data) {
             fn(data);
@@ -245,12 +245,13 @@
     <!-- 理论出现次数 -->
     <td>{{=obj.als.toFixed(2)}}</td>
     <!-- 前三次统计 -->
-    {{for (var k in obj.a3y){ }}
-    <td>{{=parseFloat(obj.a3y[k].toFixed(2))}}</td>
-    {{ } }}
-    <td>0</td>
-    <td>3</td>
-    <td>2</td>
+    {{~obj.a3y:a3y }}
+    <td>{{=parseFloat(a3y.toFixed(2))}}</td>
+    {{~}}
+    <!-- 前三周期统计 -->
+    {{~obj.a3q:a3q}}
+    <td>{{=a3q}}</td>
+    {{~}}
   </tr>
   {{~}}
   </script>

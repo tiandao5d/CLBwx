@@ -2,7 +2,8 @@
 
 'use strict'
 const sql = require('./sql/sql.js');
-const {each, randommm} = require('./jxl.js');
+const {each, randommm, reqp} = require('./jxl.js');
+var count = 50; // 请求的数据量，就是多少条
 var tt = 0;
 module.exports = (() => {
   var o = {};
@@ -15,23 +16,41 @@ module.exports = (() => {
   return o;
 })();
 
-// reqp('http://127.0.0.1:3001/get', 'get').then(function (body) {
-//   console.log(body)
-// })
 // 获取号码
 // [{q: 181213037, n: [1,2,3]}]
 function getNums () {
   return new Promise(function(resolve, reject) {
-    var a = [];
-    var f = 181213030;
-    each(50, function ( i ) {
-      a.push({
-        q: f++,
-        n: [randommm(1,6), randommm(1,6), randommm(1,6)]
-      })
-    });
-    resolve(a);
+    requestFn(data => {
+      var a = [];
+      each(data, ( i, o ) => {
+        a.push({
+          q: o.showIssue,
+          n: o.winNum.split('').map(n => parseInt(n))
+        })
+      });
+      resolve(a);
+    })
   });
+}
+
+// 模拟数据请求
+// gameId":9,"realIssue":3116,"showIssue":"190101074","winNum":"123"
+// 游戏id  流水号  销售期号 开奖号码 190107043
+// reqp('http://hb579n.natappfree.cc/ips/game/getK3WinNumInfo?count=50', 'get').then(function (body) {
+//   console.log(body)
+// })
+function requestFn( cb = () => {}) {
+  reqp('http://localhost:3000/123.json', 'get').then(function (body) {
+    if ( body && body.data && body.data.length > 0 ) {
+      var arr = body.data;
+      if ( parseInt(arr[0].showIssue) > parseInt(arr[1].showIssue) ) {
+        arr.reverse();
+      }
+      cb(arr);
+    } else {
+      cb([]);
+    }
+  })
 }
 
 // 获取新的数据
@@ -61,9 +80,4 @@ async function getSqlNewNums () {
     newarr = nums;
   }
   return newarr;
-}
-// 返回新的数据，
-// nums 请求的所有数据，lobj，数据库存储的最后一条数据
-function rnNewNums (nums, lobj) {
-
 }

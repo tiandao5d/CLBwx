@@ -5,10 +5,14 @@
 const mysql = require('mysql2');
 const config = require('../../config');
 const {each, extend} = require('../jxl.js');
-const ct = mysql.createConnection(config.sql);
+var ct;
 
 module.exports = (() => {
+  if ( !config.usesql ) {
+    return {}
+  }
   var o = {};
+  ct = mysql.createConnection(config.sql);
   o.getRow = getRow;
   o.insertObj = insertObj;
   o.getIssue = getIssue;
