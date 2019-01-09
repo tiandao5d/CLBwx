@@ -6,5 +6,11 @@ module.exports = {
     password: '123456',
     database: 'test'
   },
+  // 获取数据的接口
+  // gameId":9,"realIssue":3116,"showIssue":"190101074","winNum":"123"
+  // 游戏id  流水号  销售期号 开奖号码 190107043
+  // getNumsUrl: 'http://hb579n.natappfree.cc/ips/game/getK3WinNumInfo?count=50',
+  getNumsUrl: 'http://localhost:3000/123.json',
+  getNumsType: 'get', // 请求方式
   usesql: false // 用于判断是否使用数据库方式
 }

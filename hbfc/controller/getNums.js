@@ -1,6 +1,7 @@
 // 获取彩票原始数据列表
 
 'use strict'
+const config = require('../config');
 const sql = require('./sql/sql.js');
 const {each, randommm, reqp} = require('./jxl.js');
 var count = 50; // 请求的数据量，就是多少条
@@ -40,7 +41,7 @@ function getNums () {
 //   console.log(body)
 // })
 function requestFn( cb = () => {}) {
-  reqp('http://localhost:3000/123.json', 'get').then(function (body) {
+  reqp(config.getNumsUrl, config.getNumsType).then(function (body) {
     if ( body && body.data && body.data.length > 0 ) {
       var arr = body.data;
       if ( parseInt(arr[0].showIssue) > parseInt(arr[1].showIssue) ) {
