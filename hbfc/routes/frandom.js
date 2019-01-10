@@ -4,7 +4,6 @@
 'use strict';
 const {each} = require('../controller/jxl.js');
 const objFnums = require('../controller/formatNums.js');
-var fnums = null; // 记录格式化后的值
 module.exports =  (router) => {
   // 伪造数据或者一次性形式的福彩3d
   router.get('/gethzyl', async (ctx, next) => {
@@ -16,9 +15,7 @@ module.exports =  (router) => {
     var num = ctx.query.num;
     var day = ctx.query.day;
     var arr = null;
-    if ( !fnums ) {
-      fnums = await objFnums.formatNums();
-    }
+    var fnums = await objFnums.formatNums();
     if ( day ) {
       if ( day === 'yesterday' ) {
         arr = getDayFn(fnums, ((+new Date()) - (24*60*60*1000)));

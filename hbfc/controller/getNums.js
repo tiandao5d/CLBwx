@@ -6,6 +6,7 @@ const sql = require('./sql/sql.js');
 const {each, randommm, reqp} = require('./jxl.js');
 var count = 50; // 请求的数据量，就是多少条
 var tt = 0;
+var randomArr = null;
 module.exports = (() => {
   var o = {};
   // 获取号码
@@ -41,12 +42,19 @@ function getNums () {
 //   console.log(body)
 // })
 function requestFn( cb = () => {}) {
+  // let ctt = +new Date();
+  // if ( ctt - tt <= (10*60*1000) ) { // 超过十分钟才会请求
+  //   cb(randomArr);
+  //   return false;
+  // }
+  console.log(123)
   reqp(config.getNumsUrl, config.getNumsType).then(function (body) {
     if ( body && body.data && body.data.length > 0 ) {
       var arr = body.data;
       if ( parseInt(arr[0].showIssue) > parseInt(arr[1].showIssue) ) {
         arr.reverse();
       }
+      randomArr = arr;
       cb(arr);
     } else {
       cb([]);

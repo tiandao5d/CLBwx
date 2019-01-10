@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:esun>
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <!--<meta http-equiv="x-ua-compatible" content="ie=8" />-->
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="/images/ico/k3.ico" />
   <link type="text/css" rel="stylesheet" media="screen" href="/css/ui.datepicker.css" />
+  <link type="text/css" rel="stylesheet" href="/css/style.css" />
   <script type="text/javascript" src="/scripts/chart/jquery.min.js"></script>
   <script type="text/javascript" src="/scripts/chart/linedraw.js"></script>
   <script type="text/javascript" src="/scripts/chart/lottery.js"></script>
@@ -13,26 +15,32 @@
   <script type="text/javascript" src="/scripts/chart/jq.date.js"></script>
   <script type="text/javascript" src="/scripts/chart/chartsline.js"></script>
   <script type="text/javascript" src="/scripts/doT.min.js"></script>
+  <script type="text/javascript" src="/scripts/jsx.js"></script>
   <style type="text/css">
-    esun\:* { BEHAVIOR: url(#default#VML); }
+    esun\:* {
+      BEHAVIOR: url(#default#VML);
+    }
   </style>
   <meta name="Keywords" content="湖北快3_走势图表 基本走势,湖北快3 基本走势图,湖北快3 基本走势号码走势 " />
   <meta name="Description" content="湖北快3_走势图表 基本走势走势" />
   <title>和值走势</title>
-  <link href="/css/chart/chart.css" rel="stylesheet"/>
+  <link href="/css/chart/chart.css" rel="stylesheet" />
 
   <link type="text/css" rel="stylesheet" href="/css/notify_message.css" />
   <script type="text/javascript" src="/scripts/chart/chart_hbk3.js"></script>
 
   <script type="text/javascript">
     var lottery = "hbk3";
-    jQuery(document).ready(function () {
+    jQuery(document).ready(function() {
       initK3Zst("hbk3", "trend-sum", "0");
-      $("#chartsTable").floattableheader({ thead_id: "zst_head" });
+      $("#chartsTable").floattableheader({
+        thead_id: "zst_head"
+      });
     });
   </script>
 
 </head>
+
 <body>
 
   <div class="top"><a name="gotop">&nbsp;</a> </div>
@@ -79,76 +87,73 @@
 
 
     <div class="zst_content">
-<div class="zst_explain">本走势图数据系服务器自动读取，可能存在延时或无法读取故障，<b style="color:red;">不作为开奖依据</b>。敬请留意。</div>
+      <div class="zst_explain">本走势图数据系服务器自动读取，可能存在延时或无法读取故障，<b style="color:red;">不作为开奖依据</b>。敬请留意。</div>
       <div class="zst_edit clearfix">
 
-<div class="floatL">
-  标注形式选择：
-<input type="checkbox" onclick="yilou()" id="c_yl" name="checkbox">
-  <label for="c_yl">隐藏遗漏数据</label>
-  <input type="checkbox" id="yl_zhu" name="checkbox">
-  <label for="yl_zhu">遗漏分层</label>
-  <input type="checkbox" onclick="segmentedLine()" id="yl_fd" name="checkbox">
-  <label for="yl_fd">分段线</label>
-  <input type="checkbox" id="has_line" name="checkbox" checked="checked">
-  <label for="has_line">折线</label>
-</div>
-<div class="floatR">
-  时间选择： <span class="pageSet dateSet"><a onclick="ajaxRender(78)">今天</a> <a onclick="ajaxRender(78)">昨天</a></span>
-  <select onchange="ajaxRender($(this).val())" id="byday" class="input_slt ">
-    <option value="" selected="selected">请选择</option>
-    <option value="50">近50期</option>
-    <option value="100">近100期</option>
-    <option value="156">近二天</option>
-    <option value="234">近三天</option>
-    <option value="390">近五天</option>
-  </select>
-  &nbsp;&nbsp;<a href="/numtab.html">历史号码下载</a>&nbsp;&nbsp;<a href="/numtab.html">Excel格式号码下载</a>
-</div>
+        <div class="floatL">
+          标注形式选择：
+          <input type="checkbox" onclick="yilou()" id="c_yl" name="checkbox">
+          <label for="c_yl">隐藏遗漏数据</label>
+          <input type="checkbox" id="yl_zhu" name="checkbox">
+          <label for="yl_zhu">遗漏分层</label>
+          <input type="checkbox" onclick="segmentedLine()" id="yl_fd" name="checkbox">
+          <label for="yl_fd">分段线</label>
+          <input type="checkbox" id="has_line" name="checkbox" checked="checked">
+          <label for="has_line">折线</label>
+        </div>
+        <div class="floatR">
+          时间选择： <span class="pageSet dateSet"><a onclick="ajaxRender(0, 'today')">今天</a> <a onclick="ajaxRender(0, 'yesterday')">昨天</a></span>
+          <select onchange="ajaxRender($(this).val())" id="byday" class="input_slt ">
+            <option value="" selected="selected">请选择</option>
+            <option value="50">近50期</option>
+            <option value="100">近100期</option>
+            <option value="156">近二天</option>
+            <option value="234">近三天</option>
+            <option value="390">近五天</option>
+          </select>
+          &nbsp;&nbsp;<a href="/numtab.html">历史号码下载</a>&nbsp;&nbsp;<a href="/numtab.html">Excel格式号码下载</a>
+        </div>
 
-<script type="text/javascript">
-  $(function () {
-    ajaxRender();
-  });
-  // 获取数据
-  function getFnums (num, fn) {
-    $.ajax({
-      url: ('/get?num=' + num),
-      type: 'get',
-      success: function (data) {
-        fn(data);
-      }
-    });
-  }
-  function ajaxRender (num) {
-    getFnums((num || 50), function (fnums) {
-      render(fnums);
-    });
-  }
-  // 渲染界面
-  function render (fnums) {
-    var fnumsText = doT.template($("#tbodyTmp").text());
-    $('#chartsBox').find('canvas').remove();
-    $("#chartsTbody").html(fnumsText(fnums));
-    nolines();
-  }
-  //分短线
-  function nolines() {
-    var only_dx = function (td) {
-      return !!(td.className.indexOf("text") == -1 && td.innerHTML != "&nbsp;" && td.innerHTML != "")
-    };
-    oZXZ.bind("chartsTbody", "has_line").indent(8)
-    .newCheck(only_dx).color("#619DD9").add(4, 1, 16, 1)
-    .newCheck(only_dx).color("#619DD9").add(20, 1, 10, 1)
-    .draw(true);
-    /* 遗漏柱状图*/
-    yl_Histogram.bind({
-      table: 'chartsTbody',
-      checkBox: 'yl_zhu',
-      left: 4
-    });
-  }
-</script>
+        <script type="text/javascript">
+          $(function() {
+            ajaxRender();
+          });
+          // 获取数据
+          function ajaxRender(num, day) {
+            var p = {};
+            if (day) {
+              p.day = day;
+            } else {
+              p.num = num || 50;
+            }
+            jsx.ajax(('/get'), 'get', p, function(fnums) {
+              render(fnums);
+            })
+          }
+          // 渲染界面
+          function render(fnums) {
+            var fnumsText = doT.template($("#tbodyTmp").text());
+            $('#chartsBox').find('canvas').remove();
+            $("#chartsTbody").html(fnumsText(fnums));
+            nolines();
+          }
+          //分短线
+          function nolines() {
+            var only_dx = function(td) {
+              return !!(td.className.indexOf("text") == -1 && td.innerHTML != "&nbsp;" && td.innerHTML != "")
+            };
+            oZXZ.bind("chartsTbody", "has_line").indent(8)
+              .newCheck(only_dx).color("#619DD9").add(4, 1, 16, 1)
+              .newCheck(only_dx).color("#619DD9").add(20, 1, 10, 1)
+              .draw(true);
+            /* 遗漏柱状图*/
+            yl_Histogram.bind({
+              table: 'chartsTbody',
+              checkBox: 'yl_zhu',
+              left: 4
+            });
+          }
+        </script>
       </div>
       <div class="relative" id="chartsBox">
 
@@ -156,121 +161,121 @@
 
 
 
-<!-- hbk3 chart -->
-<table class="table_box" id="chartsTable">
-  <thead id="zst_head">
-    <tr class="tabbg">
-      <td class="line_r sequence" rowspan="2" onclick="chgMenu();"><a href="javascript:void(0);" class="sequence_up">期号</a></td>
-      <td class="line_r" rowspan="2" colspan="3">开奖号码</td>
-      <td class="line_r" colspan="16">和值</td>
-      <td class="line_r" colspan="10">和尾</td>
-      <td colspan="3">除3余数</td>
-    </tr>
-    <tr class="tabbg">
-      <td class="wid_28">3</td>
-      <td class="wid_28">4</td>
-      <td class="wid_28">5</td>
-      <td class="wid_28">6</td>
-      <td class="wid_28">7</td>
-      <td class="wid_28">8</td>
-      <td class="wid_28">9</td>
-      <td class="wid_28">10</td>
-      <td class="wid_28">11</td>
-      <td class="wid_28">12</td>
-      <td class="wid_28">13</td>
-      <td class="wid_28">14</td>
-      <td class="wid_28">15</td>
-      <td class="wid_28">16</td>
-      <td class="wid_28">17</td>
-      <td class="wid_28 line_r">18</td>
-      <td class="wid_28">0</td>
-      <td class="wid_28">1</td>
-      <td class="wid_28">2</td>
-      <td class="wid_28">3</td>
-      <td class="wid_28">4</td>
-      <td class="wid_28">5</td>
-      <td class="wid_28">6</td>
-      <td class="wid_28">7</td>
-      <td class="wid_28">8</td>
-      <td class="wid_28 line_r">9</td>
-      <td class="wid_28">余0</td>
-      <td class="wid_28">余1</td>
-      <td class="wid_28">余2</td>
-    </tr>
-  </thead>
-  <tbody id="chartsTbody"></tbody>
-  <tbody>
-    <tr id="yx_kj1" class="xhq">
-      <td class="line_r text_al_l"><a href="javascript:void(0);" class="delete" title="删除" onclick="delectColumn(this)"></a><strong>预选区</strong></td>
-      <td colspan="3" class="input_slt tab_slt">
-        <input type="hidden" id="childType" value="K3HZ" />和值 &nbsp;
+        <!-- hbk3 chart -->
+        <table class="table_box" id="chartsTable">
+          <thead id="zst_head">
+            <tr class="tabbg">
+              <td class="line_r sequence" rowspan="2" onclick="chgMenu();"><a href="javascript:void(0);" class="sequence_up">期号</a></td>
+              <td class="line_r" rowspan="2" colspan="3">开奖号码</td>
+              <td class="line_r" colspan="16">和值</td>
+              <td class="line_r" colspan="10">和尾</td>
+              <td colspan="3">除3余数</td>
+            </tr>
+            <tr class="tabbg">
+              <td class="wid_28">3</td>
+              <td class="wid_28">4</td>
+              <td class="wid_28">5</td>
+              <td class="wid_28">6</td>
+              <td class="wid_28">7</td>
+              <td class="wid_28">8</td>
+              <td class="wid_28">9</td>
+              <td class="wid_28">10</td>
+              <td class="wid_28">11</td>
+              <td class="wid_28">12</td>
+              <td class="wid_28">13</td>
+              <td class="wid_28">14</td>
+              <td class="wid_28">15</td>
+              <td class="wid_28">16</td>
+              <td class="wid_28">17</td>
+              <td class="wid_28 line_r">18</td>
+              <td class="wid_28">0</td>
+              <td class="wid_28">1</td>
+              <td class="wid_28">2</td>
+              <td class="wid_28">3</td>
+              <td class="wid_28">4</td>
+              <td class="wid_28">5</td>
+              <td class="wid_28">6</td>
+              <td class="wid_28">7</td>
+              <td class="wid_28">8</td>
+              <td class="wid_28 line_r">9</td>
+              <td class="wid_28">余0</td>
+              <td class="wid_28">余1</td>
+              <td class="wid_28">余2</td>
+            </tr>
+          </thead>
+          <tbody id="chartsTbody"></tbody>
+          <tbody>
+            <tr id="yx_kj1" class="xhq">
+              <td class="line_r text_al_l"><a href="javascript:void(0);" class="delete" title="删除" onclick="delectColumn(this)"></a><strong>预选区</strong></td>
+              <td colspan="3" class="input_slt tab_slt">
+                <input type="hidden" id="childType" value="K3HZ" />和值 &nbsp;
                 <a arg="clear_hm" href="javascript:void(0);" title="" onclick="clearNumber(this)">清</a>
-      </td>
-      <td class="light_ball" onclick="selectNumberCell(this,3,'1');">3
-      </td>
-      <td class="light_ball" onclick="selectNumberCell(this,4,'1');">4
-      </td>
-      <td class="light_ball" onclick="selectNumberCell(this,5,'1');">5
-      </td>
-      <td class="light_ball" onclick="selectNumberCell(this,6,'1');">6
-      </td>
-      <td class="light_ball" onclick="selectNumberCell(this,7,'1');">7
-      </td>
-      <td class="light_ball" onclick="selectNumberCell(this,8,'1');">8
-      </td>
-      <td class="light_ball" onclick="selectNumberCell(this,9,'1');">9
-      </td>
-      <td class="light_ball" onclick="selectNumberCell(this,10,'1');">10
-      </td>
-      <td class="light_ball" onclick="selectNumberCell(this,11,'1');">11
-      </td>
-      <td class="light_ball" onclick="selectNumberCell(this,12,'1');">12
-      </td>
-      <td class="light_ball" onclick="selectNumberCell(this,13,'1');">13
-      </td>
-      <td class="light_ball" onclick="selectNumberCell(this,14,'1');">14
-      </td>
-      <td class="light_ball" onclick="selectNumberCell(this,15,'1');">15
-      </td>
-      <td class="light_ball" onclick="selectNumberCell(this,16,'1');">16
-      </td>
-      <td class="light_ball" onclick="selectNumberCell(this,17,'1');">17
-      </td>
-      <td class="light_ball" onclick="selectNumberCell(this,18,'1');">18
-      </td>
-      <td colspan="26" class="line_l">&nbsp;</td>
-    </tr>
-    <tr id="goToBuy">
-      <td colspan="100">
-        <div class="gotobuy">
-          <a id="addrows" href="javascript:void(0);" class="add_h" onclick="addRow('hz')">增加一行</a>
-          <!--<a href="javascript:void(0);" class="buy_my" title="点击购买模拟选号" onclick="javaScript:buyPlan_hbk3('hbk3'); return false;">购买模拟选号</a>-->
-        </div>
-      </td>
-    </tr>
-  </tbody>
-</table>
+              </td>
+              <td class="light_ball" onclick="selectNumberCell(this,3,'1');">3
+              </td>
+              <td class="light_ball" onclick="selectNumberCell(this,4,'1');">4
+              </td>
+              <td class="light_ball" onclick="selectNumberCell(this,5,'1');">5
+              </td>
+              <td class="light_ball" onclick="selectNumberCell(this,6,'1');">6
+              </td>
+              <td class="light_ball" onclick="selectNumberCell(this,7,'1');">7
+              </td>
+              <td class="light_ball" onclick="selectNumberCell(this,8,'1');">8
+              </td>
+              <td class="light_ball" onclick="selectNumberCell(this,9,'1');">9
+              </td>
+              <td class="light_ball" onclick="selectNumberCell(this,10,'1');">10
+              </td>
+              <td class="light_ball" onclick="selectNumberCell(this,11,'1');">11
+              </td>
+              <td class="light_ball" onclick="selectNumberCell(this,12,'1');">12
+              </td>
+              <td class="light_ball" onclick="selectNumberCell(this,13,'1');">13
+              </td>
+              <td class="light_ball" onclick="selectNumberCell(this,14,'1');">14
+              </td>
+              <td class="light_ball" onclick="selectNumberCell(this,15,'1');">15
+              </td>
+              <td class="light_ball" onclick="selectNumberCell(this,16,'1');">16
+              </td>
+              <td class="light_ball" onclick="selectNumberCell(this,17,'1');">17
+              </td>
+              <td class="light_ball" onclick="selectNumberCell(this,18,'1');">18
+              </td>
+              <td colspan="26" class="line_l">&nbsp;</td>
+            </tr>
+            <tr id="goToBuy">
+              <td colspan="100">
+                <div class="gotobuy">
+                  <a id="addrows" href="javascript:void(0);" class="add_h" onclick="addRow('hz')">增加一行</a>
+                  <!--<a href="javascript:void(0);" class="buy_my" title="点击购买模拟选号" onclick="javaScript:buyPlan_hbk3('hbk3'); return false;">购买模拟选号</a>-->
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
       </div>
       <div class="zst_explain">
 
-<h4>参数说明：</h4>
-<div class="explain_text">
-  <ul>
-    <li><strong>和值</strong>各个中奖号码数值之和</li>
-    <li><strong>和尾</strong>和值的个位</li>
-    <li><strong>除3余数：</strong>和值除以3以后的余数，包括余0，余1，余2</li>
-    <li><strong>余0和值：</strong>3,6,9,12,15,18</li>
-    <li><strong>余1和值：</strong>4,7,10,13,16</li>
-    <li><strong>余2和值：</strong>5，8,11,14,17</li>
-    <li><strong>遗漏分层：</strong>将当前遗漏用黑色标识。</li>
-    <li><strong>分段线：</strong>每五期使用分隔线，使横向导航更加清晰。</li>
-    <li><strong>出现总次数：</strong>统计期数内实际出现的次数。</li>
-    <li><strong>遗漏：</strong>自上期开出到本期间隔的期数。</li>
-    <li><strong>最大遗漏值：</strong>统计期数内遗漏的最大值。</li>
-    <li><strong>最大连出值：</strong>统计期数内连续开出的最大值。</li>
-  </ul>
-</div>
+        <h4>参数说明：</h4>
+        <div class="explain_text">
+          <ul>
+            <li><strong>和值</strong>各个中奖号码数值之和</li>
+            <li><strong>和尾</strong>和值的个位</li>
+            <li><strong>除3余数：</strong>和值除以3以后的余数，包括余0，余1，余2</li>
+            <li><strong>余0和值：</strong>3,6,9,12,15,18</li>
+            <li><strong>余1和值：</strong>4,7,10,13,16</li>
+            <li><strong>余2和值：</strong>5，8,11,14,17</li>
+            <li><strong>遗漏分层：</strong>将当前遗漏用黑色标识。</li>
+            <li><strong>分段线：</strong>每五期使用分隔线，使横向导航更加清晰。</li>
+            <li><strong>出现总次数：</strong>统计期数内实际出现的次数。</li>
+            <li><strong>遗漏：</strong>自上期开出到本期间隔的期数。</li>
+            <li><strong>最大遗漏值：</strong>统计期数内遗漏的最大值。</li>
+            <li><strong>最大连出值：</strong>统计期数内连续开出的最大值。</li>
+          </ul>
+        </div>
 
       </div>
     </div>
@@ -287,13 +292,12 @@
   <div class="go" id="rightGo"><a title="返回顶部" class="top" href="#gotop"></a><a title="如果您有意见，请反馈给我们！" class="feedback" href="/a1.html" target="_blank" onclick=""></a><a title="返回底部" class="bottom" href="#gobottom"></a></div>
   <script type="text/javascript">
     /*异步加载JS*/
-    $(document).ready(function () {
+    $(document).ready(function() {
       var script2 = document.createElement("script");
       script2.setAttribute("src", "/stat.js");
       document.getElementsByTagName("head")[0].appendChild(script2);
-      script2.onload = function () {
-      };
-      script2.onreadystatechange = function () {
+      script2.onload = function() {};
+      script2.onreadystatechange = function() {
         var rs = this.readyState;
         if ("loaded" === rs || "complete" === rs) {
           script2.onreadystatechange = null;
@@ -306,7 +310,7 @@
   <script type="text/javascript" src="/scripts/chart/jquery.countdown-zh-CN.js"></script>
   <script type="text/javascript" src="/scripts/chart/notify_message.js"></script>
   <script id="tbodyTmp" type="text/x-dot-template">
-  {{~it:obj:ii}}
+    {{~it:obj:ii}}
     {{?(ii%5 === 0)}}
     <tr style="height:1px; background:#ccc;"><td name="hid" colspan="39" style="height:2px;background:#ccc; display: none;"></td></tr>
     {{?}}
@@ -340,4 +344,5 @@
   <span id="timer"></span>
 
 </body>
+
 </html>

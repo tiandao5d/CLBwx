@@ -584,18 +584,18 @@ function lianhao() {
 function segmentedLine() {
 	if ($("#yl_fd").attr("checked") == true) {
 		$("td[name='hid']").show();
-		if ($("#has_line").attr("checked") == true) {
-			oZXZ.bind("chartsTable", "has_line").indent(8)
-    		.clear();
-			nolines();
-		}
+		// if ($("#has_line").attr("checked") == true) {
+		// 	oZXZ.bind("chartsTable", "has_line").indent(8)
+    // 		.clear();
+		// 	nolines();
+		// }
 	} else {
 		$("td[name='hid']").hide();
-		if ($("#has_line").attr("checked") == true) {
-			oZXZ.bind("chartsTable", "has_line").indent(8)
-    		.clear();
-			nolines();
-		}
+		// if ($("#has_line").attr("checked") == true) {
+		// 	oZXZ.bind("chartsTable", "has_line").indent(8)
+    // 		.clear();
+		// 	nolines();
+		// }
 	}
 }
 

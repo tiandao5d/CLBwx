@@ -2,15 +2,12 @@
 'use strict';
 const {each, extend} = require('./jxl.js');
 const objNums = require('./getNums.js');
-var nums = null;
 module.exports = (() => {
   var o = {};
   o.getAddObj = getAddObj;
   o.getAhzYl = getAhzYl;
   o.getFnums = async () => {
-    if ( !nums ) {
-      nums = await objNums.getNums();
-    }
+    let nums = await objNums.getNums();
     return nums;
   }
   // 获取号码
