@@ -38,6 +38,27 @@ function isEmptyObject(obj) {
   return true
 }
 
+// 不传intval时，就是按照一定的间隔执行
+function debounce(method, delay, intval) {
+  let timer = null;
+  return function () {
+    if ( intval === true ) { // 只执行最后一次的
+      clearTimeout(timer);
+    } else if ( timer ) { // 按一定的间隔执行
+      return;
+    }
+    let context = this;
+    let args = arguments;
+    timer = setTimeout(function () {
+      timer = null;
+      method.apply(context, args);
+    }, delay);
+  }
+}
+// 只执行最后一次
+function throttle (method, delay) {
+  return debounce(method, delay, true);
+}
 
 function storageL(key, val) {
   if (typeof(Storage) !== 'undefined') {
