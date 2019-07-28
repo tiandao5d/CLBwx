@@ -27,100 +27,163 @@
   <script>
     let box = document.querySelector('.box');
     class Byy {
-      constructor ( box ) {
+      constructor ( box, option = {} ) {
+        this.items = option.items || []; // 所有的数据存储位置
+        this.itemHeight = option.itemHeight || 50; // 里面每条项目的高度，暂时无法做到不一致的情况
+        this.pageHeight = option.pageHeight || 300; // 容器的高度
+        this.aPageNum = option.aPageNum || Math.ceil(this.pageHeight/this.itemHeight); // 一页多少条数据，最好是可以沾满两个容器的高度，默认是两个容器的高度
+        this.getNewItems = option.getNewItems || function () {}; // 获取新条目
+        this.renderItem = option.renderItem || function () { return '没有渲染方法'}; // 渲染条目方法，方法必填
+        this.loadingStr = option.loadingStr || function () {}; // 加载字符串
+        
+
         this.box = box; // 容器元素
         this.ele = document.createElement('div'); // 放项目的元素
         this.box.appendChild(this.ele);
-        this.items = []; // 所有的数据存储位置
+        this.hasNewItem = this.items ? false : true; // 是否有新的条目，如果有初始化的items则无需加载，表示为本地数据加载
         this.ajaxType = 0; // 内部定义，用于确定异步数据请求返回，0表示可以继续下一次请求，1表示正在请求中
-        this.itemHeight = 50; // 里面每条项目的高度，暂时无法做到不一致的情况
-        this.pageHeight = 300; // 容器的高度
-        this.aPageNum = Math.ceil(this.pageHeight/this.itemHeight)*2; // 一页多少条数据，最好是可以沾满两个容器的高度，默认是两个容器的高度
         this.showPage = 3; // 默认显示三页数据最好是不要改动
         this.start = 0; // 显示数据的角标，开始角标
         this.end = this.start + (this.aPageNum*this.showPage); // 显示数据的角标，结束角标
 
+        this.ele.style.height = this.items ? ((this.items.length*this.itemHeight) + 'px') : 0; // 如果有初始化items则要初始化元素高度
         this.bindScroll();
         if ( this.end > this.items ) {
-          this.getItem(this.end).then(items => {
+          this.getItem(this.end)
+          .then(items => {
             if ( items && items.length ) {
-              this.items = this.items.concat(items);
-              this.ele.style.height = (this.items.length*this.itemHeight) + 'px';
-              this.render();
+              this.render(this.start, items);
             }
           });
         } else {
-          this.render();
+          this.render(this.start);
         }
       }
+
+      // 绑定滚动事件
       bindScroll () {
         let box = this.box;
         let oldTop = box.scrollTop;
         let newTop = oldTop;
-        let num21 = 0;
+        let num21t = 0;
+        let num21b = 0;
         box.addEventListener('scroll', (e) => {
           newTop = box.scrollTop;
-          num21 = (this.end + this.start)*this.itemHeight/2;
+          num21t = (this.end + this.start)*this.itemHeight/2; // 以上边缘为参考位置
+          num21b = num21t - this.pageHeight; // 下部边缘为参考位置
           if ( newTop > oldTop ) { // 向下滚动
-            if ( newTop > num21 ) {
+            if ( newTop > num21t ) { // 自上往下滚动，条目中间部分滚动到上部边界，可以加载下一页
               if ( this.end + this.aPageNum > this.items.length ) { // 数据不够需要加载
                 this.getItem().then(items => {
                   if ( items && items.length ) {
-                    this.items = this.items.concat(items);
-                    this.ele.style.height = (this.items.length*this.itemHeight) + 'px';
-                    this.start += this.aPageNum;
-                    this.end = this.start + (this.aPageNum*this.showPage);
-                    this.render();
+                    let start = this.start + this.aPageNum;
+                    this.render(start, items);
                   }
                 });
               } else { // 有足够的数据，无需加载
-                this.start += this.aPageNum;
-                this.end = this.start + (this.aPageNum*this.showPage);
-                this.render();
+                let start = this.start + this.aPageNum;
+                this.render(start);
               }
             }
           } else if ( newTop < oldTop ) { // 向上滚动
-            if ( newTop < num21 ) {
+            if ( newTop < num21b ) { // 自下往上滚动，条目中间部分滚动到下部边界，可以加载上一页
               if ( this.start > 0 ) {
-                this.start -= this.aPageNum;
-                this.start = this.start > 0 ? this.start : 0; // 避免误差
-                this.end = this.start + (this.aPageNum*this.showPage);
-                this.render();
+                let start = this.start - this.aPageNum;
+                start = start > 0 ? start : 0; // 避免误差
+                this.render(start);
               }
             }
           }
           oldTop = newTop;
         })
       }
-      render () {
-        let items = this.items.slice(this.start, this.end);
-        let str = items.map(o => `<div class="item">${o.txt}</div>`).join('');
+      // 渲染界面
+      // start 需要显示的数据条目的开始，用于方便截取this.items
+      // items 新加入的数据条目
+      render (start, newItems) {
+        if ( newItems ) { // 有新数据
+          this.items = this.items.concat(newItems);
+          this.ele.style.height = (this.items.length*this.itemHeight) + 'px';
+        }
+        // 重新定义显示的数据条目
+        this.start = start;
+        this.end = this.start + (this.aPageNum*this.showPage);
+        // 显示出相应条目
+        let showItems = this.items.slice(this.start, this.end);
+        let str = showItems.map(this.renderItem).join('');
         this.ele.style.paddingTop = (this.start*this.itemHeight) + 'px';
         this.ele.innerHTML = str;
       }
+      // 请求数据
       getItem ( num = this.aPageNum ) {
+        if ( this.hasNewItem === false ) {
+          return Promise.resolve(1);
+        }
         if ( this.ajaxType === 0 ) { // 可以执行请求
           this.ajaxType = 1;
-          let items = [];
-          let lgn = this.items.length;
-          for ( let i = 0; i < num; i++ ) {
-            items.push({
-              id: (lgn + i),
-              txt: (lgn + i + 1)
-            })
-          }
+          let el = this.renderLoading();
+          this.ele.appendChild(el);
           return new Promise(resolve => {
-            setTimeout(() => {
+            this.getNewItems(((items, haxNext) => {
               resolve(items);
               this.ajaxType = 0;
-            }, 1000);
+              this.ele.removeChild(el);
+              if ( haxNext === false ) { // 没有下一页了
+                this.hasNewItem = false;
+              }
+            }).bind(this), num);
           })
         } else if ( this.ajaxType === 1 ) { // 请求中
           return Promise.resolve(1);
         }
       }
+      // 加载中条目loading
+      renderLoading () {
+        let el = document.createElement('div');
+        el.className = 'item';
+        el.innerHTML = this.loadingStr() || 'loading……';
+        return el;
+      }
     }
-    let byy = new Byy(box);
+
+    
+    function renderItem (o, i) { // 渲染方法
+      return `<div class="item">${o.txt}</div>`;
+    }
+
+    function loadingStr () {
+      return '<div>loading……</div>';
+    }
+
+    // 此函数可以直接获取对象原型this
+    // 参数 cb为请求成功之后的回调函数，并且将条目数据为cb参数传回
+    // num为请求的数据数量，最小值
+    function getNewItems ( cb, num ) { // 获取新的数据
+      let items = [];
+      let lgn = this.items.length;
+      let isTrue = (this.items.length + num) > 40 ? false : true;
+      for ( let i = 0; i < num; i++ ) {
+        items.push({
+          id: (lgn + i),
+          txt: (lgn + i + 1)
+        })
+      }
+      setTimeout(() => {
+        cb(items, isTrue);
+      }, 1000);
+    }
+
+    function getNewItemsFn ( num ) { // 获取新的数据
+      let items = [];
+      for ( let i = 0; i < num; i++ ) {
+        items.push({
+          id: i,
+          txt: i + 1
+        })
+      }
+      return items;
+    }
+    let byy = new Byy(box, {items: getNewItemsFn(50), renderItem});
   </script>
 </body>
 </html>
