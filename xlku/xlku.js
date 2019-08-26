@@ -970,3 +970,24 @@ function throttle(func, wait, options) {
       trailing: trailing
   });
 }
+
+// nodejs 遍历文件夹
+// const fs = require('fs');
+// const path = require('path');
+function eachDir ( dirstr ) {
+  let arr = [];
+  aa(dirstr);
+  function aa ( dirs ) {
+    let list = fs.readdirSync(dirs);
+    list.forEach(s => {
+      s = path.join(dirs, s);
+      let stat = fs.statSync(s);
+      if ( stat.isDirectory() ) { // 文件夹
+        aa(s);
+      } else {
+        arr.push(s);
+      }
+    })
+  }
+  return arr;
+}
