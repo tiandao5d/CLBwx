@@ -1,0 +1,36 @@
+.googlemap-labelmarker-box {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+.googlemap-labelmarker-box .gmlm-imgs {
+    cursor: pointer;
+}
+.googlemap-labelmarker-box img {
+    position: absolute;
+    left: -50%;
+    top: -50%;
+    transform: translate(-50%, -50%);
+}
+.googlemap-labelmarker-box img.gmlm-img1 {
+    width: 22px;
+}
+.googlemap-labelmarker-box img.gmlm-img2 {
+    width: 16px;
+}
+.googlemap-labelmarker-box img.gmlm-img3 {
+    width: 10px;
+}
+.googlemap-labelmarker-box .gmlm-txt {
+    font-size: 12px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 12px;
+    max-width: 50px;
+    display: none;
+}
+.googlemap-pi-ssh .googlemap-labelmarker-box .gmlm-txt
+.googlemap-labelmarker-box.txt-show .gmlm-txt {
+    display: block;
+}

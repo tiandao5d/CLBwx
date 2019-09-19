@@ -61,6 +61,9 @@ function throttle (method, delay) {
   return debounce(method, delay, true);
 }
 
+// 用于浏览器缓存
+// val存在就是赋值，为null，undefined则是获取
+// 默认存储方式为localstorage，如果传入第三个参数为true，则可以切换为sessionStorage
 function storageL(key, val) {
   if (typeof(Storage) !== 'undefined') {
     if ((val === undefined) || (val === null)) { //不存储undefined和null
@@ -92,6 +95,8 @@ function storageL(key, val) {
   }
 }
 
+// 用于浏览器缓存的删除
+// 默认存储方式为localstorage，如果传入第二个参数为true，则可以切换为sessionStorage
 function rmStorageL(key) {
   if (typeof(Storage) !== 'undefined' && key) {
     if (arguments[1] === true) {
@@ -102,6 +107,8 @@ function rmStorageL(key) {
   }
 }
 
+// 用于浏览器缓存，清空数据
+// 默认存储方式为localstorage，如果传入第二个参数为true，则可以切换为sessionStorage
 function rmStorageLAll() {
   if (typeof(Storage) !== 'undefined') {
     if (arguments[0] === true) {

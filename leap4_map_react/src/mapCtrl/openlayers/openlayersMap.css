@@ -1,0 +1,52 @@
+.lgolmap-labelmarker {
+  position: absolute;
+  width: 0;
+  height: 0;
+  cursor: pointer;
+}
+.lgolmap-labelmarker .lgolmap-lm-imgs {
+  cursor: pointer;
+}
+.lgolmap-labelmarker .lgolmap-lm-circle,
+.lgolmap-labelmarker img {
+  position: absolute;
+  left: -50%;
+  top: -50%;
+  transform: translate(-50%, -50%);
+}
+.lgolmap-labelmarker .lgolmap-lm-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 100px;
+  background: #bf392a;
+}
+.lgolmap-labelmarker img.lgolmap-lm-img1 {
+  width: 22px;
+}
+.lgolmap-labelmarker img.lgolmap-lm-img2 {
+  width: 16px;
+}
+.lgolmap-labelmarker img.lgolmap-lm-img3 {
+  width: 10px;
+}
+.lgolmap-labelmarker .lgolmap-lm-txt {
+  font-size: 12px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 12px;
+  width: 50px;
+  word-wrap: break-word;
+  text-align: center;
+  display: none;
+  line-height: 1;
+  color: #fff;
+  font-weight: bold;
+}
+.lgolmap-labelmarker .lgolmap-lm-txt.center {
+  top: -6px;
+}
+.lgolmap-lm-ssh .lgolmap-labelmarker .lgolmap-lm-txt,
+.lgolmap-labelmarker .txt-show.lgolmap-lm-txt {
+  display: block;
+}
