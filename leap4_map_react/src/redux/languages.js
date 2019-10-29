@@ -2,34 +2,18 @@
 // 多语言
 import zh_cn from '../locale/zh_cn';
 import en_us from '../locale/en_us';
-import { storageL, storageKey } from '../utils';
+import { languageL } from '../utils/storage';
 const languageObj = {
     zh_cn,
     en_us
 }
 
-const defaultLanguage = languageObj[dlL().language] || zh_cn;
+const defaultLanguage = languageObj[languageL().language] || zh_cn;
 // 方便查看和防止全局字段污染
 const acType = typeInit();
 const { switchLanguage } = actionInit();
 const { languages } = reducerInit();
 export { switchLanguage, languages };
-
-// 获取或者存储本地的语言
-function dlL ( language ) {
-    if ( language ) {
-        language = {language}
-        storageL(storageKey.GLOBAL_LANGUAGE_LOCALSTORAGE, language);
-        return language;
-    }
-    language = storageL(storageKey.GLOBAL_LANGUAGE_LOCALSTORAGE);
-    if ( !language ) {
-        language = {
-            language: (navigator.language + '').toLocaleLowerCase().replace(/[^a-zA-Z]+/g, '_')
-        }
-    }
-    return language
-}
 
 // 字符串常量初始化
 function typeInit() {
@@ -43,7 +27,9 @@ function typeInit() {
 function reducerInit() {
     function languages(state = defaultLanguage, action) {
         if ( Object.keys(acType).includes(action.type) ) {
-            dlL((action.type + '').toLocaleLowerCase());
+            languageL({
+                language: (action.type + '').toLocaleLowerCase()
+            });
         }
         switch (action.type) {
             case acType.ZH_CN:

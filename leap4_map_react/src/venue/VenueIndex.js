@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { userInfoL, request } from '../utils';
+import { request } from '../utils/utilsIndex';
+import { userInfoL } from '../utils/storage';
 import blue from '../img/blue.png';
 import green from '../img/green.png';
 import orange from '../img/orange.png';
@@ -14,6 +14,9 @@ class VenueIndex {
         // await venueService.login();
         async function aaa(body) {
             let res = await venueService.search(body);
+            if ( !res.data ) {
+                return false;
+            }
             res.data = res.data.map(o => {
                 return Object.assign(o, {imgs: [blue, green, orange]})
             });
@@ -148,11 +151,11 @@ class VenueService {
         }
         return { data, type };
     }
-    login() {
+    login(obj) {
         return request({
             url: '/login',
             method: 'post',
-            body: JSON.stringify({ username: 'xulin@localgravity.com', password: '32FL_ERQD_k4B5_ckWT' })
+            body: JSON.stringify(obj)
         }).then(res => {
             if (res.token) {
                 return userInfoL(res);

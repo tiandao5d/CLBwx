@@ -31,8 +31,8 @@ class OpenLayers {
         mapOptions.container.innerHTML = ''; // 容器必须是空的
         map = new Map({
             view: new View({
-                center: formatCoord([104.218032, 35.599101]),
-                zoom: 4
+                center: mapOptions.center ? formatCoord([mapOptions.center.lng, mapOptions.center.lat]) : formatCoord([104.218032, 35.599101]),
+                zoom: mapOptions.zoom || 4
             }),
             layers: [
                 baseTileMap.layerGroup
@@ -51,13 +51,17 @@ class OpenLayers {
 
     get(type) { // 暴露的获取数据的接口
         let view = map.getView();
-        if ( type === 'extent' ) {
+        if ( type === 'extent' ) { // 获取当前显示的矩形界面
             return transformExtent(view.calculateExtent(), 'EPSG:3857', 'EPSG:4326')
         }
-        if ( type === 'center' ) {
-            return formatCoord(view.getCenter(), true);
+        if ( type === 'center' ) { // 获取中心点坐标
+            let arr = formatCoord(view.getCenter(), true);
+            return {
+                lng: arr[0],
+                lat: arr[1]
+            }
         }
-        if ( type === 'zoom' ) {
+        if ( type === 'zoom' ) { // 获取缩放层级
             return view.getZoom();
         }
     }

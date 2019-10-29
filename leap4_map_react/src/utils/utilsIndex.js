@@ -1,6 +1,12 @@
 // 自定义的全局方法调用
 import { fetch } from 'whatwg-fetch';
 import jsSHA from 'jssha';
+import 'xxl-toast/dist/xlToast.css';
+import XLToast from 'xxl-toast';
+import { userInfoL } from './storage';
+import { createHashHistory } from 'history';
+export let toast = new XLToast();
+const history = createHashHistory();
 
 // 判断变量属性的比较安全方法，可以判断出null，undefined，array，object，number，NaN
 // gettype([]) // array
@@ -31,7 +37,8 @@ export function randomArr(arr) {
 // 请不要外部直接使用存储方法，以免污染全局
 export const storageKey = { // 浏览器本地缓存的数据存储常量
     GLOBAL_LANGUAGE_LOCALSTORAGE: 'GLOBAL_LANGUAGE_LOCALSTORAGE', // 全局使用的语言切换
-    GLOBAL_USER_LOGIN_INFO: 'GLOBAL_USER_LOGIN_INFO' // 登录信息
+    GLOBAL_USER_LOGIN_INFO: 'GLOBAL_USER_LOGIN_INFO', // 登录信息
+    GLOBAL_MAP_ZOOM_CENTER: 'GLOBAL_MAP_ZOOM_CENTER' // 记录地图的层级和中心
 }
 
 // 用于浏览器缓存
@@ -92,18 +99,11 @@ export function rmStorageLAll() {
     }
 }
 
-export function userInfoL(obj) {
-    if (obj) {
-        return storageL(storageKey.GLOBAL_USER_LOGIN_INFO, obj);
-    }
-    return storageL(storageKey.GLOBAL_USER_LOGIN_INFO);
-}
-
 class Request {
     constructor() {
         this.el = document.createElement('a');
     }
-    request(p = {}) {
+    async request(p = {}) {
         // 获取用户信息
         let userInfo = userInfoL();
         // method默认值为'get'转大写
@@ -121,7 +121,7 @@ class Request {
             'Content-Type': 'application/json;charset=UTF-8',
             'X-Request-From': '1'
         }, (p.headers || {}));
-        if (!p.url.includes('/login')) {
+        if (userInfo && !p.url.includes('/login')) {
             let kobj = this.getSecrets(p, userInfo);
             p.headers = Object.assign({
                 'Authorization': ('Bearer ' + userInfo.token),
@@ -131,18 +131,10 @@ class Request {
         }
         let url = p.url;
         delete p.url;
-        return fetch(url, p)
+        return await fetch(url, p)
             .then(res => {
-                if (res.status === 401) {
-                    request({
-                        url: '/login',
-                        method: 'post',
-                        body: JSON.stringify({ username: 'xulin@localgravity.com', password: '32FL_ERQD_k4B5_ckWT' })
-                    }).then(res => {
-                        if (res.token) {
-                            return userInfoL(res);
-                        }
-                    })
+                if ( res.status === 401 || res.status === 403 ) {
+                    history.push('/login');
                     return {};
                 }
                 try {
@@ -166,6 +158,18 @@ class Request {
         secrets = shaObj.getHMAC('HEX');
         return { secrets, timestamp };
     }
+}
+export async function login(p) {
+    return request({
+        url: '/login',
+        method: 'post',
+        body: JSON.stringify(p)
+    }).then(res => {
+        if (res && res.token) {
+            return userInfoL(res);
+        }
+        return {};
+    })
 }
 let req = new Request();
 export const request = req.request.bind(req);

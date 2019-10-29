@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider, connect } from 'react-redux';
-import {IntlProvider} from 'react-intl';
+import { IntlProvider } from 'react-intl';
 import './index.css';
 import App from './App';
 import store from './redux/store';

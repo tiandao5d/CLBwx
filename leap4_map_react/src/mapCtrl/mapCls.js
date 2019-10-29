@@ -6,4 +6,4 @@ import Map from './openlayers/openlayersMap';
 
 class MapCls extends Map {}
 
-export default MapCls;
+export default new MapCls();
