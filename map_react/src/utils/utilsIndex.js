@@ -174,10 +174,4 @@ export async function login(p) {
 let req = new Request();
 export const request = req.request.bind(req);
 
-export const locaObj = {
-    appTitle: 'LEAP',
-    apiUrl: 'https://dev-api.leap.localgravity.com.cn',
-    nightfuryUrl: 'https://leap-dev.localgravity.com/webs',
-    photoHost: 'https://photo-dev-api.leap.localgravity.com.cn',
-    logoUrl: 'https://s3.cn-north-1.amazonaws.com.cn/chain-logo'
-}
+
