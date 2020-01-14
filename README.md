@@ -4,3 +4,8 @@ function a(box){
   return box
 }
 ```
+```bash
+function a(box){
+  return box
+}
+```
