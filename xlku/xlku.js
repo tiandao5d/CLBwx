@@ -8,7 +8,7 @@
 // gettype([]) // array
 function gettype(arg0) {
   var str = Object.prototype.toString.call(arg0).slice(8, -1).toLocaleLowerCase();
-  if ( (arg0 + '' === 'NaN') && (str === 'number') ) {
+  if ((arg0 + '' === 'NaN') && (str === 'number')) {
     return 'NaN'
   }
   return str;
@@ -16,10 +16,10 @@ function gettype(arg0) {
 
 // 随机值，包含最大和最小值
 // 参数为最小和最大数
-function randommm ( min, max ) {
+function randommm(min, max) {
   min = parseInt(min) || 0;
   max = parseInt(max) || 9;
-  return parseInt(Math.random()*(max - min + 1) + min);
+  return parseInt(Math.random() * (max - min + 1) + min);
 }
 
 // 去掉首尾空格
@@ -43,9 +43,9 @@ function isEmptyObject(obj) {
 function debounce(method, delay, intval) {
   let timer = null;
   return function () {
-    if ( intval === true ) { // 只执行最后一次的
+    if (intval === true) { // 只执行最后一次的
       clearTimeout(timer);
-    } else if ( timer ) { // 按一定的间隔执行
+    } else if (timer) { // 按一定的间隔执行
       return;
     }
     let context = this;
@@ -57,7 +57,7 @@ function debounce(method, delay, intval) {
   }
 }
 // 只执行最后一次
-function throttle (method, delay) {
+function throttle(method, delay) {
   return debounce(method, delay, true);
 }
 
@@ -65,7 +65,7 @@ function throttle (method, delay) {
 // val存在就是赋值，为null，undefined则是获取
 // 默认存储方式为localstorage，如果传入第三个参数为true，则可以切换为sessionStorage
 function storageL(key, val) {
-  if (typeof(Storage) !== 'undefined') {
+  if (typeof (Storage) !== 'undefined') {
     if ((val === undefined) || (val === null)) { //不存储undefined和null
       if (arguments[2] === true) {
         val = sessionStorage[key];
@@ -98,7 +98,7 @@ function storageL(key, val) {
 // 用于浏览器缓存的删除
 // 默认存储方式为localstorage，如果传入第二个参数为true，则可以切换为sessionStorage
 function rmStorageL(key) {
-  if (typeof(Storage) !== 'undefined' && key) {
+  if (typeof (Storage) !== 'undefined' && key) {
     if (arguments[1] === true) {
       sessionStorage.removeItem(key);
     } else {
@@ -110,7 +110,7 @@ function rmStorageL(key) {
 // 用于浏览器缓存，清空数据
 // 默认存储方式为localstorage，如果传入第二个参数为true，则可以切换为sessionStorage
 function rmStorageLAll() {
-  if (typeof(Storage) !== 'undefined') {
+  if (typeof (Storage) !== 'undefined') {
     if (arguments[0] === true) {
       sessionStorage.clear();
     } else {
@@ -118,6 +118,113 @@ function rmStorageLAll() {
     }
   }
 }
+
+
+// eventType 事件名称， eventKey 事件名称空间， eventFn 事件绑定的函数，
+// mode 事件绑定的模式, on 正常监听 once 只执行一次的监听 
+// mode ronce 只能绑定一个函数的监听， eventKey下数组只能有一个绑定函数后面的会覆盖前面的
+// data结构 {eventType: {eventKey: [ { eventFn, mode } ]}}
+class XLEvents {
+  constructor() {
+    // 数据函数存储
+    this.data = {};
+    // 可用的事件监听模式
+    this.modeArr = ['on', 'once', 'ronce'];
+    // 如果碰巧名称一样，那抱歉了，bug
+    this.dkey = '$xl_default_ll';
+  }
+  formatType(type, isd) {
+    let arr = type.split('.');
+    let eventType = arr[0] || this.dkey; // 事件名称
+    let eventKey = arr[1] === '' ? this.dkey : ''; // 事件命名空间
+
+    // 直接补默认值
+    if (isd === true && !eventType) {
+      eventKey = this.dkey;
+    }
+    let tItem = this.data[eventType] ? { ...this.data[eventType] } : {};
+    let kItem = tItem[eventKey] ? [...tItem[eventKey]] : [];
+    return { eventType, eventKey, tItem, kItem };
+  }
+  // 监听时如果没有事件名称或命名空间，都会给默认值
+  on(type, eventFn, mode = 'on') {
+    let { eventType, eventKey, tItem, kItem } = this.formatType(type, true);
+    if (!this.modeArr.includes(mode)) {
+      mode = 'on';
+    }
+    if (typeof eventFn === 'function' && !kItem.some(fn => eventFn === fn)) {
+      let eItem = { eventFn, mode };
+      // 只会监听一个函数，后面的函数监听会覆盖前面的
+      if (mode === 'ronce') {
+        kItem = [eItem];
+      } else {
+        kItem.push(eItem);
+      }
+    }
+    tItem[eventKey] = kItem;
+    this.data[eventType] = tItem;
+    return this;
+  }
+  once(type, eventFn) {
+    return this.on(type, eventFn, 'once');
+  }
+  emitKItem(kItem, args) {
+    kItem = kItem.filter(eItem => {
+      let fn = eItem.eventFn;
+      fn(...args);
+      // 只监听一次的，之后会直接删除
+      if (eItem.mode === 'once') {
+        return false;
+      }
+      return true;
+    });
+    return kItem;
+  }
+
+  // 触发时，如果没有命名空间
+  // 会触发此事件下所有的事件绑定
+  emit(type, ...args) {
+    let { eventType, eventKey, tItem, kItem } = this.formatType(type);
+    // 触发此事件下所有的事件绑定
+    if (!eventKey) {
+      for (let k in tItem) {
+        if (tItem[k] && tItem[k].length) {
+          tItem[k] = this.emitKItem(tItem[k], args);
+        }
+      }
+      this.data[eventType] = tItem;
+      return this;
+    }
+    if (kItem && kItem.length) {
+      kItem = this.emitKItem(kItem, args);
+      tItem[eventKey] = kItem;
+      this.data[eventType] = tItem;
+    }
+    return this;
+  }
+
+  // 解除绑定时， 如果没有命名空间
+  // 则清空此事件下所有的监听
+  off(type, eventFn) {
+    let { eventType, eventKey, tItem, kItem } = this.formatType(type);
+    // 清空此事件下所有的事件绑定
+    if (!eventKey) {
+      this.data[eventType] = {};
+      return this;
+    }
+    if (kItem && kItem.length) {
+      if (typeof eventFn === 'function') { // 删掉单个监听
+        kItem = kItem.filter(fn => fn !== eventFn);
+      } else { // 删除整个组的
+        kItem = [];
+      }
+      tItem[eventKey] = kItem;
+      this.data[eventType] = tItem;
+    }
+    return this;
+  }
+}
+
 // 时间格式化
 function msToTime(ms) {
   if (!ms) {
@@ -218,18 +325,18 @@ a = a.sort(
 
 //ajax方法封装，可独立使用，不依赖任何库，和上面也没有关系
 function xlkuajax(_param, callback) {
-  callback = _param.callback || callback || function() {};
+  callback = _param.callback || callback || function () { };
   var _a = {
-      url: '', //请求地址
-      type: 'get', //请求方式
-      dataType: 'json', //返回数据类型
-      timeout: 20000, //超时终止
-      data: {}, //需要传递的参数
-      async: true, //默认异步请求
-      headers: {}, //请求的头信息
-      processData: true //是否处理数据，以form传输
-    },
-    parseObj = function(obj) { //序列化对象
+    url: '', //请求地址
+    type: 'get', //请求方式
+    dataType: 'json', //返回数据类型
+    timeout: 20000, //超时终止
+    data: {}, //需要传递的参数
+    async: true, //默认异步请求
+    headers: {}, //请求的头信息
+    processData: true //是否处理数据，以form传输
+  },
+    parseObj = function (obj) { //序列化对象
       var s = [],
         k, v;
       for (k in obj) {
@@ -246,7 +353,7 @@ function xlkuajax(_param, callback) {
     headers = _a.headers || {},
     data = _a.data || {},
     tt; //计时器ID
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (xhr.readyState == 4) {
       clearTimeout(tt);
       if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
@@ -262,7 +369,7 @@ function xlkuajax(_param, callback) {
     }
   };
   if (_a.async && _a.timeout > 0) { //设置timeout
-    tt = setTimeout(function() {
+    tt = setTimeout(function () {
       xhr.abort();
     }, _a.timeout);
   }
@@ -312,7 +419,7 @@ function convertImgToBase64(url, newWidth, newHeight, maxSize, callback) {
   var img = new Image;
   img.crossOrigin = 'Anonymous';
   img.src = url;
-  img.onload = function() {
+  img.onload = function () {
     var cw = parseInt(newWidth), //表示画布宽度，也就是新图片的宽度
       ch = parseInt(newHeight), //表示画布的高度，也就是新图片的高度
       cw_ch,
@@ -418,14 +525,14 @@ function copyClipboardFn(val) {
 function testBtnFn() {
   //	此接口获取access_token
   var url1 = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxdbb5b2437bd5ed69&secret=95ea4492af55397f57c33c4ea3b7fe8c';
-  Common.ajax(url1, 'get', {}, function(data1) {
+  Common.ajax(url1, 'get', {}, function (data1) {
     console.log(data1);
     //此接口获取jsapi_ticket
     if (!data1.access_token) {
       return false;
     }
     var url2 = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=' + data1.access_token + '&type=jsapi';
-    Common.ajax(url2, 'get', {}, function(data2) {
+    Common.ajax(url2, 'get', {}, function (data2) {
       console.log(data2);
       if (data2.ticket) {
         var timestamp = parseInt((new Date()).getTime() / 1000);
@@ -449,12 +556,12 @@ function testBtnFn() {
   console.log(signatureMin);
   console.log(sha1(signatureMin));
   var _url = '/uplatform-api-merchant/api/user/oauth2/authorize';
-  Common.formatUrl(_url, function(newUrl) {
+  Common.formatUrl(_url, function (newUrl) {
     if (newUrl != 'error') {
       newUrl += '&state=xxy&secret=' + globalData.secret + '&appid=' + globalData.appid + '&scope=ssx&response_type=code';
     }
   });
-  Common.ajax(_url, 'get', {}, function() {
+  Common.ajax(_url, 'get', {}, function () {
     console.log(arguments)
   });
 }
@@ -626,7 +733,8 @@ function clientData() {
   if (system.win == "CE") {
     system.winMobile = system.win;
   } else if (system.win == "Ph") {
-    if (/Windows Phone OS (\d+.\d+)/.test(ua)) {;
+    if (/Windows Phone OS (\d+.\d+)/.test(ua)) {
+      ;
       system.win = "Phone";
       system.winMobile = parseFloat(RegExp["$1"]);
     }
@@ -670,11 +778,11 @@ function touchXL($me) {
   }
   var nt = $me.data('bindt');
   var cbObj = {
-    tap: function() {}, //单击事件
-    moveend: function() {}, //滑动完成事件
-    longTouch: function() {}, //长按事件
-    tbSlideFn: function() {}, //上下滑动事件
-    lrSlideFn: function() {} //左右滑动事件
+    tap: function () { }, //单击事件
+    moveend: function () { }, //滑动完成事件
+    longTouch: function () { }, //长按事件
+    tbSlideFn: function () { }, //上下滑动事件
+    lrSlideFn: function () { } //左右滑动事件
   };
   var isTouch = 'ontouchstart' in window,
     start = isTouch ? 'touchstart' : 'mousedown',
@@ -699,7 +807,7 @@ function touchXL($me) {
   end += ('.end' + nt);
   dstart += ('.dstart' + nt);
   $me.data('bindt', nt);
-  $me.on(start, function(e) {
+  $me.on(start, function (e) {
     var hobj = isTouch ? e.originalEvent.targetTouches[0] : e.originalEvent,
       touchXL = {
         s: {
@@ -709,7 +817,7 @@ function touchXL($me) {
         },
         type: 'start'
       };
-    touchXL.s1000 = setTimeout(function() {
+    touchXL.s1000 = setTimeout(function () {
       touchXL = $me.data('touchXL');
       touchXL.s.lt = longt;
       touchXL.type = 'long';
@@ -717,7 +825,7 @@ function touchXL($me) {
       cbObj.longTouch(touchXL, e);
     }, longt);
     $me.data('touchXL', touchXL);
-  }).on(move, function(e) {
+  }).on(move, function (e) {
     var hobj = isTouch ? e.originalEvent.targetTouches[0] : e.originalEvent,
       touchXL = $me.data('touchXL') || {},
       s = touchXL.s,
@@ -759,10 +867,10 @@ function touchXL($me) {
       return false; //不保存move事件
     }
     $me.data('touchXL', touchXL);
-  }).on(dstart, function() {
+  }).on(dstart, function () {
     return false; //阻止元素拖拽
   });
-  $(document).on(end, function(e) {
+  $(document).on(end, function (e) {
     var touchXL = $me.data('touchXL') || {},
       nt = Date.now(),
       type = touchXL.type || '',
@@ -811,143 +919,143 @@ window.postMessage（获取frame的win使用此方法可以在frame中onmessage�
 // 从lodash中复制过来的
 function debounce(func, wait, options) {
   var lastArgs,
-      lastThis,
-      maxWait,
-      result,
-      timerId,
-      lastCallTime,
-      lastInvokeTime = 0,
-      leading = false,
-      maxing = false,
-      trailing = true;
+    lastThis,
+    maxWait,
+    result,
+    timerId,
+    lastCallTime,
+    lastInvokeTime = 0,
+    leading = false,
+    maxing = false,
+    trailing = true;
   var nativeMax = Math.max,
-      nativeMin = Math.min;
+    nativeMin = Math.min;
   var FUNC_ERROR_TEXT = "Expected a function";
   if (typeof func != "function") {
-      throw new TypeError(FUNC_ERROR_TEXT);
+    throw new TypeError(FUNC_ERROR_TEXT);
   }
   wait = toNumber(wait) || 0;
   if (isObject(options)) {
-      leading = !!options.leading;
-      maxing = "maxWait" in options;
-      maxWait = maxing
-          ? nativeMax(toNumber(options.maxWait) || 0, wait)
-          : maxWait;
-      trailing = "trailing" in options ? !!options.trailing : trailing;
+    leading = !!options.leading;
+    maxing = "maxWait" in options;
+    maxWait = maxing
+      ? nativeMax(toNumber(options.maxWait) || 0, wait)
+      : maxWait;
+    trailing = "trailing" in options ? !!options.trailing : trailing;
   }
 
   function toNumber(num) {
-      return +num || 0;
+    return +num || 0;
   }
 
   function now() {
-      return +new Date();
+    return +new Date();
   }
 
   function isObject(obj) {
-      let s = Object.prototype.toString.call(obj);
-      return s.slice(8, -1).toLocaleLowerCase() === "object";
+    let s = Object.prototype.toString.call(obj);
+    return s.slice(8, -1).toLocaleLowerCase() === "object";
   }
 
   function invokeFunc(time) {
-      var args = lastArgs,
-          thisArg = lastThis;
+    var args = lastArgs,
+      thisArg = lastThis;
 
-      lastArgs = lastThis = undefined;
-      lastInvokeTime = time;
-      result = func.apply(thisArg, args);
-      return result;
+    lastArgs = lastThis = undefined;
+    lastInvokeTime = time;
+    result = func.apply(thisArg, args);
+    return result;
   }
 
   function leadingEdge(time) {
-      // Reset any `maxWait` timer.
-      lastInvokeTime = time;
-      // Start the timer for the trailing edge.
-      timerId = setTimeout(timerExpired, wait);
-      // Invoke the leading edge.
-      return leading ? invokeFunc(time) : result;
+    // Reset any `maxWait` timer.
+    lastInvokeTime = time;
+    // Start the timer for the trailing edge.
+    timerId = setTimeout(timerExpired, wait);
+    // Invoke the leading edge.
+    return leading ? invokeFunc(time) : result;
   }
 
   function remainingWait(time) {
-      var timeSinceLastCall = time - lastCallTime,
-          timeSinceLastInvoke = time - lastInvokeTime,
-          timeWaiting = wait - timeSinceLastCall;
+    var timeSinceLastCall = time - lastCallTime,
+      timeSinceLastInvoke = time - lastInvokeTime,
+      timeWaiting = wait - timeSinceLastCall;
 
-      return maxing
-          ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke)
-          : timeWaiting;
+    return maxing
+      ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke)
+      : timeWaiting;
   }
 
   function shouldInvoke(time) {
-      var timeSinceLastCall = time - lastCallTime,
-          timeSinceLastInvoke = time - lastInvokeTime;
+    var timeSinceLastCall = time - lastCallTime,
+      timeSinceLastInvoke = time - lastInvokeTime;
 
-      // Either this is the first call, activity has stopped and we're at the
-      // trailing edge, the system time has gone backwards and we're treating
-      // it as the trailing edge, or we've hit the `maxWait` limit.
-      return (
-          lastCallTime === undefined ||
-          timeSinceLastCall >= wait ||
-          timeSinceLastCall < 0 ||
-          (maxing && timeSinceLastInvoke >= maxWait)
-      );
+    // Either this is the first call, activity has stopped and we're at the
+    // trailing edge, the system time has gone backwards and we're treating
+    // it as the trailing edge, or we've hit the `maxWait` limit.
+    return (
+      lastCallTime === undefined ||
+      timeSinceLastCall >= wait ||
+      timeSinceLastCall < 0 ||
+      (maxing && timeSinceLastInvoke >= maxWait)
+    );
   }
 
   function timerExpired() {
-      var time = now();
-      if (shouldInvoke(time)) {
-          return trailingEdge(time);
-      }
-      // Restart the timer.
-      timerId = setTimeout(timerExpired, remainingWait(time));
+    var time = now();
+    if (shouldInvoke(time)) {
+      return trailingEdge(time);
+    }
+    // Restart the timer.
+    timerId = setTimeout(timerExpired, remainingWait(time));
   }
 
   function trailingEdge(time) {
-      timerId = undefined;
+    timerId = undefined;
 
-      // Only invoke if we have `lastArgs` which means `func` has been
-      // debounced at least once.
-      if (trailing && lastArgs) {
-          return invokeFunc(time);
-      }
-      lastArgs = lastThis = undefined;
-      return result;
+    // Only invoke if we have `lastArgs` which means `func` has been
+    // debounced at least once.
+    if (trailing && lastArgs) {
+      return invokeFunc(time);
+    }
+    lastArgs = lastThis = undefined;
+    return result;
   }
 
   function cancel() {
-      if (timerId !== undefined) {
-          clearTimeout(timerId);
-      }
-      lastInvokeTime = 0;
-      lastArgs = lastCallTime = lastThis = timerId = undefined;
+    if (timerId !== undefined) {
+      clearTimeout(timerId);
+    }
+    lastInvokeTime = 0;
+    lastArgs = lastCallTime = lastThis = timerId = undefined;
   }
 
   function flush() {
-      return timerId === undefined ? result : trailingEdge(now());
+    return timerId === undefined ? result : trailingEdge(now());
   }
 
   function debounced() {
-      var time = now(),
-          isInvoking = shouldInvoke(time);
+    var time = now(),
+      isInvoking = shouldInvoke(time);
 
-      lastArgs = arguments;
-      lastThis = this;
-      lastCallTime = time;
+    lastArgs = arguments;
+    lastThis = this;
+    lastCallTime = time;
 
-      if (isInvoking) {
-          if (timerId === undefined) {
-              return leadingEdge(lastCallTime);
-          }
-          if (maxing) {
-              // Handle invocations in a tight loop.
-              timerId = setTimeout(timerExpired, wait);
-              return invokeFunc(lastCallTime);
-          }
-      }
+    if (isInvoking) {
       if (timerId === undefined) {
-          timerId = setTimeout(timerExpired, wait);
+        return leadingEdge(lastCallTime);
       }
-      return result;
+      if (maxing) {
+        // Handle invocations in a tight loop.
+        timerId = setTimeout(timerExpired, wait);
+        return invokeFunc(lastCallTime);
+      }
+    }
+    if (timerId === undefined) {
+      timerId = setTimeout(timerExpired, wait);
+    }
+    return result;
   }
   debounced.cancel = cancel;
   debounced.flush = flush;
@@ -956,40 +1064,40 @@ function debounce(func, wait, options) {
 
 function throttle(func, wait, options) {
   var leading = true,
-      trailing = true;
+    trailing = true;
 
   var FUNC_ERROR_TEXT = "Expected a function";
   if (typeof func != "function") {
-      throw new TypeError(FUNC_ERROR_TEXT);
+    throw new TypeError(FUNC_ERROR_TEXT);
   }
 
   function isObject(obj) {
-      let s = Object.prototype.toString.call(obj);
-      return s.slice(8, -1).toLocaleLowerCase() === "object";
+    let s = Object.prototype.toString.call(obj);
+    return s.slice(8, -1).toLocaleLowerCase() === "object";
   }
   if (isObject(options)) {
-      leading = "leading" in options ? !!options.leading : leading;
-      trailing = "trailing" in options ? !!options.trailing : trailing;
+    leading = "leading" in options ? !!options.leading : leading;
+    trailing = "trailing" in options ? !!options.trailing : trailing;
   }
   return debounce(func, wait, {
-      leading: leading,
-      maxWait: wait,
-      trailing: trailing
+    leading: leading,
+    maxWait: wait,
+    trailing: trailing
   });
 }
 
 // nodejs 遍历文件夹
 // const fs = require('fs');
 // const path = require('path');
-function eachDir ( dirstr ) {
+function eachDir(dirstr) {
   let arr = [];
   aa(dirstr);
-  function aa ( dirs ) {
+  function aa(dirs) {
     let list = fs.readdirSync(dirs);
     list.forEach(s => {
       s = path.join(dirs, s);
       let stat = fs.statSync(s);
-      if ( stat.isDirectory() ) { // 文件夹
+      if (stat.isDirectory()) { // 文件夹
         aa(s);
       } else {
         arr.push(s);
