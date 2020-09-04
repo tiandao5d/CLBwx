@@ -10,7 +10,7 @@ import axios from 'axios'
 import qs from 'qs'
 import io from 'socket.io-client'
 function getDm () {
-  return 'http://172.16.46.65:3000'
+  return 'http://192.168.3.121:3000'
 }
 // axios请求报错处理
 function axioserr ( err ) {
