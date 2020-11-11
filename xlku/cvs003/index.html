@@ -1,0 +1,181 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Three.js点线几何空间图形特效 - 站长素材</title>
+
+<style>
+/* gradient fallbacks taken from csstricks.com */
+body {
+  background-color: red;
+  
+  /* SVG fallback for IE 9 (could be data URI, or could use filter) */
+  background-image: url(fallback-gradient.svg);
+  
+  /* Safari 4, Chrome 1-9, iOS 3.2-4.3, Android 2.1-3.0 */
+  background-image: -webkit-gradient(linear, left top, right top, from(red), to(#f06d06));
+  
+  /* Safari 5.1, iOS 5.0-6.1, Chrome 10-25, Android 4.0-4.3 */
+  background-image: -webkit-linear-gradient(left, red, #f06d06);
+  
+  /* Firefox 3.6 - 15 */
+  background-image: -moz-linear-gradient(left, red, #f06d06);
+  
+  /* Opera 11.1 - 12 */
+  background-image: -o-linear-gradient(left, red, #f06d06);
+  
+  /* Opera 15+, Chrome 25+, IE 10+, Firefox 16+, Safari 6.1+, iOS 7+, Android 4.4+ */
+  background-image: linear-gradient(to right, red, #f06d06);
+  margin: 0px;
+  overflow: hidden;
+}
+</style>
+
+</head>
+<body>
+<script src="https://cdn.bootcdn.net/ajax/libs/three.js/r67/three.min.js"></script>
+
+<div></div>
+
+
+<script>
+var mouseX = 0,
+      mouseY = 0,
+      windowHalfX = window.innerWidth / 2,
+      windowHalfY = window.innerHeight / 2,
+      SEPARATION = 200,
+      AMOUNTX = 10,
+      AMOUNTY = 10,
+      camera,
+      scene,
+      renderer;
+  
+  init();
+  animate();
+
+	function init() {
+
+  	var container,
+        separation = 100,
+        amountX = 50,
+        amountY = 50,
+        particle;
+    
+    container = document.createElement( 'div' );
+    document.body.appendChild( container );
+
+    scene = new THREE.Scene();
+
+    renderer = new THREE.CanvasRenderer({ alpha: true }); // gradient; this can be swapped for WebGLRenderer
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    container.appendChild( renderer.domElement );
+    
+    camera = new THREE.PerspectiveCamera(
+    	75,
+      window.innerWidth / window.innerHeight,
+      1,
+      10000
+    );
+    camera.position.z = 100;
+
+		// particles
+    var PI2 = Math.PI * 2;
+    var material = new THREE.SpriteCanvasMaterial({
+    	color: 0xffffff,
+    	program: function ( context ) {
+				context.beginPath();
+        context.arc( 0, 0, 0.5, 0, PI2, true );
+        context.fill();
+      }
+    });
+    
+    var geometry = new THREE.Geometry();
+
+    for ( var i = 0; i < 100; i ++ ) {
+      particle = new THREE.Sprite( material );
+      particle.position.x = Math.random() * 2 - 1;
+      particle.position.y = Math.random() * 2 - 1;
+      particle.position.z = Math.random() * 2 - 1;
+      particle.position.normalize();
+      particle.position.multiplyScalar( Math.random() * 10 + 450 );
+      particle.scale.x = particle.scale.y = 10;
+      scene.add( particle );
+      geometry.vertices.push( particle.position );
+    }
+
+    // lines
+    var line = new THREE.Line( geometry, new THREE.LineBasicMaterial( { color: 0xffffff, opacity: 0.5 } ) );
+    scene.add( line );
+
+    // mousey
+    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+		document.addEventListener( 'touchstart', onDocumentTouchStart, false );
+    document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+		
+ 		window.addEventListener( 'resize', onWindowResize, false );
+
+	} // end init();
+
+	function onWindowResize() {
+
+  	windowHalfX = window.innerWidth / 2;
+    windowHalfY = window.innerHeight / 2;
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+
+	}
+
+	function onDocumentMouseMove(event) {
+
+  	mouseX = event.clientX - windowHalfX;
+    mouseY = event.clientY - windowHalfY;
+
+  }
+
+  function onDocumentTouchStart( event ) {
+
+		if ( event.touches.length > 1 ) {
+
+    	event.preventDefault();
+
+      mouseX = event.touches[ 0 ].pageX - windowHalfX;
+      mouseY = event.touches[ 0 ].pageY - windowHalfY;
+
+    }
+	}
+
+  function onDocumentTouchMove( event ) {
+
+  	if ( event.touches.length == 1 ) {
+
+    	event.preventDefault();
+
+      mouseX = event.touches[ 0 ].pageX - windowHalfX;
+      mouseY = event.touches[ 0 ].pageY - windowHalfY;
+
+		}
+	}
+
+	function animate() {
+    
+		requestAnimationFrame( animate );
+    render();
+    
+	}
+
+	function render() {
+		
+    camera.position.x += ( mouseX - camera.position.x ) * .05;
+    camera.position.y += ( - mouseY + 200 - camera.position.y ) * .05;
+    camera.lookAt( scene.position );
+
+    renderer.render( scene, camera );
+  
+  }
+</script>
+
+</body>
+</html>

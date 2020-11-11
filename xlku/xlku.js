@@ -7,12 +7,52 @@
 // 判断元素属性
 // gettype([]) // array
 function gettype(arg0) {
-  var str = Object.prototype.toString.call(arg0).slice(8, -1).toLocaleLowerCase();
-  if ((arg0 + '' === 'NaN') && (str === 'number')) {
-    return 'NaN'
+  var str = Object.prototype.toString
+    .call(arg0)
+    .slice(8, -1)
+    .toLocaleLowerCase();
+  if (arg0 + "" === "NaN" && str === "number") {
+    return "NaN";
   }
   return str;
 }
+
+// 此方法为深层次的对象合并，但不考虑深拷贝，只考虑对象 [object Object]，
+// 不考虑数组，函数，时间等引用类型，一个深层次的 Object.assign方法
+// 主要用途是数据补全，给一个默认格式，然后可以默认补全后面的数据
+// 保证数据的完整性
+const assignObj = (function assignObj() {
+  function isObject(obj) {
+    return Object.prototype.toString.call(obj) === "[object Object]";
+  }
+  function fn(obj1, obj2) {
+    for (let k in obj2) {
+      let val1 = obj1[k];
+      let val2 = obj2[k];
+      if (isObject(val1) && isObject(val2)) {
+        obj1[k] = fn(val1, val2);
+      } else if (isObject(val2)) {
+        // 此时不能直接赋值，否则obj2的值可能会被改变
+        // 因为直接赋值了一个引用类型，下次循环时可能会改变这个引用类型
+        // 进行直接拷贝然后再赋值相当于拷贝了一份引用类型的基础结构
+        // 而不是直接使用后面的引用类型，无需精准的拷贝，因为只需要基础结构即可
+        val1 = JSON.parse(JSON.stringify(val2));
+        obj1[k] = fn(val1, val2);
+      } else {
+        obj1[k] = val2;
+      }
+    }
+    return obj1;
+  }
+  return function (item1, ...args) {
+    if (!(args.length > 0)) {
+      return item1;
+    }
+    return args.reduce((total, item) => {
+      return fn(total, item);
+    }, item1);
+  };
+})();
 
 // 随机值，包含最大和最小值
 // 参数为最小和最大数
@@ -24,18 +64,18 @@ function randommm(min, max) {
 
 // 去掉首尾空格
 function trim(str) {
-  return (str + '').replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+  return (str + "").replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
 }
 
 // 判断是否是空对象
 function isEmptyObject(obj) {
   if (!(obj instanceof Object)) {
-    return false
+    return false;
   }
   for (let v in obj) {
-    return false
+    return false;
   }
-  return true
+  return true;
 }
 
 // 简单版本的防抖节流函数
@@ -43,9 +83,11 @@ function isEmptyObject(obj) {
 function debounce(method, delay, intval) {
   let timer = null;
   return function () {
-    if (intval === true) { // 只执行最后一次的
+    if (intval === true) {
+      // 只执行最后一次的
       clearTimeout(timer);
-    } else if (timer) { // 按一定的间隔执行
+    } else if (timer) {
+      // 按一定的间隔执行
       return;
     }
     let context = this;
@@ -54,7 +96,7 @@ function debounce(method, delay, intval) {
       timer = null;
       method.apply(context, args);
     }, delay);
-  }
+  };
 }
 // 只执行最后一次
 function throttle(method, delay) {
@@ -65,14 +107,15 @@ function throttle(method, delay) {
 // val存在就是赋值，为null，undefined则是获取
 // 默认存储方式为localstorage，如果传入第三个参数为true，则可以切换为sessionStorage
 function storageL(key, val) {
-  if (typeof (Storage) !== 'undefined') {
-    if ((val === undefined) || (val === null)) { //不存储undefined和null
+  if (typeof Storage !== "undefined") {
+    if (val === undefined || val === null) {
+      //不存储undefined和null
       if (arguments[2] === true) {
         val = sessionStorage[key];
       } else {
         val = localStorage[key];
       }
-      if (val && val.indexOf('obj-') === 0) {
+      if (val && val.indexOf("obj-") === 0) {
         val = val.slice(4);
         return JSON.parse(val);
       } else {
@@ -81,9 +124,9 @@ function storageL(key, val) {
     } else {
       var a = val;
       if (val instanceof Object) {
-        val = 'obj-' + JSON.stringify(val);
+        val = "obj-" + JSON.stringify(val);
       } else {
-        val = val + '';
+        val = val + "";
       }
       if (arguments[2] === true) {
         sessionStorage[key] = val;
@@ -98,7 +141,7 @@ function storageL(key, val) {
 // 用于浏览器缓存的删除
 // 默认存储方式为localstorage，如果传入第二个参数为true，则可以切换为sessionStorage
 function rmStorageL(key) {
-  if (typeof (Storage) !== 'undefined' && key) {
+  if (typeof Storage !== "undefined" && key) {
     if (arguments[1] === true) {
       sessionStorage.removeItem(key);
     } else {
@@ -110,7 +153,7 @@ function rmStorageL(key) {
 // 用于浏览器缓存，清空数据
 // 默认存储方式为localstorage，如果传入第二个参数为true，则可以切换为sessionStorage
 function rmStorageLAll() {
-  if (typeof (Storage) !== 'undefined') {
+  if (typeof Storage !== "undefined") {
     if (arguments[0] === true) {
       sessionStorage.clear();
     } else {
@@ -119,9 +162,8 @@ function rmStorageLAll() {
   }
 }
 
-
 // eventType 事件名称， eventKey 事件名称空间， eventFn 事件绑定的函数，
-// mode 事件绑定的模式, on 正常监听 once 只执行一次的监听 
+// mode 事件绑定的模式, on 正常监听 once 只执行一次的监听
 // mode ronce 只能绑定一个函数的监听， eventKey下数组只能有一个绑定函数后面的会覆盖前面的
 // data结构 {eventType: {eventKey: [ { eventFn, mode } ]}}
 class XLEvents {
@@ -129,14 +171,14 @@ class XLEvents {
     // 数据函数存储
     this.data = {};
     // 可用的事件监听模式
-    this.modeArr = ['on', 'once', 'ronce'];
+    this.modeArr = ["on", "once", "ronce"];
     // 如果碰巧名称一样，那抱歉了，bug
-    this.dkey = '$xl_default_ll';
+    this.dkey = "$xl_default_ll";
   }
   formatType(type, isd) {
-    let arr = type.split('.');
+    let arr = type.split(".");
     let eventType = arr[0] || this.dkey; // 事件名称
-    let eventKey = arr[1] === '' ? this.dkey : ''; // 事件命名空间
+    let eventKey = arr[1] === "" ? this.dkey : ""; // 事件命名空间
 
     // 直接补默认值
     if (isd === true && !eventType) {
@@ -147,15 +189,15 @@ class XLEvents {
     return { eventType, eventKey, tItem, kItem };
   }
   // 监听时如果没有事件名称或命名空间，都会给默认值
-  on(type, eventFn, mode = 'on') {
+  on(type, eventFn, mode = "on") {
     let { eventType, eventKey, tItem, kItem } = this.formatType(type, true);
     if (!this.modeArr.includes(mode)) {
-      mode = 'on';
+      mode = "on";
     }
-    if (typeof eventFn === 'function' && !kItem.some(fn => eventFn === fn)) {
+    if (typeof eventFn === "function" && !kItem.some((fn) => eventFn === fn)) {
       let eItem = { eventFn, mode };
       // 只会监听一个函数，后面的函数监听会覆盖前面的
-      if (mode === 'ronce') {
+      if (mode === "ronce") {
         kItem = [eItem];
       } else {
         kItem.push(eItem);
@@ -166,14 +208,14 @@ class XLEvents {
     return this;
   }
   once(type, eventFn) {
-    return this.on(type, eventFn, 'once');
+    return this.on(type, eventFn, "once");
   }
   emitKItem(kItem, args) {
-    kItem = kItem.filter(eItem => {
+    kItem = kItem.filter((eItem) => {
       let fn = eItem.eventFn;
       fn(...args);
       // 只监听一次的，之后会直接删除
-      if (eItem.mode === 'once') {
+      if (eItem.mode === "once") {
         return false;
       }
       return true;
@@ -213,9 +255,11 @@ class XLEvents {
       return this;
     }
     if (kItem && kItem.length) {
-      if (typeof eventFn === 'function') { // 删掉单个监听
-        kItem = kItem.filter(fn => fn !== eventFn);
-      } else { // 删除整个组的
+      if (typeof eventFn === "function") {
+        // 删掉单个监听
+        kItem = kItem.filter((fn) => fn !== eventFn);
+      } else {
+        // 删除整个组的
         kItem = [];
       }
       tItem[eventKey] = kItem;
@@ -228,9 +272,9 @@ class XLEvents {
 // 时间格式化
 function msToTime(ms) {
   if (!ms) {
-    return ''
-  };
-  var _date = (ms instanceof Date) ? ms : new Date(ms);
+    return "";
+  }
+  var _date = ms instanceof Date ? ms : new Date(ms);
   var _y = _date.getFullYear(),
     _m = _date.getMonth() + 1,
     _d = _date.getDate(),
@@ -238,20 +282,20 @@ function msToTime(ms) {
     _i = _date.getMinutes(),
     _s = _date.getSeconds();
   var a = {
-    _y: (_y < 10) ? ('0' + _y) : (_y + ''),
-    _m: (_m < 10) ? ('0' + _m) : (_m + ''),
-    _d: (_d < 10) ? ('0' + _d) : (_d + ''),
-    _h: (_h < 10) ? ('0' + _h) : (_h + ''),
-    _i: (_i < 10) ? ('0' + _i) : (_i + ''),
-    _s: (_s < 10) ? ('0' + _s) : (_s + '')
-  }
-  a.em = (a._y + '-' + a._m);
-  a.ed = (a.em + '-' + a._d);
-  a.eh = (a.ed + ' ' + a._h);
-  a.ei = (a.eh + ':' + a._i);
-  a.es = (a.ei + ':' + a._s);
+    _y: _y < 10 ? "0" + _y : _y + "",
+    _m: _m < 10 ? "0" + _m : _m + "",
+    _d: _d < 10 ? "0" + _d : _d + "",
+    _h: _h < 10 ? "0" + _h : _h + "",
+    _i: _i < 10 ? "0" + _i : _i + "",
+    _s: _s < 10 ? "0" + _s : _s + "",
+  };
+  a.em = a._y + "-" + a._m;
+  a.ed = a.em + "-" + a._d;
+  a.eh = a.ed + " " + a._h;
+  a.ei = a.eh + ":" + a._i;
+  a.es = a.ei + ":" + a._s;
   a.ms = _date.getTime();
-  a['date'] = _date;
+  a["date"] = _date;
   return a;
 }
 
@@ -262,43 +306,43 @@ function msToTime(ms) {
 function nf(num, dec, sep, cho, dot) {
   num = parseFloat(num);
   if (!num) {
-    return '';
+    return "";
   }
   var pre = 7; // 计算精度，小数点后七位
 
   dec = dec <= pre && dec >= 0 ? parseInt(dec) : pre; //保留小数位数 默认pre
-  cho = cho || 'u'; // 舍入方法'u,d,r'上、下、四舍五入 默认'u'
-  dot = dot || '.'; // 小数点字符 默认'.'
+  cho = cho || "u"; // 舍入方法'u,d,r'上、下、四舍五入 默认'u'
+  dot = dot || "."; // 小数点字符 默认'.'
 
-  var arr = (num + '').split('.');
+  var arr = (num + "").split(".");
   var re = /(\d+)(\d{3})/;
   var a0 = arr[0];
-  var a1 = (arr[1] && arr[1].substr(0, dec)) || '0';
-  var a2 = parseInt((arr[1] && arr[1].substr(dec, 1))) || 0;
+  var a1 = (arr[1] && arr[1].substr(0, dec)) || "0";
+  var a2 = parseInt(arr[1] && arr[1].substr(dec, 1)) || 0;
   var a3 = dec - a1.length;
 
   if (a3 > 0) {
-    a1 += new Array(a3).join('0'); // 补充足够多的0
+    a1 += new Array(a3).join("0"); // 补充足够多的0
   }
   if (dec > 0) {
     a1 = a1.substr(0, dec);
   }
-  if (!(cho === 'd' || (cho === 'r' && a2 < 5) || a2 === 0)) {
+  if (!(cho === "d" || (cho === "r" && a2 < 5) || a2 === 0)) {
     if (dec > 0) {
-      a1 = (parseInt(a1) + 1) + '';
+      a1 = parseInt(a1) + 1 + "";
     } else {
-      a0 = (parseInt(a0) + 1) + '';
+      a0 = parseInt(a0) + 1 + "";
     }
   }
   if (!!sep && parseInt(a0) > 999) {
     while (re.test(a0)) {
-      a0 = a0.replace(re, ('$1' + sep + '$2'))
+      a0 = a0.replace(re, "$1" + sep + "$2");
     }
   }
-  if (typeof sep !== 'string') {
-    return (dec > 0 ? parseFloat(a0 + dot + a1) : parseInt(a0));
+  if (typeof sep !== "string") {
+    return dec > 0 ? parseFloat(a0 + dot + a1) : parseInt(a0);
   }
-  return (dec > 0 ? (a0 + dot + a1) : a0);
+  return dec > 0 ? a0 + dot + a1 : a0;
 }
 
 //生成随机字符串
@@ -306,9 +350,9 @@ function randomString(len) {
   len = len || 32;
   //默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1
   // var $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+  var $chars = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678";
   var maxPos = $chars.length;
-  var pwd = '';
+  var pwd = "";
   for (i = 0; i < len; i++) {
     pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
   }
@@ -316,37 +360,38 @@ function randomString(len) {
 }
 
 //字母汉字排序
-var a = ['武汉', 'deed', 'eee', 'box', '北京', '上海', '天津'];
-a = a.sort(
-  function compareFunction(param1, param2) {
-    return param1.localeCompare(param2);
-  }
-);
+var a = ["武汉", "deed", "eee", "box", "北京", "上海", "天津"];
+a = a.sort(function compareFunction(param1, param2) {
+  return param1.localeCompare(param2);
+});
 
 //ajax方法封装，可独立使用，不依赖任何库，和上面也没有关系
 function xlkuajax(_param, callback) {
-  callback = _param.callback || callback || function () { };
+  callback = _param.callback || callback || function () {};
   var _a = {
-    url: '', //请求地址
-    type: 'get', //请求方式
-    dataType: 'json', //返回数据类型
-    timeout: 20000, //超时终止
-    data: {}, //需要传递的参数
-    async: true, //默认异步请求
-    headers: {}, //请求的头信息
-    processData: true //是否处理数据，以form传输
-  },
-    parseObj = function (obj) { //序列化对象
+      url: "", //请求地址
+      type: "get", //请求方式
+      dataType: "json", //返回数据类型
+      timeout: 20000, //超时终止
+      data: {}, //需要传递的参数
+      async: true, //默认异步请求
+      headers: {}, //请求的头信息
+      processData: true, //是否处理数据，以form传输
+    },
+    parseObj = function (obj) {
+      //序列化对象
       var s = [],
-        k, v;
+        k,
+        v;
       for (k in obj) {
         v = obj[k];
-        v = typeof v === 'function' ? (v() + '') : ((v + '') || '');
-        s[s.length] = encodeURIComponent(k) + '=' + encodeURIComponent(v);
+        v = typeof v === "function" ? v() + "" : v + "" || "";
+        s[s.length] = encodeURIComponent(k) + "=" + encodeURIComponent(v);
       }
-      return s.join('&').replace(/%20/g, '+');
+      return s.join("&").replace(/%20/g, "+");
     };
-  for (var pn in _param) { //合并对象
+  for (var pn in _param) {
+    //合并对象
     _a[pn] = _param[pn];
   }
   var xhr = new XMLHttpRequest(),
@@ -357,39 +402,42 @@ function xlkuajax(_param, callback) {
     if (xhr.readyState == 4) {
       clearTimeout(tt);
       if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
-        if ((_a.dataType).toLocaleLowerCase() === 'json') {
-          var rdata = JSON.parse(xhr.responseText + '');
+        if (_a.dataType.toLocaleLowerCase() === "json") {
+          var rdata = JSON.parse(xhr.responseText + "");
           callback(rdata);
         } else {
-          callback(xhr.responseText + '');
+          callback(xhr.responseText + "");
         }
       } else {
         callback(xhr, xhr.status);
       }
     }
   };
-  if (_a.async && _a.timeout > 0) { //设置timeout
+  if (_a.async && _a.timeout > 0) {
+    //设置timeout
     tt = setTimeout(function () {
       xhr.abort();
     }, _a.timeout);
   }
   xhr.open(_a.type, _a.url, _a.async); //初始化xhr
   if (_a.processData) {
-    xhr.setRequestHeader( //默认发送的数据类型
-      'content-type',
-      'application/x-www-form-urlencoded; charset=UTF-8'
+    xhr.setRequestHeader(
+      //默认发送的数据类型
+      "content-type",
+      "application/x-www-form-urlencoded; charset=UTF-8"
     );
     data = parseObj(data);
   } else {
-    if (typeof data === 'object') {
-      if (Object.prototype.toString.call(data) != '[object FormData]') {
+    if (typeof data === "object") {
+      if (Object.prototype.toString.call(data) != "[object FormData]") {
         data = JSON.stringify(data);
       }
     } else {
-      data = (data + '');
+      data = data + "";
     }
   }
-  for (var hn in headers) { //设置头信息
+  for (var hn in headers) {
+    //设置头信息
     xhr.setRequestHeader(hn, headers[hn]);
   }
   xhr.send(data);
@@ -416,8 +464,8 @@ function xlkuajax(_param, callback) {
 //	});
 //});
 function convertImgToBase64(url, newWidth, newHeight, maxSize, callback) {
-  var img = new Image;
-  img.crossOrigin = 'Anonymous';
+  var img = new Image();
+  img.crossOrigin = "Anonymous";
   img.src = url;
   img.onload = function () {
     var cw = parseInt(newWidth), //表示画布宽度，也就是新图片的宽度
@@ -426,8 +474,8 @@ function convertImgToBase64(url, newWidth, newHeight, maxSize, callback) {
       iw = this.width, //记录图片的宽度
       ih = this.height, //记录图片的高度
       iw_ih = iw / ih,
-      canvas = document.createElement('canvas'), //创建canvas元素
-      ctx = canvas.getContext('2d'),
+      canvas = document.createElement("canvas"), //创建canvas元素
+      ctx = canvas.getContext("2d"),
       quality = 0.8, //保存图片质量，如果超出限制，将会循环减小质量直到0
       dataURL, //用来记录base64的字符串
       isTrue = true, //用来判断是否超出最大KB数
@@ -436,12 +484,15 @@ function convertImgToBase64(url, newWidth, newHeight, maxSize, callback) {
       ix = 0,
       iy = 0; //规定裁剪的位置
     maxSize = parseInt(maxSize); //最大限制的kb
-    if (!cw && !ch) { //没有指定新的宽高
+    if (!cw && !ch) {
+      //没有指定新的宽高
       cw = iw;
       ch = ih;
-    } else if (cw && !ch) { //没有指定新的高度
+    } else if (cw && !ch) {
+      //没有指定新的高度
       ch = cw / iw_ih;
-    } else if (!cw && newHeight) { //没有指定新的宽度
+    } else if (!cw && newHeight) {
+      //没有指定新的宽度
       cw = ch * iw_ih;
     }
     cw_ch = cw / ch;
@@ -455,12 +506,12 @@ function convertImgToBase64(url, newWidth, newHeight, maxSize, callback) {
     ix = (iw - sw) / 2;
     iy = (ih - sh) / 2;
     ctx.drawImage(img, ix, iy, sw, sh, 0, 0, cw, ch);
-    dataURL = canvas.toDataURL('image/jpeg', quality);
+    dataURL = canvas.toDataURL("image/jpeg", quality);
     if (maxSize) {
       while (isTrue) {
         if (imgSizeFn(dataURL) / 1024 > maxSize) {
           quality -= 0.1;
-          dataURL = canvas.toDataURL('image/jpeg', quality);
+          dataURL = canvas.toDataURL("image/jpeg", quality);
         } else {
           isTrue = false;
         }
@@ -477,7 +528,9 @@ function convertImgToBase64(url, newWidth, newHeight, maxSize, callback) {
 //将base64文件转为文件流
 function convertBase64UrlToBlob(base64Url) {
   //去掉url的头，并转换为byte
-  var bytes = window.atob(base64Url.indexOf(',') > 0 ? base64Url.split(',')[1] : base64Url);
+  var bytes = window.atob(
+    base64Url.indexOf(",") > 0 ? base64Url.split(",")[1] : base64Url
+  );
   //处理异常,将ascii码小于0的转换为大于0
   var ab = new ArrayBuffer(bytes.length);
   var ia = new Uint8Array(ab);
@@ -485,13 +538,13 @@ function convertBase64UrlToBlob(base64Url) {
     ia[i] = bytes.charCodeAt(i);
   }
   return new Blob([ab], {
-    type: 'image/jpeg'
+    type: "image/jpeg",
   });
 }
 //获取base64文件大小，返回值为字节(b)
 function imgSizeFn(base64Url) {
-  var str = base64Url.indexOf(',') > 0 ? base64Url.split(',')[1] : base64Url,
-    equalIndex = str.indexOf('=');
+  var str = base64Url.indexOf(",") > 0 ? base64Url.split(",")[1] : base64Url,
+    equalIndex = str.indexOf("=");
   if (equalIndex > 0) {
     str = str.substring(0, equalIndex);
   }
@@ -502,18 +555,16 @@ function imgSizeFn(base64Url) {
 
 //复制到剪贴板
 function copyClipboardFn(val) {
-  var ipt = document.createElement('textarea');
-  ipt.value = val || '没有内容';
-  ipt.style.position = 'absolute';
-  ipt.style.left = '999999px';
+  var ipt = document.createElement("textarea");
+  ipt.value = val || "没有内容";
+  ipt.style.position = "absolute";
+  ipt.style.left = "999999px";
   document.body.appendChild(ipt);
   ipt.select();
   document.execCommand("Copy"); // 执行浏览器复制命令
   alert("已复制好，可贴粘。");
   document.body.removeChild(ipt);
 }
-
-
 
 //	正式版appid: wx7eaf9a2e612db7b4
 //	正式版ApppSecret: 034d997cb96424674d0ef37633e7f07e
@@ -524,63 +575,80 @@ function copyClipboardFn(val) {
 //微信jsd授权
 function testBtnFn() {
   //	此接口获取access_token
-  var url1 = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxdbb5b2437bd5ed69&secret=95ea4492af55397f57c33c4ea3b7fe8c';
-  Common.ajax(url1, 'get', {}, function (data1) {
+  var url1 =
+    "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxdbb5b2437bd5ed69&secret=95ea4492af55397f57c33c4ea3b7fe8c";
+  Common.ajax(url1, "get", {}, function (data1) {
     console.log(data1);
     //此接口获取jsapi_ticket
     if (!data1.access_token) {
       return false;
     }
-    var url2 = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=' + data1.access_token + '&type=jsapi';
-    Common.ajax(url2, 'get', {}, function (data2) {
+    var url2 =
+      "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" +
+      data1.access_token +
+      "&type=jsapi";
+    Common.ajax(url2, "get", {}, function (data2) {
       console.log(data2);
       if (data2.ticket) {
-        var timestamp = parseInt((new Date()).getTime() / 1000);
-        var curUrl = 'pay.lotplay.cn/ushop-api-merchant/html/weixinmp/home.html';
-        var signatureMin = 'jsapi_ticket=' + data2.ticket +
-          '&noncestr=CGFXkC7hC6ThdefN' +
-          '&timestamp=' + timestamp +
-          '&url=' + curUrl;
-        console.log('signatureMin = ' + signatureMin);
-        console.log('timestamp = ' + timestamp);
+        var timestamp = parseInt(new Date().getTime() / 1000);
+        var curUrl =
+          "pay.lotplay.cn/ushop-api-merchant/html/weixinmp/home.html";
+        var signatureMin =
+          "jsapi_ticket=" +
+          data2.ticket +
+          "&noncestr=CGFXkC7hC6ThdefN" +
+          "&timestamp=" +
+          timestamp +
+          "&url=" +
+          curUrl;
+        console.log("signatureMin = " + signatureMin);
+        console.log("timestamp = " + timestamp);
         console.log(sha1(signatureMin));
       }
     });
   });
-  var jsapi_ticket = 'kgt8ON7yVITDhtdwci0qeTJm_y3N9OWpUP3suL8gpSj1vE_vMt1_EwARbViOAqaihYabYB6tQCnLm4KGyE83tA';
-  var curUrl = 'pay.lotplay.cn/ushop-api-merchant/html/weixinmp/home.html';
-  var signatureMin = 'jsapi_ticket=' + jsapi_ticket +
-    '&noncestr=CGFXkC7hC6ThdefN' +
-    '&timestamp=1493366680' +
-    '&url=' + curUrl;
+  var jsapi_ticket =
+    "kgt8ON7yVITDhtdwci0qeTJm_y3N9OWpUP3suL8gpSj1vE_vMt1_EwARbViOAqaihYabYB6tQCnLm4KGyE83tA";
+  var curUrl = "pay.lotplay.cn/ushop-api-merchant/html/weixinmp/home.html";
+  var signatureMin =
+    "jsapi_ticket=" +
+    jsapi_ticket +
+    "&noncestr=CGFXkC7hC6ThdefN" +
+    "&timestamp=1493366680" +
+    "&url=" +
+    curUrl;
   console.log(signatureMin);
   console.log(sha1(signatureMin));
-  var _url = '/uplatform-api-merchant/api/user/oauth2/authorize';
+  var _url = "/uplatform-api-merchant/api/user/oauth2/authorize";
   Common.formatUrl(_url, function (newUrl) {
-    if (newUrl != 'error') {
-      newUrl += '&state=xxy&secret=' + globalData.secret + '&appid=' + globalData.appid + '&scope=ssx&response_type=code';
+    if (newUrl != "error") {
+      newUrl +=
+        "&state=xxy&secret=" +
+        globalData.secret +
+        "&appid=" +
+        globalData.appid +
+        "&scope=ssx&response_type=code";
     }
   });
-  Common.ajax(_url, 'get', {}, function () {
-    console.log(arguments)
+  Common.ajax(_url, "get", {}, function () {
+    console.log(arguments);
   });
 }
-
 
 //创建元素
 //createFn('<div>123</div>')
 function createFn(str) {
-  var div = document.createElement('div'),
+  var div = document.createElement("div"),
     ele;
   div.innerHTML = str;
   var cs1 = div.childNodes,
     cs = [],
     i = 0;
-  while (ele = cs1[i++]) {
+  while ((ele = cs1[i++])) {
     if (ele.nodeType === 1) {
       cs[cs.length] = ele;
     }
-  };
+  }
   if (cs.length > 1) {
     return cs;
   } else if (cs.length == 1) {
@@ -613,7 +681,7 @@ function clientData() {
     khtml: 0,
     opera: 0,
     //完整的版本号
-    ver: null
+    ver: null,
   };
   //浏览器
   var browser = {
@@ -625,7 +693,7 @@ function clientData() {
     opera: 0,
     chrome: 0,
     //具体的版本号
-    ver: null
+    ver: null,
   };
   //平台、设备和操作系统
   var system = {
@@ -642,7 +710,7 @@ function clientData() {
     winMobile: false,
     //游戏系统
     wii: false,
-    ps: false
+    ps: false,
   };
   //检测呈现引擎和浏览器
   var ua = navigator.userAgent;
@@ -695,7 +763,7 @@ function clientData() {
   var p = navigator.platform;
   system.win = p.indexOf("Win") == 0;
   system.mac = p.indexOf("Mac") == 0;
-  system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
+  system.x11 = p == "X11" || p.indexOf("Linux") == 0;
   //检测 Windows 操作系统
   if (system.win) {
     if (/Win(?:dows )?([^do]{2})\s?(\d+\.\d+)?/.test(ua)) {
@@ -734,7 +802,6 @@ function clientData() {
     system.winMobile = system.win;
   } else if (system.win == "Ph") {
     if (/Windows Phone OS (\d+.\d+)/.test(ua)) {
-      ;
       system.win = "Phone";
       system.winMobile = parseFloat(RegExp["$1"]);
     }
@@ -758,17 +825,16 @@ function clientData() {
   return {
     engine: engine, //呈现引擎
     browser: browser, //浏览器
-    system: system //平台、设备和操作系统
+    system: system, //平台、设备和操作系统
   };
-};
-
+}
 
 //touch的封装可用于PC 基于jQuery
 function touchXL($me) {
   if (!$me) {
     return false;
   }
-  if (($me.nodeType === 1) || (typeof $me === 'string')) {
+  if ($me.nodeType === 1 || typeof $me === "string") {
     $me = $($me);
   } else if (!($me instanceof jQuery)) {
     return false;
@@ -776,117 +842,127 @@ function touchXL($me) {
   if (!($me.length > 0)) {
     return false;
   }
-  var nt = $me.data('bindt');
+  var nt = $me.data("bindt");
   var cbObj = {
-    tap: function () { }, //单击事件
-    moveend: function () { }, //滑动完成事件
-    longTouch: function () { }, //长按事件
-    tbSlideFn: function () { }, //上下滑动事件
-    lrSlideFn: function () { } //左右滑动事件
+    tap: function () {}, //单击事件
+    moveend: function () {}, //滑动完成事件
+    longTouch: function () {}, //长按事件
+    tbSlideFn: function () {}, //上下滑动事件
+    lrSlideFn: function () {}, //左右滑动事件
   };
-  var isTouch = 'ontouchstart' in window,
-    start = isTouch ? 'touchstart' : 'mousedown',
-    move = isTouch ? 'touchmove' : 'mousemove',
-    end = isTouch ? 'touchend' : 'mouseup',
-    dstart = 'dragstart',
+  var isTouch = "ontouchstart" in window,
+    start = isTouch ? "touchstart" : "mousedown",
+    move = isTouch ? "touchmove" : "mousemove",
+    end = isTouch ? "touchend" : "mouseup",
+    dstart = "dragstart",
     longt = 1000, //长按的时间
     tapt = 200, //单机的时间
     moves = 10; //滑动的最短距离
   if (nt) {
-    if (arguments[1] === 'logout') {
-      var offe = (start + '.start' + nt) + ' ' + (move + '.move' + nt) + ' ' + (dstart + '.dstart' + nt);
+    if (arguments[1] === "logout") {
+      var offe =
+        start +
+        ".start" +
+        nt +
+        " " +
+        (move + ".move" + nt) +
+        " " +
+        (dstart + ".dstart" + nt);
       console.log(offe);
-      $me.removeData(['bindt', 'touchXL']).off(offe);
-      $(document).off((end + '.end' + nt));
+      $me.removeData(["bindt", "touchXL"]).off(offe);
+      $(document).off(end + ".end" + nt);
     }
     return false;
   }
   nt = Date.now();
-  start += ('.start' + nt);
-  move += ('.move' + nt);
-  end += ('.end' + nt);
-  dstart += ('.dstart' + nt);
-  $me.data('bindt', nt);
-  $me.on(start, function (e) {
-    var hobj = isTouch ? e.originalEvent.targetTouches[0] : e.originalEvent,
-      touchXL = {
-        s: {
-          x: hobj.pageX,
-          y: hobj.pageY,
-          t: Date.now()
-        },
-        type: 'start'
+  start += ".start" + nt;
+  move += ".move" + nt;
+  end += ".end" + nt;
+  dstart += ".dstart" + nt;
+  $me.data("bindt", nt);
+  $me
+    .on(start, function (e) {
+      var hobj = isTouch ? e.originalEvent.targetTouches[0] : e.originalEvent,
+        touchXL = {
+          s: {
+            x: hobj.pageX,
+            y: hobj.pageY,
+            t: Date.now(),
+          },
+          type: "start",
+        };
+      touchXL.s1000 = setTimeout(function () {
+        touchXL = $me.data("touchXL");
+        touchXL.s.lt = longt;
+        touchXL.type = "long";
+        $me.data("touchXL", touchXL);
+        cbObj.longTouch(touchXL, e);
+      }, longt);
+      $me.data("touchXL", touchXL);
+    })
+    .on(move, function (e) {
+      var hobj = isTouch ? e.originalEvent.targetTouches[0] : e.originalEvent,
+        touchXL = $me.data("touchXL") || {},
+        s = touchXL.s,
+        type = touchXL.type,
+        m;
+      clearTimeout(touchXL.s1000);
+      //未经过start
+      if (!s || s.lt) {
+        return false;
+      }
+      m = {
+        x: hobj.pageX,
+        y: hobj.pageY,
+        t: Date.now(),
       };
-    touchXL.s1000 = setTimeout(function () {
-      touchXL = $me.data('touchXL');
-      touchXL.s.lt = longt;
-      touchXL.type = 'long';
-      $me.data('touchXL', touchXL);
-      cbObj.longTouch(touchXL, e);
-    }, longt);
-    $me.data('touchXL', touchXL);
-  }).on(move, function (e) {
-    var hobj = isTouch ? e.originalEvent.targetTouches[0] : e.originalEvent,
-      touchXL = $me.data('touchXL') || {},
-      s = touchXL.s,
-      type = touchXL.type,
-      m;
-    clearTimeout(touchXL.s1000);
-    //未经过start
-    if (!s || s.lt) {
-      return false;
-    }
-    m = {
-      x: hobj.pageX,
-      y: hobj.pageY,
-      t: Date.now()
-    };
-    var sx = s.x,
-      sy = s.y,
-      mx = m.x,
-      my = m.y,
-      x_x = mx - sx,
-      y_y = my - sy;
-    m.x_x = x_x;
-    m.y_y = y_y;
-    touchXL.m = m;
-    touchXL.type = 'move';
-    if (type === 'move_tb') {
-      touchXL.type = 'move_tb';
-      cbObj.tbSlideFn(touchXL, e);
-    } else if (type === 'move_lr') {
-      touchXL.type = 'move_lr';
-      cbObj.lrSlideFn(touchXL, e);
-    } else if (Math.abs(y_y) > moves) {
-      touchXL.type = 'move_tb';
-      cbObj.tbSlideFn(touchXL, e);
-    } else if (Math.abs(x_x) > moves) {
-      touchXL.type = 'move_lr';
-      cbObj.lrSlideFn(touchXL, e);
-    } else {
-      return false; //不保存move事件
-    }
-    $me.data('touchXL', touchXL);
-  }).on(dstart, function () {
-    return false; //阻止元素拖拽
-  });
+      var sx = s.x,
+        sy = s.y,
+        mx = m.x,
+        my = m.y,
+        x_x = mx - sx,
+        y_y = my - sy;
+      m.x_x = x_x;
+      m.y_y = y_y;
+      touchXL.m = m;
+      touchXL.type = "move";
+      if (type === "move_tb") {
+        touchXL.type = "move_tb";
+        cbObj.tbSlideFn(touchXL, e);
+      } else if (type === "move_lr") {
+        touchXL.type = "move_lr";
+        cbObj.lrSlideFn(touchXL, e);
+      } else if (Math.abs(y_y) > moves) {
+        touchXL.type = "move_tb";
+        cbObj.tbSlideFn(touchXL, e);
+      } else if (Math.abs(x_x) > moves) {
+        touchXL.type = "move_lr";
+        cbObj.lrSlideFn(touchXL, e);
+      } else {
+        return false; //不保存move事件
+      }
+      $me.data("touchXL", touchXL);
+    })
+    .on(dstart, function () {
+      return false; //阻止元素拖拽
+    });
   $(document).on(end, function (e) {
-    var touchXL = $me.data('touchXL') || {},
+    var touchXL = $me.data("touchXL") || {},
       nt = Date.now(),
-      type = touchXL.type || '',
+      type = touchXL.type || "",
       s = touchXL.s,
       m = touchXL.m;
     touchXL.e = {
-      t: nt
+      t: nt,
     };
     clearTimeout(touchXL.s1000); //清除初始用于检测长按的计时
-    if ((s && (nt - s.t < tapt)) && type === 'start') {
-      touchXL.type = 'tap';
+    if (s && nt - s.t < tapt && type === "start") {
+      touchXL.type = "tap";
       cbObj.tap(touchXL, e);
     } else if (s && m) {
       cbObj.moveend(touchXL, e);
     }
-    $me.removeData('touchXL');
+    $me.removeData("touchXL");
   });
   return cbObj;
 }
@@ -913,7 +989,6 @@ jsonp,
 window.name,
 window.postMessage（获取frame的win使用此方法可以在frame中onmessage事件event参数获取数据）
 */
-
 
 // 完整版本的节流函数，防抖函数
 // 从lodash中复制过来的
@@ -1082,7 +1157,7 @@ function throttle(func, wait, options) {
   return debounce(func, wait, {
     leading: leading,
     maxWait: wait,
-    trailing: trailing
+    trailing: trailing,
   });
 }
 
@@ -1094,15 +1169,16 @@ function eachDir(dirstr) {
   aa(dirstr);
   function aa(dirs) {
     let list = fs.readdirSync(dirs);
-    list.forEach(s => {
+    list.forEach((s) => {
       s = path.join(dirs, s);
       let stat = fs.statSync(s);
-      if (stat.isDirectory()) { // 文件夹
+      if (stat.isDirectory()) {
+        // 文件夹
         aa(s);
       } else {
         arr.push(s);
       }
-    })
+    });
   }
   return arr;
 }

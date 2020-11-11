@@ -1,0 +1,327 @@
+﻿<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>星空圆圈视差背景HTML5特效 - 站长素材</title>
+
+  <style>
+    body {
+      background: #060e1b;
+      overflow: hidden;
+    }
+
+    canvas {
+      opacity: 0.5;
+    }
+
+    /* Demo Buttons Style */
+    .codrops-demos {
+      font-size: 0.8em;
+      text-align: center;
+      position: absolute;
+      z-index: 99;
+      width: 96%;
+    }
+
+    .codrops-demos a {
+      display: inline-block;
+      margin: 0.35em 0.1em;
+      padding: 0.5em 1.2em;
+      outline: none;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+      border-radius: 2px;
+      font-size: 110%;
+      border: 2px solid transparent;
+      color: #fff;
+    }
+
+    .codrops-demos a:hover,
+    .codrops-demos a.current-demo {
+      border-color: #383a3c;
+    }
+
+    #scene {
+      position: absolute;
+      top: 0;
+    }
+
+    #yuan5 {
+      /* position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0px);
+    transform-style: preserve-3d;
+    backface-visibility: hidden; */
+    }
+
+    #yuan5>div {
+      display: none;
+      position: relative;
+      top: 0%;
+      left: 0%;
+      width: 100%;
+      height: 100%;
+      background: url(./img/yuan5.png) no-repeat center center;
+      -webkit-background-size: cover;
+      background-size: cover;
+    }
+
+    #yuan4 {
+      /* position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0px);
+    transform-style: preserve-3d;
+    backface-visibility: hidden; */
+    }
+
+    #yuan4>div {
+      position: relative;
+      top: 0%;
+      left: 0%;
+      width: 100%;
+      height: 100%;
+      background: url(./img/yuan4.png) no-repeat center center;
+      -webkit-background-size: cover;
+      background-size: cover;
+    }
+
+    #yuan3 {
+      /* position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0px);
+    transform-style: preserve-3d;
+    backface-visibility: hidden; */
+    }
+
+    #yuan3>div {
+      position: relative;
+      top: 0%;
+      left: 0%;
+      width: 100%;
+      height: 100%;
+      background: url(./img/yuan3.png) no-repeat center center;
+      -webkit-background-size: cover;
+      background-size: cover;
+    }
+
+    #yuan2 {
+      /* position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0px);
+    transform-style: preserve-3d;
+    backface-visibility: hidden; */
+    }
+
+    #yuan2>div {
+      position: relative;
+      top: 0%;
+      left: 0%;
+      width: 100%;
+      height: 100%;
+      background: url(./img/yuan2.png) no-repeat center center;
+      -webkit-background-size: cover;
+      background-size: cover;
+    }
+
+    #yuan1 {
+      /* position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0px);
+    transform-style: preserve-3d;
+    backface-visibility: hidden; */
+    }
+
+    #yuan1>div {
+      position: relative;
+      top: 0%;
+      left: 0%;
+      width: 100%;
+      height: 100%;
+      background: url(./img/yuan1.png) no-repeat center center;
+      -webkit-background-size: cover;
+      background-size: cover;
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="canvas"></canvas>
+  <div data-mode="cursor" id="scene">
+    <div data-depth="0.1" id="yuan5">
+      <div>
+      </div>
+    </div>
+    <div data-depth="0.2" id="yuan4">
+      <div>
+      </div>
+    </div>
+    <div data-depth="0.3" id="yuan3">
+      <div>
+      </div>
+    </div>
+    <div data-depth="0.4" id="yuan2">
+      <div>
+      </div>
+    </div>
+    <div data-depth="0.5" id="yuan1">
+      <div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var h = document.documentElement.clientHeight || document.body.clientHeight;
+    var w = document.documentElement.clientWidth || document.body.clientWidth;
+    console.log(h);
+    var yuan5 = window.document.getElementById('yuan5');
+    var yuan4 = window.document.getElementById('yuan4');
+    var yuan3 = window.document.getElementById('yuan3');
+    var yuan2 = window.document.getElementById('yuan2');
+    var yuan1 = window.document.getElementById('yuan1');
+    yuan5.style.height = h + 'px';
+    yuan5.style.width = h + 'px';
+    yuan5.style.marginLeft = (w - h) / 2 + 'px';
+    yuan4.style.height = h * 0.85 + 'px';
+    yuan4.style.width = h * 0.85 + 'px';
+    yuan4.style.marginLeft = (w - h * 0.85) / 2 + 'px';
+    yuan4.style.marginTop = (h - h * 0.85) / 2 + 'px';
+    yuan3.style.height = h * 0.70 + 'px';
+    yuan3.style.width = h * 0.70 + 'px';
+    yuan3.style.marginLeft = (w - h * 0.7) / 2 + 'px';
+    yuan3.style.marginTop = (h - h * 0.7) / 2 + 'px';
+    yuan2.style.height = h * 0.55 + 'px';
+    yuan2.style.width = h * 0.55 + 'px';
+    yuan2.style.marginLeft = (w - h * 0.55) / 2 + 'px';
+    yuan2.style.marginTop = (h - h * 0.55) / 2 + 'px';
+    yuan1.style.height = h * 0.40 + 'px';
+    yuan1.style.width = h * 0.4 + 'px';
+    yuan1.style.marginLeft = (w - h * 0.4) / 2 + 'px';
+    yuan1.style.marginTop = (h - h * 0.4) / 2 + 'px';
+  </script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/parallax/3.1.0/parallax.min.js"></script>
+  <script>
+    "use strict";
+
+    var canvas = document.getElementById('canvas'),
+      ctx = canvas.getContext('2d'),
+      w = canvas.width = window.innerWidth,
+      h = canvas.height = window.innerHeight,
+
+      hue = 217,
+      stars = [],
+      count = 0,
+      maxStars = 1200;
+
+    var canvas2 = document.createElement('canvas'),
+      ctx2 = canvas2.getContext('2d');
+    canvas2.width = 100;
+    canvas2.height = 100;
+    var half = canvas2.width / 2,
+      gradient2 = ctx2.createRadialGradient(half, half, 0, half, half, half);
+    gradient2.addColorStop(0.025, '#fff');
+    gradient2.addColorStop(0.1, 'hsl(' + hue + ', 61%, 33%)');
+    gradient2.addColorStop(0.25, 'hsl(' + hue + ', 64%, 6%)');
+    gradient2.addColorStop(1, 'transparent');
+
+    ctx2.fillStyle = gradient2;
+    ctx2.beginPath();
+    ctx2.arc(half, half, half, 0, Math.PI * 2);
+    ctx2.fill();
+
+    // End cache
+
+    function random(min, max) {
+      if (arguments.length < 2) {
+        max = min;
+        min = 0;
+      }
+
+      if (min > max) {
+        var hold = max;
+        max = min;
+        min = hold;
+      }
+
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function maxOrbit(x, y) {
+      var max = Math.max(x, y),
+        diameter = Math.round(Math.sqrt(max * max + max * max));
+      return diameter / 2;
+    }
+
+    var Star = function () {
+
+      this.orbitRadius = random(maxOrbit(w, h));
+      this.radius = random(60, this.orbitRadius) / 12;
+      this.orbitX = w / 2;
+      this.orbitY = h / 2;
+      this.timePassed = random(0, maxStars);
+      this.speed = random(this.orbitRadius) / 900000;
+      this.alpha = random(2, 10) / 10;
+
+      count++;
+      stars[count] = this;
+    }
+
+    Star.prototype.draw = function () {
+      var x = Math.sin(this.timePassed) * this.orbitRadius + this.orbitX,
+        y = Math.cos(this.timePassed) * this.orbitRadius + this.orbitY,
+        twinkle = random(10);
+
+      if (twinkle === 1 && this.alpha > 0) {
+        this.alpha -= 0.05;
+      } else if (twinkle === 2 && this.alpha < 1) {
+        this.alpha += 0.05;
+      }
+
+      ctx.globalAlpha = this.alpha;
+      ctx.drawImage(canvas2, x - this.radius / 2, y - this.radius / 2, this.radius, this.radius);
+      this.timePassed += this.speed;
+    }
+
+    for (var i = 0; i < maxStars; i++) {
+      new Star();
+    }
+
+    function animation() {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 0.8;
+      ctx.fillStyle = 'hsla(' + hue + ', 64%, 6%, 1)';
+      ctx.fillRect(0, 0, w, h)
+
+      ctx.globalCompositeOperation = 'lighter';
+      for (var i = 1, l = stars.length; i < l; i++) {
+        stars[i].draw();
+      };
+
+      window.requestAnimationFrame(animation);
+    }
+
+    animation();
+
+
+    var scene = document.getElementById('scene');
+    var parallaxInstance = new Parallax(scene, {
+    });
+
+  </script>
+
+</body>
+
+</html>
