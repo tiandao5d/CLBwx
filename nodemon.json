@@ -1,0 +1,3 @@
+{
+  "ignore": ["public", "xlku", "src", "webpack.*.js"]
+}

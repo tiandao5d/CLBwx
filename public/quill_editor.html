@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./css/quill.snow.css">
+  <link rel="stylesheet" href="./css/quill.bubble.css">
+  <link href="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/styles/monokai-sublime.min.css" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    .ql-syntax {
+      position: relative;
+    }
+
+    .lang-select {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+
+    input,
+    select {
+      width: 200px;
+      height: 36px;
+      border: solid 1px #ccc;
+      border-radius: 0;
+    }
+
+    li {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="status"></div>
+  <div>
+    <label for="title">标题</label>
+    <input type="text" id="title" name="title">
+  </div>
+  <div style="height: 15px;"></div>
+  <div>
+    <label for="type">属性</label>
+    <select id="type" name="type">
+      <option value="javascript">javascript</option>
+      <option value="react">react</option>
+      <option value="vue">vue</option>
+    </select>
+  </div>
+  <div style="height: 15px;"></div>
+  <div id="toolbar-container">
+    <span class="ql-formats">
+      <select class="ql-font"></select>
+      <select class="ql-size"></select>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-bold"></button>
+      <button class="ql-italic"></button>
+      <button class="ql-underline"></button>
+      <button class="ql-strike"></button>
+    </span>
+    <span class="ql-formats">
+      <select class="ql-color"></select>
+      <select class="ql-background"></select>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-script" value="sub"></button>
+      <button class="ql-script" value="super"></button>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-header" value="1"></button>
+      <button class="ql-header" value="2"></button>
+      <button class="ql-blockquote"></button>
+      <button class="ql-code-block"></button>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-list" value="ordered"></button>
+      <button class="ql-list" value="bullet"></button>
+      <button class="ql-indent" value="-1"></button>
+      <button class="ql-indent" value="+1"></button>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-direction" value="rtl"></button>
+      <select class="ql-align"></select>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-link"></button>
+      <button class="ql-image"></button>
+      <button class="ql-video"></button>
+      <button class="ql-formula"></button>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-clean"></button>
+    </span>
+  </div>
+  <div id="editor"></div>
+  <button id="add">添加</button>
+  <button id="update">更新</button>
+  <button id="reset">重置</button>
+  <div id="box">
+    <ul></ul>
+  </div>
+  <script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/highlight.min.js"></script>
+  <script src="./js/quill.js"></script>
+  <script>
+    let curItem = null;
+    // window.onload = winOnLoad;
+    winOnLoad()
+    function winOnLoad() {
+      var quill = new Quill('#editor', {
+        theme: 'snow',
+        modules: { toolbar: "#toolbar-container" }
+      });
+      let add = document.querySelector('#add')
+      let update = document.querySelector('#update')
+      let reset = document.querySelector('#reset')
+      let status = document.querySelector('#status')
+      add.addEventListener('click', () => {
+        const p = getFormVal()
+        if (valid(p)) {
+          addSync(p).then(res => {
+            if (res.type === 'success') {
+              clear();
+            }
+          })
+        } else {
+          console.log('数据错误')
+        }
+      })
+      update.addEventListener('click', () => {
+        if (!curItem) {
+          console.log('不是可更新状态')
+          return false;
+        }
+        let p = getFormVal();
+        p = Object.assign(curItem, p);
+        if (valid(p)) {
+          updateSync(p).then(res => {
+            if (res.type === 'success') {
+              clear();
+            }
+          })
+        } else {
+          console.log('数据错误')
+        }
+      })
+      reset.addEventListener('click', () => {
+        clear();
+      })
+      listInit()
+    }
+    function listInit() {
+      const ul = document.querySelector("#box ul");
+      let data = [];
+      getList().then(res => {
+        let str = '';
+        data = res.data;
+        res.data.forEach(item => {
+          str += `<li data-id="${item.id}">${item.title}</li>`;
+        })
+        ul.innerHTML = str;
+      })
+      ul.onclick = (e) => {
+        let id = +e.target.getAttribute('data-id');
+        let item = data.find(o => o.id === id);
+        setVal(item);
+        console.log(curItem)
+      }
+    }
+    function getList(id) {
+      return fetch(`/bk_list/get?id=${id}`)
+        .then(async res => {
+          let json = await res.json();
+          console.log(json)
+          return json
+        })
+    }
+    function setVal(item) {
+      curItem = item;
+      status.innerHTML = `更新：${item.title}`;
+      document.querySelector('#title').value = item.title;
+      document.querySelector('#type').value = item.type || 'javascript';
+      document.querySelector('#editor .ql-editor').innerHTML = item.content;
+    }
+    function clear() {
+      curItem = null;
+      status.innerHTML = '';
+      document.querySelector('#title').value = '';
+      document.querySelector('#type').value = 'javascript';
+      document.querySelector('#editor .ql-editor').innerHTML = '';
+      listInit();
+    }
+    function getFormVal() {
+      const title = document.querySelector('#title').value;
+      const type = document.querySelector('#type').value;
+      const content = document.querySelector('#editor .ql-editor').innerHTML;
+      const p = { title, icon: '', type, content }
+      return p;
+    }
+    function valid(p) {
+      if (p.title && p.type && p.content) {
+        return true;
+      }
+      return false;
+    }
+    function addSync(p) {
+      return fetch('/bk_list/add', { method: 'post', body: JSON.stringify(p) })
+        .then(async res => {
+          let json = await res.json();
+          console.log(json)
+          return json;
+        })
+    }
+    function updateSync(p) {
+      return fetch('/bk_list/update', { method: 'post', body: JSON.stringify(p) })
+        .then(async res => {
+          let json = await res.json();
+          console.log(json)
+          return json;
+        })
+    }
+  </script>
+</body>
+
+</html>
