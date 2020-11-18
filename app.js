@@ -16,9 +16,9 @@ onerror(app)
 app.use(cors)
   .use(json())
   .use(logger())
-  // .use(require('koa-static')(__dirname + '/public'))
-  // .use(require('koa-static')(__dirname + '/xlku'))
-  .use(require('koa-static')(__dirname + '/dist'))
+  .use(require('koa-static')(__dirname + '/public'))
+  .use(require('koa-static')(__dirname + '/xlku'))
+  // .use(require('koa-static')(__dirname + '/dist'))
   .use(router.routes())
   .use(router.allowedMethods())
 
@@ -33,13 +33,6 @@ app.on('error', function (err, ctx) {
   console.log(err)
   logger.error('server error', err, ctx)
 })
-
-// browserSync.init({
-//   server: './public',
-//   browser: 'chrome',
-//   port: config.port
-// });
-// browserSync.watch('./public/123.html').on('change', browserSync.reload)
 
 module.exports = app.listen(config.port, () => {
   webbs();
