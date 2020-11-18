@@ -15,8 +15,7 @@ const path = require("path");
 
 class BKList {
   constructor() {
-    this.fileSrc = path.resolve(__dirname, "./bk_list.json");
-    this.destSrc = "/Users/linxu/work/xulin_code/xlku/bk_list.json";
+    this.fileSrc = path.resolve(__dirname, "../xlku/bk_list.json");
     this.defaultItem = {
       id: 0,
       title: "",
@@ -130,11 +129,6 @@ class BKList {
   reset(res) {
     res = typeof res === "object" ? JSON.stringify(res) : "" + res;
     fs.writeFileSync(this.fileSrc, res);
-    if (this.destSrc) {
-      try {
-        fs.copyFileSync(this.fileSrc, this.destSrc);
-      } catch (error) {}
-    }
   }
   msg(data, msg, type) {
     return { data, msg, type };
