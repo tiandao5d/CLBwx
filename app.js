@@ -7,6 +7,7 @@ const onerror = require('koa-onerror')
 const logger = require('koa-logger')
 const config = require('./config')
 const routes = require('./routes')
+const webbs = require('./webpack/browser')
 
 // error handler
 onerror(app)
@@ -15,8 +16,9 @@ onerror(app)
 app.use(cors)
   .use(json())
   .use(logger())
-  .use(require('koa-static')(__dirname + '/public'))
-  .use(require('koa-static')(__dirname + '/xlku'))
+  // .use(require('koa-static')(__dirname + '/public'))
+  // .use(require('koa-static')(__dirname + '/xlku'))
+  .use(require('koa-static')(__dirname + '/dist'))
   .use(router.routes())
   .use(router.allowedMethods())
 
@@ -40,5 +42,6 @@ app.on('error', function (err, ctx) {
 // browserSync.watch('./public/123.html').on('change', browserSync.reload)
 
 module.exports = app.listen(config.port, () => {
+  webbs();
   console.log(`Listening on http://localhost:${config.port}`);
 });
