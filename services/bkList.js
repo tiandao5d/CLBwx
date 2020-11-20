@@ -4,6 +4,7 @@ const path = require("path");
 // id: number;
 // title?: string; // 标题
 // icon?: string; // 图标
+// description?: string; // 粗略描述
 // content?: string; // 文字说明
 // type?: string; // 主要讨论的语言
 // createTime?: number; // 添加日期
@@ -20,6 +21,7 @@ class BKList {
       id: 0,
       title: "",
       icon: "",
+      description: "",
       content: "",
       type: "",
       createTime: 0,
