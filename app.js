@@ -1,36 +1,38 @@
-const Koa = require('koa')
-const Router = require('koa-router')
-const app = new Koa()
-const router = new Router()
-const json = require('koa-json')
-const onerror = require('koa-onerror')
-const logger = require('koa-logger')
-const config = require('./config')
-const routes = require('./routes')
+const Koa = require("koa");
+const Router = require("koa-router");
+const app = new Koa();
+const router = new Router();
+const json = require("koa-json");
+const onerror = require("koa-onerror");
+const logger = require("koa-logger");
+const config = require("./config");
+const routes = require("./routes");
 
 // error handler
-onerror(app)
+onerror(app);
 
 // middlewares
-app.use(cors)
+app
+  .use(cors)
   .use(json())
   .use(logger())
-  .use(require('koa-static')(__dirname + '/public'))
-  .use(require('koa-static')(__dirname + '/xlku'))
+  .use(require("koa-static")(__dirname + "/public"))
+  .use(require("koa-static")(__dirname + "/xlku"))
+  .use(require("koa-static")(__dirname + "/index_xulin"))
   .use(router.routes())
-  .use(router.allowedMethods())
+  .use(router.allowedMethods());
 
 // 设置跨域响应头
 async function cors(ctx, next) {
-  ctx.set('Access-Control-Allow-Origin', '*')
-  await next()
+  ctx.set("Access-Control-Allow-Origin", "*");
+  await next();
 }
 
-routes(router)
-app.on('error', function (err, ctx) {
-  console.log(err)
-  logger.error('server error', err, ctx)
-})
+routes(router);
+app.on("error", function (err, ctx) {
+  console.log(err);
+  logger.error("server error", err, ctx);
+});
 
 module.exports = app.listen(config.port, () => {
   console.log(`Listening on http://localhost:${config.port}`);

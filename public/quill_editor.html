@@ -123,7 +123,7 @@
       // });
       quill = new Quill('#editor', {
         modules: {
-          // syntax: true,              // Include syntax module
+          syntax: true,              // Include syntax module
           toolbar: "#toolbar-container"  // Include button in toolbar
         },
         theme: 'snow',
@@ -133,38 +133,44 @@
       let reset = document.querySelector('#reset')
       let status = document.querySelector('#status')
       add.addEventListener('click', () => {
-        const p = getFormVal()
-        if (valid(p)) {
-          addSync(p).then(res => {
-            if (res.type === 'success') {
-              clear();
-            }
-          })
-        } else {
-          console.log('数据错误')
-        }
+        addFn();
       })
       update.addEventListener('click', () => {
         if (!curItem) {
           console.log('不是可更新状态')
           return false;
         }
-        let p = getFormVal();
-        p = Object.assign(curItem, p);
-        if (valid(p)) {
-          updateSync(p).then(res => {
-            if (res.type === 'success') {
-              clear();
-            }
-          })
-        } else {
-          console.log('数据错误')
-        }
+        updateFn(curItem);
       })
       reset.addEventListener('click', () => {
         clear();
       })
       listInit()
+    }
+    async function addFn() {
+      const p = getFormVal()
+      if (valid(p)) {
+        await addSync(p).then(res => {
+          if (res.type === 'success') {
+            clear();
+          }
+        })
+      } else {
+        console.log('数据错误')
+      }
+    }
+    async function updateFn(curItem) {
+      let p = getFormVal();
+      p = Object.assign(curItem, p);
+      if (valid(p)) {
+        await updateSync(p).then(res => {
+          if (res.type === 'success') {
+            clear();
+          }
+        })
+      } else {
+        console.log('数据错误')
+      }
     }
     function listInit() {
       const ul = document.querySelector("#box ul");
@@ -172,6 +178,11 @@
       getList().then(res => {
         let str = '';
         data = res.data;
+        data.forEach(o => {
+          if (o.content && o.content.ops) {
+            o.content = o.content.ops
+          }
+        })
         res.data.forEach(item => {
           str += `<li data-id="${item.id}">${item.title} <button>删除</button></li>`;
         })
@@ -215,7 +226,7 @@
       document.querySelector('#title').value = item.title || '';
       document.querySelector('#description').value = item.description || '';
       document.querySelector('#type').value = item.type || 'javascript';
-      document.querySelector('#editor .ql-editor').innerHTML = item.content || '';
+      document.querySelector('#editor .ql-editor').innerHTML = item.content
     }
     function clear() {
       curItem = null;
@@ -223,7 +234,7 @@
       document.querySelector('#title').value = '';
       document.querySelector('#description').value = '';
       document.querySelector('#type').value = 'javascript';
-      document.querySelector('#editor .ql-editor').innerHTML = '';
+      document.querySelector('#editor .ql-editor').innerHTML = ''
       listInit();
     }
     function getFormVal() {
